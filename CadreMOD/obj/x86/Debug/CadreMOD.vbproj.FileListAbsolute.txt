@@ -1,0 +1,26 @@
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\bin\Debug\CadreMOD.exe
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\bin\Debug\CadreMOD.pdb
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\bin\Debug\CadreMOD.xml
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\bin\Debug\policy.6.0.FarPoint.Win.Spread.dll
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\bin\Debug\policy.6.0.FarPoint.Win.Spread.config
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.CM_MAIN_frm.resources
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.frmEstimatingBase.resources
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.Resources.resources
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.vbproj.GenerateResource.Cache
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.exe.licenses
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.exe
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.xml
+C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD\obj\x86\Debug\CadreMOD.pdb
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.CM_MAIN_frm.resources
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.frmEstimatingBase.resources
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.Resources.resources
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.vbproj.GenerateResource.Cache
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.exe.licenses
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\bin\Debug\CadreMOD.exe
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\bin\Debug\CadreMOD.pdb
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\bin\Debug\CadreMOD.xml
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\bin\Debug\policy.6.0.FarPoint.Win.Spread.dll
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\bin\Debug\policy.6.0.FarPoint.Win.Spread.config
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.exe
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.xml
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.pdb
