@@ -24,3 +24,16 @@ C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Versi
 C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.exe
 C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.xml
 C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\MOD Simplification\Version 1.0\CadreMOD\obj\x86\Debug\CadreMOD.pdb
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.exe
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.xml
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.pdb
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\CadreMOD.exe
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\CadreMOD.pdb
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\CadreMOD.xml
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\policy.6.0.FarPoint.Win.Spread.dll
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\policy.6.0.FarPoint.Win.Spread.config
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.CM_MAIN_frm.resources
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.frmEstimatingBase.resources
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.Resources.resources
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.vbproj.GenerateResource.Cache
+C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\obj\x86\Debug\CadreMOD.exe.licenses

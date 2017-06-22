@@ -219,7 +219,7 @@ Partial Class CM_MAIN_frm
         Me.ContactCity_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ContactCity_txt.Size = New System.Drawing.Size(140, 20)
         Me.ContactCity_txt.TabIndex = 10
-        Me.ContactCity_txt.Text = "Anytown"
+        Me.ContactCity_txt.Text = "Starling City"
         '
         'ContactAddress2_txt
         '
@@ -669,7 +669,7 @@ Partial Class CM_MAIN_frm
         Me.JobCity_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.JobCity_txt.Size = New System.Drawing.Size(148, 20)
         Me.JobCity_txt.TabIndex = 3
-        Me.JobCity_txt.Text = "Anytown"
+        Me.JobCity_txt.Text = "Starling City"
         '
         'JobAddress_txt
         '
@@ -1617,7 +1617,6 @@ Partial Class CM_MAIN_frm
         '
         Me.btnDeleteAlt.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnDeleteAlt.BackColor = System.Drawing.SystemColors.Control
-        Me.btnDeleteAlt.Enabled = False
         Me.btnDeleteAlt.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnDeleteAlt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDeleteAlt.ForeColor = System.Drawing.SystemColors.ControlText
