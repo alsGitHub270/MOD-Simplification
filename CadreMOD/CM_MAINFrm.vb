@@ -22,7 +22,6 @@ Partial Friend Class CM_MAIN_frm
     Dim SubGroup As DataTable
 
 
-
     Private Sub CreateDataSet()
 
         Dim dtStr As System.Type
@@ -38,7 +37,7 @@ Partial Friend Class CM_MAIN_frm
 
         SummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
         SummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "C1", "", "C", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
 
         MainGroup = myDataSet.Tables.Add("BaseGroup")
@@ -47,7 +46,7 @@ Partial Friend Class CM_MAIN_frm
         'MainGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", ""})
         MainGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", ""})
         MainGroup.Rows.Add(New Object() {"Base", "B1", "B", "01-04", "Geared", 375000, "", "", ""})
-        MainGroup.Rows.Add(New Object() {"Base", "C1", "C", "01,03,04", "Gearless", 0, "", "", ""})
+        MainGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", ""})
 
         SubGroup = myDataSet.Tables.Add("SubGroup")
         SubGroup.Columns.AddRange(New DataColumn() {New DataColumn("Sub Group", dtStr), New DataColumn("id", dtStr), New DataColumn("units", dtStr), New DataColumn("machine", dtStr), New DataColumn("target", dtStr), New DataColumn("bid", dtStr), New DataColumn("Bid", dtStr), New DataColumn("Offer", dtStr), New DataColumn("comment", dtStr)})
@@ -105,6 +104,7 @@ Partial Friend Class CM_MAIN_frm
             .SheetCornerStyle.BackColor = Color.DarkGray
            
             .GrayAreaBackColor = Color.White
+            .LockBackColor = Color.LightGray
         End With
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
@@ -129,6 +129,10 @@ Partial Friend Class CM_MAIN_frm
         cmbocell.MaxDrop = 3
 
         For i As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            FpSpread1.ActiveSheet.Rows(i).Locked = True
+            FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
 
             FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary 
             FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25        'STATUS
@@ -159,50 +163,15 @@ Partial Friend Class CM_MAIN_frm
 
             FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell       ' machine/bank type
 
-
-            FpSpread1.ActiveSheet.Cells(i, 6).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 7).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 8).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 9).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 10).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 11).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 12).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 13).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 14).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 15).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 16).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 17).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 18).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 19).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 20).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 21).CellType = currencyType
+            For j As Integer = 6 To 21
+                FpSpread1.ActiveSheet.Cells(i, j).CellType = currencyType
+            Next
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 35
 
 
-            FpSpread1.ActiveSheet.Cells(i, 0).BackColor = Color.LightGray
-            '   FpSpread1.ActiveSheet.Cells(i, 5).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 6).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 7).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 8).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 9).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 10).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 11).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 12).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 13).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 14).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 15).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 16).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 17).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 18).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 19).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 21).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 22).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 23).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 24).BackColor = Color.LightGray
-            FpSpread1.ActiveSheet.Cells(i, 25).BackColor = Color.LightGray
+            'FpSpread1.ActiveSheet.Cells(i, 25).BackColor = Color.LightGray
         Next
 
         ExpandCollapseAll("Expand")
@@ -262,6 +231,12 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    Private Sub FpSpread1_ChildControlActivated(sender As Object, e As FarPoint.Win.Spread.ChildControlEventArgs) Handles FpSpread1.ChildControlActivated
+
+        Stop
+
+    End Sub
+
 
     Private Sub FpSpread1_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles FpSpread1.ChildViewCreated
 
@@ -287,9 +262,7 @@ Partial Friend Class CM_MAIN_frm
         'bttncell.Text = "Merge"
         'bttncell.ShadowSize = 3      
 
-        
-
-
+        e.SheetView.LockBackColor = Color.LightGray
 
         If e.SheetView.ParentRelationName = "MainGroup" Then
             With e.SheetView
@@ -303,6 +276,10 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(3).Visible = False
                 .Columns(4).Visible = False
 
+                .Columns(0).Locked = True
+                .Columns(5).Locked = True
+                .Columns(7).Locked = True
+
                 .SetColumnWidth(0, 100)
                 .SetColumnWidth(3, 75)
                 .SetColumnWidth(4, 75)
@@ -315,18 +292,13 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(6).CellType = currencyType
                 .Columns(7).CellType = currencyType
 
-                .Columns(0).BackColor = Color.LightGray
-                .Columns(3).BackColor = Color.LightGray
-                ' .Columns(4).BackColor = Color.LightGray
-                .Columns(5).BackColor = Color.LightGray
-                .Columns(7).Locked = True
-                .Columns(7).BackColor = Color.LightGray
+
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
             End With
         Else
             With e.SheetView
-                .LockBackColor = Color.LightGray
+
                 .DataAutoCellTypes = False
                 .DataAutoSizeColumns = False
                 '   .ColumnHeader.Rows(0).Height = 25
@@ -335,6 +307,10 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(1).Visible = False
                 .Columns(2).Visible = False
                 .Columns(3).Visible = False
+
+                .Columns(2).Locked = True
+                .Columns(3).Locked = True
+                .Columns(4).Locked = True
 
                 .SetColumnWidth(2, 50)
                 .SetColumnWidth(3, 100)
@@ -354,16 +330,11 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(7).BackColor = Color.LightGoldenrodYellow
                 .Columns(8).BackColor = Color.LightGoldenrodYellow
 
-                .Columns(2).Locked = True
-                .Columns(3).Locked = True
-                .Columns(4).Locked = True
 
                 'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
                 '.Columns(1).CellType = dateType
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
-
-
 
                 'Dim acell As FarPoint.Win.Spread.Cell
                 'Dim i, j, c As Integer
@@ -450,7 +421,7 @@ Partial Friend Class CM_MAIN_frm
                 ChildSheetView1.Cells(0, 6).BackColor = Color.LightGray
 
                 ChildSheetView1.Cells(0, 7).Locked = False
-                ChildSheetView1.Cells(0, 7).BackColor = Color.White
+                ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
 
                 Dim p As New FarPoint.Win.Picture(Image.FromFile("\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
                 Dim t As New FarPoint.Win.Spread.CellType.TextCellType
@@ -478,11 +449,11 @@ Partial Friend Class CM_MAIN_frm
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If ChildSheetView1.SelectionCount > 0 Then
-                value = iIndex
-                Exit For
-            End If
             If Not ChildSheetView1 Is Nothing Then
+                If ChildSheetView1.SelectionCount > 0 Then
+                    value = iIndex
+                    Exit For
+                End If
                 For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
                     ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
                     If Not IsNothing(ChildSheetView2) AndAlso ChildSheetView2.SelectionCount > 0 Then
@@ -563,6 +534,191 @@ Partial Friend Class CM_MAIN_frm
         machine = ChildSheetView.Cells(baseRowIndex, 4).Value
 
         SubGroup.Rows.Add(New Object() {thisID, baseID, units, machine, 0, "", "", "", ""})
+
+    End Sub
+
+    Private Sub btnAddBank_Click(sender As System.Object, e As System.EventArgs) Handles btnAddBank.Click
+        ' Add a new summary row to the grid
+        ' Add a new base row to the grid
+
+        Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
+        currencyType.Separator = ","
+        currencyType.DecimalPlaces = 0
+        currencyType.ShowSeparator = True
+        currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
+        currencyType.NegativeRed = True
+
+
+
+        SummaryGroup.Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        FpSpread1.Refresh()
+        FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
+        FpSpread1.ActiveSheet.ActiveRow.Locked = True
+
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Locked = False
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
+
+        For i As Integer = 6 To 21
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
+        Next
+
+        Dim cbstr As String()
+        cbstr = New String() {"Geared", "Gearless", "Hydro"}
+        Dim cmbocell As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+        cmbocell.Items = cbstr
+        cmbocell.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+        cmbocell.Editable = False
+        cmbocell.MaxDrop = 3
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).CellType = cmbocell
+
+        Dim valid As Boolean = False
+
+        FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 3, False)
+
+
+        FpSpread1.Refresh()
+    End Sub
+
+    Private Function ValidBank() As Boolean
+        Dim valid As Boolean = False
+
+        Dim cell_value As String
+        cell_value = FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Value.ToString.ToUpper
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Value = cell_value
+
+        If cell_value = "" Then
+            MessageBox.Show("You must enter a Bank", "Please enter the Bank")
+            valid = False
+        ElseIf BankExists(cell_value) Then
+            MessageBox.Show("The Bank you entered already exists", "Duplicated Bank")
+            valid = False
+        Else
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 1).Value = cell_value + "1"
+            valid = True
+        End If
+
+        Return valid
+    End Function
+
+    Private Function BankExists(cell_value As String) As Boolean
+
+        Dim bank_exists As Boolean = True
+
+        With FpSpread1.ActiveSheet
+            For i As Integer = 0 To .RowCount - 1
+                If .Cells(i, 3).Value = cell_value Then
+                    Exit For
+                End If
+            Next
+            bank_exists = False
+        End With
+
+        Return bank_exists
+    End Function
+
+    Private Sub FpSpread1_Click(sender As Object, e As System.EventArgs) Handles FpSpread1.Click
+
+        Stop
+
+    End Sub
+
+    Private Sub FpSpread1_LeaveCell(sender As Object, e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
+
+        Select e.Column
+            Case 3          ' bank
+                If Not ValidBank() Then
+                    e.Cancel = True
+                End If
+                FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 4, False)
+            Case 4
+                If IsNothing(FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value) Then
+                    MessageBox.Show("Please select a machine.", "Missing Data")
+                    e.Cancel = True
+                End If
+                FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 5, False)
+            Case 5
+                If Not validUnits() Then
+                    e.Cancel = True
+                End If
+        End Select
+
+        If e.Cancel = False Then
+            If e.Row <> e.NewRow Then
+                If StillValid() Then
+                    FpSpread1.ActiveSheet.SortRows(3, True, True)
+                    FpSpread1.Refresh()
+                Else
+                    e.Cancel = True
+                End If
+            End If
+        End If
+
+    End Sub
+
+    Private Function validUnits() As Boolean
+        Dim valid As Boolean = True
+
+        Dim units() As String
+        Dim subunits() As String
+
+        units = FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Value.ToString.Split("-")
+
+        For Each unit In units
+            If unit.IndexOf(",") > -1 Then
+                subunits = unit.Split(",")
+                For Each subunit In subunits
+                    If Not IsNumeric(subunit.Trim) Then
+                        valid = False
+                        Exit For
+                    End If
+                Next
+            End If
+
+            If Not valid Then Exit For
+
+            If Not IsNumeric(unit.Trim) Then
+                valid = False
+                Exit For
+            End If
+        Next
+
+        If Not valid Then
+            MessageBox.Show("Please enter units as numerics(i.e., 01-03 or 01,02-04 etc)", "Invalid Units")
+        End If
+
+        Return valid
+
+    End Function
+
+    Private Function StillValid() As Boolean
+        Dim isValid As Boolean = True
+
+        If Not ValidBank() Then
+            isValid = False
+        End If
+
+        If IsNothing(FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value) Or FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value.ToString.Trim = "" Then
+            MessageBox.Show("Please select a machine.", "Missing Data")
+            isValid = False
+        End If
+
+        If Not validUnits() Then
+            isValid = False
+        End If
+
+        Return isValid
+
+    End Function
+
+   
+
+    Private Sub btnDeleteAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteAlt.Click
+
+        Stop
+        Dim activeRow As Integer
+        activeRow = FindActiveRow()
+        Stop
 
     End Sub
 End Class
