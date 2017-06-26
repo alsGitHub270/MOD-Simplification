@@ -467,8 +467,6 @@ Partial Friend Class CM_MAIN_frm
                     If Not IsNothing(ChildSheetView2) AndAlso ChildSheetView2.SelectionCount > 0 Then
                         summaryRow = iIndex
                         baseRow = jIndex
-                        summaryValue = FpSpread1.ActiveSheet.Cells(2, 3).Value
-                        baseValue = ChildSheetView1.Cells(baseRow, 1).Value
                         altRow = ChildSheetView2.ActiveRowIndex
                         found = True
                         Exit For
@@ -777,7 +775,7 @@ Partial Friend Class CM_MAIN_frm
                "Base Row: " & activeRows(1) & vbCrLf & _
                "Alt row:  " & activeRows(2))
         If activeRows(2) = -1 Then
-            MessageBox.Show("Please click on the Target Column of the  Alternate Row you wish to delete", "Cannot determine Alternate Row")
+            MessageBox.Show("Please click on the Target Column of the  Alternate Row you wish to delete", "Cannot Determine Which Alternate Row Selected!")
         Else
             DeleteAltRow(activeRows)
         End If
@@ -808,5 +806,22 @@ Partial Friend Class CM_MAIN_frm
         
     End Sub
 
+    Private Sub btnDeleteBank_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteBank.Click
+        Dim summaryRow As Integer
+        Dim activeRows As Array
+
+        activeRows = FindActiveRows()
+        summaryRow = activeRows(0)
+
+        Try
+            If MessageBox.Show("You are about to delete all data for Bank '" & FpSpread1.ActiveSheet.Cells(summaryRow, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                FpSpread1.ActiveSheet.RemoveRows(summaryRow, 1)
+            Else
+                MessageBox.Show("Delete Canceled!", "Delete Canceled!")
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Cannot Delete the Row")
+        End Try
+    End Sub
 End Class
 
