@@ -404,13 +404,13 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnMerge_Click(sender As System.Object, e As System.EventArgs) Handles btnMerge.Click
 
-        Dim active_row As Integer
+        Dim active_row As Array
         Dim new_message As String = "You are about to merge data for Bank A."
         Dim update_message As String = "You are about to update 'Master' data for Bank A.  All current data for the Master will be overwritten."
 
         If MainGroup.Rows.Count < 4 Then
             If MessageBox.Show(new_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
-                active_row = FindActiveRow()
+                'active_row = FindActiveRows()
                 MainGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""})
                 Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                 ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
@@ -442,36 +442,88 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Function FindActiveRow() As Integer
+    Private Function FindActiveRows() As Array
 
-        Dim value As Integer = -1
-      
+        Dim summaryRow As Integer = -1
+        Dim baseRow As Integer = -1
+        Dim altRow As Integer = -1
+        Dim summaryValue As String
+        Dim baseValue As String
+        Dim found As Boolean = False
+        Dim returnArray(2) As String
+
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
             If Not ChildSheetView1 Is Nothing Then
                 If ChildSheetView1.SelectionCount > 0 Then
-                    value = iIndex
+                    summaryRow = iIndex
+                    baseRow = ChildSheetView1.ActiveRowIndex
+                    
                     Exit For
                 End If
-                For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
-                    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
+                For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                    ChildSheetView2 = ChildSheetView1.FindChildView(jIndex, 0)
                     If Not IsNothing(ChildSheetView2) AndAlso ChildSheetView2.SelectionCount > 0 Then
-                        value = iIndex
+                        summaryRow = iIndex
+                        baseRow = jIndex
+                        summaryValue = FpSpread1.ActiveSheet.Cells(2, 3).Value
+                        baseValue = ChildSheetView1.Cells(baseRow, 1).Value
+                        altRow = ChildSheetView2.ActiveRowIndex
+                        found = True
                         Exit For
                     End If
-                Next jindex
-                If value > -1 Then
+                Next jIndex
+                If found Then
                     Exit For
                 End If
             End If
-        Next iIndex
+        Next
+        returnArray = {summaryRow, baseRow, altRow}
 
-        Return value
+
+        Return returnArray
+
 
     End Function
 
+    Private Function FindActiveRowsOriginal() As Array
 
+        Dim baseRow As Integer = -1
+        Dim altRow As Integer = -1
+        Dim found As Boolean = False
+        Dim returnArray(2) As Integer
+
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+            If Not ChildSheetView1 Is Nothing Then
+                If ChildSheetView1.SelectionCount > 0 Then
+                    baseRow = iIndex
+                    found = True
+                    Exit For
+                End If
+                For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                    ChildSheetView2 = ChildSheetView1.FindChildView(jIndex, 0)
+                    If Not IsNothing(ChildSheetView2) AndAlso ChildSheetView2.SelectionCount > 0 Then
+                        baseRow = iIndex
+                        altRow = ChildSheetView2.ActiveRowIndex
+                        found = True
+                        Exit For
+                    End If
+                Next jIndex
+                If found Then
+                    Exit For
+                End If
+            End If
+        Next
+        returnArray = {baseRow, altRow}
+
+
+        Return returnArray
+
+
+    End Function
     Private Sub btnPrint_Click(sender As System.Object, e As System.EventArgs) Handles btnPrint.Click
         '' Create PrintInfo object and set properties.
         'Dim printset As New FarPoint.Win.Spread.PrintInfo()
@@ -505,7 +557,7 @@ Partial Friend Class CM_MAIN_frm
         'End If
 
     End Sub
-   
+
     Private Sub btnAddAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnAddAlt.Click
 
         'MsgBox(FpSpread1.ActiveSheet.ActiveRowIndex)
@@ -513,8 +565,10 @@ Partial Friend Class CM_MAIN_frm
         Dim baseID As String, thisID As String, units As String, machine As String
         Dim summaryRowIndex As Integer, baseRowIndex As Integer, altCount As Integer
 
+        Dim activeRows As Array
         Dim activeRow As Integer
-        activeRow = FindActiveRow()
+        activeRows = FindActiveRows()
+        activeRow = activeRows(0)
 
         ' if FindActiveRow returns -1, it's likely that the cursor is set on a summary row.  Then use ActiveRow
         If activeRow = -1 Then
@@ -715,10 +769,44 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnDeleteAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteAlt.Click
 
-        Stop
-        Dim activeRow As Integer
-        activeRow = FindActiveRow()
-        Stop
+        Dim activeRows As Array
+        activeRows = FindActiveRows()
+
+        MsgBox("ActiveIndexRow: " & FpSpread1.ActiveSheet.ActiveRowIndex & vbCrLf & _
+               "Summary Row:  " & activeRows(0) & vbCrLf & _
+               "Base Row: " & activeRows(1) & vbCrLf & _
+               "Alt row:  " & activeRows(2))
+        If activeRows(2) = -1 Then
+            MessageBox.Show("Please click on the Target Column of the  Alternate Row you wish to delete", "Cannot determine Alternate Row")
+        Else
+            DeleteAltRow(activeRows)
+        End If
+        'Stop
+
 
     End Sub
+
+    Private Sub DeleteAltRow(activeRows As Array)
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+
+        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(activeRows(0), 0)
+        If Not ChildSheetView1 Is Nothing Then
+            ChildSheetView2 = ChildSheetView1.FindChildView(activeRows(1), 0)
+                If Not IsNothing(ChildSheetView2) Then
+                Try
+                    If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(activeRows(0), 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                        ChildSheetView2.RemoveRows(activeRows(2), 1)
+                    Else
+                        MessageBox.Show("Delete Canceled!", "Delete Canceled!")
+                    End If
+
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message, "Cannot Delete the Row")
+                End Try
+                End If
+        End If
+        
+    End Sub
+
 End Class
+
