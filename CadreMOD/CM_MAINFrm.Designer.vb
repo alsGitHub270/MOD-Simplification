@@ -1643,7 +1643,6 @@ Partial Class CM_MAIN_frm
         '
         Me.btnDeleteBank.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnDeleteBank.BackColor = System.Drawing.SystemColors.Control
-        Me.btnDeleteBank.Enabled = False
         Me.btnDeleteBank.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnDeleteBank.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDeleteBank.ForeColor = System.Drawing.SystemColors.ControlText
