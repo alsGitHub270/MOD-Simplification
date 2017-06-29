@@ -102,7 +102,7 @@ Partial Friend Class CM_MAIN_frm
             '  .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).BackColor = Color.DarkGray
             .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).ForeColor = Color.Black
             .SheetCornerStyle.BackColor = Color.DarkGray
-           
+
             .GrayAreaBackColor = Color.White
             .LockBackColor = Color.LightGray
         End With
@@ -134,8 +134,8 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
 
-            FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary 
-            FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25        'STATUS
+            FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary
+            FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25         'STATUS
             FpSpread1.ActiveSheet.Cells(i, 3).Column.Width = 50         'bank
             FpSpread1.ActiveSheet.Cells(i, 4).Column.Width = 75         'bank_type
             FpSpread1.ActiveSheet.Cells(i, 5).Column.Width = 60         'units
@@ -145,7 +145,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 80         'subcontracted_labor
             FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'freight
             FpSpread1.ActiveSheet.Cells(i, 11).Column.Width = 60        'nps
-            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 70       'sales commission
+            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 70        'sales commission
             FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'project manager
             FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 60        'expenses
             FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 70        'permits
@@ -260,7 +260,7 @@ Partial Friend Class CM_MAIN_frm
         'bttncell.LightColor = Color.AliceBlue
         'bttncell.TwoState = False
         'bttncell.Text = "Merge"
-        'bttncell.ShadowSize = 3      
+        'bttncell.ShadowSize = 3
 
         e.SheetView.LockBackColor = Color.LightGray
 
@@ -447,19 +447,18 @@ Partial Friend Class CM_MAIN_frm
         Dim summaryRow As Integer = -1
         Dim baseRow As Integer = -1
         Dim altRow As Integer = -1
-        Dim summaryValue As String
-        Dim baseValue As String
         Dim found As Boolean = False
         Dim returnArray(2) As String
 
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
             If Not ChildSheetView1 Is Nothing Then
                 If ChildSheetView1.SelectionCount > 0 Then
                     summaryRow = iIndex
                     baseRow = ChildSheetView1.ActiveRowIndex
-                    
+
                     Exit For
                 End If
                 For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
@@ -479,80 +478,59 @@ Partial Friend Class CM_MAIN_frm
         Next
         returnArray = {summaryRow, baseRow, altRow}
 
-
         Return returnArray
-
 
     End Function
 
-    Private Function FindActiveRowsOriginal() As Array
 
-        Dim baseRow As Integer = -1
-        Dim altRow As Integer = -1
-        Dim found As Boolean = False
-        Dim returnArray(2) As Integer
-
-        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
-        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If Not ChildSheetView1 Is Nothing Then
-                If ChildSheetView1.SelectionCount > 0 Then
-                    baseRow = iIndex
-                    found = True
-                    Exit For
-                End If
-                For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                    ChildSheetView2 = ChildSheetView1.FindChildView(jIndex, 0)
-                    If Not IsNothing(ChildSheetView2) AndAlso ChildSheetView2.SelectionCount > 0 Then
-                        baseRow = iIndex
-                        altRow = ChildSheetView2.ActiveRowIndex
-                        found = True
-                        Exit For
-                    End If
-                Next jIndex
-                If found Then
-                    Exit For
-                End If
-            End If
-        Next
-        returnArray = {baseRow, altRow}
-
-
-        Return returnArray
-
-
-    End Function
     Private Sub btnPrint_Click(sender As System.Object, e As System.EventArgs) Handles btnPrint.Click
-        '' Create PrintInfo object and set properties.
-        'Dim printset As New FarPoint.Win.Spread.PrintInfo()
-        'printset.ShowGrid = False
-        'printset.ShowRowHeader = FarPoint.Win.Spread.PrintHeader.Hide
-        'printset.UseMax = True
-        '' Create SheetView object and assign it to the first sheet.
-        'Dim SheetToPrint = FpSpread1.Sheets(0)
-        'SheetToPrint.PrintInfo = printset
-        'FpSpread1.Sheets(0) = SheetToPrint
-        '' Print the sheet.
-        'FpSpread1.PrintSheet(0)
+
+        'Dim printset = New FarPoint.Win.Spread.PrintInfo()
+
+        'printset.PrintToPdf = True
+
+        'printset.PdfFileName = "c:\temp\test.pdf"
+
+        'printset.PdfWriteMode = FarPoint.Win.Spread.PdfWriteMode.Append
+
+        'For Each sheet As FarPoint.Win.Spread.SheetView In FpSpread1.Sheets
+
+        '    sheet.PrintInfo = printset
+        'Next
+
+        'FpSpread1.PrintSheet(-1)
+
 
         Dim printset As New FarPoint.Win.Spread.PrintInfo()
         printset.PrintToPdf = True
-        printset.PdfFileName = "C:\Temp\results.pdf"
-        printset.Orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
-        printset.ZoomFactor = 0.65
+        printset.PdfFileName = "c:\temp\results.pdf"
+        printset.orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
+        printset.zoomfactor = 0.65
+        printset.BestFitCols = True
 
-        ' Assign the printer settings and print
+        printset.PdfWriteMode = FarPoint.Win.Spread.PdfWriteMode.Append
+
+        ' assign the printer settings and print
+        '''FpSpread1.Sheets().Printinfo = printset
+
+
+        ' child view
+        Dim ss As FarPoint.Win.Spread.SheetView
+        ss = FpSpread1.Sheets(0).GetChildView(0, 0)
         FpSpread1.Sheets(0).PrintInfo = printset
-        FpSpread1.PrintSheet(0)
-        MsgBox("Print to PDF completed!")
 
-        '' Child view
-        'Dim ss As FarPoint.Win.Spread.SheetView
-        'ss = FpSpread1.Sheets(0).GetChildView(0, 0)
-        'ss.PrintInfo = printset
-        'If Not ss Is Nothing Then
-        '    FpSpread1.PrintSheet(ss)
-        'End If
+
+        For Each sheet As FarPoint.Win.Spread.SheetView In FpSpread1.Sheets
+            sheet.PrintInfo = printset
+
+        Next
+
+        'FpSpread1.PrintSheet(-1)
+        FpSpread1.SafePrint(FpSpread1, -1)
+
+
+        MsgBox("print to pdf completed!")
+
 
     End Sub
 
@@ -655,16 +633,16 @@ Partial Friend Class CM_MAIN_frm
 
     Private Function BankExists(cell_value As String) As Boolean
 
-        Dim bank_exists As Boolean = True
+        Dim bank_exists As Boolean = False
 
-        With FpSpread1.ActiveSheet
-            For i As Integer = 0 To .RowCount - 1
-                If .Cells(i, 3).Value = cell_value Then
-                    Exit For
-                End If
-            Next
-            bank_exists = False
-        End With
+        'With FpSpread1.ActiveSheet
+        '    For i As Integer = 0 To .RowCount - 1 'Assuming the new row is on the last row, and should not be interrogated
+        '        If .Cells(i, 3).Value = cell_value Then
+        '            bank_exists = True
+        '            Exit For
+        '        End If
+        '    Next
+        'End With
 
         Return bank_exists
     End Function
@@ -763,7 +741,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Function
 
-   
+
 
     Private Sub btnDeleteAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteAlt.Click
 
@@ -774,6 +752,7 @@ Partial Friend Class CM_MAIN_frm
                "Summary Row:  " & activeRows(0) & vbCrLf & _
                "Base Row: " & activeRows(1) & vbCrLf & _
                "Alt row:  " & activeRows(2))
+
         If activeRows(2) = -1 Then
             MessageBox.Show("Please click on the Target Column of the  Alternate Row you wish to delete", "Cannot Determine Which Alternate Row Selected!")
         Else
@@ -803,7 +782,7 @@ Partial Friend Class CM_MAIN_frm
                 End Try
                 End If
         End If
-        
+
     End Sub
 
     Private Sub btnDeleteBank_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteBank.Click
@@ -812,6 +791,9 @@ Partial Friend Class CM_MAIN_frm
 
         activeRows = FindActiveRows()
         summaryRow = activeRows(0)
+        If summaryRow = -1 Then
+            summaryRow = FpSpread1.ActiveSheet.ActiveRowIndex
+        End If
 
         Try
             If MessageBox.Show("You are about to delete all data for Bank '" & FpSpread1.ActiveSheet.Cells(summaryRow, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
@@ -823,5 +805,21 @@ Partial Friend Class CM_MAIN_frm
             MessageBox.Show(ex.Message, "Cannot Delete the Row")
         End Try
     End Sub
-End Class
 
+    Private Sub AlsPrint()
+
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+
+        Dim iIndex As Integer
+        Dim jIndex As Integer
+
+        For iIndex = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+            If Not IsNothing(ChildSheetView1) Then
+
+            End If
+
+        Next
+    End Sub
+End Class
