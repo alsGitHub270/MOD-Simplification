@@ -459,7 +459,7 @@ Partial Friend Class CM_MAIN_frm
                 If ChildSheetView1.SelectionCount > 0 Then
                     summaryRow = iIndex
                     baseRow = ChildSheetView1.ActiveRowIndex
-                    
+
                     Exit For
                 End If
                 For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
@@ -677,7 +677,7 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub FpSpread1_LeaveCell(sender As Object, e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
 
-        Select e.Column
+        Select Case e.Column
             Case 3          ' bank
                 If Not ValidBank() Then
                     e.Cancel = True
@@ -763,7 +763,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Function
 
-   
+
 
     Private Sub btnDeleteAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteAlt.Click
 
@@ -790,7 +790,7 @@ Partial Friend Class CM_MAIN_frm
         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(activeRows(0), 0)
         If Not ChildSheetView1 Is Nothing Then
             ChildSheetView2 = ChildSheetView1.FindChildView(activeRows(1), 0)
-                If Not IsNothing(ChildSheetView2) Then
+            If Not IsNothing(ChildSheetView2) Then
                 Try
                     If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(activeRows(0), 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                         ChildSheetView2.RemoveRows(activeRows(2), 1)
@@ -801,9 +801,9 @@ Partial Friend Class CM_MAIN_frm
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "Cannot Delete the Row")
                 End Try
-                End If
+            End If
         End If
-        
+
     End Sub
 
     Private Sub btnDeleteBank_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteBank.Click
@@ -812,7 +812,9 @@ Partial Friend Class CM_MAIN_frm
 
         activeRows = FindActiveRows()
         summaryRow = activeRows(0)
-
+        If summaryRow = -1 Then
+            summaryRow = FpSpread1.ActiveSheet.ActiveRowIndex
+        End If
         Try
             If MessageBox.Show("You are about to delete all data for Bank '" & FpSpread1.ActiveSheet.Cells(summaryRow, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 FpSpread1.ActiveSheet.RemoveRows(summaryRow, 1)
@@ -822,6 +824,15 @@ Partial Friend Class CM_MAIN_frm
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Cannot Delete the Row")
         End Try
+    End Sub
+
+    Private Sub btnDeleteMaster_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteMaster.Click
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
+        If ChildSheetView1.RowCount > 1 Then
+            ChildSheetView1.RemoveRows(0, 1)
+        End If
+
     End Sub
 End Class
 
