@@ -822,4 +822,13 @@ Partial Friend Class CM_MAIN_frm
 
         Next
     End Sub
+
+    Private Sub btnDeleteMaster_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteMaster.Click
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
+        If ChildSheetView1.RowCount > 1 Then
+            ChildSheetView1.RemoveRows(0, 1)
+        End If
+
+    End Sub
 End Class
