@@ -98,6 +98,9 @@ Partial Class CM_MAIN_frm
         Me.ContactCity_lbl = New System.Windows.Forms.Label()
         Me.ContactAddress_lbl = New System.Windows.Forms.Label()
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.BuildingType_cmb = New System.Windows.Forms.ComboBox()
+        Me.BuildingType_lbl = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Proposal_cmd = New System.Windows.Forms.Button()
         Me.Status_cmb = New System.Windows.Forms.ComboBox()
         Me.Consultant_chk = New System.Windows.Forms.CheckBox()
@@ -156,6 +159,7 @@ Partial Class CM_MAIN_frm
         Me._Forms_btn_2 = New System.Windows.Forms.Button()
         Me.btnAddAlt = New System.Windows.Forms.Button()
         Me.btnMerge = New System.Windows.Forms.Button()
+        Me.txtBidDate = New System.Windows.Forms.TextBox()
         Me.BuildingInformation_fra.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Menu_pic.SuspendLayout()
@@ -372,6 +376,10 @@ Partial Class CM_MAIN_frm
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingInformation_fra.Controls.Add(Me.BuildingType_cmb)
+        Me.BuildingInformation_fra.Controls.Add(Me.BuildingType_lbl)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtBidDate)
+        Me.BuildingInformation_fra.Controls.Add(Me.Label1)
         Me.BuildingInformation_fra.Controls.Add(Me.Proposal_cmd)
         Me.BuildingInformation_fra.Controls.Add(Me.Status_cmb)
         Me.BuildingInformation_fra.Controls.Add(Me.Consultant_chk)
@@ -424,6 +432,43 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "Building/Job Information"
+        '
+        'BuildingType_cmb
+        '
+        Me.BuildingType_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.BuildingType_cmb.DropDownWidth = 222
+        Me.BuildingType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BuildingType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.BuildingType_cmb.Location = New System.Drawing.Point(578, 125)
+        Me.BuildingType_cmb.Name = "BuildingType_cmb"
+        Me.BuildingType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BuildingType_cmb.Size = New System.Drawing.Size(50, 21)
+        Me.BuildingType_cmb.TabIndex = 86
+        '
+        'BuildingType_lbl
+        '
+        Me.BuildingType_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.BuildingType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BuildingType_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.BuildingType_lbl.Location = New System.Drawing.Point(467, 127)
+        Me.BuildingType_lbl.Name = "BuildingType_lbl"
+        Me.BuildingType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BuildingType_lbl.Size = New System.Drawing.Size(100, 13)
+        Me.BuildingType_lbl.TabIndex = 87
+        Me.BuildingType_lbl.Text = "Building Type"
+        Me.BuildingType_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(958, 205)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(56, 13)
+        Me.Label1.TabIndex = 84
+        Me.Label1.Text = "Bid Date"
         '
         'Proposal_cmd
         '
@@ -1735,6 +1780,14 @@ Partial Class CM_MAIN_frm
         Me.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnMerge.UseVisualStyleBackColor = False
         '
+        'txtBidDate
+        '
+        Me.txtBidDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtBidDate.Location = New System.Drawing.Point(1020, 200)
+        Me.txtBidDate.Name = "txtBidDate"
+        Me.txtBidDate.Size = New System.Drawing.Size(86, 20)
+        Me.txtBidDate.TabIndex = 85
+        '
         'CM_MAIN_frm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1849,5 +1902,9 @@ Partial Class CM_MAIN_frm
     Private WithEvents btnAddAlt As System.Windows.Forms.Button
     Private WithEvents btnMerge As System.Windows.Forms.Button
     Friend WithEvents btnPrint As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Public WithEvents BuildingType_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents BuildingType_lbl As System.Windows.Forms.Label
+    Friend WithEvents txtBidDate As System.Windows.Forms.TextBox
 #End Region
 End Class

@@ -33,11 +33,11 @@ Partial Friend Class CM_MAIN_frm
         myDataSet.EnforceConstraints = False
 
         SummaryGroup = myDataSet.Tables.Add("SummaryGroup")
-        SummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("Summary Group", dtStr), New DataColumn("id", dtStr), New DataColumn("_", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Bank Type", dtStr), New DataColumn("Units", dtStr), New DataColumn("Material HQ", dtInt), New DataColumn("Material RL", dtInt), New DataColumn("Labor", dtInt), New DataColumn("Subcontracted Labor", dtInt), New DataColumn("Freight", dtInt), New DataColumn("NPS", dtInt), New DataColumn("Sales Commission", dtInt), New DataColumn("Project Manager", dtInt), New DataColumn("Expenses", dtInt), New DataColumn("Permits", dtInt), New DataColumn("Bonds", dtInt), New DataColumn("OCPL", dtInt), New DataColumn("Tax", dtInt), New DataColumn("Bank Cost", dtInt), New DataColumn("Project Markup", dtInt), New DataColumn("Bank Price", dtInt), New DataColumn("BDP Hours", dtInt), New DataColumn("Special Hours", dtInt), New DataColumn("Overtime Hours", dtInt), New DataColumn("Total Hours", dtInt), New DataColumn("Comment", dtStr)})
+        SummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("Summary Group", dtStr), New DataColumn("id", dtStr), New DataColumn("_", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Bank Type", dtStr), New DataColumn("Units", dtStr), New DataColumn("Material HQ", dtInt), New DataColumn("Material RL", dtInt), New DataColumn("Sales Tax", dtInt), New DataColumn("Total BDP Hours", dtInt), New DataColumn("Total Special Hours", dtInt), New DataColumn("Total Labor Hours", dtInt), New DataColumn("Overtime Hours Included", dtInt), New DataColumn("Labor $", dtInt), New DataColumn("SubContract Work", dtInt), New DataColumn("Misc Costs", dtInt), New DataColumn("Freight", dtInt), New DataColumn("NPS Cost", dtInt), New DataColumn("Total Bank Cost", dtInt), New DataColumn("Project C1%", dtInt), New DataColumn("Bank Sell Price", dtInt)})
 
-        SummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
 
         MainGroup = myDataSet.Tables.Add("BaseGroup")
@@ -72,6 +72,8 @@ Partial Friend Class CM_MAIN_frm
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
+
+        Load_ListBoxes()
 
         BuildingInformation_fra.Left = ShiftDist
         ' JobInformation_fra.Left = ShiftDist
@@ -109,6 +111,8 @@ Partial Friend Class CM_MAIN_frm
             .LockBackColor = Color.LightGray
         End With
 
+        
+
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
         currencyType.DecimalPlaces = 0
@@ -143,34 +147,38 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 5).Column.Width = 60         'units
             FpSpread1.ActiveSheet.Cells(i, 6).Column.Width = 60         'material_HQ
             FpSpread1.ActiveSheet.Cells(i, 7).Column.Width = 60         'material_RL
-            FpSpread1.ActiveSheet.Cells(i, 8).Column.Width = 60         'labor
-            FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 80         'subcontracted_labor
-            FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'freight
-            FpSpread1.ActiveSheet.Cells(i, 11).Column.Width = 60        'nps
-            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 70        'sales commission
-            FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'project manager
-            FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 60        'expenses
-            FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 70        'permits
-            FpSpread1.ActiveSheet.Cells(i, 16).Column.Width = 60        'bonds
-            FpSpread1.ActiveSheet.Cells(i, 17).Column.Width = 60        'ocpl
-            FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'tax
-            FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 60        'bank cost
-            FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 60        'project markup
-            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 60        'bank price
-            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 50        'bdp hours
-            FpSpread1.ActiveSheet.Cells(i, 23).Column.Width = 50        'special hours
-            FpSpread1.ActiveSheet.Cells(i, 24).Column.Width = 55        'overtime hours
-            FpSpread1.ActiveSheet.Cells(i, 25).Column.Width = 50        'total hours
-            FpSpread1.ActiveSheet.Cells(i, 26).Column.Width = 160        'comment
+            FpSpread1.ActiveSheet.Cells(i, 8).Column.Width = 60         'sales tax
+            FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 60         'total BDP Hours
+            FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'total special hours
+            FpSpread1.ActiveSheet.Cells(i, 11).Column.Width = 60        'total labor hours
+            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 70        'Overtime hours included
+            FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'labor $
+            FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 70        'Subcontract work
+            FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 60        'mics costs
+            FpSpread1.ActiveSheet.Cells(i, 16).Column.Width = 60        'freight
+            FpSpread1.ActiveSheet.Cells(i, 17).Column.Width = 60        'NPS Cost
+            FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'total bank cost
+            FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 60        'project c1
+            FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 60        'bank sell price
+           
 
             FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell       ' machine/bank type
 
-            For j As Integer = 6 To 21
-                FpSpread1.ActiveSheet.Cells(i, j).CellType = currencyType
-            Next
+
+            FpSpread1.ActiveSheet.Cells(i, 6).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 7).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 8).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 13).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 14).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 15).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 16).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 17).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 18).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 20).CellType = currencyType
+
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
-            FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 35
+            FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 40
 
 
             'FpSpread1.ActiveSheet.Cells(i, 25).BackColor = Color.LightGray
@@ -233,11 +241,6 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub FpSpread1_ChildControlActivated(sender As Object, e As FarPoint.Win.Spread.ChildControlEventArgs) Handles FpSpread1.ChildControlActivated
-
-        Stop
-
-    End Sub
 
 
     Private Sub FpSpread1_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles FpSpread1.ChildViewCreated
@@ -837,4 +840,52 @@ Partial Friend Class CM_MAIN_frm
 
     End Function
 
+    Private Sub Load_ListBoxes()
+
+        BuildingType_cmb.Items.Add("AIR - Airport")
+        BuildingType_cmb.Items.Add("APA - Apartment")
+        BuildingType_cmb.Items.Add("CHU - Church")
+        BuildingType_cmb.Items.Add("CON - Condominium")
+        BuildingType_cmb.Items.Add("COT - Commercial Other - Restaurants")
+        BuildingType_cmb.Items.Add("HOS - Hospital/Ambulatory Care/Clinic")
+        BuildingType_cmb.Items.Add("HOT - Hotel/Motel/Inn/Dorm/Casino")
+        BuildingType_cmb.Items.Add("IOT - Industrial Other")
+        BuildingType_cmb.Items.Add("MIN - Mines")
+        BuildingType_cmb.Items.Add("MOV - Movie Theater")
+        BuildingType_cmb.Items.Add("OFF - Office/Bank/Administration")
+        BuildingType_cmb.Items.Add("PAR - Parking Garage")
+        BuildingType_cmb.Items.Add("POW - Power Plants")
+        BuildingType_cmb.Items.Add("RAI - Railway Station")
+        BuildingType_cmb.Items.Add("RET - Retirement Home/Nursing Home")
+        BuildingType_cmb.Items.Add("ROT - Residential Other")
+        BuildingType_cmb.Items.Add("SHI - Ship (Cruising)")
+        BuildingType_cmb.Items.Add("SHO - Shopping Center/Mall/Dept Store")
+        BuildingType_cmb.Items.Add("SPO - Arena/Sports Complex/Convention")
+        BuildingType_cmb.Items.Add("TOT - Transport Other")
+        BuildingType_cmb.Items.Add("UND - Subway/Metro")
+        BuildingType_cmb.Items.Add("UNI - School/College/University")
+        BuildingType_cmb.Items.Add("WAR - Warehouse")
+    End Sub
+
+    Private Sub BuildingType_cmb_Leave(sender As System.Object, e As System.EventArgs) Handles BuildingType_cmb.Leave
+        If BuildingType_cmb.Text.Length > 3 Then
+            BuildingType_cmb.Text = Strings.Left(BuildingType_cmb.Text, 3)
+        End If
+    End Sub
+
+    Private Sub BuildingType_cmb_LostFocus(sender As Object, e As System.EventArgs) Handles BuildingType_cmb.LostFocus
+        If BuildingType_cmb.Text.Length > 3 Then
+            BuildingType_cmb.Text = Strings.Left(BuildingType_cmb.Text, 3)
+        End If
+    End Sub
+
+    Private Sub txtBidDate_Validating(sender As System.Object, e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
+        If IsDate(txtBidDate.Text) Then
+        Else
+            e.Cancel = True
+            MessageBox.Show("Please enter a valid date in the format mm/dd/yy", "Invalid Date")
+        End If
+    End Sub
+
+  
 End Class
