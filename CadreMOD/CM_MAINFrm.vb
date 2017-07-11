@@ -8,7 +8,7 @@ Imports System.Drawing
 Imports System.Globalization
 Imports System.IO
 Imports System.Windows.Forms
-Imports System.Reflection
+
 
 Partial Friend Class CM_MAIN_frm
     Inherits System.Windows.Forms.Form
@@ -888,4 +888,11 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
   
+    Private Sub btnAddress_Click(sender As System.Object, e As System.EventArgs) Handles btnAddress.Click
+        FromCM = True
+        CM_ADDRS_frm.InitializeAddressFields = True
+        CM_ADDRS_frm.ShowDialog()
+        ' Set_CurrentAddress()
+        FromCM = False
+    End Sub
 End Class

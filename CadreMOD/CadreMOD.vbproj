@@ -92,18 +92,29 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CM_ADDRS.vb" />
+    <Compile Include="CM_ADDRSFrm.Designer.vb">
+      <DependentUpon>CM_ADDRSFrm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CM_ADDRSFrm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CM_MAIN.vb" />
     <Compile Include="CM_MAINFrm.Designer.vb">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
     </Compile>
     <Compile Include="CM_MAINFrm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Constants.vb" />
     <Compile Include="frmEstimatingBase.Designer.vb">
       <DependentUpon>frmEstimatingBase.vb</DependentUpon>
     </Compile>
     <Compile Include="frmEstimatingBase.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="General.vb" />
+    <Compile Include="Global.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -121,6 +132,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CM_ADDRSFrm.resX">
+      <DependentUpon>CM_ADDRSFrm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CM_MAINFrm.resX">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
     </EmbeddedResource>
