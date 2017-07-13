@@ -126,15 +126,36 @@ Partial Friend Class CM_MAIN_frm
         'FpSpread1.Sheets(0).Rows(2).BackColor = Color.LightGray
         'FpSpread1.Sheets(0).SetRowExpandable(i, False)
 
-        Dim cbstr As String()
-        cbstr = New String() {"Geared", "Gearless", "Hydro"}
-        Dim cmbocell As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
-        cmbocell.Items = cbstr
-        cmbocell.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
-        cmbocell.Editable = False
-        cmbocell.MaxDrop = 3
+        Dim cbstr_Machine As String()
+        cbstr_Machine = New String() {"Geared", "Gearless", "Hydro"}
+        Dim cmbocell_Machine As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+        cmbocell_Machine.Items = cbstr_Machine
+        cmbocell_Machine.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+        cmbocell_Machine.Editable = False
+        cmbocell_Machine.MaxDrop = 3
+
+        'Dim cmbocell_Bank As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+        'Dim cbstr_Bank() As String
+
+
+
+
+        'cmbocell_Bank.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+        'cmbocell_Bank.Editable = False
+        'cmbocell_Bank.MaxDrop = 3
 
         For i As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+
+            Dim cmbocell_Bank As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+            Dim cbstr_Bank() As String
+            cmbocell_Bank.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+            cmbocell_Bank.Editable = False
+            cmbocell_Bank.MaxDrop = 3
+
+            cbstr_Bank = BuildBanks(FpSpread1.ActiveSheet.GetValue(i, 3))
+            cmbocell_Bank.Items = cbstr_Bank
+
+
             FpSpread1.ActiveSheet.Rows(i).Locked = True
             FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
@@ -160,10 +181,9 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'total bank cost
             FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 60        'project c1
             FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 60        'bank sell price
-           
 
-            FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell       ' machine/bank type
-
+            FpSpread1.ActiveSheet.Cells(i, 3).CellType = cmbocell_Bank      ' bank
+            FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell_Machine   ' machine/bank type
 
             FpSpread1.ActiveSheet.Cells(i, 6).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 7).CellType = currencyType
@@ -238,6 +258,20 @@ Partial Friend Class CM_MAIN_frm
         'FpSpread1.ActiveSheet.Rows(1).Height = 50
         'FpSpread1.ActiveSheet.Columns(1).Width = 150
 
+
+    End Sub
+
+
+    Private Sub FpSpread1_CellClick(sender As Object, e As FarPoint.Win.Spread.CellClickEventArgs) Handles FpSpread1.CellClick
+        Dim thisRow As Integer
+        Dim thisColumn As Integer
+        Dim thisValue As String
+
+        thisRow = e.Row
+        thisColumn = e.Column
+        thisValue = FpSpread1.ActiveSheet.GetValue(thisRow, thisColumn)
+
+        ' MsgBox("row:  " & thisRow & "    column: " & thisColumn & " and it's value is: " & thisValue)
 
     End Sub
 
@@ -584,7 +618,7 @@ Partial Friend Class CM_MAIN_frm
 
 
 
-        SummaryGroup.Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
         FpSpread1.Refresh()
         FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
         FpSpread1.ActiveSheet.ActiveRow.Locked = True
@@ -593,7 +627,11 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
 
-        For i As Integer = 6 To 21
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 8).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = currencyType
+        For i As Integer = 13 To 18
             FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
         Next
 
@@ -616,10 +654,14 @@ Partial Friend Class CM_MAIN_frm
         cmbocell_bank.MaxDrop = 4
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
 
-
-
-
         FpSpread1.Refresh()
+    End Sub
+
+    Private Sub FpSpread1_ComboDropDown(sender As Object, e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboDropDown
+        Dim thisValue As String
+
+        thisValue = FpSpread1.ActiveSheet.GetValue(e.Row, e.Column)
+
     End Sub
 
    
@@ -650,13 +692,7 @@ Partial Friend Class CM_MAIN_frm
         If e.Cancel = False Then
             If e.Row <> e.NewRow Then
                 If StillValid() Then
-                    With FpSpread1.ActiveSheet
-                        For i As Integer = 0 To .RowCount - 1 'Assuming the new row is on the last row, and should not be interrogated
-                            .Cells(i, 3).CellType = textBoxType
-                        Next
-                        .SortRows(3, True, True)
-                    End With
-                    FpSpread1.Refresh()
+                    FpSpread1.ActiveSheet.SortRows(3, True, False)
                 Else
                     e.Cancel = True
                 End If
@@ -785,14 +821,12 @@ Partial Friend Class CM_MAIN_frm
         Dim ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
 
         Dim iIndex As Integer
-        Dim jIndex As Integer
 
         For iIndex = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
             If Not IsNothing(ChildSheetView1) Then
 
             End If
-
         Next
     End Sub
 
@@ -816,7 +850,8 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Function BuildAvailableBanks() As String()
-        ' Roll thru all the banks in the summary row.  Add to string if not available
+        ' Roll thru all the banks in the summary row. 
+        ' then delete if bank already in use
        
         Dim myList As New List(Of String)()
         Dim i As Integer
@@ -834,9 +869,21 @@ Partial Friend Class CM_MAIN_frm
             End If
         Next
 
-        Dim thisString() As String = myList.ToArray()
+        Return myList.ToArray
 
-        Return thisString
+    End Function
+
+    Private Function BuildBanks(thisBank As String) As String()
+
+        Dim myList As New List(Of String)()
+
+        myList = BuildAvailableBanks().ToList
+
+        myList.Add(thisBank)
+        myList.Sort()
+
+        Return myList.ToArray
+
 
     End Function
 

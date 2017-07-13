@@ -1347,7 +1347,7 @@ Partial Class CM_MAIN_frm
         Me.FpSpread1.Location = New System.Drawing.Point(8, 61)
         Me.FpSpread1.Name = "FpSpread1"
         Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
-        Me.FpSpread1.Size = New System.Drawing.Size(1435, 413)
+        Me.FpSpread1.Size = New System.Drawing.Size(1551, 413)
         Me.FpSpread1.TabIndex = 11
         '
         'Equipment_fra
@@ -1384,7 +1384,7 @@ Partial Class CM_MAIN_frm
         Me.btnPrint.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnPrint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.btnPrint.Location = New System.Drawing.Point(869, 24)
+        Me.btnPrint.Location = New System.Drawing.Point(826, 23)
         Me.btnPrint.Name = "btnPrint"
         Me.btnPrint.Size = New System.Drawing.Size(77, 22)
         Me.btnPrint.TabIndex = 79
@@ -1394,7 +1394,7 @@ Partial Class CM_MAIN_frm
         'Button3
         '
         Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button3.Location = New System.Drawing.Point(979, 24)
+        Me.Button3.Location = New System.Drawing.Point(936, 23)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(113, 22)
         Me.Button3.TabIndex = 74
@@ -1408,7 +1408,7 @@ Partial Class CM_MAIN_frm
         Me.btnDeleteMaster.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnDeleteMaster.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDeleteMaster.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteMaster.Location = New System.Drawing.Point(605, 35)
+        Me.btnDeleteMaster.Location = New System.Drawing.Point(562, 34)
         Me.btnDeleteMaster.Name = "btnDeleteMaster"
         Me.btnDeleteMaster.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnDeleteMaster.Size = New System.Drawing.Size(77, 22)
@@ -1424,7 +1424,7 @@ Partial Class CM_MAIN_frm
         Me.btnDeleteAlt.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnDeleteAlt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDeleteAlt.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteAlt.Location = New System.Drawing.Point(517, 35)
+        Me.btnDeleteAlt.Location = New System.Drawing.Point(474, 34)
         Me.btnDeleteAlt.Name = "btnDeleteAlt"
         Me.btnDeleteAlt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnDeleteAlt.Size = New System.Drawing.Size(77, 22)
@@ -1436,7 +1436,7 @@ Partial Class CM_MAIN_frm
         'Button2
         '
         Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button2.Location = New System.Drawing.Point(284, 24)
+        Me.Button2.Location = New System.Drawing.Point(234, 20)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(113, 22)
         Me.Button2.TabIndex = 73
@@ -1450,7 +1450,7 @@ Partial Class CM_MAIN_frm
         Me.btnDeleteBank.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnDeleteBank.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDeleteBank.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteBank.Location = New System.Drawing.Point(425, 35)
+        Me.btnDeleteBank.Location = New System.Drawing.Point(382, 34)
         Me.btnDeleteBank.Name = "btnDeleteBank"
         Me.btnDeleteBank.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnDeleteBank.Size = New System.Drawing.Size(77, 22)
@@ -1466,7 +1466,7 @@ Partial Class CM_MAIN_frm
         Me.btnForms.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnForms.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnForms.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnForms.Location = New System.Drawing.Point(694, 24)
+        Me.btnForms.Location = New System.Drawing.Point(651, 23)
         Me.btnForms.Name = "btnForms"
         Me.btnForms.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnForms.Size = New System.Drawing.Size(77, 22)
@@ -1482,7 +1482,7 @@ Partial Class CM_MAIN_frm
         Me.btnAddBank.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnAddBank.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnAddBank.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddBank.Location = New System.Drawing.Point(425, 11)
+        Me.btnAddBank.Location = New System.Drawing.Point(382, 10)
         Me.btnAddBank.Name = "btnAddBank"
         Me.btnAddBank.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnAddBank.Size = New System.Drawing.Size(77, 22)
@@ -1498,7 +1498,7 @@ Partial Class CM_MAIN_frm
         Me._Forms_btn_2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me._Forms_btn_2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._Forms_btn_2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._Forms_btn_2.Location = New System.Drawing.Point(783, 24)
+        Me._Forms_btn_2.Location = New System.Drawing.Point(740, 23)
         Me._Forms_btn_2.Name = "_Forms_btn_2"
         Me._Forms_btn_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._Forms_btn_2.Size = New System.Drawing.Size(77, 22)
@@ -1514,7 +1514,7 @@ Partial Class CM_MAIN_frm
         Me.btnAddAlt.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnAddAlt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnAddAlt.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddAlt.Location = New System.Drawing.Point(517, 11)
+        Me.btnAddAlt.Location = New System.Drawing.Point(474, 10)
         Me.btnAddAlt.Name = "btnAddAlt"
         Me.btnAddAlt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnAddAlt.Size = New System.Drawing.Size(77, 22)
@@ -1530,7 +1530,7 @@ Partial Class CM_MAIN_frm
         Me.btnMerge.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnMerge.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnMerge.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnMerge.Location = New System.Drawing.Point(605, 11)
+        Me.btnMerge.Location = New System.Drawing.Point(562, 10)
         Me.btnMerge.Name = "btnMerge"
         Me.btnMerge.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnMerge.Size = New System.Drawing.Size(77, 22)
