@@ -68,13 +68,18 @@ Partial Class CM_MAIN_frm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
-        Me.BuildingType_cmb = New System.Windows.Forms.ComboBox()
-        Me.BuildingType_lbl = New System.Windows.Forms.Label()
-        Me.txtBidDate = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.SeismicZone_cmb = New System.Windows.Forms.ComboBox()
+        Me.SeismicZone_lbl = New System.Windows.Forms.Label()
+        Me.txtBidDate = New System.Windows.Forms.DateTimePicker()
+        Me.cmdBuildingType = New System.Windows.Forms.ComboBox()
+        Me.lblBuildingType = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Proposal_cmd = New System.Windows.Forms.Button()
         Me.Status_cmb = New System.Windows.Forms.ComboBox()
-        Me.Consultant_chk = New System.Windows.Forms.CheckBox()
         Me._label_7 = New System.Windows.Forms.Label()
         Me.MajorProject_chk = New System.Windows.Forms.CheckBox()
         Me.Status_lbl = New System.Windows.Forms.Label()
@@ -130,6 +135,8 @@ Partial Class CM_MAIN_frm
         Me._Forms_btn_2 = New System.Windows.Forms.Button()
         Me.btnAddAlt = New System.Windows.Forms.Button()
         Me.btnMerge = New System.Windows.Forms.Button()
+        Me.cmbNationalAccount = New System.Windows.Forms.ComboBox()
+        Me.lblNationalAccount = New System.Windows.Forms.Label()
         Me.BuildingInformation_fra.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Menu_pic.SuspendLayout()
@@ -142,13 +149,20 @@ Partial Class CM_MAIN_frm
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
-        Me.BuildingInformation_fra.Controls.Add(Me.BuildingType_cmb)
-        Me.BuildingInformation_fra.Controls.Add(Me.BuildingType_lbl)
+        Me.BuildingInformation_fra.Controls.Add(Me.lblNationalAccount)
+        Me.BuildingInformation_fra.Controls.Add(Me.cmbNationalAccount)
+        Me.BuildingInformation_fra.Controls.Add(Me.TextBox2)
+        Me.BuildingInformation_fra.Controls.Add(Me.Label3)
+        Me.BuildingInformation_fra.Controls.Add(Me.TextBox1)
+        Me.BuildingInformation_fra.Controls.Add(Me.Label2)
+        Me.BuildingInformation_fra.Controls.Add(Me.SeismicZone_cmb)
+        Me.BuildingInformation_fra.Controls.Add(Me.SeismicZone_lbl)
         Me.BuildingInformation_fra.Controls.Add(Me.txtBidDate)
+        Me.BuildingInformation_fra.Controls.Add(Me.cmdBuildingType)
+        Me.BuildingInformation_fra.Controls.Add(Me.lblBuildingType)
         Me.BuildingInformation_fra.Controls.Add(Me.Label1)
         Me.BuildingInformation_fra.Controls.Add(Me.Proposal_cmd)
         Me.BuildingInformation_fra.Controls.Add(Me.Status_cmb)
-        Me.BuildingInformation_fra.Controls.Add(Me.Consultant_chk)
         Me.BuildingInformation_fra.Controls.Add(Me._label_7)
         Me.BuildingInformation_fra.Controls.Add(Me.MajorProject_chk)
         Me.BuildingInformation_fra.Controls.Add(Me.Status_lbl)
@@ -184,46 +198,118 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "Building/Job Information"
         '
-        'BuildingType_cmb
+        'TextBox2
         '
-        Me.BuildingType_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.BuildingType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.BuildingType_cmb.DropDownWidth = 222
-        Me.BuildingType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BuildingType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.BuildingType_cmb.Location = New System.Drawing.Point(121, 119)
-        Me.BuildingType_cmb.Name = "BuildingType_cmb"
-        Me.BuildingType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BuildingType_cmb.Size = New System.Drawing.Size(123, 21)
-        Me.BuildingType_cmb.TabIndex = 86
+        Me.TextBox2.Enabled = False
+        Me.TextBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.Location = New System.Drawing.Point(123, 132)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(336, 20)
+        Me.TextBox2.TabIndex = 94
+        Me.TextBox2.Text = "Sam Axe Consulting, Ltd."
         '
-        'BuildingType_lbl
+        'Label3
         '
-        Me.BuildingType_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.BuildingType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.BuildingType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BuildingType_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.BuildingType_lbl.Location = New System.Drawing.Point(15, 122)
-        Me.BuildingType_lbl.Name = "BuildingType_lbl"
-        Me.BuildingType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BuildingType_lbl.Size = New System.Drawing.Size(100, 13)
-        Me.BuildingType_lbl.TabIndex = 87
-        Me.BuildingType_lbl.Text = "Building Type"
-        Me.BuildingType_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.Label3.AutoSize = True
+        Me.Label3.Enabled = False
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(50, 137)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(67, 13)
+        Me.Label3.TabIndex = 93
+        Me.Label3.Text = "Consultant"
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Enabled = False
+        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.Location = New System.Drawing.Point(123, 108)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(336, 20)
+        Me.TextBox1.TabIndex = 92
+        Me.TextBox1.Text = "Queen Consolidated Enterprises"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Enabled = False
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(74, 113)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(43, 13)
+        Me.Label2.TabIndex = 91
+        Me.Label2.Text = "Owner"
+        '
+        'SeismicZone_cmb
+        '
+        Me.SeismicZone_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.SeismicZone_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SeismicZone_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.SeismicZone_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SeismicZone_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.SeismicZone_cmb.Location = New System.Drawing.Point(1279, 14)
+        Me.SeismicZone_cmb.Name = "SeismicZone_cmb"
+        Me.SeismicZone_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SeismicZone_cmb.Size = New System.Drawing.Size(40, 21)
+        Me.SeismicZone_cmb.TabIndex = 89
+        '
+        'SeismicZone_lbl
+        '
+        Me.SeismicZone_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.SeismicZone_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SeismicZone_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SeismicZone_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SeismicZone_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.SeismicZone_lbl.Location = New System.Drawing.Point(1196, 16)
+        Me.SeismicZone_lbl.Name = "SeismicZone_lbl"
+        Me.SeismicZone_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SeismicZone_lbl.Size = New System.Drawing.Size(77, 17)
+        Me.SeismicZone_lbl.TabIndex = 90
+        Me.SeismicZone_lbl.Text = "Seismic Zone "
         '
         'txtBidDate
         '
-        Me.txtBidDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBidDate.Location = New System.Drawing.Point(872, 179)
+        Me.txtBidDate.Checked = False
+        Me.txtBidDate.CustomFormat = "MM/dd/yyyy"
+        Me.txtBidDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtBidDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.txtBidDate.Location = New System.Drawing.Point(770, 173)
         Me.txtBidDate.Name = "txtBidDate"
-        Me.txtBidDate.Size = New System.Drawing.Size(86, 20)
-        Me.txtBidDate.TabIndex = 85
+        Me.txtBidDate.Size = New System.Drawing.Size(133, 20)
+        Me.txtBidDate.TabIndex = 88
+        '
+        'cmdBuildingType
+        '
+        Me.cmdBuildingType.BackColor = System.Drawing.SystemColors.Window
+        Me.cmdBuildingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmdBuildingType.DropDownWidth = 222
+        Me.cmdBuildingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdBuildingType.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cmdBuildingType.Location = New System.Drawing.Point(123, 189)
+        Me.cmdBuildingType.Name = "cmdBuildingType"
+        Me.cmdBuildingType.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cmdBuildingType.Size = New System.Drawing.Size(336, 21)
+        Me.cmdBuildingType.TabIndex = 86
+        '
+        'lblBuildingType
+        '
+        Me.lblBuildingType.BackColor = System.Drawing.SystemColors.Window
+        Me.lblBuildingType.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblBuildingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblBuildingType.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblBuildingType.Location = New System.Drawing.Point(17, 192)
+        Me.lblBuildingType.Name = "lblBuildingType"
+        Me.lblBuildingType.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblBuildingType.Size = New System.Drawing.Size(100, 13)
+        Me.lblBuildingType.TabIndex = 87
+        Me.lblBuildingType.Text = "Building Type"
+        Me.lblBuildingType.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(810, 184)
+        Me.Label1.Location = New System.Drawing.Point(708, 173)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(56, 13)
         Me.Label1.TabIndex = 84
@@ -232,7 +318,7 @@ Partial Class CM_MAIN_frm
         'Proposal_cmd
         '
         Me.Proposal_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Proposal_cmd.Location = New System.Drawing.Point(1025, 69)
+        Me.Proposal_cmd.Location = New System.Drawing.Point(924, 69)
         Me.Proposal_cmd.Name = "Proposal_cmd"
         Me.Proposal_cmd.Size = New System.Drawing.Size(67, 23)
         Me.Proposal_cmd.TabIndex = 73
@@ -245,27 +331,11 @@ Partial Class CM_MAIN_frm
         Me.Status_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Status_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Status_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Status_cmb.Location = New System.Drawing.Point(871, 125)
+        Me.Status_cmb.Location = New System.Drawing.Point(770, 119)
         Me.Status_cmb.Name = "Status_cmb"
         Me.Status_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Status_cmb.Size = New System.Drawing.Size(221, 21)
         Me.Status_cmb.TabIndex = 72
-        '
-        'Consultant_chk
-        '
-        Me.Consultant_chk.BackColor = System.Drawing.SystemColors.Window
-        Me.Consultant_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Consultant_chk.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Consultant_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Consultant_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Consultant_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Consultant_chk.Location = New System.Drawing.Point(562, 65)
-        Me.Consultant_chk.Name = "Consultant_chk"
-        Me.Consultant_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Consultant_chk.Size = New System.Drawing.Size(103, 15)
-        Me.Consultant_chk.TabIndex = 76
-        Me.Consultant_chk.Text = "Consultant"
-        Me.Consultant_chk.UseVisualStyleBackColor = False
         '
         '_label_7
         '
@@ -274,7 +344,7 @@ Partial Class CM_MAIN_frm
         Me._label_7.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me._label_7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._label_7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._label_7.Location = New System.Drawing.Point(800, 17)
+        Me._label_7.Location = New System.Drawing.Point(699, 17)
         Me._label_7.Name = "_label_7"
         Me._label_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._label_7.Size = New System.Drawing.Size(65, 13)
@@ -290,10 +360,10 @@ Partial Class CM_MAIN_frm
         Me.MajorProject_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.MajorProject_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MajorProject_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.MajorProject_chk.Location = New System.Drawing.Point(562, 38)
+        Me.MajorProject_chk.Location = New System.Drawing.Point(302, 164)
         Me.MajorProject_chk.Name = "MajorProject_chk"
         Me.MajorProject_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.MajorProject_chk.Size = New System.Drawing.Size(103, 15)
+        Me.MajorProject_chk.Size = New System.Drawing.Size(157, 15)
         Me.MajorProject_chk.TabIndex = 75
         Me.MajorProject_chk.Text = "Major Project"
         Me.MajorProject_chk.UseVisualStyleBackColor = False
@@ -304,7 +374,7 @@ Partial Class CM_MAIN_frm
         Me.Status_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Status_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Status_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Status_lbl.Location = New System.Drawing.Point(826, 123)
+        Me.Status_lbl.Location = New System.Drawing.Point(725, 122)
         Me.Status_lbl.Name = "Status_lbl"
         Me.Status_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Status_lbl.Size = New System.Drawing.Size(39, 17)
@@ -318,7 +388,7 @@ Partial Class CM_MAIN_frm
         Me.SalesRep_lst.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.SalesRep_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SalesRep_lst.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.SalesRep_lst.Location = New System.Drawing.Point(872, 15)
+        Me.SalesRep_lst.Location = New System.Drawing.Point(771, 15)
         Me.SalesRep_lst.Name = "SalesRep_lst"
         Me.SalesRep_lst.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SalesRep_lst.Size = New System.Drawing.Size(220, 21)
@@ -331,7 +401,7 @@ Partial Class CM_MAIN_frm
         Me.InstallingOffice_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.InstallingOffice_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InstallingOffice_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.InstallingOffice_cmb.Location = New System.Drawing.Point(872, 69)
+        Me.InstallingOffice_cmb.Location = New System.Drawing.Point(771, 66)
         Me.InstallingOffice_cmb.Name = "InstallingOffice_cmb"
         Me.InstallingOffice_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.InstallingOffice_cmb.Size = New System.Drawing.Size(80, 21)
@@ -343,7 +413,7 @@ Partial Class CM_MAIN_frm
         Me.ServiceOffice_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ServiceOffice_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ServiceOffice_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ServiceOffice_cmb.Location = New System.Drawing.Point(872, 96)
+        Me.ServiceOffice_cmb.Location = New System.Drawing.Point(771, 93)
         Me.ServiceOffice_cmb.Name = "ServiceOffice_cmb"
         Me.ServiceOffice_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ServiceOffice_cmb.Size = New System.Drawing.Size(80, 21)
@@ -355,7 +425,7 @@ Partial Class CM_MAIN_frm
         Me.SalesOffice_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.SalesOffice_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SalesOffice_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.SalesOffice_lbl.Location = New System.Drawing.Point(762, 44)
+        Me.SalesOffice_lbl.Location = New System.Drawing.Point(664, 41)
         Me.SalesOffice_lbl.Name = "SalesOffice_lbl"
         Me.SalesOffice_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SalesOffice_lbl.Size = New System.Drawing.Size(100, 13)
@@ -369,7 +439,7 @@ Partial Class CM_MAIN_frm
         Me.InstallingOffice_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.InstallingOffice_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InstallingOffice_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.InstallingOffice_lbl.Location = New System.Drawing.Point(762, 72)
+        Me.InstallingOffice_lbl.Location = New System.Drawing.Point(664, 66)
         Me.InstallingOffice_lbl.Name = "InstallingOffice_lbl"
         Me.InstallingOffice_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.InstallingOffice_lbl.Size = New System.Drawing.Size(100, 13)
@@ -383,7 +453,7 @@ Partial Class CM_MAIN_frm
         Me.SalesOffice_lst.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.SalesOffice_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SalesOffice_lst.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.SalesOffice_lst.Location = New System.Drawing.Point(872, 42)
+        Me.SalesOffice_lst.Location = New System.Drawing.Point(771, 39)
         Me.SalesOffice_lst.Name = "SalesOffice_lst"
         Me.SalesOffice_lst.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SalesOffice_lst.Size = New System.Drawing.Size(80, 21)
@@ -395,7 +465,7 @@ Partial Class CM_MAIN_frm
         Me.ServiceOffice_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ServiceOffice_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ServiceOffice_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ServiceOffice_lbl.Location = New System.Drawing.Point(771, 98)
+        Me.ServiceOffice_lbl.Location = New System.Drawing.Point(673, 96)
         Me.ServiceOffice_lbl.Name = "ServiceOffice_lbl"
         Me.ServiceOffice_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ServiceOffice_lbl.Size = New System.Drawing.Size(91, 13)
@@ -409,7 +479,7 @@ Partial Class CM_MAIN_frm
         Me.ProbabilityOfSale_lst.Enabled = False
         Me.ProbabilityOfSale_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ProbabilityOfSale_lst.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ProbabilityOfSale_lst.Location = New System.Drawing.Point(872, 152)
+        Me.ProbabilityOfSale_lst.Location = New System.Drawing.Point(770, 146)
         Me.ProbabilityOfSale_lst.Name = "ProbabilityOfSale_lst"
         Me.ProbabilityOfSale_lst.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ProbabilityOfSale_lst.Size = New System.Drawing.Size(220, 21)
@@ -423,7 +493,7 @@ Partial Class CM_MAIN_frm
         Me.ProbabilityOfSale_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ProbabilityOfSale_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ProbabilityOfSale_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ProbabilityOfSale_lbl.Location = New System.Drawing.Point(760, 155)
+        Me.ProbabilityOfSale_lbl.Location = New System.Drawing.Point(659, 150)
         Me.ProbabilityOfSale_lbl.Name = "ProbabilityOfSale_lbl"
         Me.ProbabilityOfSale_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ProbabilityOfSale_lbl.Size = New System.Drawing.Size(105, 17)
@@ -437,7 +507,7 @@ Partial Class CM_MAIN_frm
         Me.btnAddress.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnAddress.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddress.Location = New System.Drawing.Point(114, 152)
+        Me.btnAddress.Location = New System.Drawing.Point(123, 158)
         Me.btnAddress.Name = "btnAddress"
         Me.btnAddress.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnAddress.Size = New System.Drawing.Size(162, 25)
@@ -1436,7 +1506,7 @@ Partial Class CM_MAIN_frm
         'Button2
         '
         Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button2.Location = New System.Drawing.Point(234, 20)
+        Me.Button2.Location = New System.Drawing.Point(235, 23)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(113, 22)
         Me.Button2.TabIndex = 73
@@ -1539,6 +1609,26 @@ Partial Class CM_MAIN_frm
         Me.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnMerge.UseVisualStyleBackColor = False
         '
+        'cmbNationalAccount
+        '
+        Me.cmbNationalAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbNationalAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbNationalAccount.FormattingEnabled = True
+        Me.cmbNationalAccount.Location = New System.Drawing.Point(770, 199)
+        Me.cmbNationalAccount.Name = "cmbNationalAccount"
+        Me.cmbNationalAccount.Size = New System.Drawing.Size(81, 21)
+        Me.cmbNationalAccount.TabIndex = 95
+        '
+        'lblNationalAccount
+        '
+        Me.lblNationalAccount.AutoSize = True
+        Me.lblNationalAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNationalAccount.Location = New System.Drawing.Point(659, 204)
+        Me.lblNationalAccount.Name = "lblNationalAccount"
+        Me.lblNationalAccount.Size = New System.Drawing.Size(105, 13)
+        Me.lblNationalAccount.TabIndex = 96
+        Me.lblNationalAccount.Text = "National Account"
+        '
         'CM_MAIN_frm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1625,7 +1715,6 @@ Partial Class CM_MAIN_frm
     Friend WithEvents CurrentTime_tim As System.Windows.Forms.Timer
     Friend WithEvents Proposal_cmd As System.Windows.Forms.Button
     Public WithEvents Status_cmb As System.Windows.Forms.ComboBox
-    Public WithEvents Consultant_chk As System.Windows.Forms.CheckBox
     Private WithEvents _label_7 As System.Windows.Forms.Label
     Public WithEvents MajorProject_chk As System.Windows.Forms.CheckBox
     Public WithEvents Status_lbl As System.Windows.Forms.Label
@@ -1654,8 +1743,16 @@ Partial Class CM_MAIN_frm
     Private WithEvents btnMerge As System.Windows.Forms.Button
     Friend WithEvents btnPrint As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Public WithEvents BuildingType_cmb As System.Windows.Forms.ComboBox
-    Public WithEvents BuildingType_lbl As System.Windows.Forms.Label
-    Friend WithEvents txtBidDate As System.Windows.Forms.TextBox
+    Public WithEvents cmdBuildingType As System.Windows.Forms.ComboBox
+    Public WithEvents lblBuildingType As System.Windows.Forms.Label
+    Public WithEvents txtBidDate As System.Windows.Forms.DateTimePicker
+    Public WithEvents SeismicZone_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents SeismicZone_lbl As System.Windows.Forms.Label
+    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents lblNationalAccount As System.Windows.Forms.Label
+    Friend WithEvents cmbNationalAccount As System.Windows.Forms.ComboBox
 #End Region
 End Class

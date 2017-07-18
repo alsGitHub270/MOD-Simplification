@@ -1,55 +1,69 @@
 Partial Class frmEstimatingBase
 #Region " Windows Form Designer generated code "
 
-  Public Sub New()
-    MyBase.New()
+    Public Sub New()
+        MyBase.New()
 
-    'This call is required by the Windows Form Designer.
-    InitializeComponent()
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
 
-    'Add any initialization after the InitializeComponent() call
-    CreateDataSet()
-    Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
-    model = FpSpread1.ActiveSheet.Models.Data
+        'Add any initialization after the InitializeComponent() call
+        CreateDataSet()
+        Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
+        model = FpSpread1.ActiveSheet.Models.Data
 
-    Dim dt As DataTable
-    For Each dt In myDataSet.Tables
-      dt.DefaultView.AllowNew = False
-    Next
-    model.DataMember = "artists"
-    model.DataSource = myDataSet
+        Dim dt As DataTable
+        For Each dt In myDataSet.Tables
+            dt.DefaultView.AllowNew = False
+        Next
+        model.DataMember = "artists"
+        model.DataSource = myDataSet
 
-    FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
+        FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
 
 
-  End Sub
+    End Sub
 
-  'Form overrides dispose to clean up the component list.
-  Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
-    If disposing Then
-      If Not (components Is Nothing) Then
-        components.Dispose()
-      End If
-    End If
-    MyBase.Dispose(disposing)
-  End Sub
+    'Form overrides dispose to clean up the component list.
+    Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
+        If disposing Then
+            If Not (components Is Nothing) Then
+                components.Dispose()
+            End If
+        End If
+        MyBase.Dispose(disposing)
+    End Sub
 
-  'Required by the Windows Form Designer
-  Private components As System.ComponentModel.IContainer
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
 
-  'NOTE: The following procedure is required by the Windows Form Designer
-  'It can be modified using the Windows Form Designer.  
-  'Do not modify it using the code editor.
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEstimatingBase))
-        Dim ComboBoxCellType1 As FarPoint.Win.Spread.CellType.ComboBoxCellType = New FarPoint.Win.Spread.CellType.ComboBoxCellType()
-        Dim ComboBoxCellType2 As FarPoint.Win.Spread.CellType.ComboBoxCellType = New FarPoint.Win.Spread.CellType.ComboBoxCellType()
-        Dim ComboBoxCellType3 As FarPoint.Win.Spread.CellType.ComboBoxCellType = New FarPoint.Win.Spread.CellType.ComboBoxCellType()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.BillofMaterialsandTaskList_fra = New System.Windows.Forms.GroupBox()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.GeneralInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.TotalNumberOfFloors_cmb = New System.Windows.Forms.ComboBox()
+        Me.TotalNumberOfFloors_lbl = New System.Windows.Forms.Label()
+        Me.NumberofStopsTotal_cmb = New System.Windows.Forms.ComboBox()
+        Me.NumberofStopsTotal_lbl = New System.Windows.Forms.Label()
+        Me.NumberofStopsFront_lbl = New System.Windows.Forms.Label()
+        Me.NumberofStopsRear_lbl = New System.Windows.Forms.Label()
+        Me.NumberofLandingsTotal_lbl = New System.Windows.Forms.Label()
+        Me.NumberofStopsFront_cmb = New System.Windows.Forms.ComboBox()
+        Me.NumberofLandingsTotal_Cmb = New System.Windows.Forms.ComboBox()
+        Me.NumberofStopsRear_cmb = New System.Windows.Forms.ComboBox()
+        Me.SpeedNew_cmb = New System.Windows.Forms.ComboBox()
+        Me.CapacityNew_cmb = New System.Windows.Forms.ComboBox()
+        Me.SpeedLabel_lbl = New System.Windows.Forms.Label()
+        Me.CapacityLabel_lbl = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
@@ -77,86 +91,318 @@ Partial Class frmEstimatingBase
         Me._IconButton_cmd_15 = New System.Windows.Forms.Button()
         Me._IconButton_cmd_16 = New System.Windows.Forms.Button()
         Me._IconButton_cmd_21 = New System.Windows.Forms.Button()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.FpSpread4 = New FarPoint.Win.Spread.FpSpread()
-        Me.SheetView3 = New FarPoint.Win.Spread.SheetView()
-        Me.FpSpread3 = New FarPoint.Win.Spread.FpSpread()
-        Me.SheetView2 = New FarPoint.Win.Spread.SheetView()
-        Me.FpSpread2 = New FarPoint.Win.Spread.FpSpread()
-        Me.FpSpread2_Sheet1 = New FarPoint.Win.Spread.SheetView()
         Me.GroupBox1.SuspendLayout()
+        Me.BillofMaterialsandTaskList_fra.SuspendLayout()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GeneralInformation_fra.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         CType(Me.MDI_pic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MDI_pic.SuspendLayout()
         Me.fraHdrJobInfo.SuspendLayout()
         Me.fraHdrIcons.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        CType(Me.FpSpread4, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.SheetView3, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.FpSpread3, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.SheetView2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.FpSpread2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.FpSpread2_Sheet1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.Button2)
-        Me.GroupBox1.Controls.Add(Me.Button3)
-        Me.GroupBox1.Controls.Add(Me.FpSpread1)
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.BackColor = System.Drawing.Color.White
+        Me.GroupBox1.Controls.Add(Me.BillofMaterialsandTaskList_fra)
+        Me.GroupBox1.Controls.Add(Me.GeneralInformation_fra)
         Me.GroupBox1.Controls.Add(Me.TabControl1)
-        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 295)
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 105)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1129, 518)
+        Me.GroupBox1.Size = New System.Drawing.Size(1219, 690)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Bill of Materials and Task List"
+        '
+        'BillofMaterialsandTaskList_fra
+        '
+        Me.BillofMaterialsandTaskList_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.Button2)
+        Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.FpSpread1)
+        Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.Button3)
+        Me.BillofMaterialsandTaskList_fra.Location = New System.Drawing.Point(16, 250)
+        Me.BillofMaterialsandTaskList_fra.Name = "BillofMaterialsandTaskList_fra"
+        Me.BillofMaterialsandTaskList_fra.Size = New System.Drawing.Size(1184, 424)
+        Me.BillofMaterialsandTaskList_fra.TabIndex = 80
+        Me.BillofMaterialsandTaskList_fra.TabStop = False
+        Me.BillofMaterialsandTaskList_fra.Text = "Bill of Materials and Task List"
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(175, 6)
+        Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.Button2.Location = New System.Drawing.Point(405, 14)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(113, 23)
-        Me.Button2.TabIndex = 78
+        Me.Button2.TabIndex = 81
         Me.Button2.Text = "Expand All"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.Location = New System.Drawing.Point(986, 0)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(113, 23)
-        Me.Button3.TabIndex = 79
-        Me.Button3.Text = "Collapse All"
-        Me.Button3.UseVisualStyleBackColor = True
         '
         'FpSpread1
         '
         Me.FpSpread1.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
+        Me.FpSpread1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FpSpread1.Location = New System.Drawing.Point(10, 89)
+        Me.FpSpread1.Location = New System.Drawing.Point(6, 43)
         Me.FpSpread1.Name = "FpSpread1"
         Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
-        Me.FpSpread1.Size = New System.Drawing.Size(1125, 397)
-        Me.FpSpread1.TabIndex = 10
+        Me.FpSpread1.Size = New System.Drawing.Size(1174, 342)
+        Me.FpSpread1.TabIndex = 80
         '
         'SheetView1
         '
         Me.SheetView1.Reset()
         Me.SheetView1.SheetName = "Sheet1"
         '
+        'Button3
+        '
+        Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.Button3.Location = New System.Drawing.Point(662, 15)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(113, 23)
+        Me.Button3.TabIndex = 82
+        Me.Button3.Text = "Collapse All"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'GeneralInformation_fra
+        '
+        Me.GeneralInformation_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GeneralInformation_fra.Controls.Add(Me.TotalNumberOfFloors_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.TotalNumberOfFloors_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsTotal_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsTotal_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsFront_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsRear_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofLandingsTotal_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsFront_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofLandingsTotal_Cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsRear_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.SpeedNew_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.CapacityNew_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.SpeedLabel_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.CapacityLabel_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.Button1)
+        Me.GeneralInformation_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GeneralInformation_fra.Location = New System.Drawing.Point(16, 53)
+        Me.GeneralInformation_fra.Name = "GeneralInformation_fra"
+        Me.GeneralInformation_fra.Size = New System.Drawing.Size(1184, 196)
+        Me.GeneralInformation_fra.TabIndex = 25
+        Me.GeneralInformation_fra.TabStop = False
+        Me.GeneralInformation_fra.Text = "   General Information"
+        '
+        'TotalNumberOfFloors_cmb
+        '
+        Me.TotalNumberOfFloors_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.TotalNumberOfFloors_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.TotalNumberOfFloors_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TotalNumberOfFloors_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TotalNumberOfFloors_cmb.Location = New System.Drawing.Point(163, 174)
+        Me.TotalNumberOfFloors_cmb.Name = "TotalNumberOfFloors_cmb"
+        Me.TotalNumberOfFloors_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TotalNumberOfFloors_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.TotalNumberOfFloors_cmb.TabIndex = 47
+        '
+        'TotalNumberOfFloors_lbl
+        '
+        Me.TotalNumberOfFloors_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.TotalNumberOfFloors_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.TotalNumberOfFloors_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.TotalNumberOfFloors_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TotalNumberOfFloors_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TotalNumberOfFloors_lbl.Location = New System.Drawing.Point(6, 176)
+        Me.TotalNumberOfFloors_lbl.Name = "TotalNumberOfFloors_lbl"
+        Me.TotalNumberOfFloors_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TotalNumberOfFloors_lbl.Size = New System.Drawing.Size(161, 17)
+        Me.TotalNumberOfFloors_lbl.TabIndex = 48
+        Me.TotalNumberOfFloors_lbl.Text = "Total Number of Floors *"
+        '
+        'NumberofStopsTotal_cmb
+        '
+        Me.NumberofStopsTotal_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofStopsTotal_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofStopsTotal_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofStopsTotal_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofStopsTotal_cmb.Location = New System.Drawing.Point(158, 98)
+        Me.NumberofStopsTotal_cmb.Name = "NumberofStopsTotal_cmb"
+        Me.NumberofStopsTotal_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofStopsTotal_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.NumberofStopsTotal_cmb.TabIndex = 32
+        '
+        'NumberofStopsTotal_lbl
+        '
+        Me.NumberofStopsTotal_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofStopsTotal_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofStopsTotal_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.NumberofStopsTotal_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofStopsTotal_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofStopsTotal_lbl.Location = New System.Drawing.Point(6, 101)
+        Me.NumberofStopsTotal_lbl.Name = "NumberofStopsTotal_lbl"
+        Me.NumberofStopsTotal_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofStopsTotal_lbl.Size = New System.Drawing.Size(117, 17)
+        Me.NumberofStopsTotal_lbl.TabIndex = 35
+        Me.NumberofStopsTotal_lbl.Text = "Qty of Total Stops "
+        '
+        'NumberofStopsFront_lbl
+        '
+        Me.NumberofStopsFront_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofStopsFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofStopsFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.NumberofStopsFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofStopsFront_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofStopsFront_lbl.Location = New System.Drawing.Point(6, 127)
+        Me.NumberofStopsFront_lbl.Name = "NumberofStopsFront_lbl"
+        Me.NumberofStopsFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofStopsFront_lbl.Size = New System.Drawing.Size(155, 17)
+        Me.NumberofStopsFront_lbl.TabIndex = 36
+        Me.NumberofStopsFront_lbl.Text = "Qty of Front Openings "
+        '
+        'NumberofStopsRear_lbl
+        '
+        Me.NumberofStopsRear_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofStopsRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofStopsRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.NumberofStopsRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofStopsRear_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofStopsRear_lbl.Location = New System.Drawing.Point(6, 154)
+        Me.NumberofStopsRear_lbl.Name = "NumberofStopsRear_lbl"
+        Me.NumberofStopsRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofStopsRear_lbl.Size = New System.Drawing.Size(155, 17)
+        Me.NumberofStopsRear_lbl.TabIndex = 37
+        Me.NumberofStopsRear_lbl.Text = "Qty of Rear Openings "
+        '
+        'NumberofLandingsTotal_lbl
+        '
+        Me.NumberofLandingsTotal_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofLandingsTotal_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofLandingsTotal_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.NumberofLandingsTotal_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofLandingsTotal_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofLandingsTotal_lbl.Location = New System.Drawing.Point(6, 74)
+        Me.NumberofLandingsTotal_lbl.Name = "NumberofLandingsTotal_lbl"
+        Me.NumberofLandingsTotal_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofLandingsTotal_lbl.Size = New System.Drawing.Size(127, 17)
+        Me.NumberofLandingsTotal_lbl.TabIndex = 38
+        Me.NumberofLandingsTotal_lbl.Text = "Qty of Total Landings"
+        '
+        'NumberofStopsFront_cmb
+        '
+        Me.NumberofStopsFront_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofStopsFront_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofStopsFront_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofStopsFront_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofStopsFront_cmb.Location = New System.Drawing.Point(158, 124)
+        Me.NumberofStopsFront_cmb.Name = "NumberofStopsFront_cmb"
+        Me.NumberofStopsFront_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofStopsFront_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.NumberofStopsFront_cmb.TabIndex = 33
+        '
+        'NumberofLandingsTotal_Cmb
+        '
+        Me.NumberofLandingsTotal_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofLandingsTotal_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofLandingsTotal_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofLandingsTotal_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofLandingsTotal_Cmb.Location = New System.Drawing.Point(158, 71)
+        Me.NumberofLandingsTotal_Cmb.Name = "NumberofLandingsTotal_Cmb"
+        Me.NumberofLandingsTotal_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofLandingsTotal_Cmb.Size = New System.Drawing.Size(134, 21)
+        Me.NumberofLandingsTotal_Cmb.TabIndex = 31
+        '
+        'NumberofStopsRear_cmb
+        '
+        Me.NumberofStopsRear_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.NumberofStopsRear_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NumberofStopsRear_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumberofStopsRear_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NumberofStopsRear_cmb.Location = New System.Drawing.Point(158, 151)
+        Me.NumberofStopsRear_cmb.Name = "NumberofStopsRear_cmb"
+        Me.NumberofStopsRear_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NumberofStopsRear_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.NumberofStopsRear_cmb.TabIndex = 34
+        '
+        'SpeedNew_cmb
+        '
+        Me.SpeedNew_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.SpeedNew_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SpeedNew_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.SpeedNew_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SpeedNew_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.SpeedNew_cmb.Location = New System.Drawing.Point(158, 44)
+        Me.SpeedNew_cmb.Name = "SpeedNew_cmb"
+        Me.SpeedNew_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpeedNew_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.SpeedNew_cmb.TabIndex = 24
+        '
+        'CapacityNew_cmb
+        '
+        Me.CapacityNew_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CapacityNew_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CapacityNew_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CapacityNew_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CapacityNew_cmb.Location = New System.Drawing.Point(158, 18)
+        Me.CapacityNew_cmb.Name = "CapacityNew_cmb"
+        Me.CapacityNew_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CapacityNew_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.CapacityNew_cmb.TabIndex = 23
+        '
+        'SpeedLabel_lbl
+        '
+        Me.SpeedLabel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.SpeedLabel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SpeedLabel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SpeedLabel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SpeedLabel_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.SpeedLabel_lbl.Location = New System.Drawing.Point(6, 47)
+        Me.SpeedLabel_lbl.Name = "SpeedLabel_lbl"
+        Me.SpeedLabel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpeedLabel_lbl.Size = New System.Drawing.Size(45, 17)
+        Me.SpeedLabel_lbl.TabIndex = 26
+        Me.SpeedLabel_lbl.Text = "Speed :"
+        '
+        'CapacityLabel_lbl
+        '
+        Me.CapacityLabel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CapacityLabel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CapacityLabel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CapacityLabel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CapacityLabel_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CapacityLabel_lbl.Location = New System.Drawing.Point(6, 21)
+        Me.CapacityLabel_lbl.Name = "CapacityLabel_lbl"
+        Me.CapacityLabel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CapacityLabel_lbl.Size = New System.Drawing.Size(59, 17)
+        Me.CapacityLabel_lbl.TabIndex = 25
+        Me.CapacityLabel_lbl.Text = "Capacity :"
+        '
+        'Button1
+        '
+        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.Location = New System.Drawing.Point(1, -1)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(20, 19)
+        Me.Button1.TabIndex = 3
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'TabControl1
         '
+        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Location = New System.Drawing.Point(6, 21)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1134, 475)
+        Me.TabControl1.Size = New System.Drawing.Size(1207, 663)
         Me.TabControl1.TabIndex = 11
         '
         'TabPage1
@@ -164,7 +410,7 @@ Partial Class frmEstimatingBase
         Me.TabPage1.Location = New System.Drawing.Point(4, 25)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(1126, 446)
+        Me.TabPage1.Size = New System.Drawing.Size(1199, 634)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Car(s) 01-03"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -174,7 +420,7 @@ Partial Class frmEstimatingBase
         Me.TabPage2.Location = New System.Drawing.Point(4, 25)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(1126, 446)
+        Me.TabPage2.Size = New System.Drawing.Size(1199, 634)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Car(s) 04"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -189,7 +435,7 @@ Partial Class frmEstimatingBase
         Me.MDI_pic.Dock = System.Windows.Forms.DockStyle.Top
         Me.MDI_pic.Location = New System.Drawing.Point(0, 0)
         Me.MDI_pic.Name = "MDI_pic"
-        Me.MDI_pic.Size = New System.Drawing.Size(1129, 99)
+        Me.MDI_pic.Size = New System.Drawing.Size(1219, 99)
         Me.MDI_pic.TabIndex = 24
         Me.MDI_pic.TabStop = False
         '
@@ -213,7 +459,7 @@ Partial Class frmEstimatingBase
         Me.fraHdrJobInfo.Location = New System.Drawing.Point(0, 60)
         Me.fraHdrJobInfo.Name = "fraHdrJobInfo"
         Me.fraHdrJobInfo.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraHdrJobInfo.Size = New System.Drawing.Size(1125, 30)
+        Me.fraHdrJobInfo.Size = New System.Drawing.Size(1215, 30)
         Me.fraHdrJobInfo.TabIndex = 25
         Me.fraHdrJobInfo.TabStop = False
         '
@@ -417,7 +663,7 @@ Partial Class frmEstimatingBase
         Me.fraHdrIcons.Location = New System.Drawing.Point(0, 0)
         Me.fraHdrIcons.Name = "fraHdrIcons"
         Me.fraHdrIcons.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraHdrIcons.Size = New System.Drawing.Size(1125, 60)
+        Me.fraHdrIcons.Size = New System.Drawing.Size(1215, 60)
         Me.fraHdrIcons.TabIndex = 24
         Me.fraHdrIcons.TabStop = False
         '
@@ -549,160 +795,30 @@ Partial Class frmEstimatingBase
         Me._IconButton_cmd_21.Text = "Award"
         Me._IconButton_cmd_21.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.FpSpread4)
-        Me.GroupBox2.Controls.Add(Me.FpSpread3)
-        Me.GroupBox2.Controls.Add(Me.FpSpread2)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 99)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(1129, 196)
-        Me.GroupBox2.TabIndex = 25
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "General Information"
-        '
-        'FpSpread4
-        '
-        Me.FpSpread4.AccessibleDescription = "FpSpread4, Sheet1, Row 0, Column 0, Power Supply"
-        Me.FpSpread4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FpSpread4.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
-        Me.FpSpread4.Location = New System.Drawing.Point(858, 21)
-        Me.FpSpread4.Name = "FpSpread4"
-        Me.FpSpread4.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView3})
-        Me.FpSpread4.Size = New System.Drawing.Size(276, 165)
-        Me.FpSpread4.TabIndex = 2
-        Me.FpSpread4.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
-        '
-        'SheetView3
-        '
-        Me.SheetView3.Reset()
-        Me.SheetView3.SheetName = "Sheet1"
-        'Formulas and custom names must be loaded with R1C1 reference style
-        Me.SheetView3.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.R1C1
-        Me.SheetView3.ColumnCount = 2
-        Me.SheetView3.RowCount = 2
-        Me.SheetView3.Cells.Get(0, 0).Value = "Power Supply"
-        Me.SheetView3.Cells.Get(1, 0).Value = "Seismic Zone"
-        Me.SheetView3.ColumnHeader.Visible = False
-        Me.SheetView3.Columns.Get(0).Width = 169.0!
-        ComboBoxCellType1.ButtonAlign = FarPoint.Win.ButtonAlign.Right
-        ComboBoxCellType1.Editable = True
-        Me.SheetView3.Columns.Get(1).CellType = ComboBoxCellType1
-        Me.SheetView3.Columns.Get(1).Width = 102.0!
-        Me.SheetView3.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.None)
-        Me.SheetView3.RowHeader.Columns.Default.Resizable = False
-        Me.SheetView3.RowHeader.Visible = False
-        Me.SheetView3.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.A1
-        '
-        'FpSpread3
-        '
-        Me.FpSpread3.AccessibleDescription = "FpSpread3, Sheet1, Row 0, Column 0, Door Type"
-        Me.FpSpread3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FpSpread3.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
-        Me.FpSpread3.Location = New System.Drawing.Point(442, 21)
-        Me.FpSpread3.Name = "FpSpread3"
-        Me.FpSpread3.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView2})
-        Me.FpSpread3.Size = New System.Drawing.Size(276, 165)
-        Me.FpSpread3.TabIndex = 1
-        Me.FpSpread3.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
-        '
-        'SheetView2
-        '
-        Me.SheetView2.Reset()
-        Me.SheetView2.SheetName = "Sheet1"
-        'Formulas and custom names must be loaded with R1C1 reference style
-        Me.SheetView2.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.R1C1
-        Me.SheetView2.ColumnCount = 2
-        Me.SheetView2.RowCount = 8
-        Me.SheetView2.Cells.Get(0, 0).Value = "Door Type"
-        Me.SheetView2.Cells.Get(1, 0).Value = "Door Size"
-        Me.SheetView2.Cells.Get(2, 0).Value = "Rise"
-        Me.SheetView2.Cells.Get(3, 0).Value = "Fixture Finish"
-        Me.SheetView2.Cells.Get(4, 0).Value = "Roping"
-        Me.SheetView2.Cells.Get(5, 0).Value = "Number Of Hall Risers"
-        Me.SheetView2.Cells.Get(6, 0).Value = "Type Of Drive"
-        Me.SheetView2.Cells.Get(7, 0).Value = "Machine Location"
-        Me.SheetView2.ColumnHeader.Visible = False
-        Me.SheetView2.Columns.Get(0).Width = 169.0!
-        ComboBoxCellType2.ButtonAlign = FarPoint.Win.ButtonAlign.Right
-        ComboBoxCellType2.Editable = True
-        Me.SheetView2.Columns.Get(1).CellType = ComboBoxCellType2
-        Me.SheetView2.Columns.Get(1).Width = 102.0!
-        Me.SheetView2.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.None)
-        Me.SheetView2.RowHeader.Columns.Default.Resizable = False
-        Me.SheetView2.RowHeader.Visible = False
-        Me.SheetView2.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.A1
-        '
-        'FpSpread2
-        '
-        Me.FpSpread2.AccessibleDescription = "FpSpread2, Sheet1, Row 0, Column 0, Speed"
-        Me.FpSpread2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FpSpread2.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
-        Me.FpSpread2.Location = New System.Drawing.Point(12, 21)
-        Me.FpSpread2.Name = "FpSpread2"
-        Me.FpSpread2.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.FpSpread2_Sheet1})
-        Me.FpSpread2.Size = New System.Drawing.Size(276, 165)
-        Me.FpSpread2.TabIndex = 0
-        Me.FpSpread2.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
-        '
-        'FpSpread2_Sheet1
-        '
-        Me.FpSpread2_Sheet1.Reset()
-        Me.FpSpread2_Sheet1.SheetName = "Sheet1"
-        'Formulas and custom names must be loaded with R1C1 reference style
-        Me.FpSpread2_Sheet1.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.R1C1
-        Me.FpSpread2_Sheet1.ColumnCount = 2
-        Me.FpSpread2_Sheet1.RowCount = 8
-        Me.FpSpread2_Sheet1.Cells.Get(0, 0).Value = "Speed"
-        Me.FpSpread2_Sheet1.Cells.Get(1, 0).Value = "Capacity"
-        Me.FpSpread2_Sheet1.Cells.Get(2, 0).Value = "Stops"
-        Me.FpSpread2_Sheet1.Cells.Get(3, 0).Value = "Openings"
-        Me.FpSpread2_Sheet1.Cells.Get(4, 0).Value = "Front"
-        Me.FpSpread2_Sheet1.Cells.Get(5, 0).Value = "Rear"
-        Me.FpSpread2_Sheet1.Cells.Get(6, 0).Value = "Number Of Floors"
-        Me.FpSpread2_Sheet1.Cells.Get(7, 0).Value = "Machine Type"
-        Me.FpSpread2_Sheet1.ColumnHeader.Visible = False
-        Me.FpSpread2_Sheet1.Columns.Get(0).Width = 169.0!
-        ComboBoxCellType3.ButtonAlign = FarPoint.Win.ButtonAlign.Right
-        ComboBoxCellType3.Editable = True
-        Me.FpSpread2_Sheet1.Columns.Get(1).CellType = ComboBoxCellType3
-        Me.FpSpread2_Sheet1.Columns.Get(1).Width = 102.0!
-        Me.FpSpread2_Sheet1.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.None)
-        Me.FpSpread2_Sheet1.RowHeader.Columns.Default.Resizable = False
-        Me.FpSpread2_Sheet1.RowHeader.Visible = False
-        Me.FpSpread2_Sheet1.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.A1
-        '
         'frmEstimatingBase
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
-        Me.BackColor = System.Drawing.Color.Silver
-        Me.ClientSize = New System.Drawing.Size(1146, 795)
-        Me.Controls.Add(Me.GroupBox2)
+        Me.BackColor = System.Drawing.Color.White
+        Me.ClientSize = New System.Drawing.Size(1219, 795)
         Me.Controls.Add(Me.MDI_pic)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmEstimatingBase"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Hierarchy and alpha-blending"
+        Me.Text = "MOD Estimating"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.GroupBox1.ResumeLayout(False)
+        Me.BillofMaterialsandTaskList_fra.ResumeLayout(False)
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GeneralInformation_fra.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         CType(Me.MDI_pic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MDI_pic.ResumeLayout(False)
         Me.fraHdrJobInfo.ResumeLayout(False)
         Me.fraHdrJobInfo.PerformLayout()
         Me.fraHdrIcons.ResumeLayout(False)
-        Me.GroupBox2.ResumeLayout(False)
-        CType(Me.FpSpread4, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.SheetView3, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.FpSpread3, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.SheetView2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.FpSpread2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.FpSpread2_Sheet1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -731,20 +847,30 @@ Partial Class frmEstimatingBase
     Private WithEvents _IconButton_cmd_15 As System.Windows.Forms.Button
     Private WithEvents _IconButton_cmd_16 As System.Windows.Forms.Button
     Private WithEvents _IconButton_cmd_21 As System.Windows.Forms.Button
-    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents FpSpread2 As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents FpSpread2_Sheet1 As FarPoint.Win.Spread.SheetView
-    Friend WithEvents FpSpread4 As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents SheetView3 As FarPoint.Win.Spread.SheetView
-    Friend WithEvents FpSpread3 As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents SheetView2 As FarPoint.Win.Spread.SheetView
-    Friend WithEvents FpSpread1 As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents SheetView1 As FarPoint.Win.Spread.SheetView
+    Friend WithEvents GeneralInformation_fra As System.Windows.Forms.GroupBox
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents BillofMaterialsandTaskList_fra As System.Windows.Forms.GroupBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents FpSpread1 As FarPoint.Win.Spread.FpSpread
+    Friend WithEvents SheetView1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents Button3 As System.Windows.Forms.Button
+    Public WithEvents TotalNumberOfFloors_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents TotalNumberOfFloors_lbl As System.Windows.Forms.Label
+    Public WithEvents NumberofStopsTotal_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents NumberofStopsTotal_lbl As System.Windows.Forms.Label
+    Public WithEvents NumberofStopsFront_lbl As System.Windows.Forms.Label
+    Public WithEvents NumberofStopsRear_lbl As System.Windows.Forms.Label
+    Public WithEvents NumberofLandingsTotal_lbl As System.Windows.Forms.Label
+    Public WithEvents NumberofStopsFront_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents NumberofLandingsTotal_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents NumberofStopsRear_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents SpeedNew_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents CapacityNew_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents SpeedLabel_lbl As System.Windows.Forms.Label
+    Public WithEvents CapacityLabel_lbl As System.Windows.Forms.Label
 
 #End Region
 End Class

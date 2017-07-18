@@ -52,6 +52,11 @@
     <ApplicationIcon>CadreMO.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ADODB, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SAP\Business Explorer\BI\ADODB.dll</HintPath>
+    </Reference>
     <Reference Include="FarPoint.Excel, Version=6.0.3505.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
     <Reference Include="FarPoint.PluginCalendar.WinForms, Version=6.0.3505.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,6 +69,10 @@
     <Reference Include="FarPoint.Win.Spread, Version=6.0.3505.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files (x86)\GrapeCity\Spread .NET 6\Windows Forms\v6.0.3505\bin\FarPoint.Win.Spread.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.ADOX">
+      <HintPath>bin\Interop.ADOX.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="MTGCCombobox">
       <HintPath>..\..\..\..\Controls\MTGCCombobox.dll</HintPath>
@@ -107,6 +116,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Constants.vb" />
+    <Compile Include="frmAddresses.Designer.vb">
+      <DependentUpon>frmAddresses.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddresses.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmEstimatingBase.Designer.vb">
       <DependentUpon>frmEstimatingBase.vb</DependentUpon>
     </Compile>
@@ -137,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CM_MAINFrm.resX">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddresses.resx">
+      <DependentUpon>frmAddresses.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmEstimatingBase.resx">
       <DependentUpon>frmEstimatingBase.vb</DependentUpon>

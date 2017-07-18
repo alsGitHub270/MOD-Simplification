@@ -10,4 +10,24 @@
     Public gContractID As String = ""
     Public Contracts As CM_MAIN_IO.Contracts_TypeDec = CM_MAIN_IO.Contracts_TypeDec.CreateInstance()
 
+    Public ADOConnection As New ADODB.Connection
+    Public ADOConnectionRPTDataDB As New ADODB.Connection
+    Public ADOConnectionOptionDataBase As New ADODB.Connection
+    Public ADOConnectionMessageDataBase As New ADODB.Connection
+    Public ADOConnectionHapDatabase As New ADODB.Connection
+    Public ADOCatalogRPTdata As ADOX.Catalog = Nothing
+    Public ADOCatalogHapDatabase As ADOX.Catalog = Nothing
+    Public _ADOCatalogOptionDataBase As ADOX.Catalog = Nothing
+    Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
+        Get
+            If _ADOCatalogOptionDataBase Is Nothing Then
+                _ADOCatalogOptionDataBase = New ADOX.Catalog()
+            End If
+            Return _ADOCatalogOptionDataBase
+        End Get
+        Set(ByVal Value As ADOX.Catalog)
+            _ADOCatalogOptionDataBase = Value
+        End Set
+    End Property
+    Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
 End Module

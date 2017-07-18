@@ -15,12 +15,11 @@ Partial Friend Class CM_MAIN_frm
     Dim sv As New FarPoint.Win.Spread.SheetView()
     Dim svCollection As New System.Collections.ArrayList(10)
     Dim myDataSet As System.Data.DataSet
-    Dim LastRow As Integer
-    Dim LastCol As Integer
     Dim SummaryGroup As DataTable
     Dim MainGroup As DataTable
     Dim SubGroup As DataTable
 
+    Const _BANK_COLUMN As Integer = 3
 
     Private Sub CreateDataSet()
 
@@ -41,7 +40,7 @@ Partial Friend Class CM_MAIN_frm
 
 
         MainGroup = myDataSet.Tables.Add("BaseGroup")
-        MainGroup.Columns.AddRange(New DataColumn() {New DataColumn("Base Group", dtStr), New DataColumn("id", dtStr), New DataColumn("bank", dtStr), New DataColumn("units", dtStr), New DataColumn("machine", dtStr), New DataColumn("target", dtInt), New DataColumn("bid", dtStr), New DataColumn("award", dtStr), New DataColumn("comment", dtStr)})
+        MainGroup.Columns.AddRange(New DataColumn() {New DataColumn("Base Group", dtStr), New DataColumn("Id", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Units", dtStr), New DataColumn("Machine", dtStr), New DataColumn("Target", dtInt), New DataColumn("Bid", dtStr), New DataColumn("Award", dtStr), New DataColumn("Comment", dtStr)})
 
         'MainGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", ""})
         MainGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", ""})
@@ -49,11 +48,11 @@ Partial Friend Class CM_MAIN_frm
         MainGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", ""})
 
         SubGroup = myDataSet.Tables.Add("SubGroup")
-        SubGroup.Columns.AddRange(New DataColumn() {New DataColumn("Sub Group", dtStr), New DataColumn("id", dtStr), New DataColumn("units", dtStr), New DataColumn("machine", dtStr), New DataColumn("target", dtStr), New DataColumn("bid", dtStr), New DataColumn("Bid", dtStr), New DataColumn("Offer", dtStr), New DataColumn("comment", dtStr)})
+        SubGroup.Columns.AddRange(New DataColumn() {New DataColumn("Sub Group", dtStr), New DataColumn("id", dtStr), New DataColumn("Units", dtStr), New DataColumn("Machine", dtStr), New DataColumn("Target", dtStr), New DataColumn("Bid", dtStr), New DataColumn("Offer", dtStr), New DataColumn("Merge", dtStr), New DataColumn("Comment", dtStr)})
         SubGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
-        SubGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, True, "", "Lorem ipsam voluptatem quia volupta. "})
+        SubGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, "Lorem ipsam voluptatem quia volupta. "})
         SubGroup.Rows.Add(New Object() {"Alt3", "A1", "01-04", "Geared", -2500, "", "", "", "Lorem ipsum dolor delectus error voluptatem neque."})
-        SubGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "True", "", "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
+        SubGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "", True, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
         SubGroup.Rows.Add(New Object() {"Alt1", "B1", "01-04", "Geared", 5000, "", "", "", "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
         SubGroup.Rows.Add(New Object() {"Alt2", "B1", "01-04", "Geared", -2000, "", "", "", ""})
 
@@ -664,6 +663,13 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    Private Sub FpSpread1_ComboSelChange(sender As Object, e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboSelChange
+        Stop
+
+        Debug.Print(e.Column)
+        '  Debug.Printe.
+    End Sub
+
    
 
 
@@ -759,10 +765,10 @@ Partial Friend Class CM_MAIN_frm
         Dim activeRows As Array
         activeRows = FindActiveRows()
 
-        MsgBox("ActiveIndexRow: " & FpSpread1.ActiveSheet.ActiveRowIndex & vbCrLf & _
-               "Summary Row:  " & activeRows(0) & vbCrLf & _
-               "Base Row: " & activeRows(1) & vbCrLf & _
-               "Alt row:  " & activeRows(2))
+        'MsgBox("ActiveIndexRow: " & FpSpread1.ActiveSheet.ActiveRowIndex & vbCrLf & _
+        '       "Summary Row:  " & activeRows(0) & vbCrLf & _
+        '       "Base Row: " & activeRows(1) & vbCrLf & _
+        '       "Alt row:  " & activeRows(2))
 
         If activeRows(2) = -1 Then
             MessageBox.Show("Please click on the Target Column of the  Alternate Row you wish to delete", "Cannot Determine Which Alternate Row Selected!")
@@ -787,7 +793,7 @@ Partial Friend Class CM_MAIN_frm
                     End If
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, "Cannot Delete the Row")
+                    MessageBox.Show(ex.Message, "Cannot Delete the Alt Row")
                 End Try
                 End If
         End If
@@ -811,7 +817,7 @@ Partial Friend Class CM_MAIN_frm
                 MessageBox.Show("Delete Canceled!", "Delete Canceled!")
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Cannot Delete the Row")
+            MessageBox.Show(ex.Message, "Cannot Delete the Bank Row")
         End Try
     End Sub
 
@@ -889,44 +895,50 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub Load_ListBoxes()
 
-        BuildingType_cmb.Items.Add("AIR - Airport")
-        BuildingType_cmb.Items.Add("APA - Apartment")
-        BuildingType_cmb.Items.Add("CHU - Church")
-        BuildingType_cmb.Items.Add("CON - Condominium")
-        BuildingType_cmb.Items.Add("COT - Commercial Other - Restaurants")
-        BuildingType_cmb.Items.Add("HOS - Hospital/Ambulatory Care/Clinic")
-        BuildingType_cmb.Items.Add("HOT - Hotel/Motel/Inn/Dorm/Casino")
-        BuildingType_cmb.Items.Add("IOT - Industrial Other")
-        BuildingType_cmb.Items.Add("MIN - Mines")
-        BuildingType_cmb.Items.Add("MOV - Movie Theater")
-        BuildingType_cmb.Items.Add("OFF - Office/Bank/Administration")
-        BuildingType_cmb.Items.Add("PAR - Parking Garage")
-        BuildingType_cmb.Items.Add("POW - Power Plants")
-        BuildingType_cmb.Items.Add("RAI - Railway Station")
-        BuildingType_cmb.Items.Add("RET - Retirement Home/Nursing Home")
-        BuildingType_cmb.Items.Add("ROT - Residential Other")
-        BuildingType_cmb.Items.Add("SHI - Ship (Cruising)")
-        BuildingType_cmb.Items.Add("SHO - Shopping Center/Mall/Dept Store")
-        BuildingType_cmb.Items.Add("SPO - Arena/Sports Complex/Convention")
-        BuildingType_cmb.Items.Add("TOT - Transport Other")
-        BuildingType_cmb.Items.Add("UND - Subway/Metro")
-        BuildingType_cmb.Items.Add("UNI - School/College/University")
-        BuildingType_cmb.Items.Add("WAR - Warehouse")
+        cmdBuildingType.Items.Clear()
+        'db2List(ADOConnectionOptionDataBase, BUILDING_CODE_ONLY_QUERY_NAME, BuildingCode_cmb, "Building Code/ID")
+        cmdBuildingType.Items.Add("AIR - Airport")
+        cmdBuildingType.Items.Add("APA - Apartment")
+        cmdBuildingType.Items.Add("CHU - Church")
+        cmdBuildingType.Items.Add("CON - Condominium")
+        cmdBuildingType.Items.Add("COT - Commercial Other - Restaurants")
+        cmdBuildingType.Items.Add("HOS - Hospital/Ambulatory Care/Clinic")
+        cmdBuildingType.Items.Add("HOT - Hotel/Motel/Inn/Dorm/Casino")
+        cmdBuildingType.Items.Add("IOT - Industrial Other")
+        cmdBuildingType.Items.Add("MIN - Mines")
+        cmdBuildingType.Items.Add("MOV - Movie Theater")
+        cmdBuildingType.Items.Add("OFF - Office/Bank/Administration")
+        cmdBuildingType.Items.Add("PAR - Parking Garage")
+        cmdBuildingType.Items.Add("POW - Power Plants")
+        cmdBuildingType.Items.Add("RAI - Railway Station")
+        cmdBuildingType.Items.Add("RET - Retirement Home/Nursing Home")
+        cmdBuildingType.Items.Add("ROT - Residential Other")
+        cmdBuildingType.Items.Add("SHI - Ship (Cruising)")
+        cmdBuildingType.Items.Add("SHO - Shopping Center/Mall/Dept Store")
+        cmdBuildingType.Items.Add("SPO - Arena/Sports Complex/Convention")
+        cmdBuildingType.Items.Add("TOT - Transport Other")
+        cmdBuildingType.Items.Add("UND - Subway/Metro")
+        cmdBuildingType.Items.Add("UNI - School/College/University")
+        cmdBuildingType.Items.Add("WAR - Warehouse")
+
+        cmbNationalAccount.Items.Add("No")
+        cmbNationalAccount.Items.Add("Yes")
+
+        SeismicZone_cmb.Items.Clear()
+        For i As Integer = 0 To 4
+            SeismicZone_cmb.Items.Add(CStr(i))
+        Next i
+
     End Sub
 
-    Private Sub BuildingType_cmb_Leave(sender As System.Object, e As System.EventArgs) Handles BuildingType_cmb.Leave
-        If BuildingType_cmb.Text.Length > 3 Then
-            BuildingType_cmb.Text = Strings.Left(BuildingType_cmb.Text, 3)
-        End If
-    End Sub
+    
+    'Private Sub cmbBuildingType_DropDown(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmdBuildingType.DropDown
+    '    cmdBuildingType.Width = 267
+    '    cmdBuildingType.Left = 40
+    'End Sub
 
-    Private Sub BuildingType_cmb_LostFocus(sender As Object, e As System.EventArgs) Handles BuildingType_cmb.LostFocus
-        If BuildingType_cmb.Text.Length > 3 Then
-            BuildingType_cmb.Text = Strings.Left(BuildingType_cmb.Text, 3)
-        End If
-    End Sub
 
-    Private Sub txtBidDate_Validating(sender As System.Object, e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
+    Private Sub txtBidDate_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
         If IsDate(txtBidDate.Text) Then
         Else
             e.Cancel = True
@@ -934,12 +946,16 @@ Partial Friend Class CM_MAIN_frm
         End If
     End Sub
 
-  
     Private Sub btnAddress_Click(sender As System.Object, e As System.EventArgs) Handles btnAddress.Click
-        FromCM = True
-        CM_ADDRS_frm.InitializeAddressFields = True
-        CM_ADDRS_frm.ShowDialog()
-        ' Set_CurrentAddress()
-        FromCM = False
+        frmAddresses.ShowDialog()
+    End Sub
+    Private Sub SeismicZone_cmb_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles SeismicZone_cmb.Leave
+        ValidateTextBoxInput_Text(Me, SeismicZone_cmb, ENTRY_NOT_AN_INTEGER, True)
+    End Sub
+
+    Private Sub FpSpread1_SelectionChanging(sender As Object, e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
+        Stop
+        e.Cancel = True
+
     End Sub
 End Class
