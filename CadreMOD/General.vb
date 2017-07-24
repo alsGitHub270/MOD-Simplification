@@ -357,4 +357,38 @@ Query_Execute_Error:
         End Select
         Return ReturnCode
     End Function
+    Public Function CalculateNumberOfCarsInEstimate(ByRef Units As String) As Integer
+        Dim TempLine As String = ""
+        Dim UnitsLine As New System.Text.StringBuilder
+        Dim Pos As Integer
+        Dim RngeStart, RngeEnd As Byte
+        Dim UnitsInEstimate() As String
+        Dim ReturnVal As Integer = 0
+        Erase UnitsInEstimate
+        Const Comma As String = ","
+        Dim LowUnit As Byte = 255
+        Dim HighUnit As Byte = 0
+        UnitsInEstimate = Units.Split(New String() {Comma}, StringSplitOptions.None)
+        For Each UnitsInEstimate_item As String In UnitsInEstimate
+            UnitsLine.Append(Comma & UnitsInEstimate_item)
+            Pos = (UnitsInEstimate_item.IndexOf("-") + 1)
+            If Pos = 0 Then
+                TempLine = TempLine & Comma & UnitsInEstimate_item
+                If (UnitsInEstimate_item) < LowUnit Then LowUnit = Conversion.Val(UnitsInEstimate_item)
+                If (UnitsInEstimate_item) > HighUnit Then HighUnit = Conversion.Val(UnitsInEstimate_item)
+            Else
+                RngeStart = Conversion.Val(Strings.Left(UnitsInEstimate_item, 2))
+                RngeEnd = Conversion.Val(Strings.Right(UnitsInEstimate_item, 2))
+                For k As Integer = RngeStart To RngeEnd
+                    TempLine = TempLine & Comma & CStr(k)
+                Next k
+                If RngeStart < LowUnit Then LowUnit = RngeStart
+                If RngeEnd > HighUnit Then HighUnit = RngeEnd
+            End If
+        Next UnitsInEstimate_item
+        TempLine = Strings.Mid(TempLine, 2)
+        UnitsInEstimate = TempLine.Split(",")
+        ReturnVal = UnitsInEstimate.GetUpperBound(0) + 1
+        Return ReturnVal
+    End Function
 End Module

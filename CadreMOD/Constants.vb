@@ -5,7 +5,7 @@
 
     Public Const TYPE_NAME_HERE As String = "<Type Name Here>"
 
-    Public Const ImageFileLocation As String = "C:\Chuck\MOD\MOD Simplification\CadreMOD\CadreMOD"
+    Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD"
     Public Const MOVE_FIRST As Integer = 0
     Public Const MOVE_NEXT As Integer = 1
     Public Const MOVE_PREVIOUS As Integer = 2
@@ -40,4 +40,11 @@
     Public Const ENTRY_NOT_IN_THE_NUMBER_RANGE As Integer = 5
     Public Const ENTRY_NOT_BLANK As Integer = 6
     Public Const ENTRY_HAS_TOO_MANY_DECIMALS As Integer = 7
+    Public Const GROUP_SETUP_QRY As String = "GROUP_SETUP_QRY"
+    Public Const HYDRO_TYPE As String = "Hydro"
+    Public Const GEARED_TYPE As String = "Geared"
+    Public Const GEARLESS_TYPE As String = "Gearless"
+    Public Const AC_TYPE As String = "AC"
+    Public Const AC_REGEN_TYPE As String = "AC Regen"
+    Public Const DC_TYPE As String = "DC"
 End Module

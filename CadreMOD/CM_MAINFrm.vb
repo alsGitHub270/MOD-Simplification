@@ -19,6 +19,8 @@ Partial Friend Class CM_MAIN_frm
     Dim MainGroup As DataTable
     Dim SubGroup As DataTable
 
+    Public DefaultTaxCode As String = ""
+
     Const _BANK_COLUMN As Integer = 3
 
     Private Sub CreateDataSet()
@@ -32,11 +34,11 @@ Partial Friend Class CM_MAIN_frm
         myDataSet.EnforceConstraints = False
 
         SummaryGroup = myDataSet.Tables.Add("SummaryGroup")
-        SummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("Summary Group", dtStr), New DataColumn("id", dtStr), New DataColumn("_", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Bank Type", dtStr), New DataColumn("Units", dtStr), New DataColumn("Material HQ", dtInt), New DataColumn("Material RL", dtInt), New DataColumn("Sales Tax", dtInt), New DataColumn("Total BDP Hours", dtInt), New DataColumn("Total Special Hours", dtInt), New DataColumn("Total Labor Hours", dtInt), New DataColumn("Overtime Hours Included", dtInt), New DataColumn("Labor $", dtInt), New DataColumn("SubContract Work", dtInt), New DataColumn("Misc Costs", dtInt), New DataColumn("Freight", dtInt), New DataColumn("NPS Cost", dtInt), New DataColumn("Total Bank Cost", dtInt), New DataColumn("Project C1%", dtInt), New DataColumn("Bank Sell Price", dtInt)})
+        SummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("Summary Group", dtStr), New DataColumn("id", dtStr), New DataColumn("_", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Bank Type", dtStr), New DataColumn("Units", dtStr), New DataColumn("Material HQ", dtInt), New DataColumn("Material RL", dtInt), New DataColumn("Sales Tax", dtInt), New DataColumn("Total BDP Hours", dtInt), New DataColumn("Total Special Hours", dtInt), New DataColumn("Total Labor Hours", dtInt), New DataColumn("Overtime Hours Included", dtInt), New DataColumn("Labor $", dtInt), New DataColumn("SubContract Work", dtInt), New DataColumn("Misc Costs", dtInt), New DataColumn("Freight", dtInt), New DataColumn("NPS Cost", dtInt), New DataColumn("Total Bank Cost", dtInt), New DataColumn("Project C1%", dtInt), New DataColumn("Bank Sell Price", dtInt), New DataColumn("Tax Rate", dtInt), New DataColumn("Labor Rate", dtInt)})
 
-        SummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        SummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
 
         MainGroup = myDataSet.Tables.Add("BaseGroup")
@@ -159,6 +161,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 19).Locked = False
 
             FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary
             FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25         'STATUS
@@ -180,6 +183,8 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'total bank cost
             FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 60        'project c1
             FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 60        'bank sell price
+            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 60        'tax rate
+            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 60        'Labor rate
 
             FpSpread1.ActiveSheet.Cells(i, 3).CellType = cmbocell_Bank      ' bank
             FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell_Machine   ' machine/bank type
@@ -194,6 +199,8 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 17).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 18).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 20).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 21).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 22).CellType = currencyType
 
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
@@ -924,14 +931,29 @@ Partial Friend Class CM_MAIN_frm
         cmbNationalAccount.Items.Add("No")
         cmbNationalAccount.Items.Add("Yes")
 
-        SeismicZone_cmb.Items.Clear()
+        cmbTaxCode.Items.Clear()
+        cmbTaxCode.Items.Add("Taxable")
+        cmbTaxCode.Items.Add("Tax Exempt")
+        If DefaultTaxCode = "Tax Excluded" Then cmbTaxCode.Items.Add("Tax Excluded")
+
+        cmbSeismicZone.Items.Clear()
         For i As Integer = 0 To 4
-            SeismicZone_cmb.Items.Add(CStr(i))
+            cmbSeismicZone.Items.Add(CStr(i))
         Next i
+
+
+        cmbNFPA13CodeYear.Items.Clear()
+        cmbNFPA13CodeYear.Items.Add("2010")
+        cmbNFPA13CodeYear.Items.Add("2013")
+        'If ME_ADM01Bnk_typ.NFPA13CodeYear = "N/A" Then
+        cmbNFPA13CodeYear.Items.Add("N/A")
+        'End If
+
+
 
     End Sub
 
-    
+
     'Private Sub cmbBuildingType_DropDown(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmdBuildingType.DropDown
     '    cmdBuildingType.Width = 267
     '    cmdBuildingType.Left = 40
@@ -949,8 +971,8 @@ Partial Friend Class CM_MAIN_frm
     Private Sub btnAddress_Click(sender As System.Object, e As System.EventArgs) Handles btnAddress.Click
         frmAddresses.ShowDialog()
     End Sub
-    Private Sub SeismicZone_cmb_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles SeismicZone_cmb.Leave
-        ValidateTextBoxInput_Text(Me, SeismicZone_cmb, ENTRY_NOT_AN_INTEGER, True)
+    Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmbSeismicZone.Leave, cmbSeismicZone.SelectedIndexChanged
+        ValidateTextBoxInput_Text(Me, cmbSeismicZone, ENTRY_NOT_AN_INTEGER, True)
     End Sub
 
     Private Sub FpSpread1_SelectionChanging(sender As Object, e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging

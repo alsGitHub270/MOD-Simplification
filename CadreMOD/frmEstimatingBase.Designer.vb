@@ -49,6 +49,10 @@ Partial Class frmEstimatingBase
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.GeneralInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.DriveType_cmb = New System.Windows.Forms.ComboBox()
+        Me.DriveType_lbl = New System.Windows.Forms.Label()
+        Me.MachineType_cmb = New System.Windows.Forms.ComboBox()
+        Me.MachineType_lbl = New System.Windows.Forms.Label()
         Me.TotalNumberOfFloors_cmb = New System.Windows.Forms.ComboBox()
         Me.TotalNumberOfFloors_lbl = New System.Windows.Forms.Label()
         Me.NumberofStopsTotal_cmb = New System.Windows.Forms.ComboBox()
@@ -63,7 +67,7 @@ Partial Class frmEstimatingBase
         Me.CapacityNew_cmb = New System.Windows.Forms.ComboBox()
         Me.SpeedLabel_lbl = New System.Windows.Forms.Label()
         Me.CapacityLabel_lbl = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
@@ -176,6 +180,10 @@ Partial Class frmEstimatingBase
         '
         Me.GeneralInformation_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GeneralInformation_fra.Controls.Add(Me.DriveType_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.DriveType_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.MachineType_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.MachineType_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.TotalNumberOfFloors_cmb)
         Me.GeneralInformation_fra.Controls.Add(Me.TotalNumberOfFloors_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.NumberofStopsTotal_cmb)
@@ -190,7 +198,7 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.Controls.Add(Me.CapacityNew_cmb)
         Me.GeneralInformation_fra.Controls.Add(Me.SpeedLabel_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.CapacityLabel_lbl)
-        Me.GeneralInformation_fra.Controls.Add(Me.Button1)
+        Me.GeneralInformation_fra.Controls.Add(Me.ExpandCollapseFrame_btn)
         Me.GeneralInformation_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GeneralInformation_fra.Location = New System.Drawing.Point(16, 53)
         Me.GeneralInformation_fra.Name = "GeneralInformation_fra"
@@ -198,6 +206,61 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.TabIndex = 25
         Me.GeneralInformation_fra.TabStop = False
         Me.GeneralInformation_fra.Text = "   General Information"
+        '
+        'DriveType_cmb
+        '
+        Me.DriveType_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.DriveType_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.DriveType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.DriveType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DriveType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.DriveType_cmb.Location = New System.Drawing.Point(525, 48)
+        Me.DriveType_cmb.Name = "DriveType_cmb"
+        Me.DriveType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.DriveType_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.DriveType_cmb.TabIndex = 101
+        '
+        'DriveType_lbl
+        '
+        Me.DriveType_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.DriveType_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.DriveType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DriveType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DriveType_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.DriveType_lbl.Location = New System.Drawing.Point(370, 50)
+        Me.DriveType_lbl.Name = "DriveType_lbl"
+        Me.DriveType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.DriveType_lbl.Size = New System.Drawing.Size(69, 15)
+        Me.DriveType_lbl.TabIndex = 102
+        Me.DriveType_lbl.Text = "Drive Type"
+        '
+        'MachineType_cmb
+        '
+        Me.MachineType_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.MachineType_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.MachineType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.MachineType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MachineType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.MachineType_cmb.Location = New System.Drawing.Point(524, 19)
+        Me.MachineType_cmb.Name = "MachineType_cmb"
+        Me.MachineType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.MachineType_cmb.Size = New System.Drawing.Size(134, 21)
+        Me.MachineType_cmb.Sorted = True
+        Me.MachineType_cmb.TabIndex = 99
+        '
+        'MachineType_lbl
+        '
+        Me.MachineType_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.MachineType_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.MachineType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.MachineType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MachineType_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.MachineType_lbl.Location = New System.Drawing.Point(370, 21)
+        Me.MachineType_lbl.Name = "MachineType_lbl"
+        Me.MachineType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.MachineType_lbl.Size = New System.Drawing.Size(120, 16)
+        Me.MachineType_lbl.TabIndex = 100
+        Me.MachineType_lbl.Text = "Machine Type"
         '
         'TotalNumberOfFloors_cmb
         '
@@ -382,15 +445,15 @@ Partial Class frmEstimatingBase
         Me.CapacityLabel_lbl.TabIndex = 25
         Me.CapacityLabel_lbl.Text = "Capacity :"
         '
-        'Button1
+        'ExpandCollapseFrame_btn
         '
-        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.White
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button1.Location = New System.Drawing.Point(1, -1)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(20, 19)
-        Me.Button1.TabIndex = 3
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.ExpandCollapseFrame_btn.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ExpandCollapseFrame_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ExpandCollapseFrame_btn.Location = New System.Drawing.Point(1, -1)
+        Me.ExpandCollapseFrame_btn.Name = "ExpandCollapseFrame_btn"
+        Me.ExpandCollapseFrame_btn.Size = New System.Drawing.Size(20, 19)
+        Me.ExpandCollapseFrame_btn.TabIndex = 3
+        Me.ExpandCollapseFrame_btn.UseVisualStyleBackColor = True
         '
         'TabControl1
         '
@@ -851,7 +914,7 @@ Partial Class frmEstimatingBase
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
     Friend WithEvents BillofMaterialsandTaskList_fra As System.Windows.Forms.GroupBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents FpSpread1 As FarPoint.Win.Spread.FpSpread
@@ -871,6 +934,10 @@ Partial Class frmEstimatingBase
     Public WithEvents CapacityNew_cmb As System.Windows.Forms.ComboBox
     Public WithEvents SpeedLabel_lbl As System.Windows.Forms.Label
     Public WithEvents CapacityLabel_lbl As System.Windows.Forms.Label
+    Public WithEvents DriveType_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents DriveType_lbl As System.Windows.Forms.Label
+    Public WithEvents MachineType_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents MachineType_lbl As System.Windows.Forms.Label
 
 #End Region
 End Class
