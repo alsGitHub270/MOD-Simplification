@@ -8,59 +8,105 @@ Imports System.Drawing
 Imports System.Globalization
 Imports System.IO
 Imports System.Windows.Forms
+Imports Newtonsoft.Json
 
 
 Partial Friend Class CM_MAIN_frm
     Inherits System.Windows.Forms.Form
     Dim sv As New FarPoint.Win.Spread.SheetView()
     Dim svCollection As New System.Collections.ArrayList(10)
-    Dim myDataSet As System.Data.DataSet
-    Dim SummaryGroup As DataTable
-    Dim MainGroup As DataTable
-    Dim SubGroup As DataTable
+    Dim dsCadre As DataSet
+    '   Dim dtBuildingJobInfoGroup As DataTable
+    Dim dtSummaryGroup As DataTable
+    Dim dtBaseGroup As DataTable
+    Dim dtAltGroup As DataTable
 
+    Private CurrentBuildingInformationFrameHeight As Integer = 0, CurrentEquipmentFrameHeight As Integer = 0
     Public DefaultTaxCode As String = ""
 
     Const _BANK_COLUMN As Integer = 3
 
     Private Sub CreateDataSet()
 
-        Dim dtStr As System.Type
-        Dim dtInt As System.Type
-        dtStr = System.Type.GetType("System.String")
-        dtInt = System.Type.GetType("System.Int32")
+        Dim typeStr As System.Type
+        Dim typeInt As System.Type
+        typeStr = System.Type.GetType("System.String")
+        typeInt = System.Type.GetType("System.Int32")
 
-        myDataSet = New DataSet()
-        myDataSet.EnforceConstraints = False
+        dsCadre = New DataSet()
+        dsCadre.EnforceConstraints = False
 
-        SummaryGroup = myDataSet.Tables.Add("SummaryGroup")
-        SummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("Summary Group", dtStr), New DataColumn("id", dtStr), New DataColumn("_", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Bank Type", dtStr), New DataColumn("Units", dtStr), New DataColumn("Material HQ", dtInt), New DataColumn("Material RL", dtInt), New DataColumn("Sales Tax", dtInt), New DataColumn("Total BDP Hours", dtInt), New DataColumn("Total Special Hours", dtInt), New DataColumn("Total Labor Hours", dtInt), New DataColumn("Overtime Hours Included", dtInt), New DataColumn("Labor $", dtInt), New DataColumn("SubContract Work", dtInt), New DataColumn("Misc Costs", dtInt), New DataColumn("Freight", dtInt), New DataColumn("NPS Cost", dtInt), New DataColumn("Total Bank Cost", dtInt), New DataColumn("Project C1%", dtInt), New DataColumn("Bank Sell Price", dtInt), New DataColumn("Tax Rate", dtInt), New DataColumn("Labor Rate", dtInt)})
+        dtSummaryGroup = dsCadre.Tables.Add("SummaryGroup")
+        dtSummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("SummaryGroup", typeStr), _
+                                                          New DataColumn("id", typeStr), _
+                                                          New DataColumn("_", typeStr), _
+                                                          New DataColumn("Bank", typeStr), _
+                                                          New DataColumn("Bank Type", typeStr), _
+                                                          New DataColumn("Units", typeStr), _
+                                                          New DataColumn("Material HQ", typeInt), _
+                                                          New DataColumn("Material RL", typeInt), _
+                                                          New DataColumn("Sales Tax", typeInt), _
+                                                          New DataColumn("Total BDP Hours", typeInt), _
+                                                          New DataColumn("Total Special Hours", typeInt), _
+                                                          New DataColumn("Total Labor Hours", typeInt), _
+                                                          New DataColumn("Overtime Hours Included", typeInt), _
+                                                          New DataColumn("Labor $", typeInt), _
+                                                          New DataColumn("SubContract Work", typeInt), _
+                                                          New DataColumn("Misc Costs", typeInt), _
+                                                          New DataColumn("Freight", typeInt), _
+                                                          New DataColumn("NPS Cost", typeInt), _
+                                                          New DataColumn("Total Bank Cost", typeInt), _
+                                                          New DataColumn("Project C1%", typeInt), _
+                                                          New DataColumn("Bank Sell Price", typeInt), _
+                                                          New DataColumn("Tax Rate", typeInt), _
+                                                          New DataColumn("Labor Rate", typeInt)
+                                                         })
 
-        SummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        SummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
 
-        MainGroup = myDataSet.Tables.Add("BaseGroup")
-        MainGroup.Columns.AddRange(New DataColumn() {New DataColumn("Base Group", dtStr), New DataColumn("Id", dtStr), New DataColumn("Bank", dtStr), New DataColumn("Units", dtStr), New DataColumn("Machine", dtStr), New DataColumn("Target", dtInt), New DataColumn("Bid", dtStr), New DataColumn("Award", dtStr), New DataColumn("Comment", dtStr)})
+        dtBaseGroup = dsCadre.Tables.Add("BaseGroup")
+        dtBaseGroup.Columns.AddRange(New DataColumn() {New DataColumn("BaseGroup", typeStr), _
+                                                       New DataColumn("Id", typeStr), _
+                                                       New DataColumn("Bank", typeStr), _
+                                                       New DataColumn("Units", typeStr), _
+                                                       New DataColumn("Machine", typeStr), _
+                                                       New DataColumn("Target", typeInt), _
+                                                       New DataColumn("Bid", typeStr), _
+                                                       New DataColumn("Award", typeStr), _
+                                                       New DataColumn("Comment", typeStr)
+                                                      })
 
         'MainGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", ""})
-        MainGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", ""})
-        MainGroup.Rows.Add(New Object() {"Base", "B1", "B", "01-04", "Geared", 375000, "", "", ""})
-        MainGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", ""})
+        'dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", ""})
+        'dtBaseGroup.Rows.Add(New Object() {"Base", "B1", "B", "01-04", "Geared", 375000, "", "", ""})
+        'dtBaseGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", ""})
 
-        SubGroup = myDataSet.Tables.Add("SubGroup")
-        SubGroup.Columns.AddRange(New DataColumn() {New DataColumn("Sub Group", dtStr), New DataColumn("id", dtStr), New DataColumn("Units", dtStr), New DataColumn("Machine", dtStr), New DataColumn("Target", dtStr), New DataColumn("Bid", dtStr), New DataColumn("Offer", dtStr), New DataColumn("Merge", dtStr), New DataColumn("Comment", dtStr)})
-        SubGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
-        SubGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, "Lorem ipsam voluptatem quia volupta. "})
-        SubGroup.Rows.Add(New Object() {"Alt3", "A1", "01-04", "Geared", -2500, "", "", "", "Lorem ipsum dolor delectus error voluptatem neque."})
-        SubGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "", True, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
-        SubGroup.Rows.Add(New Object() {"Alt1", "B1", "01-04", "Geared", 5000, "", "", "", "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
-        SubGroup.Rows.Add(New Object() {"Alt2", "B1", "01-04", "Geared", -2000, "", "", "", ""})
+        dtAltGroup = dsCadre.Tables.Add("AltGroup")
+        dtAltGroup.Columns.AddRange(New DataColumn() {New DataColumn("AltGroup", typeStr), _
+                                                      New DataColumn("id", typeStr), _
+                                                      New DataColumn("Units", typeStr), _
+                                                      New DataColumn("Machine", typeStr), _
+                                                      New DataColumn("Target", typeStr), _
+                                                      New DataColumn("Bid", typeStr), _
+                                                      New DataColumn("Offer", typeStr), _
+                                                      New DataColumn("Merge", typeStr), _
+                                                      New DataColumn("Comment", typeStr)
+                                                     })
+        'dtAltGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
+        'dtAltGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, "Lorem ipsam voluptatem quia volupta. "})
+        'dtAltGroup.Rows.Add(New Object() {"Alt3", "A1", "01-04", "Geared", -2500, "", "", "", "Lorem ipsum dolor delectus error voluptatem neque."})
+        'dtAltGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "", True, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
+        'dtAltGroup.Rows.Add(New Object() {"Alt1", "B1", "01-04", "Geared", 5000, "", "", "", "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
+        'dtAltGroup.Rows.Add(New Object() {"Alt2", "B1", "01-04", "Geared", -2000, "", "", "", ""})
+
+        Deserialize()
 
         'Add the relations
-        myDataSet.Relations.Add("MainGroup", SummaryGroup.Columns("Bank"), MainGroup.Columns("bank"))
-        myDataSet.Relations.Add("BaseGroup", MainGroup.Columns("id"), SubGroup.Columns("id"))
+        dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("Bank"), dsCadre.Tables("BaseGroup").Columns("Bank"))
+        dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("id"), dsCadre.Tables("AltGroup").Columns("id"))
 
     End Sub
 
@@ -112,7 +158,7 @@ Partial Friend Class CM_MAIN_frm
             .LockBackColor = Color.LightGray
         End With
 
-        
+
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
@@ -252,9 +298,9 @@ Partial Friend Class CM_MAIN_frm
         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
         Dim t1 As New FarPoint.Win.Spread.CellType.TextCellType
         ' Load an image file and set it to BackgroundImage property.
-        Dim p As New FarPoint.Win.Picture(Image.FromFile("\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
         t.BackgroundImage = p
-        Dim p1 As New FarPoint.Win.Picture(Image.FromFile("\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+        Dim p1 As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
 
         ' Apply the text cell.
         FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
@@ -263,19 +309,23 @@ Partial Friend Class CM_MAIN_frm
         ' Set the size of the cell so the image is displayed
         'FpSpread1.ActiveSheet.Rows(1).Height = 50
         'FpSpread1.ActiveSheet.Columns(1).Width = 150
+        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+        CurrentBuildingInformationFrameHeight = BuildingInformation_fra.Height
+        CurrentEquipmentFrameHeight = Equipment_fra.Height
+        Relocate_Equipment_Frame()
 
 
     End Sub
 
 
-    Private Sub FpSpread1_CellClick(sender As Object, e As FarPoint.Win.Spread.CellClickEventArgs) Handles FpSpread1.CellClick
-        Dim thisRow As Integer
-        Dim thisColumn As Integer
-        Dim thisValue As String
+    Private Sub FpSpread1_CellClick(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.CellClickEventArgs) Handles FpSpread1.CellClick
+        '    Dim thisRow As Integer
+        '    Dim thisColumn As Integer
+        '    Dim thisValue As String
 
-        thisRow = e.Row
-        thisColumn = e.Column
-        thisValue = FpSpread1.ActiveSheet.GetValue(thisRow, thisColumn)
+        '    thisRow = e.Row
+        '    thisColumn = e.Column
+        '    thisValue = FpSpread1.ActiveSheet.GetValue(thisRow, thisColumn)
 
         ' MsgBox("row:  " & thisRow & "    column: " & thisColumn & " and it's value is: " & thisValue)
 
@@ -447,15 +497,16 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub btnMerge_Click(sender As System.Object, e As System.EventArgs) Handles btnMerge.Click
+    Private Sub btnMerge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMerge.Click
 
         Dim new_message As String = "You are about to merge data for Bank A."
         Dim update_message As String = "You are about to update 'Master' data for Bank A.  All current data for the Master will be overwritten."
 
-        If MainGroup.Rows.Count < 4 Then
+        If dsCadre.Tables("BaseGroup").Rows.Count < 4 Then
             If MessageBox.Show(new_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
                 'active_row = FindActiveRows()
-                MainGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""})
+                'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""})
+                dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""}))
                 Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                 ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
                 ChildSheetView1.SortRows(1, True, True)
@@ -467,7 +518,7 @@ Partial Friend Class CM_MAIN_frm
                 ChildSheetView1.Cells(0, 7).Locked = False
                 ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
 
-                Dim p As New FarPoint.Win.Picture(Image.FromFile("\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
+                Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
                 Dim t As New FarPoint.Win.Spread.CellType.TextCellType
                 t.BackgroundImage = p
                 ' Apply the text cell.
@@ -527,7 +578,7 @@ Partial Friend Class CM_MAIN_frm
     End Function
 
 
-    Private Sub btnPrint_Click(sender As System.Object, e As System.EventArgs) Handles btnPrint.Click
+    Private Sub btnPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrint.Click
 
         'Dim printset = New FarPoint.Win.Spread.PrintInfo()
 
@@ -548,8 +599,8 @@ Partial Friend Class CM_MAIN_frm
         Dim printset As New FarPoint.Win.Spread.PrintInfo()
         printset.PrintToPdf = True
         printset.PdfFileName = "c:\temp\results.pdf"
-        printset.orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
-        printset.zoomfactor = 0.65
+        printset.Orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
+        printset.ZoomFactor = 0.65
         printset.BestFitCols = True
 
         printset.PdfWriteMode = FarPoint.Win.Spread.PdfWriteMode.Append
@@ -578,7 +629,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub btnAddAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnAddAlt.Click
+    Private Sub btnAddAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddAlt.Click
 
         'MsgBox(FpSpread1.ActiveSheet.ActiveRowIndex)
         Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
@@ -607,11 +658,11 @@ Partial Friend Class CM_MAIN_frm
         units = ChildSheetView.Cells(baseRowIndex, 3).Value
         machine = ChildSheetView.Cells(baseRowIndex, 4).Value
 
-        SubGroup.Rows.Add(New Object() {thisID, baseID, units, machine, 0, "", "", "", ""})
+        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisID, baseID, units, machine, 0, "", "", "", ""})
 
     End Sub
 
-    Private Sub btnAddBank_Click(sender As System.Object, e As System.EventArgs) Handles btnAddBank.Click
+    Private Sub btnAddBank_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBank.Click
         ' Add a new summary row to the grid
         ' Add a new base row to the grid
 
@@ -622,9 +673,7 @@ Partial Friend Class CM_MAIN_frm
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
 
-
-
-        SummaryGroup.Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
         FpSpread1.Refresh()
         FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
         FpSpread1.ActiveSheet.ActiveRow.Locked = True
@@ -663,24 +712,23 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.Refresh()
     End Sub
 
-    Private Sub FpSpread1_ComboDropDown(sender As Object, e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboDropDown
+    Private Sub FpSpread1_ComboDropDown(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboDropDown
         Dim thisValue As String
 
         thisValue = FpSpread1.ActiveSheet.GetValue(e.Row, e.Column)
 
     End Sub
 
-    Private Sub FpSpread1_ComboSelChange(sender As Object, e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboSelChange
-        Stop
+    Private Sub FpSpread1_ComboSelChange(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboSelChange
 
         Debug.Print(e.Column)
         '  Debug.Printe.
     End Sub
 
-   
 
 
-    Private Sub FpSpread1_LeaveCell(sender As Object, e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
+
+    Private Sub FpSpread1_LeaveCell(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
 
         Dim textBoxType As New FarPoint.Win.Spread.CellType.TextCellType()
 
@@ -767,7 +815,7 @@ Partial Friend Class CM_MAIN_frm
 
 
 
-    Private Sub btnDeleteAlt_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteAlt.Click
+    Private Sub btnDeleteAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteAlt.Click
 
         Dim activeRows As Array
         activeRows = FindActiveRows()
@@ -785,13 +833,13 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub DeleteAltRow(activeRows As Array)
+    Private Sub DeleteAltRow(ByVal activeRows As Array)
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
 
         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(activeRows(0), 0)
         If Not ChildSheetView1 Is Nothing Then
             ChildSheetView2 = ChildSheetView1.FindChildView(activeRows(1), 0)
-                If Not IsNothing(ChildSheetView2) Then
+            If Not IsNothing(ChildSheetView2) Then
                 Try
                     If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(activeRows(0), 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                         ChildSheetView2.RemoveRows(activeRows(2), 1)
@@ -802,12 +850,12 @@ Partial Friend Class CM_MAIN_frm
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "Cannot Delete the Alt Row")
                 End Try
-                End If
+            End If
         End If
 
     End Sub
 
-    Private Sub btnDeleteBank_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteBank.Click
+    Private Sub btnDeleteBank_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteBank.Click
         Dim summaryRow As Integer
         Dim activeRows As Array
 
@@ -843,7 +891,7 @@ Partial Friend Class CM_MAIN_frm
         Next
     End Sub
 
-    Private Sub btnDeleteMaster_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteMaster.Click
+    Private Sub btnDeleteMaster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteMaster.Click
 
         If MessageBox.Show("You are about to delete the Master for this Summary Row.  Are you Sure", "Are you Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
             Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
@@ -852,7 +900,7 @@ Partial Friend Class CM_MAIN_frm
                 ChildSheetView1.RemoveRows(0, 1)
             End If
 
-            Dim p As New FarPoint.Win.Picture(Image.FromFile("\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+            Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
             Dim t As New FarPoint.Win.Spread.CellType.TextCellType
             t.BackgroundImage = p
             ' Apply the text cell.
@@ -865,7 +913,7 @@ Partial Friend Class CM_MAIN_frm
     Private Function BuildAvailableBanks() As String()
         ' Roll thru all the banks in the summary row. 
         ' then delete if bank already in use
-       
+
         Dim myList As New List(Of String)()
         Dim i As Integer
         Dim bank As String
@@ -874,7 +922,7 @@ Partial Friend Class CM_MAIN_frm
             myList.Add(Chr(i))
         Next
 
-        For Each dr As DataRow In myDataSet.Tables(0).Rows
+        For Each dr As DataRow In dsCadre.Tables(0).Rows
             bank = dr("Bank")
             If bank <> "" Then
                 i = myList.IndexOf(bank)
@@ -886,7 +934,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Function
 
-    Private Function BuildBanks(thisBank As String) As String()
+    Private Function BuildBanks(ByVal thisBank As String) As String()
 
         Dim myList As New List(Of String)()
 
@@ -968,16 +1016,69 @@ Partial Friend Class CM_MAIN_frm
         End If
     End Sub
 
-    Private Sub btnAddress_Click(sender As System.Object, e As System.EventArgs) Handles btnAddress.Click
+    Private Sub btnAddress_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddress.Click
         frmAddresses.ShowDialog()
     End Sub
     Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmbSeismicZone.Leave, cmbSeismicZone.SelectedIndexChanged
         ValidateTextBoxInput_Text(Me, cmbSeismicZone, ENTRY_NOT_AN_INTEGER, True)
     End Sub
 
-    Private Sub FpSpread1_SelectionChanging(sender As Object, e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
+    Private Sub ExpandCollapseFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseFrame_btn.Click
+        If BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
+            BuildingInformation_fra.Height = CurrentBuildingInformationFrameHeight
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+        Else
+            BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
+        End If
+        Relocate_Equipment_Frame()
+
+    End Sub
+    Private Sub Relocate_Equipment_Frame()
+
+        Equipment_fra.Top = BuildingInformation_fra.Top + BuildingInformation_fra.Height + 6
+        If BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
+            Equipment_fra.Height += CurrentBuildingInformationFrameHeight - 20
+        Else
+            Equipment_fra.Height = CurrentEquipmentFrameHeight
+        End If
+
+    End Sub
+    Private Sub FpSpread1_SelectionChanging(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
         Stop
         e.Cancel = True
 
+    End Sub
+
+    Private Sub Serialize()
+        Dim json As String = ""
+
+        Try
+            json = JsonConvert.SerializeObject(dsCadre, Formatting.Indented)
+
+            Using sw As StreamWriter = New StreamWriter("C:\Temp\cadre.json")
+                sw.Write(json)
+            End Using
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Writing Cadre Json file")
+        End Try
+    End Sub
+
+    Private Sub Deserialize()
+        Dim json As String = ""
+
+        Try
+            Using sr As StreamReader = New StreamReader("C:\Temp\cadre.json")
+                json = sr.ReadToEnd
+            End Using
+            dsCadre = JsonConvert.DeserializeObject(Of DataSet)(json)
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
+        Serialize()
     End Sub
 End Class

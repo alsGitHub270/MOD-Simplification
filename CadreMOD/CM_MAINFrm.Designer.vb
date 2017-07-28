@@ -9,15 +9,18 @@ Partial Class CM_MAIN_frm
         '    ReLoadForm(False)
         'Add any initialization after the InitializeComponent() call
         CreateDataSet()
+
+        'Deserialize()
+
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         model = FpSpread1.ActiveSheet.Models.Data
 
         Dim dt As DataTable
-        For Each dt In myDataSet.Tables
+        For Each dt In dsCadre.Tables
             dt.DefaultView.AllowNew = False
         Next
         model.DataMember = "artists"
-        model.DataSource = myDataSet
+        model.DataSource = dsCadre
 
         FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
 
@@ -43,7 +46,7 @@ Partial Class CM_MAIN_frm
     Public WithEvents EstimateNum_txt As System.Windows.Forms.MaskedTextBox
     Public WithEvents Estimator_txt As System.Windows.Forms.MaskedTextBox
     Private WithEvents _Menu_tlb_0 As System.Windows.Forms.Button
-    Private WithEvents _Menu_tlb_1 As System.Windows.Forms.Button
+    Private WithEvents btnSave As System.Windows.Forms.Button
     Private WithEvents _Menu_tlb_3 As System.Windows.Forms.Button
     Private WithEvents _Menu_tlb_4 As System.Windows.Forms.Button
     Private WithEvents _label_0 As System.Windows.Forms.Label
@@ -68,9 +71,11 @@ Partial Class CM_MAIN_frm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.cmbTaxCode = New System.Windows.Forms.ComboBox()
         Me.fraCode = New System.Windows.Forms.GroupBox()
+        Me.chkEngineeringSurvey = New System.Windows.Forms.CheckBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.chkHeadDetection = New System.Windows.Forms.CheckBox()
         Me.cmbNFPA13CodeYear = New System.Windows.Forms.ComboBox()
@@ -126,7 +131,7 @@ Partial Class CM_MAIN_frm
         Me.EstimateNum_txt = New System.Windows.Forms.MaskedTextBox()
         Me.Estimator_txt = New System.Windows.Forms.MaskedTextBox()
         Me._Menu_tlb_0 = New System.Windows.Forms.Button()
-        Me._Menu_tlb_1 = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
         Me._Menu_tlb_3 = New System.Windows.Forms.Button()
         Me._Menu_tlb_4 = New System.Windows.Forms.Button()
         Me._label_0 = New System.Windows.Forms.Label()
@@ -165,6 +170,7 @@ Partial Class CM_MAIN_frm
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingInformation_fra.Controls.Add(Me.ExpandCollapseFrame_btn)
         Me.BuildingInformation_fra.Controls.Add(Me.Label6)
         Me.BuildingInformation_fra.Controls.Add(Me.cmbTaxCode)
         Me.BuildingInformation_fra.Controls.Add(Me.fraCode)
@@ -213,7 +219,17 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Size = New System.Drawing.Size(1452, 227)
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
-        Me.BuildingInformation_fra.Text = "Building/Job Information"
+        Me.BuildingInformation_fra.Text = "    Building/Job Information"
+        '
+        'ExpandCollapseFrame_btn
+        '
+        Me.ExpandCollapseFrame_btn.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ExpandCollapseFrame_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ExpandCollapseFrame_btn.Location = New System.Drawing.Point(0, 0)
+        Me.ExpandCollapseFrame_btn.Name = "ExpandCollapseFrame_btn"
+        Me.ExpandCollapseFrame_btn.Size = New System.Drawing.Size(20, 19)
+        Me.ExpandCollapseFrame_btn.TabIndex = 51
+        Me.ExpandCollapseFrame_btn.UseVisualStyleBackColor = True
         '
         'Label6
         '
@@ -238,6 +254,7 @@ Partial Class CM_MAIN_frm
         'fraCode
         '
         Me.fraCode.BackColor = System.Drawing.SystemColors.Window
+        Me.fraCode.Controls.Add(Me.chkEngineeringSurvey)
         Me.fraCode.Controls.Add(Me.Label5)
         Me.fraCode.Controls.Add(Me.chkHeadDetection)
         Me.fraCode.Controls.Add(Me.cmbNFPA13CodeYear)
@@ -260,6 +277,22 @@ Partial Class CM_MAIN_frm
         Me.fraCode.TabIndex = 97
         Me.fraCode.TabStop = False
         Me.fraCode.Text = "Code"
+        '
+        'chkEngineeringSurvey
+        '
+        Me.chkEngineeringSurvey.BackColor = System.Drawing.Color.White
+        Me.chkEngineeringSurvey.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkEngineeringSurvey.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkEngineeringSurvey.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.chkEngineeringSurvey.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkEngineeringSurvey.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkEngineeringSurvey.Location = New System.Drawing.Point(50, 200)
+        Me.chkEngineeringSurvey.Name = "chkEngineeringSurvey"
+        Me.chkEngineeringSurvey.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkEngineeringSurvey.Size = New System.Drawing.Size(137, 15)
+        Me.chkEngineeringSurvey.TabIndex = 72
+        Me.chkEngineeringSurvey.Text = "Engineering Survey"
+        Me.chkEngineeringSurvey.UseVisualStyleBackColor = False
         '
         'Label5
         '
@@ -284,10 +317,10 @@ Partial Class CM_MAIN_frm
         Me.chkHeadDetection.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.chkHeadDetection.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkHeadDetection.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkHeadDetection.Location = New System.Drawing.Point(83, 179)
+        Me.chkHeadDetection.Location = New System.Drawing.Point(75, 179)
         Me.chkHeadDetection.Name = "chkHeadDetection"
         Me.chkHeadDetection.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkHeadDetection.Size = New System.Drawing.Size(104, 15)
+        Me.chkHeadDetection.Size = New System.Drawing.Size(112, 15)
         Me.chkHeadDetection.TabIndex = 70
         Me.chkHeadDetection.Text = "Heat Detection"
         Me.chkHeadDetection.UseVisualStyleBackColor = False
@@ -943,7 +976,7 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.Controls.Add(Me.EstimateNum_txt)
         Me.Menu_pic.Controls.Add(Me.Estimator_txt)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_0)
-        Me.Menu_pic.Controls.Add(Me._Menu_tlb_1)
+        Me.Menu_pic.Controls.Add(Me.btnSave)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_3)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_4)
         Me.Menu_pic.Controls.Add(Me._label_0)
@@ -1006,18 +1039,18 @@ Partial Class CM_MAIN_frm
         Me._Menu_tlb_0.Text = "Exit"
         Me._Menu_tlb_0.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_Menu_tlb_1
+        'btnSave
         '
-        Me._Menu_tlb_1.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._Menu_tlb_1.Image = CType(resources.GetObject("_Menu_tlb_1.Image"), System.Drawing.Image)
-        Me._Menu_tlb_1.Location = New System.Drawing.Point(60, 1)
-        Me._Menu_tlb_1.Name = "_Menu_tlb_1"
-        Me._Menu_tlb_1.Size = New System.Drawing.Size(46, 46)
-        Me._Menu_tlb_1.TabIndex = 34
-        Me._Menu_tlb_1.TabStop = False
-        Me._Menu_tlb_1.Tag = "Save Data"
-        Me._Menu_tlb_1.Text = "Save"
-        Me._Menu_tlb_1.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
+        Me.btnSave.Location = New System.Drawing.Point(60, 1)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(46, 46)
+        Me.btnSave.TabIndex = 34
+        Me.btnSave.TabStop = False
+        Me.btnSave.Tag = "Save Data"
+        Me.btnSave.Text = "Save"
+        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         '_Menu_tlb_3
         '
@@ -1939,7 +1972,7 @@ Partial Class CM_MAIN_frm
         ReDim Menu_tlb(4)
         Me.Menu_tlb(2) = _Menu_tlb_2
         Me.Menu_tlb(0) = _Menu_tlb_0
-        Me.Menu_tlb(1) = _Menu_tlb_1
+        Me.Menu_tlb(1) = btnSave
         Me.Menu_tlb(3) = _Menu_tlb_3
         Me.Menu_tlb(4) = _Menu_tlb_4
     End Sub
@@ -2010,5 +2043,7 @@ Partial Class CM_MAIN_frm
     Public WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents cmbTaxCode As System.Windows.Forms.ComboBox
+    Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
+    Public WithEvents chkEngineeringSurvey As System.Windows.Forms.CheckBox
 #End Region
 End Class
