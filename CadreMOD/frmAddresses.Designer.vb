@@ -51,6 +51,7 @@ Partial Class frmAddresses
         Me.tabArchitect = New System.Windows.Forms.TabPage()
         Me.tabMgmt_Co = New System.Windows.Forms.TabPage()
         Me.tabOther = New System.Windows.Forms.TabPage()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.SuspendLayout()
@@ -119,6 +120,7 @@ Partial Class frmAddresses
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.Button1)
         Me.Panel1.Controls.Add(Me.txtEmail)
         Me.Panel1.Controls.Add(Me.txtFax)
         Me.Panel1.Controls.Add(Me.txtExt)
@@ -341,6 +343,15 @@ Partial Class frmAddresses
         Me.tabOther.Text = "Other"
         Me.tabOther.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.Image = Global.CadreMOD.My.Resources.Resources.save
+        Me.Button1.Location = New System.Drawing.Point(379, 203)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(37, 38)
+        Me.Button1.TabIndex = 22
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'frmAddresses
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -385,4 +396,5 @@ Partial Class frmAddresses
     Friend WithEvents tabArchitect As System.Windows.Forms.TabPage
     Friend WithEvents tabMgmt_Co As System.Windows.Forms.TabPage
     Friend WithEvents tabOther As System.Windows.Forms.TabPage
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 End Class

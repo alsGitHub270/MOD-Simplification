@@ -156,7 +156,7 @@ Partial Class CM_MAIN_frm
         Me.btnAddBank = New System.Windows.Forms.Button()
         Me._Forms_btn_2 = New System.Windows.Forms.Button()
         Me.btnAddAlt = New System.Windows.Forms.Button()
-        Me.btnMerge = New System.Windows.Forms.Button()
+        Me.btnPreOrder = New System.Windows.Forms.Button()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1728,7 +1728,7 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.Controls.Add(Me.btnAddBank)
         Me.Equipment_fra.Controls.Add(Me._Forms_btn_2)
         Me.Equipment_fra.Controls.Add(Me.btnAddAlt)
-        Me.Equipment_fra.Controls.Add(Me.btnMerge)
+        Me.Equipment_fra.Controls.Add(Me.btnPreOrder)
         Me.Equipment_fra.Controls.Add(Me.FpSpread1)
         Me.Equipment_fra.Controls.Add(Me._JobHighRiskFactor_lbl_1)
         Me.Equipment_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1885,21 +1885,21 @@ Partial Class CM_MAIN_frm
         Me.btnAddAlt.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnAddAlt.UseVisualStyleBackColor = False
         '
-        'btnMerge
+        'btnPreOrder
         '
-        Me.btnMerge.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnMerge.BackColor = System.Drawing.SystemColors.Control
-        Me.btnMerge.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnMerge.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMerge.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnMerge.Location = New System.Drawing.Point(562, 10)
-        Me.btnMerge.Name = "btnMerge"
-        Me.btnMerge.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnMerge.Size = New System.Drawing.Size(77, 22)
-        Me.btnMerge.TabIndex = 72
-        Me.btnMerge.Text = "Merge"
-        Me.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnMerge.UseVisualStyleBackColor = False
+        Me.btnPreOrder.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnPreOrder.BackColor = System.Drawing.SystemColors.Control
+        Me.btnPreOrder.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnPreOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPreOrder.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnPreOrder.Location = New System.Drawing.Point(562, 10)
+        Me.btnPreOrder.Name = "btnPreOrder"
+        Me.btnPreOrder.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnPreOrder.Size = New System.Drawing.Size(77, 22)
+        Me.btnPreOrder.TabIndex = 72
+        Me.btnPreOrder.Text = "Pre-Order"
+        Me.btnPreOrder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnPreOrder.UseVisualStyleBackColor = False
         '
         'CM_MAIN_frm
         '
@@ -2014,7 +2014,7 @@ Partial Class CM_MAIN_frm
     Private WithEvents btnAddBank As System.Windows.Forms.Button
     Private WithEvents _Forms_btn_2 As System.Windows.Forms.Button
     Private WithEvents btnAddAlt As System.Windows.Forms.Button
-    Private WithEvents btnMerge As System.Windows.Forms.Button
+    Private WithEvents btnPreOrder As System.Windows.Forms.Button
     Friend WithEvents btnPrint As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Public WithEvents cmdBuildingType As System.Windows.Forms.ComboBox

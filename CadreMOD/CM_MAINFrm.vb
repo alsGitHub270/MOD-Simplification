@@ -314,7 +314,6 @@ Partial Friend Class CM_MAIN_frm
         CurrentEquipmentFrameHeight = Equipment_fra.Height
         Relocate_Equipment_Frame()
 
-
     End Sub
 
 
@@ -359,7 +358,7 @@ Partial Friend Class CM_MAIN_frm
 
         e.SheetView.LockBackColor = Color.LightGray
 
-        If e.SheetView.ParentRelationName = "MainGroup" Then
+        If e.SheetView.ParentRelationName = "Summary_Base_Relationship" Then
             With e.SheetView
                 .RowHeader.AutoText = False
                 .DataAutoCellTypes = False
@@ -387,9 +386,14 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(6).CellType = currencyType
                 .Columns(7).CellType = currencyType
 
-
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
+
+                .SortRows(1, True, True)
+                If .RowCount <> 1 Then
+                    .SetRowExpandable(0, False)
+                End If
+
             End With
         Else
             With e.SheetView
@@ -497,7 +501,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub btnMerge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMerge.Click
+    Private Sub btnPreOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPreOrder.Click
 
         Dim new_message As String = "You are about to merge data for Bank A."
         Dim update_message As String = "You are about to update 'Master' data for Bank A.  All current data for the Master will be overwritten."
@@ -506,7 +510,7 @@ Partial Friend Class CM_MAIN_frm
             If MessageBox.Show(new_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
                 'active_row = FindActiveRows()
                 'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""})
-                dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""}))
+                dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", "A00", "A", "01-04", "Geared", 496250, "", "", ""}))
                 Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                 ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
                 ChildSheetView1.SortRows(1, True, True)
@@ -525,7 +529,7 @@ Partial Friend Class CM_MAIN_frm
                 FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
             End If
         Else
-            MessageBox.Show(update_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2)
+            MessageBox.Show("A Master Has Already Been Created", "Cannot Create Master", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2)
         End If
 
         'FpSpread1.ActiveSheet.LockBackColor = Color.LightCyan
@@ -1045,7 +1049,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
     Private Sub FpSpread1_SelectionChanging(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
-        Stop
+
         e.Cancel = True
 
     End Sub
@@ -1078,7 +1082,14 @@ Partial Friend Class CM_MAIN_frm
         End Try
     End Sub
 
+   
+
+
     Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
         Serialize()
+
+        frmAddresses.Save()
+
+
     End Sub
 End Class

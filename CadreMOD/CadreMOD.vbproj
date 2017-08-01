@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildingInfo.vb" />
+    <Compile Include="Contact.vb" />
     <Compile Include="CM_ADDRS.vb" />
     <Compile Include="CM_ADDRSFrm.Designer.vb">
       <DependentUpon>CM_ADDRSFrm.vb</DependentUpon>
@@ -187,6 +188,7 @@
     <Content Include="CadreMO.ico" />
     <Content Include="images\circlechecked.png" />
     <Content Include="images\openned.png" />
+    <None Include="images\save.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
