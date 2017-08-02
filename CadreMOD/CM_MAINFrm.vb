@@ -16,6 +16,8 @@ Partial Friend Class CM_MAIN_frm
     Dim sv As New FarPoint.Win.Spread.SheetView()
     Dim svCollection As New System.Collections.ArrayList(10)
     Dim dsCadre As DataSet
+    Dim dsTemp As DataSet
+
     '   Dim dtBuildingJobInfoGroup As DataTable
     Dim dtSummaryGroup As DataTable
     Dim dtBaseGroup As DataTable
@@ -31,7 +33,7 @@ Partial Friend Class CM_MAIN_frm
         Dim typeStr As System.Type
         Dim typeInt As System.Type
         typeStr = System.Type.GetType("System.String")
-        typeInt = System.Type.GetType("System.Int32")
+        typeInt = System.Type.GetType("System.Int64")
 
         dsCadre = New DataSet()
         dsCadre.EnforceConstraints = False
@@ -62,27 +64,44 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("Labor Rate", typeInt)
                                                          })
 
-        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        dtSummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        dtSummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        dtSummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
 
         dtBaseGroup = dsCadre.Tables.Add("BaseGroup")
         dtBaseGroup.Columns.AddRange(New DataColumn() {New DataColumn("BaseGroup", typeStr), _
-                                                       New DataColumn("Id", typeStr), _
-                                                       New DataColumn("Bank", typeStr), _
-                                                       New DataColumn("Units", typeStr), _
-                                                       New DataColumn("Machine", typeStr), _
-                                                       New DataColumn("Target", typeInt), _
-                                                       New DataColumn("Bid", typeStr), _
-                                                       New DataColumn("Award", typeStr), _
-                                                       New DataColumn("Comment", typeStr)
+                                                        New DataColumn("Id", typeStr), _
+                                                        New DataColumn("Bank", typeStr), _
+                                                        New DataColumn("Units", typeStr), _
+                                                        New DataColumn("Machine", typeStr), _
+                                                        New DataColumn("Target", typeInt), _
+                                                        New DataColumn("Bid", typeStr), _
+                                                        New DataColumn("Award", typeStr), _
+                                                        New DataColumn("Material HQ", typeInt), _
+                                                        New DataColumn("Material RL", typeInt), _
+                                                        New DataColumn("Sales Tax", typeInt), _
+                                                        New DataColumn("Total BDP Hours", typeInt), _
+                                                        New DataColumn("Total Special Hours", typeInt), _
+                                                        New DataColumn("Total Labor Hours", typeInt), _
+                                                        New DataColumn("Overtime Hours Included", typeInt), _
+                                                        New DataColumn("Labor $", typeInt), _
+                                                        New DataColumn("SubContract Work", typeInt), _
+                                                        New DataColumn("Misc Costs", typeInt), _
+                                                        New DataColumn("Freight", typeInt), _
+                                                        New DataColumn("NPS Cost", typeInt), _
+                                                        New DataColumn("Total Bank Cost", typeInt), _
+                                                        New DataColumn("Project C1%", typeInt), _
+                                                        New DataColumn("Bank Sell Price", typeInt), _
+                                                        New DataColumn("Tax Rate", typeInt), _
+                                                        New DataColumn("Labor Rate", typeInt), _
+                                                        New DataColumn("Comment", typeStr)
                                                       })
 
-        'MainGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", ""})
-        'dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", ""})
-        'dtBaseGroup.Rows.Add(New Object() {"Base", "B1", "B", "01-04", "Geared", 375000, "", "", ""})
-        'dtBaseGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", ""})
+        dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+        dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+        dtBaseGroup.Rows.Add(New Object() {"Base", "B1", "B", "01-04", "Geared", 375000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+        dtBaseGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
 
         dtAltGroup = dsCadre.Tables.Add("AltGroup")
         dtAltGroup.Columns.AddRange(New DataColumn() {New DataColumn("AltGroup", typeStr), _
@@ -93,16 +112,33 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("Bid", typeStr), _
                                                       New DataColumn("Offer", typeStr), _
                                                       New DataColumn("Merge", typeStr), _
+                                                       New DataColumn("Material HQ", typeInt), _
+                                                        New DataColumn("Material RL", typeInt), _
+                                                        New DataColumn("Sales Tax", typeInt), _
+                                                        New DataColumn("Total BDP Hours", typeInt), _
+                                                        New DataColumn("Total Special Hours", typeInt), _
+                                                        New DataColumn("Total Labor Hours", typeInt), _
+                                                        New DataColumn("Overtime Hours Included", typeInt), _
+                                                        New DataColumn("Labor $", typeInt), _
+                                                        New DataColumn("SubContract Work", typeInt), _
+                                                        New DataColumn("Misc Costs", typeInt), _
+                                                        New DataColumn("Freight", typeInt), _
+                                                        New DataColumn("NPS Cost", typeInt), _
+                                                        New DataColumn("Total Bank Cost", typeInt), _
+                                                        New DataColumn("Project C1%", typeInt), _
+                                                        New DataColumn("Bank Sell Price", typeInt), _
+                                                        New DataColumn("Tax Rate", typeInt), _
+                                                        New DataColumn("Labor Rate", typeInt), _
                                                       New DataColumn("Comment", typeStr)
                                                      })
-        'dtAltGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, "Lorem ipsam voluptatem quia volupta. "})
-        'dtAltGroup.Rows.Add(New Object() {"Alt3", "A1", "01-04", "Geared", -2500, "", "", "", "Lorem ipsum dolor delectus error voluptatem neque."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "", True, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt1", "B1", "01-04", "Geared", 5000, "", "", "", "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt2", "B1", "01-04", "Geared", -2000, "", "", "", ""})
+        dtAltGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
+        dtAltGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsam voluptatem quia volupta. "})
+        dtAltGroup.Rows.Add(New Object() {"Alt3", "A1", "01-04", "Geared", -2500, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsum dolor delectus error voluptatem neque."})
+        dtAltGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "", True, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
+        dtAltGroup.Rows.Add(New Object() {"Alt1", "B1", "01-04", "Geared", 5000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
+        dtAltGroup.Rows.Add(New Object() {"Alt2", "B1", "01-04", "Geared", -2000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
 
-        Deserialize()
+        '  Deserialize()  'HACK:  Commented out for now until after 
 
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("Bank"), dsCadre.Tables("BaseGroup").Columns("Bank"))
@@ -363,7 +399,7 @@ Partial Friend Class CM_MAIN_frm
                 .RowHeader.AutoText = False
                 .DataAutoCellTypes = False
                 .DataAutoSizeColumns = False
-                '   .ColumnHeader.Rows(0).Height = 25
+                .ColumnHeader.Rows(0).Height = 40
 
                 .Columns(1).Visible = False
                 .Columns(2).Visible = False
@@ -374,17 +410,35 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(5).Locked = True
                 .Columns(7).Locked = True
 
-                .SetColumnWidth(0, 100)
+                .SetColumnWidth(0, 65)
                 .SetColumnWidth(3, 75)
                 .SetColumnWidth(4, 75)
-                .SetColumnWidth(5, 75)
+                .SetColumnWidth(5, 60)
                 .SetColumnWidth(6, 75)
                 .SetColumnWidth(7, 75)
-                .SetColumnWidth(8, 375)
-
+                .SetColumnWidth(8, 60)
+                .SetColumnWidth(9, 60)
+                .SetColumnWidth(10, 60)
+                .SetColumnWidth(11, 60)
+                .SetColumnWidth(12, 60)
+                .SetColumnWidth(13, 60)
+                .SetColumnWidth(14, 60)
+                .SetColumnWidth(15, 60)
+                .SetColumnWidth(16, 75)
+                .SetColumnWidth(17, 60)
+                .SetColumnWidth(18, 60)
+                .SetColumnWidth(19, 60)
+                .SetColumnWidth(20, 60)
+                .SetColumnWidth(21, 60)
+                .SetColumnWidth(22, 60)
+                .SetColumnWidth(23, 60)
+                .SetColumnWidth(24, 60)
+                .SetColumnWidth(25, 200)
+              
                 .Columns(5).CellType = currencyType
                 .Columns(6).CellType = currencyType
                 .Columns(7).CellType = currencyType
+                '  .Columns(0).CellType = currencyType
 
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
@@ -395,12 +449,12 @@ Partial Friend Class CM_MAIN_frm
                 End If
 
             End With
-        Else
+        Else  ' AltGroup
             With e.SheetView
 
                 .DataAutoCellTypes = False
                 .DataAutoSizeColumns = False
-                '   .ColumnHeader.Rows(0).Height = 25
+                .ColumnHeader.Rows(0).Height = 40
 
                 .Columns(0).Visible = False
                 .Columns(1).Visible = False
@@ -417,7 +471,25 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(5, 75)
                 .SetColumnWidth(6, 50)
                 .SetColumnWidth(7, 50)
-                .SetColumnWidth(8, 375)
+                .SetColumnWidth(8, 50)
+                .SetColumnWidth(9, 50)
+                .SetColumnWidth(10, 50)
+                .SetColumnWidth(11, 50)
+                .SetColumnWidth(12, 50)
+                .SetColumnWidth(13, 50)
+                .SetColumnWidth(14, 75)
+                .SetColumnWidth(15, 50)
+                .SetColumnWidth(16, 75)
+                .SetColumnWidth(17, 50)
+                .SetColumnWidth(18, 50)
+                .SetColumnWidth(19, 50)
+                .SetColumnWidth(20, 50)
+                .SetColumnWidth(21, 50)
+                .SetColumnWidth(22, 50)
+                .SetColumnWidth(23, 50)
+                .SetColumnWidth(24, 50)
+
+                .SetColumnWidth(25, 375)
 
                 .Columns(4).CellType = currencyType
                 .Columns(5).CellType = currencyType
@@ -1075,21 +1147,18 @@ Partial Friend Class CM_MAIN_frm
             Using sr As StreamReader = New StreamReader("C:\Temp\cadre.json")
                 json = sr.ReadToEnd
             End Using
-            dsCadre = JsonConvert.DeserializeObject(Of DataSet)(json)
+            dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
+            dsCadre.Merge(dsTemp, MissingSchemaAction.Add)   'HACK:  may want to revise this to something like 
+            '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
 
         Catch ex As Exception
-
+            MessageBox.Show(ex.Message, "Error Reading Input File")
         End Try
     End Sub
 
-   
-
-
+  
     Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
         Serialize()
-
         frmAddresses.Save()
-
-
     End Sub
 End Class

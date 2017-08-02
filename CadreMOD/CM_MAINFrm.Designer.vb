@@ -19,7 +19,7 @@ Partial Class CM_MAIN_frm
         For Each dt In dsCadre.Tables
             dt.DefaultView.AllowNew = False
         Next
-        model.DataMember = "artists"
+        '   model.DataMember = "artists"
         model.DataSource = dsCadre
 
         FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
