@@ -23,6 +23,7 @@ Partial Class CM_MAIN_frm
         model.DataSource = dsCadre
 
         FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
+        FpSpread1.ActiveSheet.SortRows(3, True, False)
 
     End Sub
     Private visualControls() As String = New String() {"components", "ToolTipMain", "CostPriceView_cmb", "CostPrice_grd", "Totals_grd", "CostPriceView_lbl", "CostPrice_fra", "Comments_txt", "Comments_fra", "AgentFor_txt", "Company_txt", "ContactName_txt", "ContactCity_txt", "ContactAddress2_txt", "ContactAddress_txt", "ContactState_txt", "ContactZip_txt", "Agentfor_lbl", "Company_lbl", "ContactName_lbl", "ContactZip_lbl", "ContactState_lbl", "ContactCity_lbl", "ContactAddress_lbl", "Contact_fra", "ServiceOffice_cmb", "InstallingOffice_cmb", "SalesRep_lst", "ProbabilityOfSale_lst", "Status_cmb", "SalesOffice_lst", "ServiceOffice_lbl", "ProbabilityOfSale_lbl", "Status_lbl", "_label_7", "InstallingOffice_lbl", "SalesOffice_lbl", "Job_Info_Fra", "_Forms_btn_0", "JobAddress2_txt", "JobCity_txt", "JobAddress_txt", "JobName_txt", "JobState_txt", "JobZip_txt", "_label_14", "_label_12", "_label_10", "_label_9", "_label_8", "Customer_Info_Fra", "GO_grd", "_Forms_btn_1", "_Forms_btn_2", "_Action_btn_0", "_Action_btn_1", "_JobHighRiskFactor_lbl_1", "_JobHighRiskFactor_lbl_0", "Equipment_fra", "Scope_grd", "Scope_fra", "Hidden_pic", "_Menu_tlb_2", "EstimateNum_txt", "Estimator_txt", "_Menu_tlb_0", "_Menu_tlb_1", "_Menu_tlb_3", "_Menu_tlb_4", "_label_0", "_label_4", "TodaysDate_lbl", "Menu_pic", "_StatusBar1_Panel1", "_StatusBar1_Panel2", "_StatusBar1_Panel3", "_StatusBar1_Panel4", "StatusBar1", "Action_frm", "Action_btn", "Forms_btn", "JobHighRiskFactor_lbl", "Menu_tlb", "label", "Scope_grd_Sheet1", "GO_grd_Sheet1", "Totals_grd_Sheet1", "CostPrice_grd_Sheet1"}
@@ -30,7 +31,7 @@ Partial Class CM_MAIN_frm
     Private components As System.ComponentModel.IContainer
     Public ToolTipMain As System.Windows.Forms.ToolTip
     Public WithEvents BuildingInformation_fra As System.Windows.Forms.GroupBox
-    Private WithEvents btnAddress As System.Windows.Forms.Button
+    Private WithEvents btnContacts As System.Windows.Forms.Button
     Public WithEvents JobAddress2_txt As System.Windows.Forms.TextBox
     Public WithEvents JobCity_txt As System.Windows.Forms.TextBox
     Public WithEvents JobAddress_txt As System.Windows.Forms.TextBox
@@ -114,7 +115,7 @@ Partial Class CM_MAIN_frm
         Me.ServiceOffice_lbl = New System.Windows.Forms.Label()
         Me.ProbabilityOfSale_lst = New System.Windows.Forms.ComboBox()
         Me.ProbabilityOfSale_lbl = New System.Windows.Forms.Label()
-        Me.btnAddress = New System.Windows.Forms.Button()
+        Me.btnContacts = New System.Windows.Forms.Button()
         Me.JobAddress2_txt = New System.Windows.Forms.TextBox()
         Me.JobCity_txt = New System.Windows.Forms.TextBox()
         Me.JobAddress_txt = New System.Windows.Forms.TextBox()
@@ -198,7 +199,7 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.ServiceOffice_lbl)
         Me.BuildingInformation_fra.Controls.Add(Me.ProbabilityOfSale_lst)
         Me.BuildingInformation_fra.Controls.Add(Me.ProbabilityOfSale_lbl)
-        Me.BuildingInformation_fra.Controls.Add(Me.btnAddress)
+        Me.BuildingInformation_fra.Controls.Add(Me.btnContacts)
         Me.BuildingInformation_fra.Controls.Add(Me.JobAddress2_txt)
         Me.BuildingInformation_fra.Controls.Add(Me.JobCity_txt)
         Me.BuildingInformation_fra.Controls.Add(Me.JobAddress_txt)
@@ -652,10 +653,10 @@ Partial Class CM_MAIN_frm
         Me.MajorProject_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.MajorProject_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MajorProject_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.MajorProject_chk.Location = New System.Drawing.Point(303, 168)
+        Me.MajorProject_chk.Location = New System.Drawing.Point(361, 168)
         Me.MajorProject_chk.Name = "MajorProject_chk"
         Me.MajorProject_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.MajorProject_chk.Size = New System.Drawing.Size(157, 15)
+        Me.MajorProject_chk.Size = New System.Drawing.Size(99, 15)
         Me.MajorProject_chk.TabIndex = 75
         Me.MajorProject_chk.Text = "Major Project"
         Me.MajorProject_chk.UseVisualStyleBackColor = False
@@ -793,20 +794,20 @@ Partial Class CM_MAIN_frm
         Me.ProbabilityOfSale_lbl.Text = "Probability of Sale"
         Me.ProbabilityOfSale_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'btnAddress
+        'btnContacts
         '
-        Me.btnAddress.BackColor = System.Drawing.SystemColors.Control
-        Me.btnAddress.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAddress.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddress.Location = New System.Drawing.Point(124, 162)
-        Me.btnAddress.Name = "btnAddress"
-        Me.btnAddress.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnAddress.Size = New System.Drawing.Size(162, 25)
-        Me.btnAddress.TabIndex = 6
-        Me.btnAddress.Text = "&Address"
-        Me.btnAddress.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnAddress.UseVisualStyleBackColor = False
+        Me.btnContacts.BackColor = System.Drawing.SystemColors.Control
+        Me.btnContacts.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnContacts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnContacts.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnContacts.Location = New System.Drawing.Point(124, 162)
+        Me.btnContacts.Name = "btnContacts"
+        Me.btnContacts.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnContacts.Size = New System.Drawing.Size(162, 25)
+        Me.btnContacts.TabIndex = 6
+        Me.btnContacts.Text = "Contacts"
+        Me.btnContacts.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnContacts.UseVisualStyleBackColor = False
         '
         'JobAddress2_txt
         '
@@ -1979,7 +1980,7 @@ Partial Class CM_MAIN_frm
 
     Sub InitializeForms_btn()
         ReDim Forms_btn(2)
-        Me.Forms_btn(0) = btnAddress
+        Me.Forms_btn(0) = btnContacts
         Me.Forms_btn(1) = btnForms
         Me.Forms_btn(2) = _Forms_btn_2
     End Sub

@@ -18,6 +18,15 @@
     Public ADOCatalogRPTdata As ADOX.Catalog = Nothing
     Public ADOCatalogHapDatabase As ADOX.Catalog = Nothing
     Public _ADOCatalogOptionDataBase As ADOX.Catalog = Nothing
+
+    Public dsCadre As DataSet
+    '   Dim dtBuildingJobInfoGroup As DataTable
+    Public dtSummaryGroup As DataTable
+    Public dtBaseGroup As DataTable
+    Public dtAltGroup As DataTable
+    Public dtContactGroup As DataTable
+    Public dtBuildingInfo As DataTable
+
     Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
         Get
             If _ADOCatalogOptionDataBase Is Nothing Then

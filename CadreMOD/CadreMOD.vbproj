@@ -121,10 +121,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Constants.vb" />
-    <Compile Include="frmAddresses.Designer.vb">
-      <DependentUpon>frmAddresses.vb</DependentUpon>
+    <Compile Include="frmContacts.Designer.vb">
+      <DependentUpon>frmContacts.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmAddresses.vb">
+    <Compile Include="frmContacts.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmEstimatingBase.Designer.vb">
@@ -158,8 +158,8 @@
     <EmbeddedResource Include="CM_MAINFrm.resX">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAddresses.resx">
-      <DependentUpon>frmAddresses.vb</DependentUpon>
+    <EmbeddedResource Include="frmContacts.resx">
+      <DependentUpon>frmContacts.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmEstimatingBase.resx">
       <DependentUpon>frmEstimatingBase.vb</DependentUpon>
