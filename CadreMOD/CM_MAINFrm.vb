@@ -613,7 +613,6 @@ Partial Friend Class CM_MAIN_frm
         If dsCadre.Tables("BaseGroup").Rows.Count < 4 Then
             If MessageBox.Show(new_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
                 'active_row = FindActiveRows()
-                'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 496250, "", "", ""})
                 dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", "A00", "A", "01-04", "Geared", 496250, "", "", ""}))
                 Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                 ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
@@ -840,7 +839,7 @@ Partial Friend Class CM_MAIN_frm
     Private Sub FpSpread1_LeaveCell(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
 
         Dim textBoxType As New FarPoint.Win.Spread.CellType.TextCellType()
-        Static bankDesignation As String
+
 
         Select Case e.Column
             Case 3          ' bank
@@ -848,7 +847,9 @@ Partial Friend Class CM_MAIN_frm
                 '        e.Cancel = True
                 '    End If
                 '    FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 4, False)
-                bankDesignation = "C"
+                Dim bank As String = FpSpread1.ActiveSheet.GetValue(e.Row, 3)
+                Dim thisID As String = bank & "1"
+                dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, "", "", ""})
             Case 4
                 If IsNothing(FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value) Then
                     MessageBox.Show("Please select a machine.", "Missing Data")
@@ -864,9 +865,6 @@ Partial Friend Class CM_MAIN_frm
         If e.Cancel = False Then
             If e.Row <> e.NewRow Then
                 If StillValid() Then
-                    Dim bank As String = FpSpread1.ActiveSheet.GetValue(e.Row, 3)
-                    Dim thisID As String = bank & "1"
-                    dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, "", "", ""})
                     FpSpread1.ActiveSheet.SortRows(3, True, False)
                 Else
                     e.Cancel = True
