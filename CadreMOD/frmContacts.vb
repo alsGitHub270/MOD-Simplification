@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Linq
 Imports Newtonsoft.Json
+Imports System.Collections.Generic
 
 
 Public Class frmContacts

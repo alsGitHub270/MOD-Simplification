@@ -8,6 +8,7 @@ Imports System.Drawing
 Imports System.Globalization
 Imports System.IO
 Imports System.Windows.Forms
+Imports System.Collections.Generic
 Imports Newtonsoft.Json
 
 
@@ -74,25 +75,26 @@ Partial Friend Class CM_MAIN_frm
                                                         New DataColumn("Target", typeInt), _
                                                         New DataColumn("Bid", typeStr), _
                                                         New DataColumn("Award", typeStr), _
+                                                        New DataColumn("Material HQ", typeInt), _
+                                                        New DataColumn("Material RL", typeInt), _
+                                                        New DataColumn("Sales Tax", typeInt), _
+                                                        New DataColumn("Total BDP Hours", typeInt), _
+                                                        New DataColumn("Total Special Hours", typeInt), _
+                                                        New DataColumn("Total Labor Hours", typeInt), _
+                                                        New DataColumn("Overtime Hours Included", typeInt), _
+                                                        New DataColumn("Labor $", typeInt), _
+                                                        New DataColumn("SubContract Work", typeInt), _
+                                                        New DataColumn("Misc Costs", typeInt), _
+                                                        New DataColumn("Freight", typeInt), _
+                                                        New DataColumn("NPS Cost", typeInt), _
+                                                        New DataColumn("Total Bank Cost", typeInt), _
+                                                        New DataColumn("Project C1%", typeInt), _
+                                                        New DataColumn("Bank Sell Price", typeInt), _
+                                                        New DataColumn("Tax Rate", typeInt), _
+                                                        New DataColumn("Labor Rate", typeInt), _
                                                         New DataColumn("Comment", typeStr)
-                                                      })
-        'New DataColumn("Material HQ", typeInt), _
-        'New DataColumn("Material RL", typeInt), _
-        'New DataColumn("Sales Tax", typeInt), _
-        'New DataColumn("Total BDP Hours", typeInt), _
-        'New DataColumn("Total Special Hours", typeInt), _
-        'New DataColumn("Total Labor Hours", typeInt), _
-        'New DataColumn("Overtime Hours Included", typeInt), _
-        'New DataColumn("Labor $", typeInt), _
-        'New DataColumn("SubContract Work", typeInt), _
-        'New DataColumn("Misc Costs", typeInt), _
-        'New DataColumn("Freight", typeInt), _
-        'New DataColumn("NPS Cost", typeInt), _
-        'New DataColumn("Total Bank Cost", typeInt), _
-        'New DataColumn("Project C1%", typeInt), _
-        'New DataColumn("Bank Sell Price", typeInt), _
-        'New DataColumn("Tax Rate", typeInt), _
-        'New DataColumn("Labor Rate", typeInt), _
+                                                        })
+       
 
 
         'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
@@ -109,25 +111,26 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("Bid", typeStr), _
                                                       New DataColumn("Offer", typeStr), _
                                                       New DataColumn("Merge", typeStr), _
+                                                      New DataColumn("Material HQ", typeInt), _
+                                                     New DataColumn("Material RL", typeInt), _
+                                                     New DataColumn("Sales Tax", typeInt), _
+                                                     New DataColumn("Total BDP Hours", typeInt), _
+                                                     New DataColumn("Total Special Hours", typeInt), _
+                                                     New DataColumn("Total Labor Hours", typeInt), _
+                                                     New DataColumn("Overtime Hours Included", typeInt), _
+                                                     New DataColumn("Labor $", typeInt), _
+                                                     New DataColumn("SubContract Work", typeInt), _
+                                                     New DataColumn("Misc Costs", typeInt), _
+                                                     New DataColumn("Freight", typeInt), _
+                                                     New DataColumn("NPS Cost", typeInt), _
+                                                     New DataColumn("Total Bank Cost", typeInt), _
+                                                     New DataColumn("Project C1%", typeInt), _
+                                                     New DataColumn("Bank Sell Price", typeInt), _
+                                                     New DataColumn("Tax Rate", typeInt), _
+                                                     New DataColumn("Labor Rate", typeInt), _
                                                        New DataColumn("Comment", typeStr)
                                                      })
-        ' New DataColumn("Material HQ", typeInt), _
-        ' New DataColumn("Material RL", typeInt), _
-        ' New DataColumn("Sales Tax", typeInt), _
-        ' New DataColumn("Total BDP Hours", typeInt), _
-        ' New DataColumn("Total Special Hours", typeInt), _
-        ' New DataColumn("Total Labor Hours", typeInt), _
-        ' New DataColumn("Overtime Hours Included", typeInt), _
-        ' New DataColumn("Labor $", typeInt), _
-        ' New DataColumn("SubContract Work", typeInt), _
-        ' New DataColumn("Misc Costs", typeInt), _
-        ' New DataColumn("Freight", typeInt), _
-        ' New DataColumn("NPS Cost", typeInt), _
-        ' New DataColumn("Total Bank Cost", typeInt), _
-        ' New DataColumn("Project C1%", typeInt), _
-        ' New DataColumn("Bank Sell Price", typeInt), _
-        ' New DataColumn("Tax Rate", typeInt), _
-        ' New DataColumn("Labor Rate", typeInt), _
+
 
         'dtAltGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
         'dtAltGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsam voluptatem quia volupta. "})
@@ -449,24 +452,24 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(5, 60)
                 .SetColumnWidth(6, 75)
                 .SetColumnWidth(7, 75)
-                .SetColumnWidth(8, 275)
-                '.SetColumnWidth(9, 60)
-                '.SetColumnWidth(10, 60)
-                '.SetColumnWidth(11, 60)
-                '.SetColumnWidth(12, 60)
-                '.SetColumnWidth(13, 60)
-                '.SetColumnWidth(14, 60)
-                '.SetColumnWidth(15, 60)
-                '.SetColumnWidth(16, 75)
-                '.SetColumnWidth(17, 60)
-                '.SetColumnWidth(18, 60)
-                '.SetColumnWidth(19, 60)
-                '.SetColumnWidth(20, 60)
-                '.SetColumnWidth(21, 60)
-                '.SetColumnWidth(22, 60)
-                '.SetColumnWidth(23, 60)
-                '.SetColumnWidth(24, 60)
-                '.SetColumnWidth(25, 200)
+                .SetColumnWidth(8, 75)
+                .SetColumnWidth(9, 60)
+                .SetColumnWidth(10, 60)
+                .SetColumnWidth(11, 60)
+                .SetColumnWidth(12, 60)
+                .SetColumnWidth(13, 60)
+                .SetColumnWidth(14, 60)
+                .SetColumnWidth(15, 60)
+                .SetColumnWidth(16, 75)
+                .SetColumnWidth(17, 60)
+                .SetColumnWidth(18, 60)
+                .SetColumnWidth(19, 60)
+                .SetColumnWidth(20, 60)
+                .SetColumnWidth(21, 60)
+                .SetColumnWidth(22, 60)
+                .SetColumnWidth(23, 60)
+                .SetColumnWidth(24, 60)
+                .SetColumnWidth(25, 200)
 
                 .Columns(5).CellType = currencyType
                 .Columns(6).CellType = currencyType
@@ -503,25 +506,24 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(5, 75)
                 .SetColumnWidth(6, 50)
                 .SetColumnWidth(7, 50)
-                .SetColumnWidth(8, 350)
-                '.SetColumnWidth(9, 50)
-                '.SetColumnWidth(10, 50)
-                '.SetColumnWidth(11, 50)
-                '.SetColumnWidth(12, 50)
-                '.SetColumnWidth(13, 50)
-                '.SetColumnWidth(14, 75)
-                '.SetColumnWidth(15, 50)
-                '.SetColumnWidth(16, 75)
-                '.SetColumnWidth(17, 50)
-                '.SetColumnWidth(18, 50)
-                '.SetColumnWidth(19, 50)
-                '.SetColumnWidth(20, 50)
-                '.SetColumnWidth(21, 50)
-                '.SetColumnWidth(22, 50)
-                '.SetColumnWidth(23, 50)
-                '.SetColumnWidth(24, 50)
-
-                '.SetColumnWidth(25, 375)
+                .SetColumnWidth(8, 50)
+                .SetColumnWidth(9, 50)
+                .SetColumnWidth(10, 50)
+                .SetColumnWidth(11, 50)
+                .SetColumnWidth(12, 50)
+                .SetColumnWidth(13, 50)
+                .SetColumnWidth(14, 75)
+                .SetColumnWidth(15, 50)
+                .SetColumnWidth(16, 75)
+                .SetColumnWidth(17, 50)
+                .SetColumnWidth(18, 50)
+                .SetColumnWidth(19, 50)
+                .SetColumnWidth(20, 50)
+                .SetColumnWidth(21, 50)
+                .SetColumnWidth(22, 50)
+                .SetColumnWidth(23, 50)
+                .SetColumnWidth(24, 50)
+                .SetColumnWidth(25, 375)
 
                 .Columns(4).CellType = currencyType
                 .Columns(5).CellType = currencyType
