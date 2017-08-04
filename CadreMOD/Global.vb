@@ -39,4 +39,5 @@
         End Set
     End Property
     Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
+    Public MachineType As String = String.Empty
 End Module
