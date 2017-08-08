@@ -189,9 +189,17 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub _Forms_btn_2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _Forms_btn_2.Click
-        frmEstimatingBase.Show()
-        Me.Hide()
+    Private Sub btnEstimate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEstimate.Click
+        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+        MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
+        CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
+        Select Case EstimateLevel
+            Case "Summary"
+            Case "Master", "Base", "Alt"
+                frmEstimatingBase.Show()
+                Me.Hide()
+            Case Else
+        End Select
     End Sub
 
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -334,16 +342,19 @@ Partial Friend Class CM_MAIN_frm
         ExpandCollapseAll("Expand")
         ExpandCollapseAll("Collapse")
         FpSpread1.Visible = True
+        FpSpread1.ActiveSheet.TitleInfo.Value = "Summary"
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If ChildSheetView1.RowCount = 0 Then
-                ChildSheetView1.SetRowExpandable(iIndex, False)
-            End If
             If Not ChildSheetView1 Is Nothing Then
+                ChildSheetView1.TitleInfo.Value = "Child" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
+                If ChildSheetView1.RowCount = 0 Then
+                    ChildSheetView1.SetRowExpandable(iIndex, False)
+                End If
                 For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
                     ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
                     If Not ChildSheetView2 Is Nothing Then
+                        ChildSheetView2.TitleInfo.Value = "Grandchild" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
                         ChildSheetView2.SetColumnVisible(1, False)
                     Else
 
@@ -400,6 +411,22 @@ Partial Friend Class CM_MAIN_frm
 
         ' MsgBox("row:  " & thisRow & "    column: " & thisColumn & " and it's value is: " & thisValue)
 
+        Dim usex As FarPoint.Win.Spread.SheetView = e.View.GetSheetView
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+        EstimateLevel = String.Empty
+        If usex.TitleInfo.Text.ToUpper.IndexOf("SUMMARY") > -1 Then
+            EstimateLevel = "Summary"
+        ElseIf usex.TitleInfo.Text.ToUpper.IndexOf("GRANDCHILD") > -1 Then
+            EstimateLevel = "Alt"
+        Else
+            ChildSheetView1 = FpSpread1.ActiveSheet.GetChildView(CurRow, 0)
+            If Not IsNothing(ChildSheetView1) Then
+                If ChildSheetView1.RowCount > 0 Then
+                    EstimateLevel = ChildSheetView1.Cells(e.Row, 0).Text
+                End If
+            End If
+        End If
     End Sub
 
 
@@ -1040,7 +1067,9 @@ Partial Friend Class CM_MAIN_frm
             bank = dr("Bank")
             If bank <> "" Then
                 i = myList.IndexOf(bank)
-                myList.RemoveAt(i)
+                If i > -1 Then
+                    myList.RemoveAt(i)
+                End If
             End If
         Next
 
@@ -1068,25 +1097,18 @@ Partial Friend Class CM_MAIN_frm
 
         cboBuildingType.Items.Clear()
 
-
-
         Dim sSQL As String = "SELECT code & ' - ' &  Description AS BldgCode " & _
                     "FROM [Building Code] " & _
                     "ORDER BY Code;"
 
         myList = GetItemList(sSQL)
-
         For Each code In myList
             cboBuildingType.Items.Add(code)
         Next
 
-
-
-
         sSQL = "SELECT DISTINCTROW [Local Code] & ' - ' & IIf([City] Is Null,'',[City] & ',') & IIf([State] Is Null,' ',[State]) AS [Local Code/ID] FROM [Local Code] WHERE [State] = '" & JobState_txt.Text & "';"
 
         myList = GetItemList(sSQL)
-
         For Each code In myList
             cboLocalCode.Items.Add(code)
         Next
@@ -1133,8 +1155,6 @@ Partial Friend Class CM_MAIN_frm
         For i As Integer = 0 To 4
             cboSeismicZone.Items.Add(CStr(i))
         Next i
-
-
 
         cboNFPA13CodeYear.Items.Clear()
         cboNFPA13CodeYear.Items.Add("2010")
@@ -1197,9 +1217,17 @@ Partial Friend Class CM_MAIN_frm
         If BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
             BuildingInformation_fra.Height = CurrentBuildingInformationFrameHeight
             ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+            For Each CurControl As Control In BuildingInformation_fra.Controls
+                CurControl.Visible = True
+            Next CurControl
         Else
             BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
             ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
+            For Each CurControl As Control In BuildingInformation_fra.Controls
+                If CurControl.Name <> "ExpandCollapseFrame_btn" Then
+                    CurControl.Visible = False
+                End If
+            Next CurControl
         End If
         Relocate_Equipment_Frame()
 

@@ -27,7 +27,6 @@
     Public dtContactGroup As DataTable
     Public dtBuildingInfo As DataTable
 
-    Public workingRecordSet As ADODB.Recordset
 
     Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
         Get
@@ -42,4 +41,6 @@
     End Property
     Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
     Public MachineType As String = String.Empty
+    Public CurrentUnits As String = String.Empty
+    Public EstimateLevel As String = String.Empty
 End Module

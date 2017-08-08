@@ -256,6 +256,9 @@ Public Class frmEstimatingBase
     Public Const BuildingGCWork As String = "04SUB"
     Public Const Crane As String = "05SUB"
 
+    Private Const EST_Prefix As String = "EST: "
+    Private Const ORD_Prefix As String = "ORD: "
+
     Private Sub CreateDataSet()
         Dim MainGroups As DataTable = Nothing
         Dim SubGroups As DataTable = Nothing
@@ -377,6 +380,7 @@ Public Class frmEstimatingBase
     End Sub
     Private Sub PrepareThisForm()
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
+        Dim TabToRemove As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
         Load_ListBoxes()
@@ -450,11 +454,27 @@ Public Class frmEstimatingBase
                 'Next jindex
             End If
         Next iIndex
+        OrderingTabs.Top = CarData_fra.Top
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
-        CarTab.Text = "EST: 01-03"
-        OrderTab.Text = "ORD: 01-03"
+        CarTab.Text = EST_Prefix & CurrentUnits
+        OrderTab.Text = ORD_Prefix & CurrentUnits
+        Select Case EstimateLevel
+            Case "Master"
+                TabToRemove = "+"
+            Case Else
+                TabToRemove = ORD_Prefix
+        End Select
+        If Not String.IsNullOrEmpty(TabToRemove) Then
+            For iIndex As Integer = TabControl1.TabPages.Count - 1 To 0 Step -1
+                Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
+                If CurTab.Text.IndexOf(TabToRemove) > -1 Then
+                    TabControl1.TabPages.Remove(CurTab)
+                End If
+            Next iIndex
+        End If
         TabControl1.SelectTab(0)
         DisplayEST_vs_ORD()
+        ExpensesPerDayDetails_btn.Left = ExpensesPerDay_txt.Left
         Me.Cursor = Cursors.Default
 
     End Sub
@@ -914,6 +934,10 @@ Public Class frmEstimatingBase
         CwtGovernorExistingSheaveDiameter_cmb.Items.Add("16.00")
         CwtGovernorExistingSheaveDiameter_cmb.Items.Add("Other")
 
+        PEStampRequired_cmb.Items.Clear()
+        PEStampRequired_cmb.Items.Add("Yes")
+        PEStampRequired_cmb.Items.Add("No")
+
     End Sub
     Private Function SetCombo(ByVal ArrayType As String, ByVal CurrentSheet As FarPoint.Win.Spread.SheetView, ByVal RowNum As Integer) As FarPoint.Win.Spread.CellType.ComboBoxCellType
         Dim ReturnCmb As New FarPoint.Win.Spread.CellType.ComboBoxCellType
@@ -1085,16 +1109,32 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub TabControl1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.Click
-        DisplayEST_vs_ORD()
+        Dim LastIndex As Integer = TabControl1.TabPages.Count - 1
+        Dim UseUnits As String = String.Empty
+
+        If TabControl1.SelectedTab.Text.IndexOf("+") > -1 Then
+            UseUnits = InputBox("Enter Car Unit(s)", "Split Cars")
+            If Not String.IsNullOrEmpty(UseUnits) Then
+                TabControl1.TabPages.Insert(LastIndex, EST_Prefix & UseUnits)
+                TabControl1.SelectTab(LastIndex)
+            End If
+        Else
+            DisplayEST_vs_ORD()
+        End If
+
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
-        If TabControl1.SelectedTab.Text.IndexOf("EST") > -1 Then
+        If TabControl1.SelectedTab.Text.IndexOf(EST_Prefix) > -1 Then
             CarData_fra.Visible = True
-            OrderingTabs.Visible = False
-        ElseIf TabControl1.SelectedTab.Text.IndexOf("ORD") > -1 Then
+            If EstimateLevel = "Master" Then
+                OrderingTabs.Visible = False
+            End If
+        ElseIf TabControl1.SelectedTab.Text.IndexOf(ORD_Prefix) > -1 Then
             CarData_fra.Visible = False
             OrderingTabs.Visible = True
+        ElseIf TabControl1.SelectedTab.Text.IndexOf("+") Then
+            CarData_fra.Visible = False
         End If
 
     End Sub
@@ -1251,5 +1291,9 @@ Public Class frmEstimatingBase
     End Sub
     Private Sub CwtGovernorExistingSheaveDiameter_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingSheaveDiameter_cmb.LostFocus
         ResetGovImage()
+    End Sub
+    Private Sub ExpensesPerDayDetails_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDayDetails_btn.Click
+        ExpensesPerDay_frm.ShowDialog()
+        ExpensesPerDay_txt.Text = FormatNumber(SubcontractedLaborCost.TotalCost, 2)
     End Sub
 End Class

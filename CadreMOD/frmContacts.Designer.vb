@@ -22,6 +22,7 @@ Partial Class frmContacts
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmContacts))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -51,7 +52,7 @@ Partial Class frmContacts
         Me.tabArchitect = New System.Windows.Forms.TabPage()
         Me.tabMgmt_Co = New System.Windows.Forms.TabPage()
         Me.tabOther = New System.Windows.Forms.TabPage()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.SuspendLayout()
@@ -120,7 +121,7 @@ Partial Class frmContacts
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.Button1)
+        Me.Panel1.Controls.Add(Me.btnSave)
         Me.Panel1.Controls.Add(Me.txtEmail)
         Me.Panel1.Controls.Add(Me.txtFax)
         Me.Panel1.Controls.Add(Me.txtExt)
@@ -345,12 +346,16 @@ Partial Class frmContacts
         '
         'Button1
         '
-        Me.Button1.Image = Global.CadreMOD.My.Resources.Resources.save
-        Me.Button1.Location = New System.Drawing.Point(379, 203)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(37, 38)
-        Me.Button1.TabIndex = 22
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
+        Me.btnSave.Location = New System.Drawing.Point(370, 208)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(46, 45)
+        Me.btnSave.TabIndex = 35
+        Me.btnSave.TabStop = False
+        Me.btnSave.Tag = "Save Data"
+        Me.btnSave.Text = "Save"
+        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'frmAddresses
         '
@@ -359,7 +364,7 @@ Partial Class frmContacts
         Me.ClientSize = New System.Drawing.Size(470, 326)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TabControl1)
-        Me.Name = "frmAddresses"
+        Me.Name = "frmContacts"
         Me.Text = "frmAddresses"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -396,5 +401,5 @@ Partial Class frmContacts
     Friend WithEvents tabArchitect As System.Windows.Forms.TabPage
     Friend WithEvents tabMgmt_Co As System.Windows.Forms.TabPage
     Friend WithEvents tabOther As System.Windows.Forms.TabPage
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Private WithEvents btnSave As System.Windows.Forms.Button
 End Class

@@ -136,6 +136,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Constants.vb" />
+    <Compile Include="ExpensesPerDay_frm.Designer.vb">
+      <DependentUpon>ExpensesPerDay_frm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ExpensesPerDay_frm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExpensesPerDay_mod.vb" />
     <Compile Include="frmContacts.Designer.vb">
       <DependentUpon>frmContacts.vb</DependentUpon>
     </Compile>
@@ -172,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CM_MAINFrm.resX">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExpensesPerDay_frm.resX">
+      <DependentUpon>ExpensesPerDay_frm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmContacts.resx">
       <DependentUpon>frmContacts.vb</DependentUpon>

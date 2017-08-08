@@ -155,7 +155,7 @@ Partial Class CM_MAIN_frm
         Me.btnDeleteBank = New System.Windows.Forms.Button()
         Me.btnForms = New System.Windows.Forms.Button()
         Me.btnAddBank = New System.Windows.Forms.Button()
-        Me._Forms_btn_2 = New System.Windows.Forms.Button()
+        Me.btnEstimate = New System.Windows.Forms.Button()
         Me.btnAddAlt = New System.Windows.Forms.Button()
         Me.btnPreOrder = New System.Windows.Forms.Button()
         Me.BuildingInformation_fra.SuspendLayout()
@@ -1724,7 +1724,7 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.Controls.Add(Me.btnDeleteBank)
         Me.Equipment_fra.Controls.Add(Me.btnForms)
         Me.Equipment_fra.Controls.Add(Me.btnAddBank)
-        Me.Equipment_fra.Controls.Add(Me._Forms_btn_2)
+        Me.Equipment_fra.Controls.Add(Me.btnEstimate)
         Me.Equipment_fra.Controls.Add(Me.btnAddAlt)
         Me.Equipment_fra.Controls.Add(Me.btnPreOrder)
         Me.Equipment_fra.Controls.Add(Me.FpSpread1)
@@ -1853,19 +1853,19 @@ Partial Class CM_MAIN_frm
         '
         '_Forms_btn_2
         '
-        Me._Forms_btn_2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me._Forms_btn_2.BackColor = System.Drawing.SystemColors.Control
-        Me._Forms_btn_2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me._Forms_btn_2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._Forms_btn_2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._Forms_btn_2.Location = New System.Drawing.Point(740, 23)
-        Me._Forms_btn_2.Name = "_Forms_btn_2"
-        Me._Forms_btn_2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me._Forms_btn_2.Size = New System.Drawing.Size(77, 22)
-        Me._Forms_btn_2.TabIndex = 28
-        Me._Forms_btn_2.Text = "E&stimate"
-        Me._Forms_btn_2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me._Forms_btn_2.UseVisualStyleBackColor = False
+        Me.btnEstimate.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnEstimate.BackColor = System.Drawing.SystemColors.Control
+        Me.btnEstimate.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnEstimate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnEstimate.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnEstimate.Location = New System.Drawing.Point(740, 23)
+        Me.btnEstimate.Name = "_Forms_btn_2"
+        Me.btnEstimate.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnEstimate.Size = New System.Drawing.Size(77, 22)
+        Me.btnEstimate.TabIndex = 28
+        Me.btnEstimate.Text = "E&stimate"
+        Me.btnEstimate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnEstimate.UseVisualStyleBackColor = False
         '
         'btnAddAlt
         '
@@ -1979,7 +1979,7 @@ Partial Class CM_MAIN_frm
         ReDim Forms_btn(2)
         Me.Forms_btn(0) = btnContacts
         Me.Forms_btn(1) = btnForms
-        Me.Forms_btn(2) = _Forms_btn_2
+        Me.Forms_btn(2) = btnEstimate
     End Sub
     Sub InitializeAction_btn()
 
@@ -2010,7 +2010,7 @@ Partial Class CM_MAIN_frm
     Private WithEvents btnDeleteBank As System.Windows.Forms.Button
     Private WithEvents btnForms As System.Windows.Forms.Button
     Private WithEvents btnAddBank As System.Windows.Forms.Button
-    Private WithEvents _Forms_btn_2 As System.Windows.Forms.Button
+    Private WithEvents btnEstimate As System.Windows.Forms.Button
     Private WithEvents btnAddAlt As System.Windows.Forms.Button
     Private WithEvents btnPreOrder As System.Windows.Forms.Button
     Friend WithEvents btnPrint As System.Windows.Forms.Button

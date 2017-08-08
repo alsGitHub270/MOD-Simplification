@@ -204,32 +204,9 @@ Public Class frmContacts
     End Sub
 
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        Dim thisClass As New Contact
-        Dim thisContactType As String
-        Select Case TabControl1.SelectedIndex
-            Case 0
-                thisClass = BuildingOwner
-                thisContactType = "owner"
-            Case 1
-                thisClass = Consultant
-                thisContactType = "consultant"
-            Case 2
-                thisClass = GC
-                thisContactType = "gc"
-            Case 3
-                thisClass = Architect
-                thisContactType = "architect"
-            Case 4
-                thisClass = MgmtCo
-                thisContactType = "mgmtCo"
-            Case 5
-                thisClass = OtherContact
-                thisContactType = "other"
-        End Select
 
-        PostData(thisContactType, thisClass)
 
     End Sub
 
@@ -279,4 +256,29 @@ Public Class frmContacts
         End Try
     End Sub
 
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        Dim thisClass As New Contact
+        Dim thisContactType As String = String.Empty
+        Select Case TabControl1.SelectedIndex
+            Case 0
+                thisClass = BuildingOwner
+                thisContactType = "owner"
+            Case 1
+                thisClass = Consultant
+                thisContactType = "consultant"
+            Case 2
+                thisClass = GC
+                thisContactType = "gc"
+            Case 3
+                thisClass = Architect
+                thisContactType = "architect"
+            Case 4
+                thisClass = MgmtCo
+                thisContactType = "mgmtCo"
+            Case 5
+                thisClass = OtherContact
+                thisContactType = "other"
+        End Select
+        PostData(thisContactType, thisClass)
+    End Sub
 End Class
