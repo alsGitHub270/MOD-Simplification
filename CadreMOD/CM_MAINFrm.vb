@@ -24,7 +24,7 @@ Partial Friend Class CM_MAIN_frm
     Public DefaultTaxCode As String = ""
 
     Const _BANK_COLUMN As Integer = 3
-
+   
     Private Sub CreateDataSet()
 
         Dim typeStr As System.Type
@@ -1063,55 +1063,106 @@ Partial Friend Class CM_MAIN_frm
     End Function
 
     Private Sub Load_ListBoxes()
+        Dim myList As New List(Of String)()
+        Dim where As String
 
-        cmdBuildingType.Items.Clear()
-        'db2List(ADOConnectionOptionDataBase, BUILDING_CODE_ONLY_QUERY_NAME, BuildingCode_cmb, "Building Code/ID")
-        cmdBuildingType.Items.Add("AIR - Airport")
-        cmdBuildingType.Items.Add("APA - Apartment")
-        cmdBuildingType.Items.Add("CHU - Church")
-        cmdBuildingType.Items.Add("CON - Condominium")
-        cmdBuildingType.Items.Add("COT - Commercial Other - Restaurants")
-        cmdBuildingType.Items.Add("HOS - Hospital/Ambulatory Care/Clinic")
-        cmdBuildingType.Items.Add("HOT - Hotel/Motel/Inn/Dorm/Casino")
-        cmdBuildingType.Items.Add("IOT - Industrial Other")
-        cmdBuildingType.Items.Add("MIN - Mines")
-        cmdBuildingType.Items.Add("MOV - Movie Theater")
-        cmdBuildingType.Items.Add("OFF - Office/Bank/Administration")
-        cmdBuildingType.Items.Add("PAR - Parking Garage")
-        cmdBuildingType.Items.Add("POW - Power Plants")
-        cmdBuildingType.Items.Add("RAI - Railway Station")
-        cmdBuildingType.Items.Add("RET - Retirement Home/Nursing Home")
-        cmdBuildingType.Items.Add("ROT - Residential Other")
-        cmdBuildingType.Items.Add("SHI - Ship (Cruising)")
-        cmdBuildingType.Items.Add("SHO - Shopping Center/Mall/Dept Store")
-        cmdBuildingType.Items.Add("SPO - Arena/Sports Complex/Convention")
-        cmdBuildingType.Items.Add("TOT - Transport Other")
-        cmdBuildingType.Items.Add("UND - Subway/Metro")
-        cmdBuildingType.Items.Add("UNI - School/College/University")
-        cmdBuildingType.Items.Add("WAR - Warehouse")
+        cboBuildingType.Items.Clear()
 
-        cmbNationalAccount.Items.Add("No")
-        cmbNationalAccount.Items.Add("Yes")
 
-        cmbTaxCode.Items.Clear()
-        cmbTaxCode.Items.Add("Taxable")
-        cmbTaxCode.Items.Add("Tax Exempt")
-        If DefaultTaxCode = "Tax Excluded" Then cmbTaxCode.Items.Add("Tax Excluded")
 
-        cmbSeismicZone.Items.Clear()
+        Dim sSQL As String = "SELECT code & ' - ' &  Description AS BldgCode " & _
+                    "FROM [Building Code] " & _
+                    "ORDER BY Code;"
+
+        myList = GetItemList(sSQL)
+
+        For Each code In myList
+            cboBuildingType.Items.Add(code)
+        Next
+
+
+
+
+        sSQL = "SELECT DISTINCTROW [Local Code] & ' - ' & IIf([City] Is Null,'',[City] & ',') & IIf([State] Is Null,' ',[State]) AS [Local Code/ID] FROM [Local Code] WHERE [State] = '" & JobState_txt.Text & "';"
+
+        myList = GetItemList(sSQL)
+
+        For Each code In myList
+            cboLocalCode.Items.Add(code)
+        Next
+
+        cboANSICode.Items.Clear()
+        cboANSICode.Items.Add(CStr(1971))
+        cboANSICode.Items.Add(CStr(1978))
+        cboANSICode.Items.Add(CStr(1981))
+        cboANSICode.Items.Add(CStr(1984))
+        cboANSICode.Items.Add(CStr(1987))
+        cboANSICode.Items.Add(CStr(1989))
+        cboANSICode.Items.Add(CStr(1990))
+        cboANSICode.Items.Add(CStr(1993))
+        cboANSICode.Items.Add(CStr(1994))
+        cboANSICode.Items.Add(CStr(1996))
+        cboANSICode.Items.Add(CStr(1997))
+        cboANSICode.Items.Add(CStr(1998))
+        cboANSICode.Items.Add(CStr(1999))
+        cboANSICode.Items.Add(CStr(2000))
+        cboANSICode.Items.Add(CStr(2002))
+        cboANSICode.Items.Add(CStr(2003))
+        cboANSICode.Items.Add(CStr(2004))
+        cboANSICode.Items.Add(CStr(2005))
+        cboANSICode.Items.Add(CStr(2007))
+        cboANSICode.Items.Add(CStr(2008))
+        cboANSICode.Items.Add(CStr(2009))
+        cboANSICode.Items.Add(CStr(2010))
+        cboANSICode.Items.Add(CStr(2013))
+        cboANSICode.Items.Add(CStr(2016))
+
+        cboNFPA13CodeYear.Items.Clear()
+        cboNFPA13CodeYear.Items.Add("2010")
+        cboNFPA13CodeYear.Items.Add("2013")
+
+        cboNationalAccount.Items.Add("No")
+        cboNationalAccount.Items.Add("Yes")
+
+        cboTaxCode.Items.Clear()
+        cboTaxCode.Items.Add("Taxable")
+        cboTaxCode.Items.Add("Tax Exempt")
+        If DefaultTaxCode = "Tax Excluded" Then cboTaxCode.Items.Add("Tax Excluded")
+
+        cboSeismicZone.Items.Clear()
         For i As Integer = 0 To 4
-            cmbSeismicZone.Items.Add(CStr(i))
+            cboSeismicZone.Items.Add(CStr(i))
         Next i
 
 
-        cmbNFPA13CodeYear.Items.Clear()
-        cmbNFPA13CodeYear.Items.Add("2010")
-        cmbNFPA13CodeYear.Items.Add("2013")
-        'If ME_ADM01Bnk_typ.NFPA13CodeYear = "N/A" Then
-        cmbNFPA13CodeYear.Items.Add("N/A")
-        'End If
 
+        cboNFPA13CodeYear.Items.Clear()
+        cboNFPA13CodeYear.Items.Add("2010")
+        cboNFPA13CodeYear.Items.Add("2013")
 
+        sSQL = "SELECT Office FROM [MOD OFFICE] WHERE Installing = True ORDER BY Office"
+        myList = GetItemList(sSQL)
+        For Each office In myList
+            cboSalesOffice.Items.Add(office)
+        Next
+
+        'same query for installing office
+        For Each office In myList
+            cboInstallingOffice.Items.Add(office)
+        Next
+
+        sSQL = "SELECT Office FROM [MOD OFFICE] WHERE Service = True ORDER BY Office"
+        myList = GetItemList(sSQL)
+        For Each office In myList
+            cboServiceOffice.Items.Add(office)
+        Next
+
+        cboProbabilityOfSale.Items.Clear()
+        cboProbabilityOfSale.Items.Add("0-25%")
+        cboProbabilityOfSale.Items.Add("26-50%")
+        cboProbabilityOfSale.Items.Add("51-75%")
+        cboProbabilityOfSale.Items.Add("76-99%")
+        cboProbabilityOfSale.Items.Add("100%")
 
     End Sub
 
@@ -1135,11 +1186,11 @@ Partial Friend Class CM_MAIN_frm
         'datatable = dtContactGroup
         'Dim f2 As frmAddresses = New frmAddresses(datatable)
         'f2.ShowDialog()
-       
+
         frmContacts.ShowDialog()
     End Sub
-    Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmbSeismicZone.Leave, cmbSeismicZone.SelectedIndexChanged
-        ValidateTextBoxInput_Text(Me, cmbSeismicZone, ENTRY_NOT_AN_INTEGER, True)
+    Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cboSeismicZone.Leave, cboSeismicZone.SelectedIndexChanged
+        ValidateTextBoxInput_Text(Me, cboSeismicZone, ENTRY_NOT_AN_INTEGER, True)
     End Sub
 
     Private Sub ExpandCollapseFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseFrame_btn.Click
@@ -1191,7 +1242,9 @@ Partial Friend Class CM_MAIN_frm
                 json = sr.ReadToEnd
             End Using
             dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
-            dsCadre.Merge(dsTemp, MissingSchemaAction.Add)   'HACK:  may want to revise this to something like 
+            'JsonSerializerSettings()
+            'NullValueHandling = NullValueHandling.Include
+            dsCadre.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
             '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
             FpSpread1.ActiveSheet.SortRows(3, True, False)
         Catch ex As Exception
@@ -1204,4 +1257,28 @@ Partial Friend Class CM_MAIN_frm
         Serialize()
         ' frmAddresses.Save()
     End Sub
+
+    Private Function GetItemList(sSQL As String) As List(Of String)
+        Dim dataSource As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\Options.accdb"
+        Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
+        Dim result As String
+        Dim myList As New List(Of String)()
+
+
+        Using cn As New OleDb.OleDbConnection(cnstr)
+            cn.Open()
+
+            Dim cmd As New OleDb.OleDbCommand(sSQL, cn)
+            Dim reader As OleDb.OleDbDataReader = cmd.ExecuteReader
+            While reader.Read
+                result = (reader(0).ToString)
+                myList.Add(result)
+            End While
+
+        End Using
+
+        Return myList
+    End Function
+
+  
 End Class

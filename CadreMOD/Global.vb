@@ -27,6 +27,8 @@
     Public dtContactGroup As DataTable
     Public dtBuildingInfo As DataTable
 
+    Public workingRecordSet As ADODB.Recordset
+
     Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
         Get
             If _ADOCatalogOptionDataBase Is Nothing Then
