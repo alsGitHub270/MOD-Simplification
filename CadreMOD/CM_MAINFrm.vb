@@ -24,13 +24,17 @@ Partial Friend Class CM_MAIN_frm
     Public DefaultTaxCode As String = ""
 
     Const _BANK_COLUMN As Integer = 3
-   
+
+    Private UseCurRow As Integer = 0, UseCurCol As Integer = 0, CurSummaryRow As Integer = 0
+
     Private Sub CreateDataSet()
 
         Dim typeStr As System.Type
         Dim typeInt As System.Type
+        Dim typeBool As System.Type
         typeStr = System.Type.GetType("System.String")
         typeInt = System.Type.GetType("System.Int64")
+        typeBool = System.Type.GetType("System.Boolean")
 
         dsCadre = New DataSet()
         dsCadre.EnforceConstraints = False
@@ -95,7 +99,7 @@ Partial Friend Class CM_MAIN_frm
                                                         New DataColumn("Comment", typeStr)
                                                         })
        
-
+        dtBaseGroup.Columns("Material RL").DefaultValue = 0
 
         'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
         'dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
@@ -290,7 +294,6 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 19).Locked = False
 
             FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary
             FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25         'STATUS
@@ -303,7 +306,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 60         'total BDP Hours
             FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'total special hours
             FpSpread1.ActiveSheet.Cells(i, 11).Column.Width = 60        'total labor hours
-            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 70        'Overtime hours included
+            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 60        'Overtime hours included
             FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'labor $
             FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 70        'Subcontract work
             FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 60        'mics costs
@@ -413,20 +416,33 @@ Partial Friend Class CM_MAIN_frm
 
         Dim usex As FarPoint.Win.Spread.SheetView = e.View.GetSheetView
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+
+
         EstimateLevel = String.Empty
         If usex.TitleInfo.Text.ToUpper.IndexOf("SUMMARY") > -1 Then
             EstimateLevel = "Summary"
-        ElseIf usex.TitleInfo.Text.ToUpper.IndexOf("GRANDCHILD") > -1 Then
-            EstimateLevel = "Alt"
         Else
-            ChildSheetView1 = FpSpread1.ActiveSheet.GetChildView(CurRow, 0)
-            If Not IsNothing(ChildSheetView1) Then
-                If ChildSheetView1.RowCount > 0 Then
-                    EstimateLevel = ChildSheetView1.Cells(e.Row, 0).Text
+            CurSummaryRow = 0
+            For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+                If FpSpread1.ActiveSheet.Cells(iIndex, 3).Text = Strings.Right(usex.TitleInfo.Text, 1) Then
+                    CurSummaryRow = iIndex
+                    Exit For
+                End If
+            Next iIndex
+            If usex.TitleInfo.Text.ToUpper.IndexOf("GRANDCHILD") > -1 Then
+                EstimateLevel = "Alt"
+            Else
+                ChildSheetView1 = FpSpread1.ActiveSheet.GetChildView(CurSummaryRow, 0)
+                If Not IsNothing(ChildSheetView1) Then
+                    If ChildSheetView1.RowCount > 0 Then
+                        EstimateLevel = ChildSheetView1.Cells(e.Row, 0).Text
+                    End If
                 End If
             End If
         End If
+        UseCurRow = e.Row
+        UseCurCol = e.Column
+
     End Sub
 
 
@@ -471,7 +487,10 @@ Partial Friend Class CM_MAIN_frm
 
                 .Columns(0).Locked = True
                 .Columns(5).Locked = True
-                .Columns(7).Locked = True
+                For i As Integer = 7 To 24
+                    .Columns(i).Locked = True
+                    .SetColumnWidth(i, 60)
+                Next i
 
                 .SetColumnWidth(0, 65)
                 .SetColumnWidth(3, 75)
@@ -479,28 +498,24 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(5, 60)
                 .SetColumnWidth(6, 75)
                 .SetColumnWidth(7, 75)
-                .SetColumnWidth(8, 75)
-                .SetColumnWidth(9, 60)
-                .SetColumnWidth(10, 60)
-                .SetColumnWidth(11, 60)
-                .SetColumnWidth(12, 60)
-                .SetColumnWidth(13, 60)
-                .SetColumnWidth(14, 60)
-                .SetColumnWidth(15, 60)
-                .SetColumnWidth(16, 75)
-                .SetColumnWidth(17, 60)
-                .SetColumnWidth(18, 60)
-                .SetColumnWidth(19, 60)
-                .SetColumnWidth(20, 60)
-                .SetColumnWidth(21, 60)
-                .SetColumnWidth(22, 60)
-                .SetColumnWidth(23, 60)
-                .SetColumnWidth(24, 60)
+                .SetColumnWidth(16, 70)
                 .SetColumnWidth(25, 200)
 
                 .Columns(5).CellType = currencyType
                 .Columns(6).CellType = currencyType
                 .Columns(7).CellType = currencyType
+                .Columns(8).CellType = currencyType
+                .Columns(9).CellType = currencyType
+                .Columns(10).CellType = currencyType
+                .Columns(15).CellType = currencyType
+                .Columns(16).CellType = currencyType
+                .Columns(17).CellType = currencyType
+                .Columns(18).CellType = currencyType
+                .Columns(19).CellType = currencyType
+                .Columns(20).CellType = currencyType
+                .Columns(22).CellType = currencyType
+                .Columns(23).CellType = currencyType
+                .Columns(24).CellType = currencyType
 
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
@@ -533,34 +548,37 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(5, 75)
                 .SetColumnWidth(6, 50)
                 .SetColumnWidth(7, 50)
-                .SetColumnWidth(8, 50)
-                .SetColumnWidth(9, 50)
-                .SetColumnWidth(10, 50)
-                .SetColumnWidth(11, 50)
-                .SetColumnWidth(12, 50)
-                .SetColumnWidth(13, 50)
-                .SetColumnWidth(14, 75)
-                .SetColumnWidth(15, 50)
-                .SetColumnWidth(16, 75)
-                .SetColumnWidth(17, 50)
-                .SetColumnWidth(18, 50)
-                .SetColumnWidth(19, 50)
-                .SetColumnWidth(20, 50)
-                .SetColumnWidth(21, 50)
-                .SetColumnWidth(22, 50)
-                .SetColumnWidth(23, 50)
-                .SetColumnWidth(24, 50)
+
+                For i As Integer = 8 To 24
+                    .Columns(i).Locked = True
+                    .SetColumnWidth(i, 60)
+                Next
+                
+                .SetColumnWidth(16, 70)
                 .SetColumnWidth(25, 375)
 
                 .Columns(4).CellType = currencyType
                 .Columns(5).CellType = currencyType
                 .Columns(6).CellType = ckbxcell
                 .Columns(7).CellType = ckbxcell
+                .Columns(8).CellType = currencyType
+                .Columns(9).CellType = currencyType
+                .Columns(10).CellType = currencyType
+                .Columns(15).CellType = currencyType
+                .Columns(16).CellType = currencyType
+                .Columns(17).CellType = currencyType
+                .Columns(18).CellType = currencyType
+                .Columns(19).CellType = currencyType
+                .Columns(20).CellType = currencyType
+                .Columns(22).CellType = currencyType
+                .Columns(23).CellType = currencyType
+                .Columns(24).CellType = currencyType
+
 
                 .Columns(5).BackColor = Color.LightGoldenrodYellow
                 .Columns(6).BackColor = Color.LightGoldenrodYellow
                 .Columns(7).BackColor = Color.LightGoldenrodYellow
-                .Columns(8).BackColor = Color.LightGoldenrodYellow
+
 
 
                 'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
@@ -636,38 +654,53 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnPreOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPreOrder.Click
 
-        Dim new_message As String = "You are about to merge data for Bank A."
-        Dim update_message As String = "You are about to update 'Master' data for Bank A.  All current data for the Master will be overwritten."
+        Dim update_message As String
+        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
 
-        If dsCadre.Tables("BaseGroup").Rows.Count < 4 Then
-            If MessageBox.Show(new_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
-                'active_row = FindActiveRows()
-                dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", "A00", "A", "01-04", "Geared", 496250, "", "", ""}))
-                Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-                ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
-                ChildSheetView1.SortRows(1, True, True)
-                ChildSheetView1.SetRowExpandable(0, False)
+        MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
+        CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
+        Select Case EstimateLevel
+            Case "Summary"
+            Case "Master"
+            Case "Base", "Alt"
+               
+                Dim bank As String
+                bank = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 3).Text
 
-                ChildSheetView1.Cells(0, 6).Locked = True
-                ChildSheetView1.Cells(0, 6).BackColor = Color.LightGray
+                Dim foundRows() As Data.DataRow
+                Dim criteria As String
+                criteria = "BaseGroup = 'Master' AND bank = '" & bank & "'"
+                foundRows = dtBaseGroup.Select(criteria)
+                If foundRows.Count = 0 Then
 
-                ChildSheetView1.Cells(0, 7).Locked = False
-                ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
+                    update_message = "You are about to create a 'Master' for Bank " & bank & ".  Are you sure?"
 
-                Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
-                Dim t As New FarPoint.Win.Spread.CellType.TextCellType
-                t.BackgroundImage = p
-                ' Apply the text cell.
-                FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
-            End If
-        Else
-            MessageBox.Show("A Master Has Already Been Created", "Cannot Create Master", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2)
-        End If
+                    If MessageBox.Show(update_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
+                        '  dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", altID, bank, "01-04", "Geared", target, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""}))
+                        AddMasterRow(bank)
 
-        'FpSpread1.ActiveSheet.LockBackColor = Color.LightCyan
-        'FpSpread1.ActiveSheet.LockForeColor = Color.Green
-        'FpSpread1.ActiveSheet.Columns[0, 3].Locked = True
-        'FpSpread1.ActiveSheet.Cells[1,1,1,2].Locked = False
+                        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+                        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurSummaryRow, 0)
+                        ChildSheetView1.SortRows(1, True, True)
+                        ChildSheetView1.SetRowExpandable(0, False)
+
+                        ChildSheetView1.Cells(0, 6).Locked = True
+                        ChildSheetView1.Cells(0, 6).BackColor = Color.LightGray
+
+                        ChildSheetView1.Cells(0, 7).Locked = False
+                        ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
+
+                        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
+                        Dim t As New FarPoint.Win.Spread.CellType.TextCellType
+                        t.BackgroundImage = p
+                        ' Apply the text cell.
+                        FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
+                    End If
+                Else
+                    MessageBox.Show("A Master Has Already Been Created", "Cannot Create Master", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                End If
+            Case Else
+        End Select
 
 
     End Sub
@@ -682,6 +715,7 @@ Partial Friend Class CM_MAIN_frm
         Dim returnArray(2) As String
 
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+
 
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
@@ -1280,7 +1314,7 @@ Partial Friend Class CM_MAIN_frm
         End Try
     End Sub
 
-  
+
     Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
         Serialize()
         ' frmAddresses.Save()
@@ -1308,5 +1342,52 @@ Partial Friend Class CM_MAIN_frm
         Return myList
     End Function
 
-  
+    Private Sub AddMasterRow(bank As String)
+
+        Dim baseID As String
+        Dim target As Integer = 0
+        Dim criteria As String
+        Dim row As DataRow
+        Dim datarows() As DataRow
+        Dim mylist As List(Of Object)
+
+        baseID = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
+
+        ' dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", altID, bank, "01-04", "Geared", target, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""}))
+
+        ' Build the target amount.  Bid overrides Target at Alt level
+        criteria = "id = '" & baseID & "' and merge = 'True'"
+        datarows = dtAltGroup.Select(criteria)
+
+        For Each row In datarows
+            If row("Bid") <> "" Then
+                target += row("Bid")
+            Else
+                target += row("Target")
+            End If
+        Next
+
+        criteria = "bank = '" & bank & "'"
+        Dim baseRow() As Data.DataRow
+        baseRow = dtBaseGroup.Select(criteria)
+        target += baseRow(0).Item("Target")
+
+        ' Copy existing Bank Row data into a new row
+        Dim newRow As DataRow = dtBaseGroup.NewRow
+
+        For i As Integer = 0 To dtBaseGroup.Columns.Count - 1
+            newRow.Item(i) = baseRow(0).Item(i)
+        Next
+
+        ' Update new row as Master
+        newRow("Target") = target
+        newRow("Id") = bank.Trim & "0"
+        newRow("BaseGroup") = "Master"
+
+        dtBaseGroup.Rows.Add(newRow)
+
+    End Sub
+
+
+
 End Class
