@@ -294,6 +294,8 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 19).Locked = False
+
 
             FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary
             FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25         'STATUS
@@ -492,6 +494,8 @@ Partial Friend Class CM_MAIN_frm
                     .SetColumnWidth(i, 60)
                 Next i
 
+                .Columns(21).Locked = False
+
                 .SetColumnWidth(0, 65)
                 .SetColumnWidth(3, 75)
                 .SetColumnWidth(4, 75)
@@ -553,7 +557,9 @@ Partial Friend Class CM_MAIN_frm
                     .Columns(i).Locked = True
                     .SetColumnWidth(i, 60)
                 Next
-                
+
+                .Columns(21).Locked = False
+
                 .SetColumnWidth(16, 70)
                 .SetColumnWidth(25, 375)
 
@@ -799,7 +805,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub btnAddAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddAlt.Click
+    Private Sub AddAlternateRow()
 
         'MsgBox(FpSpread1.ActiveSheet.ActiveRowIndex)
         Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
@@ -824,15 +830,15 @@ Partial Friend Class CM_MAIN_frm
         altCount = ChildSheetView2.RowCount
         'ChildSheetView2.GetLastNonEmptyRow()
         baseID = ChildSheetView.Cells(baseRowIndex, 1).Value
-        thisID = "Alt" + (altCount + 1).ToString
+        thisID = "Alt"
         units = ChildSheetView.Cells(baseRowIndex, 3).Value
         machine = ChildSheetView.Cells(baseRowIndex, 4).Value
 
-        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisID, baseID, units, machine, 0, "", "", "", ""})
-
+        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisID, baseID, units, machine, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+        FpSpread1.Refresh()
     End Sub
 
-    Private Sub btnAddBank_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBank.Click
+    Private Sub AddBankRow()
         ' Add a new summary row to the grid
         ' Add a new base row to the grid
 
@@ -843,7 +849,7 @@ Partial Friend Class CM_MAIN_frm
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
 
-        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
         FpSpread1.Refresh()
         FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
@@ -852,6 +858,7 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Locked = False
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 19).Locked = False
 
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
@@ -912,7 +919,7 @@ Partial Friend Class CM_MAIN_frm
                 '    FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 4, False)
                 Dim bank As String = FpSpread1.ActiveSheet.GetValue(e.Row, 3)
                 Dim thisID As String = bank & "1"
-                dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, "", "", ""})
+                dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
             Case 4
                 If IsNothing(FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value) Then
                     MessageBox.Show("Please select a machine.", "Missing Data")
@@ -990,7 +997,7 @@ Partial Friend Class CM_MAIN_frm
 
 
 
-    Private Sub btnDeleteAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteAlt.Click
+    Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click
 
         Dim activeRows As Array
         activeRows = FindActiveRows()
@@ -999,11 +1006,33 @@ Partial Friend Class CM_MAIN_frm
         '       "Summary Row:  " & activeRows(0) & vbCrLf & _
         '       "Base Row: " & activeRows(1) & vbCrLf & _
         '       "Alt row:  " & activeRows(2))
-
-        If activeRows(2) = -1 Then
-            MessageBox.Show("Please click on the Target Column of the  Alternate Row you wish to delete", "Cannot Determine Which Alternate Row Selected!")
+        Dim summary_row As String
+        If activeRows(0) = -1 And EstimateLevel = "Summary" Then
+            summary_row = FpSpread1.Sheets(0).ActiveRowIndex
         Else
-            DeleteAltRow(activeRows)
+            summary_row = activeRows(0)
+        End If
+
+        If EstimateLevel = "Alt" Then
+            If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(summary_row, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                'If MessageBox.Show("Delete Alt '" & CInt(activeRows(2)) + 1 & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                DeleteAltRow(activeRows)
+            End If
+        ElseIf EstimateLevel = "Master" Then
+            Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
+            If MessageBox.Show("Delete Master for Bank '" & selected_bank & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                ' DeleteAltRow(activeRows)
+                DeleteMaster(activeRows)
+            End If
+        ElseIf EstimateLevel = "Summary" Then
+            Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
+            If MessageBox.Show("You are about to delete all data for Bank '" & selected_bank & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                DeleteBank(summary_row)
+            End If
+        ElseIf EstimateLevel = "Base" Then
+            MessageBox.Show("You cannot delete a Base Row.  You might want to remove the 'Summary' row to delete the estimate for the entire Bank", "Try Again", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            MessageBox.Show("Please click on the Target Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
         End If
 
     End Sub
@@ -1016,12 +1045,8 @@ Partial Friend Class CM_MAIN_frm
             ChildSheetView2 = ChildSheetView1.FindChildView(activeRows(1), 0)
             If Not IsNothing(ChildSheetView2) Then
                 Try
-                    If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(activeRows(0), 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
-                        ChildSheetView2.RemoveRows(activeRows(2), 1)
-                    Else
-                        MessageBox.Show("Delete Canceled!", "Delete Canceled!")
-                    End If
-
+                    ChildSheetView2.RemoveRows(activeRows(2), 1)
+                    MessageBox.Show("Delete Canceled!", "Delete Canceled!")
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "Cannot Delete the Alt Row")
                 End Try
@@ -1030,7 +1055,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub btnDeleteBank_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteBank.Click
+    Private Sub btnDeleteBank_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim summaryRow As Integer
         Dim activeRows As Array
 
@@ -1066,7 +1091,7 @@ Partial Friend Class CM_MAIN_frm
         Next
     End Sub
 
-    Private Sub btnDeleteMaster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteMaster.Click
+    Private Sub btnDeleteMaster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If MessageBox.Show("You are about to delete the Master for this Summary Row.  Are you Sure", "Are you Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
             Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
@@ -1321,7 +1346,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Function GetItemList(sSQL As String) As List(Of String)
-        Dim dataSource As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD\bin\Debug\Options.accdb"
+        Dim dataSource As String = My.Application.Info.DirectoryPath & "\" & OPTION_DATABASE_NAME
         Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
         Dim result As String
         Dim myList As New List(Of String)()
@@ -1333,8 +1358,10 @@ Partial Friend Class CM_MAIN_frm
             Dim cmd As New OleDb.OleDbCommand(sSQL, cn)
             Dim reader As OleDb.OleDbDataReader = cmd.ExecuteReader
             While reader.Read
+                If Not String.IsNullOrEmpty(reader(0).ToString) Then
                 result = (reader(0).ToString)
                 myList.Add(result)
+                End If
             End While
 
         End Using
@@ -1388,6 +1415,54 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    Private Sub DeleteMaster(activeRows() As String)
+
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+
+        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(activeRows(0), 0)
+        If ChildSheetView1.RowCount > 1 Then
+            ChildSheetView1.RemoveRows(0, 1)
+        End If
+
+        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+        Dim t As New FarPoint.Win.Spread.CellType.TextCellType
+        t.BackgroundImage = p
+        ' Apply the text cell.
+        FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
 
 
+    End Sub
+
+    Private Sub DeleteBank(summaryRow As String)
+
+        Try
+            FpSpread1.ActiveSheet.RemoveRows(summaryRow, 1)
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Cannot Delete the Bank Row")
+        End Try
+
+    End Sub
+
+    Private Sub btnAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnAdd.Click
+        Dim activeRows As Array
+        activeRows = FindActiveRows()
+
+        Dim summary_row As String
+        If activeRows(0) = -1 And EstimateLevel = "Summary" Then
+            summary_row = FpSpread1.Sheets(0).ActiveRowIndex
+        Else
+            summary_row = activeRows(0)
+        End If
+
+        If EstimateLevel = "Alt" Or EstimateLevel = "Base" Then
+            AddAlternateRow()
+        ElseIf EstimateLevel = "Summary" Then
+            AddBankRow()
+        ElseIf EstimateLevel = "Master" Then
+            MessageBox.Show("You cannot add an alternate row to the Master Row.  Please select a Base Row where you wish to add an alternate.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        Else
+            MessageBox.Show("Please click on the Target Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
+        End If
+
+    End Sub
 End Class

@@ -147,16 +147,13 @@ Partial Class CM_MAIN_frm
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
         Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
         Me.Equipment_fra = New System.Windows.Forms.GroupBox()
+        Me.btnAdd = New System.Windows.Forms.Button()
         Me.btnPrint = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.btnDeleteMaster = New System.Windows.Forms.Button()
-        Me.btnDeleteAlt = New System.Windows.Forms.Button()
+        Me.btnDelete = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.btnDeleteBank = New System.Windows.Forms.Button()
         Me.btnForms = New System.Windows.Forms.Button()
-        Me.btnAddBank = New System.Windows.Forms.Button()
         Me.btnEstimate = New System.Windows.Forms.Button()
-        Me.btnAddAlt = New System.Windows.Forms.Button()
         Me.btnPreOrder = New System.Windows.Forms.Button()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
@@ -1716,16 +1713,13 @@ Partial Class CM_MAIN_frm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.Equipment_fra.Controls.Add(Me.btnAdd)
         Me.Equipment_fra.Controls.Add(Me.btnPrint)
         Me.Equipment_fra.Controls.Add(Me.Button3)
-        Me.Equipment_fra.Controls.Add(Me.btnDeleteMaster)
-        Me.Equipment_fra.Controls.Add(Me.btnDeleteAlt)
+        Me.Equipment_fra.Controls.Add(Me.btnDelete)
         Me.Equipment_fra.Controls.Add(Me.Button2)
-        Me.Equipment_fra.Controls.Add(Me.btnDeleteBank)
         Me.Equipment_fra.Controls.Add(Me.btnForms)
-        Me.Equipment_fra.Controls.Add(Me.btnAddBank)
         Me.Equipment_fra.Controls.Add(Me.btnEstimate)
-        Me.Equipment_fra.Controls.Add(Me.btnAddAlt)
         Me.Equipment_fra.Controls.Add(Me.btnPreOrder)
         Me.Equipment_fra.Controls.Add(Me.FpSpread1)
         Me.Equipment_fra.Controls.Add(Me._JobHighRiskFactor_lbl_1)
@@ -1739,12 +1733,28 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.TabStop = False
         Me.Equipment_fra.Text = "Equipment "
         '
+        'btnAdd
+        '
+        Me.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnAdd.BackColor = System.Drawing.SystemColors.Control
+        Me.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnAdd.Location = New System.Drawing.Point(370, 21)
+        Me.btnAdd.Name = "btnAdd"
+        Me.btnAdd.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnAdd.Size = New System.Drawing.Size(77, 22)
+        Me.btnAdd.TabIndex = 80
+        Me.btnAdd.Text = "Add"
+        Me.btnAdd.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnAdd.UseVisualStyleBackColor = False
+        '
         'btnPrint
         '
         Me.btnPrint.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnPrint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.btnPrint.Location = New System.Drawing.Point(826, 23)
+        Me.btnPrint.Location = New System.Drawing.Point(826, 21)
         Me.btnPrint.Name = "btnPrint"
         Me.btnPrint.Size = New System.Drawing.Size(77, 22)
         Me.btnPrint.TabIndex = 79
@@ -1754,70 +1764,38 @@ Partial Class CM_MAIN_frm
         'Button3
         '
         Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button3.Location = New System.Drawing.Point(936, 23)
+        Me.Button3.Location = New System.Drawing.Point(985, 21)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(113, 22)
         Me.Button3.TabIndex = 74
         Me.Button3.Text = "Collapse All"
         Me.Button3.UseVisualStyleBackColor = True
         '
-        'btnDeleteMaster
+        'btnDelete
         '
-        Me.btnDeleteMaster.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnDeleteMaster.BackColor = System.Drawing.SystemColors.Control
-        Me.btnDeleteMaster.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnDeleteMaster.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnDeleteMaster.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteMaster.Location = New System.Drawing.Point(562, 34)
-        Me.btnDeleteMaster.Name = "btnDeleteMaster"
-        Me.btnDeleteMaster.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnDeleteMaster.Size = New System.Drawing.Size(77, 22)
-        Me.btnDeleteMaster.TabIndex = 77
-        Me.btnDeleteMaster.Text = "Del Master"
-        Me.btnDeleteMaster.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnDeleteMaster.UseVisualStyleBackColor = False
-        '
-        'btnDeleteAlt
-        '
-        Me.btnDeleteAlt.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnDeleteAlt.BackColor = System.Drawing.SystemColors.Control
-        Me.btnDeleteAlt.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnDeleteAlt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnDeleteAlt.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteAlt.Location = New System.Drawing.Point(474, 34)
-        Me.btnDeleteAlt.Name = "btnDeleteAlt"
-        Me.btnDeleteAlt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnDeleteAlt.Size = New System.Drawing.Size(77, 22)
-        Me.btnDeleteAlt.TabIndex = 78
-        Me.btnDeleteAlt.Text = "Del Alt "
-        Me.btnDeleteAlt.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnDeleteAlt.UseVisualStyleBackColor = False
+        Me.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnDelete.BackColor = System.Drawing.SystemColors.Control
+        Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnDelete.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnDelete.Location = New System.Drawing.Point(464, 21)
+        Me.btnDelete.Name = "btnDelete"
+        Me.btnDelete.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnDelete.Size = New System.Drawing.Size(77, 22)
+        Me.btnDelete.TabIndex = 78
+        Me.btnDelete.Text = "Delete"
+        Me.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnDelete.UseVisualStyleBackColor = False
         '
         'Button2
         '
         Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button2.Location = New System.Drawing.Point(235, 23)
+        Me.Button2.Location = New System.Drawing.Point(195, 21)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(113, 22)
         Me.Button2.TabIndex = 73
         Me.Button2.Text = "Expand All"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'btnDeleteBank
-        '
-        Me.btnDeleteBank.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnDeleteBank.BackColor = System.Drawing.SystemColors.Control
-        Me.btnDeleteBank.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnDeleteBank.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnDeleteBank.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteBank.Location = New System.Drawing.Point(382, 34)
-        Me.btnDeleteBank.Name = "btnDeleteBank"
-        Me.btnDeleteBank.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnDeleteBank.Size = New System.Drawing.Size(77, 22)
-        Me.btnDeleteBank.TabIndex = 26
-        Me.btnDeleteBank.Text = "Del Bank "
-        Me.btnDeleteBank.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnDeleteBank.UseVisualStyleBackColor = False
         '
         'btnForms
         '
@@ -1826,7 +1804,7 @@ Partial Class CM_MAIN_frm
         Me.btnForms.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnForms.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnForms.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnForms.Location = New System.Drawing.Point(651, 23)
+        Me.btnForms.Location = New System.Drawing.Point(651, 21)
         Me.btnForms.Name = "btnForms"
         Me.btnForms.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnForms.Size = New System.Drawing.Size(77, 22)
@@ -1835,53 +1813,21 @@ Partial Class CM_MAIN_frm
         Me.btnForms.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnForms.UseVisualStyleBackColor = False
         '
-        'btnAddBank
-        '
-        Me.btnAddBank.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnAddBank.BackColor = System.Drawing.SystemColors.Control
-        Me.btnAddBank.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnAddBank.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAddBank.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddBank.Location = New System.Drawing.Point(382, 10)
-        Me.btnAddBank.Name = "btnAddBank"
-        Me.btnAddBank.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnAddBank.Size = New System.Drawing.Size(77, 22)
-        Me.btnAddBank.TabIndex = 25
-        Me.btnAddBank.Text = "Add Bank"
-        Me.btnAddBank.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnAddBank.UseVisualStyleBackColor = False
-        '
-        '_Forms_btn_2
+        'btnEstimate
         '
         Me.btnEstimate.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnEstimate.BackColor = System.Drawing.SystemColors.Control
         Me.btnEstimate.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnEstimate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnEstimate.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnEstimate.Location = New System.Drawing.Point(740, 23)
-        Me.btnEstimate.Name = "_Forms_btn_2"
+        Me.btnEstimate.Location = New System.Drawing.Point(740, 21)
+        Me.btnEstimate.Name = "btnEstimate"
         Me.btnEstimate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnEstimate.Size = New System.Drawing.Size(77, 22)
         Me.btnEstimate.TabIndex = 28
         Me.btnEstimate.Text = "E&stimate"
         Me.btnEstimate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnEstimate.UseVisualStyleBackColor = False
-        '
-        'btnAddAlt
-        '
-        Me.btnAddAlt.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnAddAlt.BackColor = System.Drawing.SystemColors.Control
-        Me.btnAddAlt.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnAddAlt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAddAlt.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddAlt.Location = New System.Drawing.Point(474, 10)
-        Me.btnAddAlt.Name = "btnAddAlt"
-        Me.btnAddAlt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnAddAlt.Size = New System.Drawing.Size(77, 22)
-        Me.btnAddAlt.TabIndex = 29
-        Me.btnAddAlt.Text = "Add Alt"
-        Me.btnAddAlt.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnAddAlt.UseVisualStyleBackColor = False
         '
         'btnPreOrder
         '
@@ -1890,7 +1836,7 @@ Partial Class CM_MAIN_frm
         Me.btnPreOrder.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnPreOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnPreOrder.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnPreOrder.Location = New System.Drawing.Point(562, 10)
+        Me.btnPreOrder.Location = New System.Drawing.Point(557, 21)
         Me.btnPreOrder.Name = "btnPreOrder"
         Me.btnPreOrder.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnPreOrder.Size = New System.Drawing.Size(77, 22)
@@ -2004,14 +1950,10 @@ Partial Class CM_MAIN_frm
     Friend WithEvents FpSpread1 As FarPoint.Win.Spread.FpSpread
     Public WithEvents Equipment_fra As System.Windows.Forms.GroupBox
     Friend WithEvents Button3 As System.Windows.Forms.Button
-    Private WithEvents btnDeleteMaster As System.Windows.Forms.Button
-    Private WithEvents btnDeleteAlt As System.Windows.Forms.Button
+    Private WithEvents btnDelete As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
-    Private WithEvents btnDeleteBank As System.Windows.Forms.Button
     Private WithEvents btnForms As System.Windows.Forms.Button
-    Private WithEvents btnAddBank As System.Windows.Forms.Button
     Private WithEvents btnEstimate As System.Windows.Forms.Button
-    Private WithEvents btnAddAlt As System.Windows.Forms.Button
     Private WithEvents btnPreOrder As System.Windows.Forms.Button
     Friend WithEvents btnPrint As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -2043,5 +1985,6 @@ Partial Class CM_MAIN_frm
     Friend WithEvents cboTaxCode As System.Windows.Forms.ComboBox
     Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
     Public WithEvents chkEngineeringSurvey As System.Windows.Forms.CheckBox
+    Private WithEvents btnAdd As System.Windows.Forms.Button
 #End Region
 End Class
