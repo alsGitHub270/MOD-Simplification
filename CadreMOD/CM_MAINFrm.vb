@@ -230,7 +230,6 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.VerticalScrollBar.Renderer = Nothing
         FpSpread1.VisualStyles = FarPoint.Win.VisualStyles.Off
 
-
         'Init Spread
         With FpSpread1.ActiveSheet
             .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
@@ -503,7 +502,7 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(6, 75)
                 .SetColumnWidth(7, 75)
                 .SetColumnWidth(16, 70)
-                .SetColumnWidth(25, 200)
+                .SetColumnWidth(25, 175)
 
                 .Columns(5).CellType = currencyType
                 .Columns(6).CellType = currencyType
@@ -561,7 +560,7 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(21).Locked = False
 
                 .SetColumnWidth(16, 70)
-                .SetColumnWidth(25, 375)
+                .SetColumnWidth(25, 175)
 
                 .Columns(4).CellType = currencyType
                 .Columns(5).CellType = currencyType
@@ -829,6 +828,9 @@ Partial Friend Class CM_MAIN_frm
         ChildSheetView2 = ChildSheetView.GetChildView(baseRowIndex, 0)
         altCount = ChildSheetView2.RowCount
         'ChildSheetView2.GetLastNonEmptyRow()
+        If ChildSheetView.Cells(baseRowIndex, 0).Text = "Master" Then
+            baseRowIndex += 1
+        End If
         baseID = ChildSheetView.Cells(baseRowIndex, 1).Value
         thisID = "Alt"
         units = ChildSheetView.Cells(baseRowIndex, 3).Value
@@ -864,6 +866,8 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 8).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 21).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 22).CellType = currencyType
         For i As Integer = 13 To 18
             FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
         Next
@@ -1046,7 +1050,6 @@ Partial Friend Class CM_MAIN_frm
             If Not IsNothing(ChildSheetView2) Then
                 Try
                     ChildSheetView2.RemoveRows(activeRows(2), 1)
-                    MessageBox.Show("Delete Canceled!", "Delete Canceled!")
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "Cannot Delete the Alt Row")
                 End Try
