@@ -31,6 +31,7 @@ Partial Class frmContacts
         Me.txtAddress = New System.Windows.Forms.TextBox()
         Me.txtAddress2 = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnSave = New System.Windows.Forms.Button()
         Me.txtEmail = New System.Windows.Forms.TextBox()
         Me.txtFax = New System.Windows.Forms.TextBox()
         Me.txtExt = New System.Windows.Forms.TextBox()
@@ -52,7 +53,6 @@ Partial Class frmContacts
         Me.tabArchitect = New System.Windows.Forms.TabPage()
         Me.tabMgmt_Co = New System.Windows.Forms.TabPage()
         Me.tabOther = New System.Windows.Forms.TabPage()
-        Me.btnSave = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.SuspendLayout()
@@ -63,9 +63,9 @@ Partial Class frmContacts
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(46, 8)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(96, 15)
+        Me.Label1.Size = New System.Drawing.Size(99, 15)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Company Name"
+        Me.Label1.Text = "Company Name:"
         '
         'Label2
         '
@@ -73,9 +73,9 @@ Partial Class frmContacts
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(57, 35)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(85, 15)
+        Me.Label2.Size = New System.Drawing.Size(88, 15)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Contact Name"
+        Me.Label2.Text = "Contact Name:"
         '
         'Label3
         '
@@ -83,9 +83,9 @@ Partial Class frmContacts
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(91, 62)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(51, 15)
+        Me.Label3.Size = New System.Drawing.Size(54, 15)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Address"
+        Me.Label3.Text = "Address:"
         '
         'txtCompanyName
         '
@@ -147,6 +147,19 @@ Partial Class frmContacts
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(419, 261)
         Me.Panel1.TabIndex = 8
+        '
+        'btnSave
+        '
+        Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
+        Me.btnSave.Location = New System.Drawing.Point(370, 208)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(46, 45)
+        Me.btnSave.TabIndex = 35
+        Me.btnSave.TabStop = False
+        Me.btnSave.Tag = "Save Data"
+        Me.btnSave.Text = "Save"
+        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'txtEmail
         '
@@ -210,9 +223,9 @@ Partial Class frmContacts
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.Location = New System.Drawing.Point(103, 226)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(39, 15)
+        Me.Label11.Size = New System.Drawing.Size(42, 15)
         Me.Label11.TabIndex = 14
-        Me.Label11.Text = "Email"
+        Me.Label11.Text = "Email:"
         '
         'Label10
         '
@@ -220,9 +233,9 @@ Partial Class frmContacts
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.Location = New System.Drawing.Point(115, 196)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(27, 15)
+        Me.Label10.Size = New System.Drawing.Size(30, 15)
         Me.Label10.TabIndex = 13
-        Me.Label10.Text = "Fax"
+        Me.Label10.Text = "Fax:"
         '
         'Label9
         '
@@ -240,9 +253,9 @@ Partial Class frmContacts
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.Location = New System.Drawing.Point(99, 172)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(43, 15)
+        Me.Label8.Size = New System.Drawing.Size(46, 15)
         Me.Label8.TabIndex = 11
-        Me.Label8.Text = "Phone"
+        Me.Label8.Text = "Phone:"
         '
         'Label7
         '
@@ -250,9 +263,9 @@ Partial Class frmContacts
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(210, 142)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(56, 15)
+        Me.Label7.Size = New System.Drawing.Size(59, 15)
         Me.Label7.TabIndex = 10
-        Me.Label7.Text = "Zip Code"
+        Me.Label7.Text = "Zip Code:"
         '
         'Label6
         '
@@ -260,9 +273,9 @@ Partial Class frmContacts
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(107, 142)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(35, 15)
+        Me.Label6.Size = New System.Drawing.Size(38, 15)
         Me.Label6.TabIndex = 9
-        Me.Label6.Text = "State"
+        Me.Label6.Text = "State:"
         '
         'Label5
         '
@@ -270,9 +283,9 @@ Partial Class frmContacts
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.Location = New System.Drawing.Point(116, 116)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(26, 15)
+        Me.Label5.Size = New System.Drawing.Size(29, 15)
         Me.Label5.TabIndex = 8
-        Me.Label5.Text = "City"
+        Me.Label5.Text = "City:"
         '
         'TabControl1
         '
@@ -344,20 +357,7 @@ Partial Class frmContacts
         Me.tabOther.Text = "Other"
         Me.tabOther.UseVisualStyleBackColor = True
         '
-        'Button1
-        '
-        Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
-        Me.btnSave.Location = New System.Drawing.Point(370, 208)
-        Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(46, 45)
-        Me.btnSave.TabIndex = 35
-        Me.btnSave.TabStop = False
-        Me.btnSave.Tag = "Save Data"
-        Me.btnSave.Text = "Save"
-        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        'frmAddresses
+        'frmContacts
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font

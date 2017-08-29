@@ -9,6 +9,7 @@ Imports System.Globalization
 Imports System.IO
 Imports System.Windows.Forms
 Imports System.Collections.Generic
+Imports System.Linq
 Imports Newtonsoft.Json
 
 
@@ -161,6 +162,7 @@ Partial Friend Class CM_MAIN_frm
 
         dtBuildingInfo = dsCadre.Tables.Add("BldgInfo")
         dtBuildingInfo.Columns.AddRange(New DataColumn() {New DataColumn("building_type", typeStr), _
+                                                          New DataColumn("major_project", typeBool), _
                                                           New DataColumn("sales_rep", typeStr), _
                                                           New DataColumn("sales_office", typeStr), _
                                                           New DataColumn("installing_office", typeStr), _
@@ -175,10 +177,16 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("ansi_csa_b44_code", typeStr), _
                                                           New DataColumn("nfpa_code", typeStr), _
                                                           New DataColumn("sds_level", typeStr), _
-                                                          New DataColumn("ishpd", typeStr), _
-                                                          New DataColumn("dsa", typeStr), _
-                                                          New DataColumn("head_detection", typeStr), _
-                                                          New DataColumn("engineering_survey", typeStr)
+                                                          New DataColumn("oshpd", typeBool), _
+                                                          New DataColumn("dsa", typeBool), _
+                                                          New DataColumn("head_detection", typeBool), _
+                                                          New DataColumn("engineering_survey", typeBool), _
+                                                          New DataColumn("nps_duration", typeStr), _
+                                                          New DataColumn("nps_call_back", typeStr), _
+                                                          New DataColumn("nps_material_cost", typeStr), _
+                                                          New DataColumn("nps_labor_cost", typeStr), _
+                                                          New DataColumn("nps_one_time_cost", typeStr), _
+                                                          New DataColumn("ocpl", typeStr)
                                                          })
 
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
@@ -212,9 +220,9 @@ Partial Friend Class CM_MAIN_frm
 
         Load_ListBoxes()
 
-        BuildingInformation_fra.Left = ShiftDist
+        '   BuildingInformation_fra.Left = ShiftDist
         ' JobInformation_fra.Left = ShiftDist
-        Equipment_fra.Left = ShiftDist
+        ' Equipment_fra.Left = ShiftDist
 
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
 
@@ -400,6 +408,8 @@ Partial Friend Class CM_MAIN_frm
         CurrentBuildingInformationFrameHeight = BuildingInformation_fra.Height
         CurrentEquipmentFrameHeight = Equipment_fra.Height
         Relocate_Equipment_Frame()
+
+        LoadTopOfForm()
 
     End Sub
 
@@ -728,7 +738,6 @@ Partial Friend Class CM_MAIN_frm
                 If ChildSheetView1.SelectionCount > 0 Then
                     summaryRow = iIndex
                     baseRow = ChildSheetView1.ActiveRowIndex
-
                     Exit For
                 End If
                 For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
@@ -1000,7 +1009,6 @@ Partial Friend Class CM_MAIN_frm
     End Function
 
 
-
     Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click
 
         Dim activeRows As Array
@@ -1246,6 +1254,24 @@ Partial Friend Class CM_MAIN_frm
         cboProbabilityOfSale.Items.Add("76-99%")
         cboProbabilityOfSale.Items.Add("100%")
 
+        cboDurationMonths.Items.Clear()
+        cboDurationMonths.Items.Add("0")
+        cboDurationMonths.Items.Add("3")
+        cboDurationMonths.Items.Add("6")
+        cboDurationMonths.Items.Add("9")
+        cboDurationMonths.Items.Add("12")
+        'If Contracts.NationalAccount Then
+        '    DurationMonths_cmb.Items.Add("15")
+        '    DurationMonths_cmb.Items.Add("18")
+        '    DurationMonths_cmb.Items.Add("21")
+        '    DurationMonths_cmb.Items.Add("24")
+        'End If
+
+        cboCallBackHours.Items.Clear()
+        cboCallBackHours.Items.Add("0")
+        cboCallBackHours.Items.Add("8")
+        cboCallBackHours.Items.Add("24")
+
     End Sub
 
 
@@ -1344,6 +1370,7 @@ Partial Friend Class CM_MAIN_frm
 
 
     Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
+        SaveTopOfForm()
         Serialize()
         ' frmAddresses.Save()
     End Sub
@@ -1468,4 +1495,82 @@ Partial Friend Class CM_MAIN_frm
         End If
 
     End Sub
+
+    Private Sub LoadTopOfForm()
+        Dim foundRows() As Data.DataRow
+
+        foundRows = dtBuildingInfo.Select("1 = 1")  ' there should only be one row.  always true
+        If foundRows.Count = 1 Then
+            cboBuildingType.SelectedItem = foundRows(0)("building_type")
+            cboSalesRep.SelectedItem = foundRows(0).Item("sales_rep").ToString
+            cboSalesOffice.SelectedItem = foundRows(0).Item("Sales_Office").ToString
+            cboInstallingOffice.SelectedItem = foundRows(0).Item("installing_office").ToString
+            cboServiceOffice.SelectedItem = foundRows(0).Item("service_office").ToString
+
+            cboStatus.SelectedItem = foundRows(0).Item("status").ToString
+            cboProbabilityOfSale.SelectedItem = foundRows(0).Item("probability_of_sale").ToString
+            txtBidDate.Text = foundRows(0).Item("bid_date").ToString
+            cboNationalAccount.SelectedItem = foundRows(0).Item("national_account").ToString
+
+            cboTaxCode.SelectedItem = foundRows(0).Item("tax_code").ToString
+            cboSeismicZone.SelectedItem = foundRows(0).Item("seismic_zone").ToString
+            cboLocalCode.SelectedItem = foundRows(0).Item("local_code").ToString
+            cboANSICode.SelectedItem = foundRows(0).Item("ansi_csa_b44_code").ToString
+
+            cboNFPA13CodeYear.SelectedItem = foundRows(0).Item("nfpa_code").ToString
+            txtSDSlevel.Text = foundRows(0).Item("sds_level").ToString
+
+            chkMajorProject.CheckState = IIf(foundRows(0).Item("major_project"), CheckState.Checked, CheckState.Unchecked)
+            chkOSHPD.CheckState = IIf(foundRows(0).Item("oshpd"), CheckState.Checked, CheckState.Unchecked)
+            chkDSA.CheckState = IIf(foundRows(0).Item("dsa"), CheckState.Checked, CheckState.Unchecked)
+            chkHeadDetection.CheckState = IIf(foundRows(0).Item("head_detection"), CheckState.Checked, CheckState.Unchecked)
+            chkEngineeringSurvey.CheckState = IIf(foundRows(0).Item("engineering_survey"), CheckState.Checked, CheckState.Unchecked)
+
+            cboDurationMonths.SelectedItem = foundRows(0).Item("nps_duration").ToString
+            cboCallBackHours.SelectedItem = foundRows(0).Item("nps_call_back").ToString
+            txtNPSMaterialCost.Text = foundRows(0).Item("nps_material_cost").ToString
+
+            txtNPSLaborCost.Text = foundRows(0).Item("nps_labor_cost").ToString
+            txtNPSOneTimeCost.Text = foundRows(0).Item("nps_one_time_cost").ToString
+            txtOCPL.Text = foundRows(0).Item("ocpl").ToString
+        Else
+            MessageBox.Show("Error Loading Building Info, Codes and NPS", "Error Loading From Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+
+    End Sub
+
+    Private Sub SaveTopOfForm()
+        Dim my_row() As Data.DataRow
+
+        my_row = dtBuildingInfo.Select("1 = 1")
+
+        my_row(0)("building_type") = cboBuildingType.Text
+        my_row(0)("major_project") = chkMajorProject.CheckState
+        my_row(0)("sales_rep") = cboSalesRep.SelectedText
+        my_row(0)("sales_office") = cboSalesOffice.Text
+        my_row(0)("installing_office") = cboInstallingOffice.Text
+        my_row(0)("service_office") = cboServiceOffice.Text
+        my_row(0)("status") = cboStatus.Text
+        my_row(0)("probability_of_sale") = cboProbabilityOfSale.Text
+        my_row(0)("bid_date") = txtBidDate.Text
+        my_row(0)("national_account") = cboNationalAccount.Text
+        my_row(0)("tax_code") = cboTaxCode.Text
+        my_row(0)("seismic_zone") = cboSeismicZone.Text
+        my_row(0)("local_code") = cboLocalCode.Text
+        my_row(0)("ansi_csa_b44_code") = cboANSICode.Text
+        my_row(0)("nfpa_code") = cboNFPA13CodeYear.Text
+        my_row(0)("sds_level") = txtSDSlevel.Text
+        my_row(0)("oshpd") = chkOSHPD.CheckState
+        my_row(0)("dsa") = chkDSA.CheckState
+        my_row(0)("head_detection") = chkDSA.CheckState
+        my_row(0)("engineering_survey") = chkEngineeringSurvey.CheckState
+        my_row(0)("nps_duration") = cboDurationMonths.Text
+        my_row(0)("nps_call_back") = cboCallBackHours.Text
+        my_row(0)("nps_material_cost") = txtNPSMaterialCost.Text
+        my_row(0)("nps_labor_cost") = txtNPSLaborCost.Text
+        my_row(0)("nps_one_time_cost") = txtNPSOneTimeCost.Text
+        my_row(0)("ocpl") = txtOCPL.Text
+
+    End Sub
+
 End Class

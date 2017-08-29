@@ -75,22 +75,6 @@ Partial Class CM_MAIN_frm
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.cboTaxCode = New System.Windows.Forms.ComboBox()
-        Me.fraCode = New System.Windows.Forms.GroupBox()
-        Me.chkEngineeringSurvey = New System.Windows.Forms.CheckBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.chkHeadDetection = New System.Windows.Forms.CheckBox()
-        Me.cboNFPA13CodeYear = New System.Windows.Forms.ComboBox()
-        Me.txtSDSlevel = New System.Windows.Forms.TextBox()
-        Me.SDSlevel_lbl = New System.Windows.Forms.Label()
-        Me.chkDSA = New System.Windows.Forms.CheckBox()
-        Me.chkOSHPD = New System.Windows.Forms.CheckBox()
-        Me.HeatDetection_chk = New System.Windows.Forms.CheckBox()
-        Me.cboANSICode = New System.Windows.Forms.ComboBox()
-        Me.cboLocalCode = New System.Windows.Forms.ComboBox()
-        Me.cboSeismicZone = New System.Windows.Forms.ComboBox()
-        Me.ANSICode_lbl = New System.Windows.Forms.Label()
-        Me.lblLocalCode = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.lblNationalAccount = New System.Windows.Forms.Label()
         Me.cboNationalAccount = New System.Windows.Forms.ComboBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
@@ -127,6 +111,22 @@ Partial Class CM_MAIN_frm
         Me._label_10 = New System.Windows.Forms.Label()
         Me._label_9 = New System.Windows.Forms.Label()
         Me._label_8 = New System.Windows.Forms.Label()
+        Me.fraCode = New System.Windows.Forms.GroupBox()
+        Me.chkEngineeringSurvey = New System.Windows.Forms.CheckBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.chkHeadDetection = New System.Windows.Forms.CheckBox()
+        Me.cboNFPA13CodeYear = New System.Windows.Forms.ComboBox()
+        Me.txtSDSlevel = New System.Windows.Forms.TextBox()
+        Me.SDSlevel_lbl = New System.Windows.Forms.Label()
+        Me.chkDSA = New System.Windows.Forms.CheckBox()
+        Me.chkOSHPD = New System.Windows.Forms.CheckBox()
+        Me.HeatDetection_chk = New System.Windows.Forms.CheckBox()
+        Me.cboANSICode = New System.Windows.Forms.ComboBox()
+        Me.cboLocalCode = New System.Windows.Forms.ComboBox()
+        Me.cboSeismicZone = New System.Windows.Forms.ComboBox()
+        Me.ANSICode_lbl = New System.Windows.Forms.Label()
+        Me.lblLocalCode = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Menu_pic = New System.Windows.Forms.PictureBox()
         Me._Menu_tlb_2 = New System.Windows.Forms.Button()
         Me.EstimateNum_txt = New System.Windows.Forms.MaskedTextBox()
@@ -155,6 +155,19 @@ Partial Class CM_MAIN_frm
         Me.btnForms = New System.Windows.Forms.Button()
         Me.btnEstimate = New System.Windows.Forms.Button()
         Me.btnPreOrder = New System.Windows.Forms.Button()
+        Me.NewProductService_fra = New System.Windows.Forms.GroupBox()
+        Me.txtNPSLaborCost = New System.Windows.Forms.TextBox()
+        Me.txtNPSOneTimeCost = New System.Windows.Forms.TextBox()
+        Me.txtNPSMaterialCost = New System.Windows.Forms.TextBox()
+        Me.cboDurationMonths = New System.Windows.Forms.ComboBox()
+        Me.cboCallBackHours = New System.Windows.Forms.ComboBox()
+        Me.lblNPSLaborCosts = New System.Windows.Forms.Label()
+        Me.lblNPSOneTimeCost_ = New System.Windows.Forms.Label()
+        Me.lblDuration = New System.Windows.Forms.Label()
+        Me.lblNPSMaterialCost = New System.Windows.Forms.Label()
+        Me.lblCallBackHours = New System.Windows.Forms.Label()
+        Me.txtOCPL = New System.Windows.Forms.TextBox()
+        Me.lblOCPL = New System.Windows.Forms.Label()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -163,6 +176,7 @@ Partial Class CM_MAIN_frm
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Equipment_fra.SuspendLayout()
+        Me.NewProductService_fra.SuspendLayout()
         Me.SuspendLayout()
         '
         'BuildingInformation_fra
@@ -171,7 +185,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.ExpandCollapseFrame_btn)
         Me.BuildingInformation_fra.Controls.Add(Me.Label6)
         Me.BuildingInformation_fra.Controls.Add(Me.cboTaxCode)
-        Me.BuildingInformation_fra.Controls.Add(Me.fraCode)
         Me.BuildingInformation_fra.Controls.Add(Me.lblNationalAccount)
         Me.BuildingInformation_fra.Controls.Add(Me.cboNationalAccount)
         Me.BuildingInformation_fra.Controls.Add(Me.TextBox2)
@@ -208,13 +221,12 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me._label_10)
         Me.BuildingInformation_fra.Controls.Add(Me._label_9)
         Me.BuildingInformation_fra.Controls.Add(Me._label_8)
-        Me.BuildingInformation_fra.Dock = System.Windows.Forms.DockStyle.Top
         Me.BuildingInformation_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BuildingInformation_fra.ForeColor = System.Drawing.SystemColors.ControlText
         Me.BuildingInformation_fra.Location = New System.Drawing.Point(0, 57)
         Me.BuildingInformation_fra.Name = "BuildingInformation_fra"
         Me.BuildingInformation_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BuildingInformation_fra.Size = New System.Drawing.Size(1452, 227)
+        Me.BuildingInformation_fra.Size = New System.Drawing.Size(859, 227)
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
@@ -233,284 +245,38 @@ Partial Class CM_MAIN_frm
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(768, 202)
+        Me.Label6.Location = New System.Drawing.Point(682, 199)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(61, 13)
+        Me.Label6.Size = New System.Drawing.Size(65, 13)
         Me.Label6.TabIndex = 99
-        Me.Label6.Text = "Tax Code"
+        Me.Label6.Text = "Tax Code:"
         '
         'cboTaxCode
         '
         Me.cboTaxCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboTaxCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboTaxCode.FormattingEnabled = True
-        Me.cboTaxCode.Location = New System.Drawing.Point(835, 199)
+        Me.cboTaxCode.Location = New System.Drawing.Point(749, 196)
         Me.cboTaxCode.Name = "cboTaxCode"
         Me.cboTaxCode.Size = New System.Drawing.Size(87, 21)
         Me.cboTaxCode.TabIndex = 98
-        '
-        'fraCode
-        '
-        Me.fraCode.BackColor = System.Drawing.SystemColors.Window
-        Me.fraCode.Controls.Add(Me.chkEngineeringSurvey)
-        Me.fraCode.Controls.Add(Me.Label5)
-        Me.fraCode.Controls.Add(Me.chkHeadDetection)
-        Me.fraCode.Controls.Add(Me.cboNFPA13CodeYear)
-        Me.fraCode.Controls.Add(Me.txtSDSlevel)
-        Me.fraCode.Controls.Add(Me.SDSlevel_lbl)
-        Me.fraCode.Controls.Add(Me.chkDSA)
-        Me.fraCode.Controls.Add(Me.chkOSHPD)
-        Me.fraCode.Controls.Add(Me.HeatDetection_chk)
-        Me.fraCode.Controls.Add(Me.cboANSICode)
-        Me.fraCode.Controls.Add(Me.cboLocalCode)
-        Me.fraCode.Controls.Add(Me.cboSeismicZone)
-        Me.fraCode.Controls.Add(Me.ANSICode_lbl)
-        Me.fraCode.Controls.Add(Me.lblLocalCode)
-        Me.fraCode.Controls.Add(Me.Label4)
-        Me.fraCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.fraCode.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.fraCode.Location = New System.Drawing.Point(985, 0)
-        Me.fraCode.Name = "fraCode"
-        Me.fraCode.Size = New System.Drawing.Size(317, 227)
-        Me.fraCode.TabIndex = 97
-        Me.fraCode.TabStop = False
-        Me.fraCode.Text = "Code"
-        '
-        'chkEngineeringSurvey
-        '
-        Me.chkEngineeringSurvey.BackColor = System.Drawing.Color.White
-        Me.chkEngineeringSurvey.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkEngineeringSurvey.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkEngineeringSurvey.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.chkEngineeringSurvey.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkEngineeringSurvey.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkEngineeringSurvey.Location = New System.Drawing.Point(50, 200)
-        Me.chkEngineeringSurvey.Name = "chkEngineeringSurvey"
-        Me.chkEngineeringSurvey.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkEngineeringSurvey.Size = New System.Drawing.Size(137, 15)
-        Me.chkEngineeringSurvey.TabIndex = 72
-        Me.chkEngineeringSurvey.Text = "Engineering Survey"
-        Me.chkEngineeringSurvey.UseVisualStyleBackColor = False
-        '
-        'Label5
-        '
-        Me.Label5.BackColor = System.Drawing.SystemColors.Window
-        Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Label5.Location = New System.Drawing.Point(47, 90)
-        Me.Label5.Name = "Label5"
-        Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label5.Size = New System.Drawing.Size(120, 13)
-        Me.Label5.TabIndex = 71
-        Me.Label5.Tag = " "
-        Me.Label5.Text = "NFPA 13 Code Year"
-        '
-        'chkHeadDetection
-        '
-        Me.chkHeadDetection.BackColor = System.Drawing.Color.White
-        Me.chkHeadDetection.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkHeadDetection.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkHeadDetection.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.chkHeadDetection.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkHeadDetection.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkHeadDetection.Location = New System.Drawing.Point(75, 179)
-        Me.chkHeadDetection.Name = "chkHeadDetection"
-        Me.chkHeadDetection.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkHeadDetection.Size = New System.Drawing.Size(112, 15)
-        Me.chkHeadDetection.TabIndex = 70
-        Me.chkHeadDetection.Text = "Heat Detection"
-        Me.chkHeadDetection.UseVisualStyleBackColor = False
-        '
-        'cboNFPA13CodeYear
-        '
-        Me.cboNFPA13CodeYear.BackColor = System.Drawing.SystemColors.Window
-        Me.cboNFPA13CodeYear.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cboNFPA13CodeYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboNFPA13CodeYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboNFPA13CodeYear.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboNFPA13CodeYear.Location = New System.Drawing.Point(173, 86)
-        Me.cboNFPA13CodeYear.Name = "cboNFPA13CodeYear"
-        Me.cboNFPA13CodeYear.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboNFPA13CodeYear.Size = New System.Drawing.Size(134, 21)
-        Me.cboNFPA13CodeYear.TabIndex = 18
-        '
-        'txtSDSlevel
-        '
-        Me.txtSDSlevel.AcceptsReturn = True
-        Me.txtSDSlevel.BackColor = System.Drawing.SystemColors.Window
-        Me.txtSDSlevel.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtSDSlevel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSDSlevel.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSDSlevel.Location = New System.Drawing.Point(171, 113)
-        Me.txtSDSlevel.MaxLength = 6
-        Me.txtSDSlevel.Name = "txtSDSlevel"
-        Me.txtSDSlevel.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtSDSlevel.Size = New System.Drawing.Size(134, 20)
-        Me.txtSDSlevel.TabIndex = 17
-        Me.txtSDSlevel.Text = " "
-        '
-        'SDSlevel_lbl
-        '
-        Me.SDSlevel_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.SDSlevel_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.SDSlevel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.SDSlevel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SDSlevel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.SDSlevel_lbl.Location = New System.Drawing.Point(9, 117)
-        Me.SDSlevel_lbl.Name = "SDSlevel_lbl"
-        Me.SDSlevel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SDSlevel_lbl.Size = New System.Drawing.Size(156, 17)
-        Me.SDSlevel_lbl.TabIndex = 67
-        Me.SDSlevel_lbl.Text = "SDS level - <= 2.0 / > 2.0"
-        '
-        'chkDSA
-        '
-        Me.chkDSA.BackColor = System.Drawing.Color.White
-        Me.chkDSA.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkDSA.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkDSA.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.chkDSA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkDSA.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkDSA.Location = New System.Drawing.Point(135, 158)
-        Me.chkDSA.Name = "chkDSA"
-        Me.chkDSA.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkDSA.Size = New System.Drawing.Size(52, 15)
-        Me.chkDSA.TabIndex = 16
-        Me.chkDSA.Text = "DSA"
-        Me.chkDSA.UseVisualStyleBackColor = False
-        '
-        'chkOSHPD
-        '
-        Me.chkOSHPD.BackColor = System.Drawing.Color.White
-        Me.chkOSHPD.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkOSHPD.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkOSHPD.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.chkOSHPD.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOSHPD.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkOSHPD.Location = New System.Drawing.Point(118, 139)
-        Me.chkOSHPD.Name = "chkOSHPD"
-        Me.chkOSHPD.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkOSHPD.Size = New System.Drawing.Size(69, 15)
-        Me.chkOSHPD.TabIndex = 15
-        Me.chkOSHPD.Text = "OSHPD"
-        Me.chkOSHPD.UseVisualStyleBackColor = False
-        '
-        'HeatDetection_chk
-        '
-        Me.HeatDetection_chk.BackColor = System.Drawing.Color.White
-        Me.HeatDetection_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.HeatDetection_chk.Cursor = System.Windows.Forms.Cursors.Default
-        Me.HeatDetection_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.HeatDetection_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.HeatDetection_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.HeatDetection_chk.Location = New System.Drawing.Point(6, 246)
-        Me.HeatDetection_chk.Name = "HeatDetection_chk"
-        Me.HeatDetection_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.HeatDetection_chk.Size = New System.Drawing.Size(181, 15)
-        Me.HeatDetection_chk.TabIndex = 19
-        Me.HeatDetection_chk.Text = "Heat Detection"
-        Me.HeatDetection_chk.UseVisualStyleBackColor = False
-        '
-        'cboANSICode
-        '
-        Me.cboANSICode.BackColor = System.Drawing.SystemColors.Window
-        Me.cboANSICode.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cboANSICode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboANSICode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboANSICode.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboANSICode.Location = New System.Drawing.Point(173, 60)
-        Me.cboANSICode.Name = "cboANSICode"
-        Me.cboANSICode.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboANSICode.Size = New System.Drawing.Size(134, 21)
-        Me.cboANSICode.TabIndex = 13
-        '
-        'cboLocalCode
-        '
-        Me.cboLocalCode.BackColor = System.Drawing.SystemColors.Window
-        Me.cboLocalCode.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cboLocalCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboLocalCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboLocalCode.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboLocalCode.Location = New System.Drawing.Point(173, 36)
-        Me.cboLocalCode.Name = "cboLocalCode"
-        Me.cboLocalCode.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboLocalCode.Size = New System.Drawing.Size(134, 21)
-        Me.cboLocalCode.TabIndex = 11
-        '
-        'cboSeismicZone
-        '
-        Me.cboSeismicZone.BackColor = System.Drawing.SystemColors.Window
-        Me.cboSeismicZone.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cboSeismicZone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboSeismicZone.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboSeismicZone.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSeismicZone.Location = New System.Drawing.Point(171, 11)
-        Me.cboSeismicZone.Name = "cboSeismicZone"
-        Me.cboSeismicZone.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboSeismicZone.Size = New System.Drawing.Size(134, 21)
-        Me.cboSeismicZone.TabIndex = 10
-        '
-        'ANSICode_lbl
-        '
-        Me.ANSICode_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.ANSICode_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.ANSICode_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ANSICode_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ANSICode_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ANSICode_lbl.Location = New System.Drawing.Point(42, 63)
-        Me.ANSICode_lbl.Name = "ANSICode_lbl"
-        Me.ANSICode_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.ANSICode_lbl.Size = New System.Drawing.Size(123, 13)
-        Me.ANSICode_lbl.TabIndex = 63
-        Me.ANSICode_lbl.Tag = " "
-        Me.ANSICode_lbl.Text = "ANSI/CSA/B44 Code"
-        '
-        'lblLocalCode
-        '
-        Me.lblLocalCode.BackColor = System.Drawing.SystemColors.Window
-        Me.lblLocalCode.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblLocalCode.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.lblLocalCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLocalCode.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblLocalCode.Location = New System.Drawing.Point(95, 40)
-        Me.lblLocalCode.Name = "lblLocalCode"
-        Me.lblLocalCode.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblLocalCode.Size = New System.Drawing.Size(70, 17)
-        Me.lblLocalCode.TabIndex = 56
-        Me.lblLocalCode.Text = "Local Code "
-        '
-        'Label4
-        '
-        Me.Label4.BackColor = System.Drawing.SystemColors.Window
-        Me.Label4.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Label4.Location = New System.Drawing.Point(80, 14)
-        Me.Label4.Name = "Label4"
-        Me.Label4.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label4.Size = New System.Drawing.Size(85, 13)
-        Me.Label4.TabIndex = 49
-        Me.Label4.Text = "Seismic Zone "
         '
         'lblNationalAccount
         '
         Me.lblNationalAccount.AutoSize = True
         Me.lblNationalAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblNationalAccount.Location = New System.Drawing.Point(571, 204)
+        Me.lblNationalAccount.Location = New System.Drawing.Point(485, 201)
         Me.lblNationalAccount.Name = "lblNationalAccount"
-        Me.lblNationalAccount.Size = New System.Drawing.Size(105, 13)
+        Me.lblNationalAccount.Size = New System.Drawing.Size(109, 13)
         Me.lblNationalAccount.TabIndex = 96
-        Me.lblNationalAccount.Text = "National Account"
+        Me.lblNationalAccount.Text = "National Account:"
         '
         'cboNationalAccount
         '
         Me.cboNationalAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboNationalAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboNationalAccount.FormattingEnabled = True
-        Me.cboNationalAccount.Location = New System.Drawing.Point(682, 199)
+        Me.cboNationalAccount.Location = New System.Drawing.Point(596, 196)
         Me.cboNationalAccount.Name = "cboNationalAccount"
         Me.cboNationalAccount.Size = New System.Drawing.Size(81, 21)
         Me.cboNationalAccount.TabIndex = 95
@@ -532,9 +298,9 @@ Partial Class CM_MAIN_frm
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(51, 141)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(67, 13)
+        Me.Label3.Size = New System.Drawing.Size(71, 13)
         Me.Label3.TabIndex = 93
-        Me.Label3.Text = "Consultant"
+        Me.Label3.Text = "Consultant:"
         '
         'TextBox1
         '
@@ -553,9 +319,9 @@ Partial Class CM_MAIN_frm
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(75, 113)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(43, 13)
+        Me.Label2.Size = New System.Drawing.Size(47, 13)
         Me.Label2.TabIndex = 91
-        Me.Label2.Text = "Owner"
+        Me.Label2.Text = "Owner:"
         '
         'txtBidDate
         '
@@ -563,7 +329,7 @@ Partial Class CM_MAIN_frm
         Me.txtBidDate.CustomFormat = "MM/dd/yyyy"
         Me.txtBidDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtBidDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.txtBidDate.Location = New System.Drawing.Point(682, 173)
+        Me.txtBidDate.Location = New System.Drawing.Point(596, 170)
         Me.txtBidDate.Name = "txtBidDate"
         Me.txtBidDate.Size = New System.Drawing.Size(133, 20)
         Me.txtBidDate.TabIndex = 88
@@ -592,23 +358,23 @@ Partial Class CM_MAIN_frm
         Me.lblBuildingType.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblBuildingType.Size = New System.Drawing.Size(100, 13)
         Me.lblBuildingType.TabIndex = 87
-        Me.lblBuildingType.Text = "Building Type"
+        Me.lblBuildingType.Text = "Building Type:"
         Me.lblBuildingType.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(620, 173)
+        Me.Label1.Location = New System.Drawing.Point(534, 170)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(56, 13)
+        Me.Label1.Size = New System.Drawing.Size(60, 13)
         Me.Label1.TabIndex = 84
-        Me.Label1.Text = "Bid Date"
+        Me.Label1.Text = "Bid Date:"
         '
         'Proposal_cmd
         '
         Me.Proposal_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Proposal_cmd.Location = New System.Drawing.Point(826, 69)
+        Me.Proposal_cmd.Location = New System.Drawing.Point(740, 66)
         Me.Proposal_cmd.Name = "Proposal_cmd"
         Me.Proposal_cmd.Size = New System.Drawing.Size(87, 23)
         Me.Proposal_cmd.TabIndex = 73
@@ -621,7 +387,7 @@ Partial Class CM_MAIN_frm
         Me.cboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboStatus.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboStatus.Location = New System.Drawing.Point(682, 119)
+        Me.cboStatus.Location = New System.Drawing.Point(596, 116)
         Me.cboStatus.Name = "cboStatus"
         Me.cboStatus.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboStatus.Size = New System.Drawing.Size(231, 21)
@@ -634,12 +400,12 @@ Partial Class CM_MAIN_frm
         Me._label_7.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me._label_7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._label_7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._label_7.Location = New System.Drawing.Point(611, 17)
+        Me._label_7.Location = New System.Drawing.Point(525, 14)
         Me._label_7.Name = "_label_7"
         Me._label_7.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me._label_7.Size = New System.Drawing.Size(65, 13)
+        Me._label_7.Size = New System.Drawing.Size(69, 13)
         Me._label_7.TabIndex = 81
-        Me._label_7.Text = "Sales Rep"
+        Me._label_7.Text = "Sales Rep:"
         Me._label_7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'chkMajorProject
@@ -655,7 +421,7 @@ Partial Class CM_MAIN_frm
         Me.chkMajorProject.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkMajorProject.Size = New System.Drawing.Size(99, 15)
         Me.chkMajorProject.TabIndex = 75
-        Me.chkMajorProject.Text = "Major Project"
+        Me.chkMajorProject.Text = "Major Project:"
         Me.chkMajorProject.UseVisualStyleBackColor = False
         '
         'Status_lbl
@@ -664,12 +430,12 @@ Partial Class CM_MAIN_frm
         Me.Status_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Status_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Status_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Status_lbl.Location = New System.Drawing.Point(637, 122)
+        Me.Status_lbl.Location = New System.Drawing.Point(551, 119)
         Me.Status_lbl.Name = "Status_lbl"
         Me.Status_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Status_lbl.Size = New System.Drawing.Size(39, 17)
         Me.Status_lbl.TabIndex = 79
-        Me.Status_lbl.Text = "Status"
+        Me.Status_lbl.Text = "Status:"
         Me.Status_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'cboSalesRep
@@ -678,7 +444,7 @@ Partial Class CM_MAIN_frm
         Me.cboSalesRep.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboSalesRep.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboSalesRep.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSalesRep.Location = New System.Drawing.Point(683, 15)
+        Me.cboSalesRep.Location = New System.Drawing.Point(597, 12)
         Me.cboSalesRep.Name = "cboSalesRep"
         Me.cboSalesRep.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboSalesRep.Size = New System.Drawing.Size(230, 21)
@@ -691,7 +457,7 @@ Partial Class CM_MAIN_frm
         Me.cboInstallingOffice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboInstallingOffice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboInstallingOffice.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboInstallingOffice.Location = New System.Drawing.Point(683, 66)
+        Me.cboInstallingOffice.Location = New System.Drawing.Point(597, 63)
         Me.cboInstallingOffice.Name = "cboInstallingOffice"
         Me.cboInstallingOffice.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboInstallingOffice.Size = New System.Drawing.Size(80, 21)
@@ -703,7 +469,7 @@ Partial Class CM_MAIN_frm
         Me.cboServiceOffice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboServiceOffice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboServiceOffice.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboServiceOffice.Location = New System.Drawing.Point(683, 93)
+        Me.cboServiceOffice.Location = New System.Drawing.Point(597, 90)
         Me.cboServiceOffice.Name = "cboServiceOffice"
         Me.cboServiceOffice.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboServiceOffice.Size = New System.Drawing.Size(80, 21)
@@ -715,12 +481,12 @@ Partial Class CM_MAIN_frm
         Me.SalesOffice_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.SalesOffice_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SalesOffice_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.SalesOffice_lbl.Location = New System.Drawing.Point(576, 41)
+        Me.SalesOffice_lbl.Location = New System.Drawing.Point(490, 38)
         Me.SalesOffice_lbl.Name = "SalesOffice_lbl"
         Me.SalesOffice_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SalesOffice_lbl.Size = New System.Drawing.Size(100, 13)
         Me.SalesOffice_lbl.TabIndex = 77
-        Me.SalesOffice_lbl.Text = "Sales Office"
+        Me.SalesOffice_lbl.Text = "Sales Office:"
         Me.SalesOffice_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'InstallingOffice_lbl
@@ -729,12 +495,12 @@ Partial Class CM_MAIN_frm
         Me.InstallingOffice_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.InstallingOffice_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InstallingOffice_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.InstallingOffice_lbl.Location = New System.Drawing.Point(576, 66)
+        Me.InstallingOffice_lbl.Location = New System.Drawing.Point(490, 63)
         Me.InstallingOffice_lbl.Name = "InstallingOffice_lbl"
         Me.InstallingOffice_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.InstallingOffice_lbl.Size = New System.Drawing.Size(100, 13)
         Me.InstallingOffice_lbl.TabIndex = 78
-        Me.InstallingOffice_lbl.Text = "Installing Office"
+        Me.InstallingOffice_lbl.Text = "Installing Office:"
         Me.InstallingOffice_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'cboSalesOffice
@@ -743,7 +509,7 @@ Partial Class CM_MAIN_frm
         Me.cboSalesOffice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboSalesOffice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboSalesOffice.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSalesOffice.Location = New System.Drawing.Point(683, 39)
+        Me.cboSalesOffice.Location = New System.Drawing.Point(597, 36)
         Me.cboSalesOffice.Name = "cboSalesOffice"
         Me.cboSalesOffice.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboSalesOffice.Size = New System.Drawing.Size(80, 21)
@@ -755,12 +521,12 @@ Partial Class CM_MAIN_frm
         Me.ServiceOffice_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ServiceOffice_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ServiceOffice_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ServiceOffice_lbl.Location = New System.Drawing.Point(585, 96)
+        Me.ServiceOffice_lbl.Location = New System.Drawing.Point(499, 93)
         Me.ServiceOffice_lbl.Name = "ServiceOffice_lbl"
         Me.ServiceOffice_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ServiceOffice_lbl.Size = New System.Drawing.Size(91, 13)
         Me.ServiceOffice_lbl.TabIndex = 82
-        Me.ServiceOffice_lbl.Text = "Service Office"
+        Me.ServiceOffice_lbl.Text = "Service Office:"
         Me.ServiceOffice_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'cboProbabilityOfSale
@@ -768,7 +534,7 @@ Partial Class CM_MAIN_frm
         Me.cboProbabilityOfSale.BackColor = System.Drawing.SystemColors.Window
         Me.cboProbabilityOfSale.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboProbabilityOfSale.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboProbabilityOfSale.Location = New System.Drawing.Point(682, 146)
+        Me.cboProbabilityOfSale.Location = New System.Drawing.Point(596, 143)
         Me.cboProbabilityOfSale.Name = "cboProbabilityOfSale"
         Me.cboProbabilityOfSale.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboProbabilityOfSale.Size = New System.Drawing.Size(231, 21)
@@ -780,12 +546,12 @@ Partial Class CM_MAIN_frm
         Me.ProbabilityOfSale_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ProbabilityOfSale_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ProbabilityOfSale_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ProbabilityOfSale_lbl.Location = New System.Drawing.Point(571, 150)
+        Me.ProbabilityOfSale_lbl.Location = New System.Drawing.Point(483, 147)
         Me.ProbabilityOfSale_lbl.Name = "ProbabilityOfSale_lbl"
         Me.ProbabilityOfSale_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.ProbabilityOfSale_lbl.Size = New System.Drawing.Size(105, 17)
+        Me.ProbabilityOfSale_lbl.Size = New System.Drawing.Size(107, 17)
         Me.ProbabilityOfSale_lbl.TabIndex = 80
-        Me.ProbabilityOfSale_lbl.Text = "Probability of Sale"
+        Me.ProbabilityOfSale_lbl.Text = "Probability of Sale:"
         Me.ProbabilityOfSale_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'btnContacts
@@ -963,6 +729,252 @@ Partial Class CM_MAIN_frm
         Me._label_8.Text = "Building Name:"
         Me._label_8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'fraCode
+        '
+        Me.fraCode.BackColor = System.Drawing.SystemColors.Window
+        Me.fraCode.Controls.Add(Me.chkEngineeringSurvey)
+        Me.fraCode.Controls.Add(Me.Label5)
+        Me.fraCode.Controls.Add(Me.chkHeadDetection)
+        Me.fraCode.Controls.Add(Me.cboNFPA13CodeYear)
+        Me.fraCode.Controls.Add(Me.txtSDSlevel)
+        Me.fraCode.Controls.Add(Me.SDSlevel_lbl)
+        Me.fraCode.Controls.Add(Me.chkDSA)
+        Me.fraCode.Controls.Add(Me.chkOSHPD)
+        Me.fraCode.Controls.Add(Me.HeatDetection_chk)
+        Me.fraCode.Controls.Add(Me.cboANSICode)
+        Me.fraCode.Controls.Add(Me.cboLocalCode)
+        Me.fraCode.Controls.Add(Me.cboSeismicZone)
+        Me.fraCode.Controls.Add(Me.ANSICode_lbl)
+        Me.fraCode.Controls.Add(Me.lblLocalCode)
+        Me.fraCode.Controls.Add(Me.Label4)
+        Me.fraCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.fraCode.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.fraCode.Location = New System.Drawing.Point(865, 57)
+        Me.fraCode.Name = "fraCode"
+        Me.fraCode.Size = New System.Drawing.Size(317, 227)
+        Me.fraCode.TabIndex = 97
+        Me.fraCode.TabStop = False
+        Me.fraCode.Text = "Codes"
+        '
+        'chkEngineeringSurvey
+        '
+        Me.chkEngineeringSurvey.BackColor = System.Drawing.Color.White
+        Me.chkEngineeringSurvey.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkEngineeringSurvey.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkEngineeringSurvey.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.chkEngineeringSurvey.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkEngineeringSurvey.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkEngineeringSurvey.Location = New System.Drawing.Point(50, 200)
+        Me.chkEngineeringSurvey.Name = "chkEngineeringSurvey"
+        Me.chkEngineeringSurvey.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkEngineeringSurvey.Size = New System.Drawing.Size(137, 15)
+        Me.chkEngineeringSurvey.TabIndex = 72
+        Me.chkEngineeringSurvey.Text = "Engineering Survey:"
+        Me.chkEngineeringSurvey.UseVisualStyleBackColor = False
+        '
+        'Label5
+        '
+        Me.Label5.BackColor = System.Drawing.SystemColors.Window
+        Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Label5.Location = New System.Drawing.Point(47, 90)
+        Me.Label5.Name = "Label5"
+        Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label5.Size = New System.Drawing.Size(120, 13)
+        Me.Label5.TabIndex = 71
+        Me.Label5.Tag = " "
+        Me.Label5.Text = "NFPA 13 Code Year:"
+        '
+        'chkHeadDetection
+        '
+        Me.chkHeadDetection.BackColor = System.Drawing.Color.White
+        Me.chkHeadDetection.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkHeadDetection.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkHeadDetection.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.chkHeadDetection.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkHeadDetection.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkHeadDetection.Location = New System.Drawing.Point(75, 179)
+        Me.chkHeadDetection.Name = "chkHeadDetection"
+        Me.chkHeadDetection.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkHeadDetection.Size = New System.Drawing.Size(112, 15)
+        Me.chkHeadDetection.TabIndex = 70
+        Me.chkHeadDetection.Text = "Heat Detection:"
+        Me.chkHeadDetection.UseVisualStyleBackColor = False
+        '
+        'cboNFPA13CodeYear
+        '
+        Me.cboNFPA13CodeYear.BackColor = System.Drawing.SystemColors.Window
+        Me.cboNFPA13CodeYear.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboNFPA13CodeYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboNFPA13CodeYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboNFPA13CodeYear.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboNFPA13CodeYear.Location = New System.Drawing.Point(173, 86)
+        Me.cboNFPA13CodeYear.Name = "cboNFPA13CodeYear"
+        Me.cboNFPA13CodeYear.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboNFPA13CodeYear.Size = New System.Drawing.Size(134, 21)
+        Me.cboNFPA13CodeYear.TabIndex = 18
+        '
+        'txtSDSlevel
+        '
+        Me.txtSDSlevel.AcceptsReturn = True
+        Me.txtSDSlevel.BackColor = System.Drawing.SystemColors.Window
+        Me.txtSDSlevel.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtSDSlevel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSDSlevel.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtSDSlevel.Location = New System.Drawing.Point(171, 113)
+        Me.txtSDSlevel.MaxLength = 6
+        Me.txtSDSlevel.Name = "txtSDSlevel"
+        Me.txtSDSlevel.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtSDSlevel.Size = New System.Drawing.Size(134, 20)
+        Me.txtSDSlevel.TabIndex = 17
+        Me.txtSDSlevel.Text = " "
+        '
+        'SDSlevel_lbl
+        '
+        Me.SDSlevel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.SDSlevel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SDSlevel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SDSlevel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SDSlevel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.SDSlevel_lbl.Location = New System.Drawing.Point(9, 117)
+        Me.SDSlevel_lbl.Name = "SDSlevel_lbl"
+        Me.SDSlevel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SDSlevel_lbl.Size = New System.Drawing.Size(156, 17)
+        Me.SDSlevel_lbl.TabIndex = 67
+        Me.SDSlevel_lbl.Text = "SDS level - <= 2.0 / > 2.0:"
+        '
+        'chkDSA
+        '
+        Me.chkDSA.BackColor = System.Drawing.Color.White
+        Me.chkDSA.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkDSA.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkDSA.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.chkDSA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkDSA.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkDSA.Location = New System.Drawing.Point(135, 158)
+        Me.chkDSA.Name = "chkDSA"
+        Me.chkDSA.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkDSA.Size = New System.Drawing.Size(52, 15)
+        Me.chkDSA.TabIndex = 16
+        Me.chkDSA.Text = "DSA:"
+        Me.chkDSA.UseVisualStyleBackColor = False
+        '
+        'chkOSHPD
+        '
+        Me.chkOSHPD.BackColor = System.Drawing.Color.White
+        Me.chkOSHPD.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkOSHPD.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkOSHPD.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.chkOSHPD.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkOSHPD.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkOSHPD.Location = New System.Drawing.Point(118, 139)
+        Me.chkOSHPD.Name = "chkOSHPD"
+        Me.chkOSHPD.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkOSHPD.Size = New System.Drawing.Size(69, 15)
+        Me.chkOSHPD.TabIndex = 15
+        Me.chkOSHPD.Text = "OSHPD:"
+        Me.chkOSHPD.UseVisualStyleBackColor = False
+        '
+        'HeatDetection_chk
+        '
+        Me.HeatDetection_chk.BackColor = System.Drawing.Color.White
+        Me.HeatDetection_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.HeatDetection_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.HeatDetection_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.HeatDetection_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.HeatDetection_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.HeatDetection_chk.Location = New System.Drawing.Point(6, 246)
+        Me.HeatDetection_chk.Name = "HeatDetection_chk"
+        Me.HeatDetection_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.HeatDetection_chk.Size = New System.Drawing.Size(181, 15)
+        Me.HeatDetection_chk.TabIndex = 19
+        Me.HeatDetection_chk.Text = "Heat Detection"
+        Me.HeatDetection_chk.UseVisualStyleBackColor = False
+        '
+        'cboANSICode
+        '
+        Me.cboANSICode.BackColor = System.Drawing.SystemColors.Window
+        Me.cboANSICode.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboANSICode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboANSICode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboANSICode.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboANSICode.Location = New System.Drawing.Point(173, 60)
+        Me.cboANSICode.Name = "cboANSICode"
+        Me.cboANSICode.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboANSICode.Size = New System.Drawing.Size(134, 21)
+        Me.cboANSICode.TabIndex = 13
+        '
+        'cboLocalCode
+        '
+        Me.cboLocalCode.BackColor = System.Drawing.SystemColors.Window
+        Me.cboLocalCode.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboLocalCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboLocalCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboLocalCode.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboLocalCode.Location = New System.Drawing.Point(173, 36)
+        Me.cboLocalCode.Name = "cboLocalCode"
+        Me.cboLocalCode.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboLocalCode.Size = New System.Drawing.Size(134, 21)
+        Me.cboLocalCode.TabIndex = 11
+        '
+        'cboSeismicZone
+        '
+        Me.cboSeismicZone.BackColor = System.Drawing.SystemColors.Window
+        Me.cboSeismicZone.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboSeismicZone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboSeismicZone.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboSeismicZone.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboSeismicZone.Location = New System.Drawing.Point(171, 11)
+        Me.cboSeismicZone.Name = "cboSeismicZone"
+        Me.cboSeismicZone.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboSeismicZone.Size = New System.Drawing.Size(134, 21)
+        Me.cboSeismicZone.TabIndex = 10
+        '
+        'ANSICode_lbl
+        '
+        Me.ANSICode_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.ANSICode_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ANSICode_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ANSICode_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ANSICode_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.ANSICode_lbl.Location = New System.Drawing.Point(39, 63)
+        Me.ANSICode_lbl.Name = "ANSICode_lbl"
+        Me.ANSICode_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ANSICode_lbl.Size = New System.Drawing.Size(126, 13)
+        Me.ANSICode_lbl.TabIndex = 63
+        Me.ANSICode_lbl.Tag = " "
+        Me.ANSICode_lbl.Text = "ANSI/CSA/B44 Code:"
+        '
+        'lblLocalCode
+        '
+        Me.lblLocalCode.BackColor = System.Drawing.SystemColors.Window
+        Me.lblLocalCode.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblLocalCode.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblLocalCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLocalCode.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblLocalCode.Location = New System.Drawing.Point(95, 40)
+        Me.lblLocalCode.Name = "lblLocalCode"
+        Me.lblLocalCode.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblLocalCode.Size = New System.Drawing.Size(70, 17)
+        Me.lblLocalCode.TabIndex = 56
+        Me.lblLocalCode.Text = "Local Code:"
+        '
+        'Label4
+        '
+        Me.Label4.BackColor = System.Drawing.SystemColors.Window
+        Me.Label4.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Label4.Location = New System.Drawing.Point(80, 14)
+        Me.Label4.Name = "Label4"
+        Me.Label4.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label4.Size = New System.Drawing.Size(85, 13)
+        Me.Label4.TabIndex = 49
+        Me.Label4.Text = "Seismic Zone:"
+        '
         'Menu_pic
         '
         Me.Menu_pic.BackColor = System.Drawing.SystemColors.Control
@@ -980,7 +992,7 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Menu_pic.Location = New System.Drawing.Point(0, 0)
         Me.Menu_pic.Name = "Menu_pic"
-        Me.Menu_pic.Size = New System.Drawing.Size(1452, 57)
+        Me.Menu_pic.Size = New System.Drawing.Size(1484, 57)
         Me.Menu_pic.TabIndex = 37
         Me.Menu_pic.TabStop = False
         '
@@ -1112,7 +1124,7 @@ Partial Class CM_MAIN_frm
         Me.StatusBar1.Location = New System.Drawing.Point(0, 773)
         Me.StatusBar1.Name = "StatusBar1"
         Me.StatusBar1.ShowItemToolTips = True
-        Me.StatusBar1.Size = New System.Drawing.Size(1452, 22)
+        Me.StatusBar1.Size = New System.Drawing.Size(1484, 22)
         Me.StatusBar1.TabIndex = 41
         '
         '_StatusBar1_Panel1
@@ -1704,7 +1716,7 @@ Partial Class CM_MAIN_frm
         Me.FpSpread1.Location = New System.Drawing.Point(8, 61)
         Me.FpSpread1.Name = "FpSpread1"
         Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
-        Me.FpSpread1.Size = New System.Drawing.Size(1551, 413)
+        Me.FpSpread1.Size = New System.Drawing.Size(1583, 413)
         Me.FpSpread1.TabIndex = 11
         '
         'Equipment_fra
@@ -1728,7 +1740,7 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.Location = New System.Drawing.Point(0, 290)
         Me.Equipment_fra.Name = "Equipment_fra"
         Me.Equipment_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Equipment_fra.Size = New System.Drawing.Size(1452, 480)
+        Me.Equipment_fra.Size = New System.Drawing.Size(1484, 480)
         Me.Equipment_fra.TabIndex = 43
         Me.Equipment_fra.TabStop = False
         Me.Equipment_fra.Text = "Equipment "
@@ -1740,7 +1752,7 @@ Partial Class CM_MAIN_frm
         Me.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAdd.Location = New System.Drawing.Point(370, 21)
+        Me.btnAdd.Location = New System.Drawing.Point(386, 21)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnAdd.Size = New System.Drawing.Size(77, 22)
@@ -1754,7 +1766,7 @@ Partial Class CM_MAIN_frm
         Me.btnPrint.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnPrint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.btnPrint.Location = New System.Drawing.Point(826, 21)
+        Me.btnPrint.Location = New System.Drawing.Point(842, 21)
         Me.btnPrint.Name = "btnPrint"
         Me.btnPrint.Size = New System.Drawing.Size(77, 22)
         Me.btnPrint.TabIndex = 79
@@ -1764,7 +1776,7 @@ Partial Class CM_MAIN_frm
         'Button3
         '
         Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button3.Location = New System.Drawing.Point(985, 21)
+        Me.Button3.Location = New System.Drawing.Point(1001, 21)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(113, 22)
         Me.Button3.TabIndex = 74
@@ -1778,7 +1790,7 @@ Partial Class CM_MAIN_frm
         Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDelete.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDelete.Location = New System.Drawing.Point(464, 21)
+        Me.btnDelete.Location = New System.Drawing.Point(480, 21)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnDelete.Size = New System.Drawing.Size(77, 22)
@@ -1790,7 +1802,7 @@ Partial Class CM_MAIN_frm
         'Button2
         '
         Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button2.Location = New System.Drawing.Point(195, 21)
+        Me.Button2.Location = New System.Drawing.Point(211, 21)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(113, 22)
         Me.Button2.TabIndex = 73
@@ -1804,7 +1816,7 @@ Partial Class CM_MAIN_frm
         Me.btnForms.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnForms.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnForms.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnForms.Location = New System.Drawing.Point(651, 21)
+        Me.btnForms.Location = New System.Drawing.Point(667, 21)
         Me.btnForms.Name = "btnForms"
         Me.btnForms.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnForms.Size = New System.Drawing.Size(77, 22)
@@ -1820,7 +1832,7 @@ Partial Class CM_MAIN_frm
         Me.btnEstimate.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnEstimate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnEstimate.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnEstimate.Location = New System.Drawing.Point(740, 21)
+        Me.btnEstimate.Location = New System.Drawing.Point(756, 21)
         Me.btnEstimate.Name = "btnEstimate"
         Me.btnEstimate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnEstimate.Size = New System.Drawing.Size(77, 22)
@@ -1836,7 +1848,7 @@ Partial Class CM_MAIN_frm
         Me.btnPreOrder.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnPreOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnPreOrder.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnPreOrder.Location = New System.Drawing.Point(557, 21)
+        Me.btnPreOrder.Location = New System.Drawing.Point(573, 21)
         Me.btnPreOrder.Name = "btnPreOrder"
         Me.btnPreOrder.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.btnPreOrder.Size = New System.Drawing.Size(77, 22)
@@ -1844,6 +1856,201 @@ Partial Class CM_MAIN_frm
         Me.btnPreOrder.Text = "Pre-Order"
         Me.btnPreOrder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnPreOrder.UseVisualStyleBackColor = False
+        '
+        'NewProductService_fra
+        '
+        Me.NewProductService_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.NewProductService_fra.Controls.Add(Me.txtNPSLaborCost)
+        Me.NewProductService_fra.Controls.Add(Me.txtNPSOneTimeCost)
+        Me.NewProductService_fra.Controls.Add(Me.txtNPSMaterialCost)
+        Me.NewProductService_fra.Controls.Add(Me.cboDurationMonths)
+        Me.NewProductService_fra.Controls.Add(Me.cboCallBackHours)
+        Me.NewProductService_fra.Controls.Add(Me.lblNPSLaborCosts)
+        Me.NewProductService_fra.Controls.Add(Me.lblNPSOneTimeCost_)
+        Me.NewProductService_fra.Controls.Add(Me.lblDuration)
+        Me.NewProductService_fra.Controls.Add(Me.lblNPSMaterialCost)
+        Me.NewProductService_fra.Controls.Add(Me.lblCallBackHours)
+        Me.NewProductService_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NewProductService_fra.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.NewProductService_fra.Location = New System.Drawing.Point(1188, 57)
+        Me.NewProductService_fra.Name = "NewProductService_fra"
+        Me.NewProductService_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NewProductService_fra.Size = New System.Drawing.Size(290, 143)
+        Me.NewProductService_fra.TabIndex = 98
+        Me.NewProductService_fra.TabStop = False
+        Me.NewProductService_fra.Text = "New Product Service"
+        '
+        'txtNPSLaborCost
+        '
+        Me.txtNPSLaborCost.AcceptsReturn = True
+        Me.txtNPSLaborCost.BackColor = System.Drawing.SystemColors.Window
+        Me.txtNPSLaborCost.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtNPSLaborCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNPSLaborCost.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtNPSLaborCost.Location = New System.Drawing.Point(183, 85)
+        Me.txtNPSLaborCost.MaxLength = 0
+        Me.txtNPSLaborCost.Name = "txtNPSLaborCost"
+        Me.txtNPSLaborCost.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtNPSLaborCost.Size = New System.Drawing.Size(101, 20)
+        Me.txtNPSLaborCost.TabIndex = 16
+        '
+        'txtNPSOneTimeCost
+        '
+        Me.txtNPSOneTimeCost.AcceptsReturn = True
+        Me.txtNPSOneTimeCost.BackColor = System.Drawing.SystemColors.Window
+        Me.txtNPSOneTimeCost.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtNPSOneTimeCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNPSOneTimeCost.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtNPSOneTimeCost.Location = New System.Drawing.Point(183, 109)
+        Me.txtNPSOneTimeCost.MaxLength = 0
+        Me.txtNPSOneTimeCost.Name = "txtNPSOneTimeCost"
+        Me.txtNPSOneTimeCost.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtNPSOneTimeCost.Size = New System.Drawing.Size(101, 20)
+        Me.txtNPSOneTimeCost.TabIndex = 17
+        '
+        'txtNPSMaterialCost
+        '
+        Me.txtNPSMaterialCost.AcceptsReturn = True
+        Me.txtNPSMaterialCost.BackColor = System.Drawing.SystemColors.Window
+        Me.txtNPSMaterialCost.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtNPSMaterialCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNPSMaterialCost.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtNPSMaterialCost.Location = New System.Drawing.Point(183, 61)
+        Me.txtNPSMaterialCost.MaxLength = 0
+        Me.txtNPSMaterialCost.Name = "txtNPSMaterialCost"
+        Me.txtNPSMaterialCost.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtNPSMaterialCost.Size = New System.Drawing.Size(101, 20)
+        Me.txtNPSMaterialCost.TabIndex = 15
+        '
+        'cboDurationMonths
+        '
+        Me.cboDurationMonths.BackColor = System.Drawing.SystemColors.Window
+        Me.cboDurationMonths.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboDurationMonths.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboDurationMonths.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboDurationMonths.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboDurationMonths.Location = New System.Drawing.Point(183, 13)
+        Me.cboDurationMonths.Name = "cboDurationMonths"
+        Me.cboDurationMonths.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboDurationMonths.Size = New System.Drawing.Size(101, 21)
+        Me.cboDurationMonths.TabIndex = 13
+        '
+        'cboCallBackHours
+        '
+        Me.cboCallBackHours.BackColor = System.Drawing.SystemColors.Window
+        Me.cboCallBackHours.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboCallBackHours.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboCallBackHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboCallBackHours.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboCallBackHours.Location = New System.Drawing.Point(183, 37)
+        Me.cboCallBackHours.Name = "cboCallBackHours"
+        Me.cboCallBackHours.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboCallBackHours.Size = New System.Drawing.Size(101, 21)
+        Me.cboCallBackHours.TabIndex = 14
+        '
+        'lblNPSLaborCosts
+        '
+        Me.lblNPSLaborCosts.BackColor = System.Drawing.SystemColors.Window
+        Me.lblNPSLaborCosts.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblNPSLaborCosts.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblNPSLaborCosts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNPSLaborCosts.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblNPSLaborCosts.Location = New System.Drawing.Point(31, 90)
+        Me.lblNPSLaborCosts.Name = "lblNPSLaborCosts"
+        Me.lblNPSLaborCosts.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblNPSLaborCosts.Size = New System.Drawing.Size(141, 18)
+        Me.lblNPSLaborCosts.TabIndex = 37
+        Me.lblNPSLaborCosts.Text = "Labor Cost (per month) :"
+        Me.lblNPSLaborCosts.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lblNPSOneTimeCost_
+        '
+        Me.lblNPSOneTimeCost_.BackColor = System.Drawing.SystemColors.Window
+        Me.lblNPSOneTimeCost_.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblNPSOneTimeCost_.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblNPSOneTimeCost_.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNPSOneTimeCost_.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblNPSOneTimeCost_.Location = New System.Drawing.Point(31, 114)
+        Me.lblNPSOneTimeCost_.Name = "lblNPSOneTimeCost_"
+        Me.lblNPSOneTimeCost_.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblNPSOneTimeCost_.Size = New System.Drawing.Size(141, 18)
+        Me.lblNPSOneTimeCost_.TabIndex = 34
+        Me.lblNPSOneTimeCost_.Text = "One Time Cost:"
+        Me.lblNPSOneTimeCost_.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lblDuration
+        '
+        Me.lblDuration.BackColor = System.Drawing.SystemColors.Window
+        Me.lblDuration.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblDuration.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblDuration.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDuration.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblDuration.Location = New System.Drawing.Point(31, 18)
+        Me.lblDuration.Name = "lblDuration"
+        Me.lblDuration.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblDuration.Size = New System.Drawing.Size(141, 18)
+        Me.lblDuration.TabIndex = 30
+        Me.lblDuration.Text = "Duration (months) :"
+        Me.lblDuration.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lblNPSMaterialCost
+        '
+        Me.lblNPSMaterialCost.BackColor = System.Drawing.SystemColors.Window
+        Me.lblNPSMaterialCost.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblNPSMaterialCost.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblNPSMaterialCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNPSMaterialCost.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblNPSMaterialCost.Location = New System.Drawing.Point(12, 66)
+        Me.lblNPSMaterialCost.Name = "lblNPSMaterialCost"
+        Me.lblNPSMaterialCost.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblNPSMaterialCost.Size = New System.Drawing.Size(160, 18)
+        Me.lblNPSMaterialCost.TabIndex = 31
+        Me.lblNPSMaterialCost.Text = "Material Cost (per month):"
+        Me.lblNPSMaterialCost.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lblCallBackHours
+        '
+        Me.lblCallBackHours.BackColor = System.Drawing.SystemColors.Window
+        Me.lblCallBackHours.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblCallBackHours.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblCallBackHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCallBackHours.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblCallBackHours.Location = New System.Drawing.Point(31, 42)
+        Me.lblCallBackHours.Name = "lblCallBackHours"
+        Me.lblCallBackHours.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblCallBackHours.Size = New System.Drawing.Size(141, 18)
+        Me.lblCallBackHours.TabIndex = 29
+        Me.lblCallBackHours.Text = "Call Back (hours) :"
+        Me.lblCallBackHours.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'txtOCPL
+        '
+        Me.txtOCPL.AcceptsReturn = True
+        Me.txtOCPL.BackColor = System.Drawing.SystemColors.Window
+        Me.txtOCPL.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtOCPL.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtOCPL.Location = New System.Drawing.Point(1371, 206)
+        Me.txtOCPL.MaxLength = 0
+        Me.txtOCPL.Name = "txtOCPL"
+        Me.txtOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtOCPL.Size = New System.Drawing.Size(101, 20)
+        Me.txtOCPL.TabIndex = 99
+        '
+        'lblOCPL
+        '
+        Me.lblOCPL.BackColor = System.Drawing.SystemColors.Window
+        Me.lblOCPL.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblOCPL.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOCPL.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblOCPL.Location = New System.Drawing.Point(1222, 209)
+        Me.lblOCPL.Name = "lblOCPL"
+        Me.lblOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblOCPL.Size = New System.Drawing.Size(138, 18)
+        Me.lblOCPL.TabIndex = 100
+        Me.lblOCPL.Text = "OCPL ($ in Millions) :"
+        Me.lblOCPL.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'CM_MAIN_frm
         '
@@ -1853,10 +2060,14 @@ Partial Class CM_MAIN_frm
         Me.BackColor = System.Drawing.SystemColors.Window
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.ClientSize = New System.Drawing.Size(1452, 795)
+        Me.ClientSize = New System.Drawing.Size(1484, 795)
+        Me.Controls.Add(Me.txtOCPL)
+        Me.Controls.Add(Me.lblOCPL)
+        Me.Controls.Add(Me.NewProductService_fra)
         Me.Controls.Add(Me.BuildingInformation_fra)
         Me.Controls.Add(Me.Equipment_fra)
         Me.Controls.Add(Me.Menu_pic)
+        Me.Controls.Add(Me.fraCode)
         Me.Controls.Add(Me.StatusBar1)
         Me.ForeColor = System.Drawing.SystemColors.WindowText
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -1880,6 +2091,8 @@ Partial Class CM_MAIN_frm
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Equipment_fra.ResumeLayout(False)
+        Me.NewProductService_fra.ResumeLayout(False)
+        Me.NewProductService_fra.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1986,5 +2199,18 @@ Partial Class CM_MAIN_frm
     Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
     Public WithEvents chkEngineeringSurvey As System.Windows.Forms.CheckBox
     Private WithEvents btnAdd As System.Windows.Forms.Button
+    Public WithEvents NewProductService_fra As System.Windows.Forms.GroupBox
+    Public WithEvents txtNPSLaborCost As System.Windows.Forms.TextBox
+    Public WithEvents txtNPSOneTimeCost As System.Windows.Forms.TextBox
+    Public WithEvents txtNPSMaterialCost As System.Windows.Forms.TextBox
+    Public WithEvents cboDurationMonths As System.Windows.Forms.ComboBox
+    Public WithEvents cboCallBackHours As System.Windows.Forms.ComboBox
+    Public WithEvents lblNPSLaborCosts As System.Windows.Forms.Label
+    Public WithEvents lblNPSOneTimeCost_ As System.Windows.Forms.Label
+    Public WithEvents lblDuration As System.Windows.Forms.Label
+    Public WithEvents lblNPSMaterialCost As System.Windows.Forms.Label
+    Public WithEvents lblCallBackHours As System.Windows.Forms.Label
+    Public WithEvents txtOCPL As System.Windows.Forms.TextBox
+    Public WithEvents lblOCPL As System.Windows.Forms.Label
 #End Region
 End Class
