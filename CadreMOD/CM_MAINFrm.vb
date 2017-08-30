@@ -9,7 +9,6 @@ Imports System.Globalization
 Imports System.IO
 Imports System.Windows.Forms
 Imports System.Collections.Generic
-Imports System.Linq
 Imports Newtonsoft.Json
 
 
@@ -36,6 +35,7 @@ Partial Friend Class CM_MAIN_frm
         typeStr = System.Type.GetType("System.String")
         typeInt = System.Type.GetType("System.Int64")
         typeBool = System.Type.GetType("System.Boolean")
+        Dim typeSingle As System.Type = System.Type.GetType("System.Single")
 
         dsCadre = New DataSet()
         dsCadre.EnforceConstraints = False
@@ -49,19 +49,19 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("Units", typeStr), _
                                                           New DataColumn("Material HQ", typeInt), _
                                                           New DataColumn("Material RL", typeInt), _
-                                                          New DataColumn("Sales Tax", typeInt), _
+                                                          New DataColumn("Tax", typeInt), _
                                                           New DataColumn("Total BDP Hours", typeInt), _
                                                           New DataColumn("Total Special Hours", typeInt), _
                                                           New DataColumn("Total Labor Hours", typeInt), _
                                                           New DataColumn("Overtime Hours Included", typeInt), _
-                                                          New DataColumn("Labor $", typeInt), _
+                                                          New DataColumn("Labor", typeInt), _
                                                           New DataColumn("SubContract Work", typeInt), _
                                                           New DataColumn("Misc Costs", typeInt), _
                                                           New DataColumn("Freight", typeInt), _
                                                           New DataColumn("NPS Cost", typeInt), _
                                                           New DataColumn("Total Bank Cost", typeInt), _
-                                                          New DataColumn("Project C1%", typeInt), _
-                                                          New DataColumn("Bank Sell Price", typeInt), _
+                                                          New DataColumn("C1", typeSingle), _
+                                                          New DataColumn("Sell Price", typeInt), _
                                                           New DataColumn("Tax Rate", typeInt), _
                                                           New DataColumn("Labor Rate", typeInt)
                                                          })
@@ -82,19 +82,19 @@ Partial Friend Class CM_MAIN_frm
                                                         New DataColumn("Award", typeStr), _
                                                         New DataColumn("Material HQ", typeInt), _
                                                         New DataColumn("Material RL", typeInt), _
-                                                        New DataColumn("Sales Tax", typeInt), _
+                                                        New DataColumn("Tax", typeInt), _
                                                         New DataColumn("Total BDP Hours", typeInt), _
                                                         New DataColumn("Total Special Hours", typeInt), _
                                                         New DataColumn("Total Labor Hours", typeInt), _
                                                         New DataColumn("Overtime Hours Included", typeInt), _
-                                                        New DataColumn("Labor $", typeInt), _
+                                                        New DataColumn("Labor", typeInt), _
                                                         New DataColumn("SubContract Work", typeInt), _
                                                         New DataColumn("Misc Costs", typeInt), _
                                                         New DataColumn("Freight", typeInt), _
                                                         New DataColumn("NPS Cost", typeInt), _
                                                         New DataColumn("Total Bank Cost", typeInt), _
-                                                        New DataColumn("Project C1%", typeInt), _
-                                                        New DataColumn("Bank Sell Price", typeInt), _
+                                                        New DataColumn("C1", typeSingle), _
+                                                        New DataColumn("Sell Price", typeInt), _
                                                         New DataColumn("Tax Rate", typeInt), _
                                                         New DataColumn("Labor Rate", typeInt), _
                                                         New DataColumn("Comment", typeStr)
@@ -118,19 +118,19 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("Merge", typeStr), _
                                                       New DataColumn("Material HQ", typeInt), _
                                                      New DataColumn("Material RL", typeInt), _
-                                                     New DataColumn("Sales Tax", typeInt), _
+                                                     New DataColumn("Tax", typeInt), _
                                                      New DataColumn("Total BDP Hours", typeInt), _
                                                      New DataColumn("Total Special Hours", typeInt), _
                                                      New DataColumn("Total Labor Hours", typeInt), _
                                                      New DataColumn("Overtime Hours Included", typeInt), _
-                                                     New DataColumn("Labor $", typeInt), _
+                                                     New DataColumn("Labor", typeInt), _
                                                      New DataColumn("SubContract Work", typeInt), _
                                                      New DataColumn("Misc Costs", typeInt), _
                                                      New DataColumn("Freight", typeInt), _
                                                      New DataColumn("NPS Cost", typeInt), _
                                                      New DataColumn("Total Bank Cost", typeInt), _
-                                                     New DataColumn("Project C1%", typeInt), _
-                                                     New DataColumn("Bank Sell Price", typeInt), _
+                                                     New DataColumn("C1", typeSingle), _
+                                                     New DataColumn("Sell Price", typeInt), _
                                                      New DataColumn("Tax Rate", typeInt), _
                                                      New DataColumn("Labor Rate", typeInt), _
                                                        New DataColumn("Comment", typeStr)
@@ -238,6 +238,7 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.VerticalScrollBar.Renderer = Nothing
         FpSpread1.VisualStyles = FarPoint.Win.VisualStyles.Off
 
+
         'Init Spread
         With FpSpread1.ActiveSheet
             .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
@@ -256,6 +257,12 @@ Partial Friend Class CM_MAIN_frm
         End With
 
 
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType()
+        percentType.DecimalPlaces = 1
+
+        Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
+        numberType.DecimalPlaces = 1
+       
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
@@ -263,6 +270,7 @@ Partial Friend Class CM_MAIN_frm
         currencyType.ShowSeparator = True
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
+
 
         ' FpSpread1.Sheets(0).Rows(1).Locked = True
         'FpSpread1.Sheets(0).Rows(1).BackColor = Color.LightGray
@@ -343,6 +351,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 21).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 22).CellType = currencyType
 
+            FpSpread1.ActiveSheet.Cells(i, 19).CellType = percentType
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 40
@@ -407,8 +416,9 @@ Partial Friend Class CM_MAIN_frm
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
         CurrentBuildingInformationFrameHeight = BuildingInformation_fra.Height
         CurrentEquipmentFrameHeight = Equipment_fra.Height
-        Relocate_Equipment_Frame()
 
+        Relocate_Equipment_Frame()
+        SizeTotalsForm()
         LoadTopOfForm()
 
     End Sub
@@ -454,6 +464,8 @@ Partial Friend Class CM_MAIN_frm
         UseCurRow = e.Row
         UseCurCol = e.Column
 
+        ProcessTotals()
+
     End Sub
 
 
@@ -469,6 +481,10 @@ Partial Friend Class CM_MAIN_frm
         currencyType.ShowSeparator = True
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
+
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+        percentType.DecimalPlaces = 1
+
 
         Dim ckbxcell As New FarPoint.Win.Spread.CellType.CheckBoxCellType()
         ' ckbxcell.TextTrue = "Included In Bid"
@@ -530,6 +546,8 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(23).CellType = currencyType
                 .Columns(24).CellType = currencyType
 
+                .Columns(21).CellType = percentType
+
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
 
@@ -588,6 +606,8 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(22).CellType = currencyType
                 .Columns(23).CellType = currencyType
                 .Columns(24).CellType = currencyType
+
+                .Columns(21).CellType = percentType
 
 
                 .Columns(5).BackColor = Color.LightGoldenrodYellow
@@ -1332,7 +1352,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
     Private Sub FpSpread1_SelectionChanging(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
 
-        e.Cancel = True
+        ProcessTotals()
 
     End Sub
 
@@ -1497,80 +1517,146 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub LoadTopOfForm()
-        Dim foundRows() As Data.DataRow
+        Dim row As Data.DataRow
+        Try
+            If dtBuildingInfo.Rows.Count = 1 Then
+                row = dtBuildingInfo.Rows(0)  ' there should only be one row.  unless new estimate
 
-        foundRows = dtBuildingInfo.Select("1 = 1")  ' there should only be one row.  always true
-        If foundRows.Count = 1 Then
-            cboBuildingType.SelectedItem = foundRows(0)("building_type")
-            cboSalesRep.SelectedItem = foundRows(0).Item("sales_rep").ToString
-            cboSalesOffice.SelectedItem = foundRows(0).Item("Sales_Office").ToString
-            cboInstallingOffice.SelectedItem = foundRows(0).Item("installing_office").ToString
-            cboServiceOffice.SelectedItem = foundRows(0).Item("service_office").ToString
+                cboBuildingType.SelectedItem = row("building_type")
+                cboSalesRep.SelectedItem = row.Item("sales_rep").ToString
+                cboSalesOffice.SelectedItem = row.Item("Sales_Office").ToString
+                cboInstallingOffice.SelectedItem = row.Item("installing_office").ToString
+                cboServiceOffice.SelectedItem = row.Item("service_office").ToString
 
-            cboStatus.SelectedItem = foundRows(0).Item("status").ToString
-            cboProbabilityOfSale.SelectedItem = foundRows(0).Item("probability_of_sale").ToString
-            txtBidDate.Text = foundRows(0).Item("bid_date").ToString
-            cboNationalAccount.SelectedItem = foundRows(0).Item("national_account").ToString
+                cboStatus.SelectedItem = row.Item("status").ToString
+                cboProbabilityOfSale.SelectedItem = row.Item("probability_of_sale").ToString
+                txtBidDate.Text = row.Item("bid_date").ToString
+                cboNationalAccount.SelectedItem = row.Item("national_account").ToString
 
-            cboTaxCode.SelectedItem = foundRows(0).Item("tax_code").ToString
-            cboSeismicZone.SelectedItem = foundRows(0).Item("seismic_zone").ToString
-            cboLocalCode.SelectedItem = foundRows(0).Item("local_code").ToString
-            cboANSICode.SelectedItem = foundRows(0).Item("ansi_csa_b44_code").ToString
+                cboTaxCode.SelectedItem = row.Item("tax_code").ToString
+                cboSeismicZone.SelectedItem = row.Item("seismic_zone").ToString
+                cboLocalCode.SelectedItem = row.Item("local_code").ToString
+                cboANSICode.SelectedItem = row.Item("ansi_csa_b44_code").ToString
 
-            cboNFPA13CodeYear.SelectedItem = foundRows(0).Item("nfpa_code").ToString
-            txtSDSlevel.Text = foundRows(0).Item("sds_level").ToString
+                cboNFPA13CodeYear.SelectedItem = row.Item("nfpa_code").ToString
+                txtSDSlevel.Text = row.Item("sds_level").ToString
 
-            chkMajorProject.CheckState = IIf(foundRows(0).Item("major_project"), CheckState.Checked, CheckState.Unchecked)
-            chkOSHPD.CheckState = IIf(foundRows(0).Item("oshpd"), CheckState.Checked, CheckState.Unchecked)
-            chkDSA.CheckState = IIf(foundRows(0).Item("dsa"), CheckState.Checked, CheckState.Unchecked)
-            chkHeadDetection.CheckState = IIf(foundRows(0).Item("head_detection"), CheckState.Checked, CheckState.Unchecked)
-            chkEngineeringSurvey.CheckState = IIf(foundRows(0).Item("engineering_survey"), CheckState.Checked, CheckState.Unchecked)
+                chkMajorProject.CheckState = IIf(row.Item("major_project"), CheckState.Checked, CheckState.Unchecked)
+                chkOSHPD.CheckState = IIf(row.Item("oshpd"), CheckState.Checked, CheckState.Unchecked)
+                chkDSA.CheckState = IIf(row.Item("dsa"), CheckState.Checked, CheckState.Unchecked)
+                chkHeadDetection.CheckState = IIf(row.Item("head_detection"), CheckState.Checked, CheckState.Unchecked)
+                chkEngineeringSurvey.CheckState = IIf(row.Item("engineering_survey"), CheckState.Checked, CheckState.Unchecked)
 
-            cboDurationMonths.SelectedItem = foundRows(0).Item("nps_duration").ToString
-            cboCallBackHours.SelectedItem = foundRows(0).Item("nps_call_back").ToString
-            txtNPSMaterialCost.Text = foundRows(0).Item("nps_material_cost").ToString
+                cboDurationMonths.SelectedItem = row.Item("nps_duration").ToString
+                cboCallBackHours.SelectedItem = row.Item("nps_call_back").ToString
+                txtNPSMaterialCost.Text = row.Item("nps_material_cost").ToString
 
-            txtNPSLaborCost.Text = foundRows(0).Item("nps_labor_cost").ToString
-            txtNPSOneTimeCost.Text = foundRows(0).Item("nps_one_time_cost").ToString
-            txtOCPL.Text = foundRows(0).Item("ocpl").ToString
-        Else
+                txtNPSLaborCost.Text = row.Item("nps_labor_cost").ToString
+                txtNPSOneTimeCost.Text = row.Item("nps_one_time_cost").ToString
+                txtOCPL.Text = row.Item("ocpl").ToString
+            Else
+                row = dtBuildingInfo.NewRow
+            End If
+
+        Catch ex As Exception
             MessageBox.Show("Error Loading Building Info, Codes and NPS", "Error Loading From Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End If
+        End Try
+
 
     End Sub
 
     Private Sub SaveTopOfForm()
-        Dim my_row() As Data.DataRow
+        Dim row As DataRow
 
-        my_row = dtBuildingInfo.Select("1 = 1")
+        Try
+            If dtBuildingInfo.Rows.Count = 0 Then   ' new row should have been created, but just in case
+                row = dtBuildingInfo.NewRow
+            Else
+                row = dtBuildingInfo.Rows(0)
+            End If
 
-        my_row(0)("building_type") = cboBuildingType.Text
-        my_row(0)("major_project") = chkMajorProject.CheckState
-        my_row(0)("sales_rep") = cboSalesRep.SelectedText
-        my_row(0)("sales_office") = cboSalesOffice.Text
-        my_row(0)("installing_office") = cboInstallingOffice.Text
-        my_row(0)("service_office") = cboServiceOffice.Text
-        my_row(0)("status") = cboStatus.Text
-        my_row(0)("probability_of_sale") = cboProbabilityOfSale.Text
-        my_row(0)("bid_date") = txtBidDate.Text
-        my_row(0)("national_account") = cboNationalAccount.Text
-        my_row(0)("tax_code") = cboTaxCode.Text
-        my_row(0)("seismic_zone") = cboSeismicZone.Text
-        my_row(0)("local_code") = cboLocalCode.Text
-        my_row(0)("ansi_csa_b44_code") = cboANSICode.Text
-        my_row(0)("nfpa_code") = cboNFPA13CodeYear.Text
-        my_row(0)("sds_level") = txtSDSlevel.Text
-        my_row(0)("oshpd") = chkOSHPD.CheckState
-        my_row(0)("dsa") = chkDSA.CheckState
-        my_row(0)("head_detection") = chkDSA.CheckState
-        my_row(0)("engineering_survey") = chkEngineeringSurvey.CheckState
-        my_row(0)("nps_duration") = cboDurationMonths.Text
-        my_row(0)("nps_call_back") = cboCallBackHours.Text
-        my_row(0)("nps_material_cost") = txtNPSMaterialCost.Text
-        my_row(0)("nps_labor_cost") = txtNPSLaborCost.Text
-        my_row(0)("nps_one_time_cost") = txtNPSOneTimeCost.Text
-        my_row(0)("ocpl") = txtOCPL.Text
+            row("building_type") = cboBuildingType.Text
+            row("major_project") = chkMajorProject.CheckState
+            row("sales_rep") = cboSalesRep.SelectedText
+            row("sales_office") = cboSalesOffice.Text
+            row("installing_office") = cboInstallingOffice.Text
+            row("service_office") = cboServiceOffice.Text
+            row("status") = cboStatus.Text
+            row("probability_of_sale") = cboProbabilityOfSale.Text
+            row("bid_date") = txtBidDate.Text
+            row("national_account") = cboNationalAccount.Text
+            row("tax_code") = cboTaxCode.Text
+            row("seismic_zone") = cboSeismicZone.Text
+            row("local_code") = cboLocalCode.Text
+            row("ansi_csa_b44_code") = cboANSICode.Text
+            row("nfpa_code") = cboNFPA13CodeYear.Text
+            row("sds_level") = txtSDSlevel.Text
+            row("oshpd") = chkOSHPD.CheckState
+            row("dsa") = chkDSA.CheckState
+            row("head_detection") = chkDSA.CheckState
+            row("engineering_survey") = chkEngineeringSurvey.CheckState
+            row("nps_duration") = cboDurationMonths.Text
+            row("nps_call_back") = cboCallBackHours.Text
+            row("nps_material_cost") = txtNPSMaterialCost.Text
+            row("nps_labor_cost") = txtNPSLaborCost.Text
+            row("nps_one_time_cost") = txtNPSOneTimeCost.Text
+            row("ocpl") = txtOCPL.Text
+
+        Catch ex As Exception
+            MessageBox.Show("Error saving data at top of Contract Management Screen", "Error Saving to Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    
+    Private Sub CM_MAIN_frm_Activated(sender As System.Object, e As System.EventArgs) Handles MyBase.Activated
+        ProcessTotals()
+        sprTotals.Refresh()
+    End Sub
+
+    Private Sub ProcessTotals()
+        Dim dblProco As Double, dblC1Sum As Double, dblC1 As Double, dblSellPrice As Double
+
+        For Each row As DataRow In dtSummaryGroup.Rows
+            dblProco += row("Total Bank Cost")
+            dblC1Sum += row("C1")
+            dblSellPrice += row("Sell Price")
+        Next
+        '
+        dblC1 = Math.Round((dblC1Sum / dtSummaryGroup.Rows.Count), 3)
+      
+        sprTotals.ActiveSheet.Cells(0, 12).Text = FormatCurrency(dblProco)
+        sprTotals.ActiveSheet.Cells(0, 13).Text = FormatPercent(dblC1, 1)
+        sprTotals.ActiveSheet.Cells(0, 14).Text = FormatCurrency(dblSellPrice)
+
+        sprTotals.Refresh()
 
     End Sub
 
+    Private Sub SizeTotalsForm()
+
+        
+        sprTotals.ActiveSheet.Cells(0, 0).Column.Width = 58         'material_HQ
+        sprTotals.ActiveSheet.Cells(0, 1).Column.Width = 60         'material_RL
+        sprTotals.ActiveSheet.Cells(0, 2).Column.Width = 60         'sales tax
+        sprTotals.ActiveSheet.Cells(0, 3).Column.Width = 60         'total BDP Hours
+        sprTotals.ActiveSheet.Cells(0, 4).Column.Width = 60        'total special hours
+        sprTotals.ActiveSheet.Cells(0, 5).Column.Width = 60        'total labor hours
+        sprTotals.ActiveSheet.Cells(0, 6).Column.Width = 60        'Overtime hours included
+        sprTotals.ActiveSheet.Cells(0, 7).Column.Width = 60        'labor $
+        sprTotals.ActiveSheet.Cells(0, 8).Column.Width = 70        'Subcontract work
+        sprTotals.ActiveSheet.Cells(0, 9).Column.Width = 60        'mics costs
+        sprTotals.ActiveSheet.Cells(0, 10).Column.Width = 60        'freight
+        sprTotals.ActiveSheet.Cells(0, 11).Column.Width = 60        'NPS Cost
+        sprTotals.ActiveSheet.Cells(0, 12).Column.Width = 60        'total bank cost
+        sprTotals.ActiveSheet.Cells(0, 13).Column.Width = 60        'project c1
+        sprTotals.ActiveSheet.Cells(0, 14).Column.Width = 60        'bank sell price
+        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 60        'tax rate
+        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 60        'Labor rate
+
+        sprTotals.ActiveSheet.Rows(0).Locked = True
+
+      
+    End Sub
+
+   
 End Class

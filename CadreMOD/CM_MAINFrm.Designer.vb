@@ -70,6 +70,9 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
+        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim NumberCellType1 As FarPoint.Win.Spread.CellType.NumberCellType = New FarPoint.Win.Spread.CellType.NumberCellType()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
@@ -147,6 +150,8 @@ Partial Class CM_MAIN_frm
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
         Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
         Me.Equipment_fra = New System.Windows.Forms.GroupBox()
+        Me.sprTotals = New FarPoint.Win.Spread.FpSpread()
+        Me.sprTotals_Sheet1 = New FarPoint.Win.Spread.SheetView()
         Me.btnAdd = New System.Windows.Forms.Button()
         Me.btnPrint = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -176,6 +181,8 @@ Partial Class CM_MAIN_frm
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Equipment_fra.SuspendLayout()
+        CType(Me.sprTotals, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sprTotals_Sheet1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.NewProductService_fra.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -1713,11 +1720,13 @@ Partial Class CM_MAIN_frm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FpSpread1.Location = New System.Drawing.Point(8, 61)
+        Me.FpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
+        Me.FpSpread1.Location = New System.Drawing.Point(6, 67)
         Me.FpSpread1.Name = "FpSpread1"
         Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
-        Me.FpSpread1.Size = New System.Drawing.Size(1583, 413)
+        Me.FpSpread1.Size = New System.Drawing.Size(1478, 407)
         Me.FpSpread1.TabIndex = 11
+        Me.FpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         '
         'Equipment_fra
         '
@@ -1725,6 +1734,7 @@ Partial Class CM_MAIN_frm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.Equipment_fra.Controls.Add(Me.sprTotals)
         Me.Equipment_fra.Controls.Add(Me.btnAdd)
         Me.Equipment_fra.Controls.Add(Me.btnPrint)
         Me.Equipment_fra.Controls.Add(Me.Button3)
@@ -1744,6 +1754,191 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.TabIndex = 43
         Me.Equipment_fra.TabStop = False
         Me.Equipment_fra.Text = "Equipment "
+        '
+        'sprTotals
+        '
+        Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
+        Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
+        Me.sprTotals.HorizontalScrollBar.Name = ""
+        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
+        Me.sprTotals.HorizontalScrollBar.TabIndex = 0
+        Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
+        Me.sprTotals.Location = New System.Drawing.Point(6, 49)
+        Me.sprTotals.Name = "sprTotals"
+        Me.sprTotals.ScrollBarTrackPolicy = FarPoint.Win.Spread.ScrollBarTrackPolicy.Both
+        Me.sprTotals.ScrollTipPolicy = FarPoint.Win.Spread.ScrollTipPolicy.Both
+        Me.sprTotals.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.sprTotals_Sheet1})
+        Me.sprTotals.Size = New System.Drawing.Size(1398, 21)
+        Me.sprTotals.Skin = FarPoint.Win.Spread.DefaultSpreadSkins.ArcticSea
+        Me.sprTotals.TabIndex = 87
+        Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
+        Me.sprTotals.VerticalScrollBar.Name = ""
+        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
+        Me.sprTotals.VerticalScrollBar.TabIndex = 11
+        Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
+        '
+        'sprTotals_Sheet1
+        '
+        Me.sprTotals_Sheet1.Reset()
+        Me.sprTotals_Sheet1.SheetName = "Sheet1"
+        'Formulas and custom names must be loaded with R1C1 reference style
+        Me.sprTotals_Sheet1.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.R1C1
+        Me.sprTotals_Sheet1.ColumnCount = 23
+        Me.sprTotals_Sheet1.RowCount = 1
+        Me.sprTotals_Sheet1.Cells.Get(0, 0).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold)
+        Me.sprTotals_Sheet1.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 0).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 1).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 1).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 1).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 1).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 1).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 2).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 2).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 2).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 2).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 2).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 3).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 3).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 3).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 3).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 3).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 4).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 4).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 4).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 4).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 4).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 5).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 5).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 5).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 5).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 5).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 6).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 6).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 6).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 6).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 6).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 7).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 7).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 7).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 7).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 7).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 8).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 8).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 8).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 8).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 8).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 9).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 9).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 9).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 9).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 9).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 10).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 10).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 10).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 10).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 10).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 11).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 11).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 11).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 11).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 11).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 12).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 12).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 12).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 12).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 12).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 13).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 13).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 13).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 13).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 13).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 14).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 14).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 14).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 14).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 14).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 15).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 15).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 15).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 15).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 15).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).BackColor = System.Drawing.Color.Cyan
+        NumberCellType1.DecimalPlaces = 2
+        NumberCellType1.DecimalSeparator = "."
+        NumberCellType1.MaximumValue = 9999.99R
+        NumberCellType1.MinimumValue = -9999.99R
+        NumberCellType1.ShowSeparator = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).CellType = NumberCellType1
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 17).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.ColumnFooter.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
+        Me.sprTotals_Sheet1.ColumnFooter.DefaultStyle.Parent = "ColumnHeaderArcticSea"
+        Me.sprTotals_Sheet1.ColumnFooterSheetCornerStyle.NoteIndicatorColor = System.Drawing.Color.Red
+        Me.sprTotals_Sheet1.ColumnFooterSheetCornerStyle.Parent = "CornerArcticSea"
+        Me.sprTotals_Sheet1.ColumnHeader.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
+        Me.sprTotals_Sheet1.ColumnHeader.DefaultStyle.Parent = "ColumnHeaderArcticSea"
+        Me.sprTotals_Sheet1.ColumnHeader.Rows.Get(0).Height = 27.0!
+        Me.sprTotals_Sheet1.ColumnHeader.Visible = False
+        Me.sprTotals_Sheet1.Columns.Get(0).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(1).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(2).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(3).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(4).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(5).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(6).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(7).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(8).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(9).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(10).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(11).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(12).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(13).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(14).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(15).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(16).Width = 38.0!
+        Me.sprTotals_Sheet1.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
+        Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+        Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Value = "Summary Totals"
+        Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.RowHeader.Columns.Default.Resizable = False
+        Me.sprTotals_Sheet1.RowHeader.Columns.Get(0).Width = 363.0!
+        Me.sprTotals_Sheet1.RowHeader.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
+        Me.sprTotals_Sheet1.RowHeader.DefaultStyle.Parent = "RowHeaderArcticSea"
+        Me.sprTotals_Sheet1.Rows.Get(0).BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sprTotals_Sheet1.Rows.Get(0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold)
+        Me.sprTotals_Sheet1.Rows.Get(0).Height = 17.0!
+        Me.sprTotals_Sheet1.Rows.Get(0).Label = "Summary Totals"
+        Me.sprTotals_Sheet1.SheetCornerStyle.NoteIndicatorColor = System.Drawing.Color.Red
+        Me.sprTotals_Sheet1.SheetCornerStyle.Parent = "CornerArcticSea"
+        Me.sprTotals_Sheet1.VerticalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
+        Me.sprTotals_Sheet1.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.A1
         '
         'btnAdd
         '
@@ -2091,6 +2286,8 @@ Partial Class CM_MAIN_frm
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Equipment_fra.ResumeLayout(False)
+        CType(Me.sprTotals, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sprTotals_Sheet1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.NewProductService_fra.ResumeLayout(False)
         Me.NewProductService_fra.PerformLayout()
         Me.ResumeLayout(False)
@@ -2212,5 +2409,7 @@ Partial Class CM_MAIN_frm
     Public WithEvents lblCallBackHours As System.Windows.Forms.Label
     Public WithEvents txtOCPL As System.Windows.Forms.TextBox
     Public WithEvents lblOCPL As System.Windows.Forms.Label
+    Friend WithEvents sprTotals As FarPoint.Win.Spread.FpSpread
+    Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
 #End Region
 End Class
