@@ -4,7 +4,7 @@
     Public Const tCM_ADDRESS_TITLE As String = "Address"
 
 
-    Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification - GIT\CadreMOD"
+    Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification\CadreMOD"
     Public Const MOVE_FIRST As Integer = 0
     Public Const MOVE_NEXT As Integer = 1
     Public Const MOVE_PREVIOUS As Integer = 2
@@ -127,4 +127,37 @@
     Public Const FINISH_SILVER As String = "Silver"
     Public Const FINISH_CHROME As String = "Chrome"
     Public Const FINISH_GLASS As String = "Glass"
+
+
+    ' Operational Constants
+    Public Const APPLICATION_INI_FILE_NAME As String = "CadreMO.INI"
+
+    ' From CRM.vb
+    Public Const Status_OpportunityInProgress As String = "2 - Opp In Progress"
+    Public Const Status_OpportunityOnHold As String = "2 - Opp On Hold"
+    Public Const Status_OpportunityLost As String = "2 - Opp Lost"
+    Public Const Status_OpportunityCancelled As String = "2 - Opp Cancelled"
+    Public Const Status_OfferInProgress As String = "3 - Offer In Progress"
+    Public Const Status_OfferCancelled As String = "3 - Offer(s) Cancelled"
+    Public Const Status_OfferSubmitted As String = "4 - Offer Submitted"
+    Public Const Status_OfferOnHold As String = "4 - Offer On Hold"
+    Public Const Status_OfferWon As String = "4 - Offer Won"
+    Public Const Status_OfferLost As String = "4 - Offer Lost"
+
+    Public Const NOTES_BOOKING_DATABASE As String = "cdreup.nsf"
+    Public Const NOTES_BOOKING_DATABASE_TEST As String = "testCdreup.nsf"
+
+    'Bid Types
+    Public Const BID_TYPE_CAPITAL_PLAN As String = "Capital Plan"
+    Public Const BID_TYPE_FIRM_BID As String = "Firm Bid"
+
+    Public Const USER_DIRECTOR As String = "YGNSLSPDRZNA" ' C CRM WebClient Business Role   Sales Director
+    Public Const USER_MANAGER As String = "YGNSLSPMGZNA" ' C CRM WebClient Business Role   Sales Manager
+    Public Const USER_SALES As String = "YGNSLSPROZNA" ' C CRM WebClient Business Role   Sales Professional
+    Public Const USER_ENGINEER As String = "YGNSLSENGZNA" ' C CRM WebClient Business Role   Engineer
+
+    Public Const USER_QM_SALES As String = "YGC_SALPRO"
+    Public Const USER_QM_DIRECTOR As String = "YGC_SALDIR"
+    Public Const USER_QM_MANAGER As String = "YGC_SALMAN"
+
 End Module

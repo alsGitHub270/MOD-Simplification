@@ -167,8 +167,6 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("sales_office", typeStr), _
                                                           New DataColumn("installing_office", typeStr), _
                                                           New DataColumn("service_office", typeStr), _
-                                                          New DataColumn("status", typeStr), _
-                                                          New DataColumn("probability_of_sale", typeStr), _
                                                           New DataColumn("bid_date", typeStr), _
                                                           New DataColumn("national_account", typeStr), _
                                                           New DataColumn("tax_code", typeStr), _
@@ -1273,6 +1271,7 @@ Partial Friend Class CM_MAIN_frm
         cboProbabilityOfSale.Items.Add("51-75%")
         cboProbabilityOfSale.Items.Add("76-99%")
         cboProbabilityOfSale.Items.Add("100%")
+        AssignListIndex_First(cboProbabilityOfSale, Contracts.ProbabilityOfSale)
 
         cboDurationMonths.Items.Clear()
         cboDurationMonths.Items.Add("0")
@@ -1280,17 +1279,44 @@ Partial Friend Class CM_MAIN_frm
         cboDurationMonths.Items.Add("6")
         cboDurationMonths.Items.Add("9")
         cboDurationMonths.Items.Add("12")
-        'If Contracts.NationalAccount Then
-        '    DurationMonths_cmb.Items.Add("15")
-        '    DurationMonths_cmb.Items.Add("18")
-        '    DurationMonths_cmb.Items.Add("21")
-        '    DurationMonths_cmb.Items.Add("24")
-        'End If
+        If Contracts.NationalAccount Then
+            cboDurationMonths.Items.Add("15")
+            cboDurationMonths.Items.Add("18")
+            cboDurationMonths.Items.Add("21")
+            cboDurationMonths.Items.Add("24")
+        End If
 
         cboCallBackHours.Items.Clear()
         cboCallBackHours.Items.Add("0")
         cboCallBackHours.Items.Add("8")
         cboCallBackHours.Items.Add("24")
+
+        cboStatus.Items.Clear()
+        If Not String.IsNullOrEmpty(Contracts.CRM_Status) Then
+            cboStatus.Items.Add(Contracts.CRM_Status)
+        End If
+        Select Case Contracts.BidType
+            Case BID_TYPE_CAPITAL_PLAN
+                cboStatus.Items.Add(Status_OpportunityInProgress)
+                cboStatus.Items.Add(Status_OpportunityOnHold)
+                cboStatus.Items.Add(Status_OpportunityLost)
+                cboStatus.Items.Add(Status_OpportunityCancelled)
+            Case Else
+                Select Case Contracts.Status
+                    Case Status_OfferSubmitted, Status_OfferOnHold, Status_OfferWon, Status_OfferLost
+                        cboStatus.Items.Add(Status_OfferSubmitted)
+                        cboStatus.Items.Add(Status_OfferOnHold)
+                        cboStatus.Items.Add(Status_OfferWon)
+                        cboStatus.Items.Add(Status_OfferLost)
+                    Case Else
+                        cboStatus.Items.Add(Status_OfferInProgress)
+                        cboStatus.Items.Add(Status_OfferCancelled)
+                End Select
+        End Select
+        AssignListIndex_First(cboStatus, Contracts.Status)
+
+        Populate_SalesRep(Me.cboSalesRep)
+        AssignListIndex(cboSalesRep, Contracts.SalesRepName)
 
     End Sub
 
@@ -1528,8 +1554,8 @@ Partial Friend Class CM_MAIN_frm
                 cboInstallingOffice.SelectedItem = row.Item("installing_office").ToString
                 cboServiceOffice.SelectedItem = row.Item("service_office").ToString
 
-                cboStatus.SelectedItem = row.Item("status").ToString
-                cboProbabilityOfSale.SelectedItem = row.Item("probability_of_sale").ToString
+                'cboStatus.SelectedItem = row.Item("status").ToString
+                'cboProbabilityOfSale.SelectedItem = row.Item("probability_of_sale").ToString
                 txtBidDate.Text = row.Item("bid_date").ToString
                 cboNationalAccount.SelectedItem = row.Item("national_account").ToString
 
@@ -1581,8 +1607,8 @@ Partial Friend Class CM_MAIN_frm
             row("sales_office") = cboSalesOffice.Text
             row("installing_office") = cboInstallingOffice.Text
             row("service_office") = cboServiceOffice.Text
-            row("status") = cboStatus.Text
-            row("probability_of_sale") = cboProbabilityOfSale.Text
+            'row("status") = cboStatus.Text
+            'row("probability_of_sale") = cboProbabilityOfSale.Text
             row("bid_date") = txtBidDate.Text
             row("national_account") = cboNationalAccount.Text
             row("tax_code") = cboTaxCode.Text

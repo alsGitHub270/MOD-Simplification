@@ -1,4 +1,7 @@
-﻿Module General
+﻿Imports System.IO
+Imports System.Linq
+
+Module General
 
     Public Sub SelectInputArea(ByRef ThisControl As Object, ByRef ThisStartSel As Byte, ByRef ThisStartLen As Byte)
 
@@ -391,4 +394,211 @@ Query_Execute_Error:
         ReturnVal = UnitsInEstimate.GetUpperBound(0) + 1
         Return ReturnVal
     End Function
+
+    Public Function ConvertTwipsToPixels(ByVal UseCoordinate As Single) As Integer
+        Dim UseTwipsToPixels As Integer = UseCoordinate * 0.066666667
+
+        Return UseTwipsToPixels
+
+    End Function
+    Public Function ConvertPixelsToTwips(ByVal UseCoordinate As Single) As Integer
+        Dim UsePixelsToTwips As Integer = Conversion.Val(UseCoordinate / 0.066666667)
+
+        Return UsePixelsToTwips
+
+    End Function
+
+    Public Function TranslateOfficeNumber(ByVal sOfficeNumberOld As String, Optional ByVal bSalesOffice As Boolean = False, Optional ByVal bIgnoreShape As Boolean = False) As String
+        Dim sWhere As String = "[Office] = " & FixSQLString(sOfficeNumberOld)
+        Dim sNewOffice As String = "New Office"
+
+        TranslateOfficeNumber = sOfficeNumberOld
+        Select Case TranslateOfficeNumber
+            Case "0410", "0710"
+                TranslateOfficeNumber = "0610"
+            Case "1120"
+                TranslateOfficeNumber = "1110"
+            Case "0410, 0710"
+                TranslateOfficeNumber = "0610"
+            Case "1120"
+                TranslateOfficeNumber = "1110"
+            Case "1121", "1220", "1230"
+                TranslateOfficeNumber = "1210"
+            Case "1320"
+                TranslateOfficeNumber = "1311"
+            Case "1430"
+                TranslateOfficeNumber = "1410"
+            Case "1450"
+                TranslateOfficeNumber = "1440"
+            Case "1611", "1612", "1613", "1614"
+                TranslateOfficeNumber = "1610"
+            Case "1712", "1713", "1714", "1715", "1716", "1717", "1718", "1731"
+                TranslateOfficeNumber = "1730"
+            Case "1751", "1752", "1811", "1812"
+                TranslateOfficeNumber = "1750"
+            Case "0320", "2211", "2212", "2214"
+                TranslateOfficeNumber = "2210"
+            Case "2312", "2313"
+                TranslateOfficeNumber = "2310"
+            Case "2411", "2414", "2416", "2417"
+                TranslateOfficeNumber = "2410"
+            Case "2413"
+                TranslateOfficeNumber = "2540"
+            Case "2541"
+                TranslateOfficeNumber = "2543"
+            Case "2721"
+                TranslateOfficeNumber = "2720"
+            Case "2811"
+                TranslateOfficeNumber = "2810"
+            Case "2610"
+                TranslateOfficeNumber = "2812"
+            Case "2912"
+                TranslateOfficeNumber = "2911"
+            Case "3332"
+                TranslateOfficeNumber = "3330"
+            Case "3412", "3414", "3415", "3416", "3417"
+                TranslateOfficeNumber = "3410"
+            Case "3611"
+                TranslateOfficeNumber = "3610"
+            Case "3630"
+                TranslateOfficeNumber = "3631"
+            Case "3711"
+                TranslateOfficeNumber = "3710"
+            Case "3413"
+                TranslateOfficeNumber = "3810"
+            Case "4811", "4812", "4813", "6331"
+                TranslateOfficeNumber = "4810"
+            Case "4912"
+                TranslateOfficeNumber = "4910"
+            Case "5115"
+                TranslateOfficeNumber = "5110"
+            Case "5112", "5113", "5114"
+                TranslateOfficeNumber = "5111"
+            Case "5231"
+                TranslateOfficeNumber = "5230"
+            Case "5311", "5312", "5413"
+                TranslateOfficeNumber = "5310"
+            Case "5411", "5412", "6711"
+                TranslateOfficeNumber = "5410"
+            Case "5512"
+                TranslateOfficeNumber = "5511"
+            Case "5612"
+                TranslateOfficeNumber = "5610"
+            Case "5614"
+                TranslateOfficeNumber = "5611"
+            Case "5811"
+                TranslateOfficeNumber = "5810"
+            Case "5911", "1420"
+                TranslateOfficeNumber = "5910"
+            Case "6111-6112"
+                TranslateOfficeNumber = "6110"
+            Case "6113"
+                TranslateOfficeNumber = "6122"
+            Case "6435", "6436"
+                TranslateOfficeNumber = "6432"
+            Case "6642", "6433"
+                TranslateOfficeNumber = "6640"
+            Case "6712-6713"
+                TranslateOfficeNumber = "6710"
+            Case "8111", "8112"
+                TranslateOfficeNumber = "8110"
+            Case "8241"
+                TranslateOfficeNumber = "8240"
+            Case "8311", "8341"
+                TranslateOfficeNumber = "8310"
+            Case "4911", "4913", "8330"
+                TranslateOfficeNumber = "8312"
+            Case "8321"
+                TranslateOfficeNumber = "8320"
+            Case "8411", "8412"
+                TranslateOfficeNumber = "8410"
+            Case "2216"
+                TranslateOfficeNumber = "8520"
+            Case "8113", "8120", "8611", "8612"
+                TranslateOfficeNumber = "8610"
+            Case Else
+        End Select
+        If Not gbShape And Not bIgnoreShape Then
+            Exit Function
+        End If
+        'If Not bSalesOffice Then
+        '    'If String.IsNullOrEmpty(ProjectData.SalesOffice) Then
+        '    '    Exit Function
+        '    'End If
+        '    If ProjectData.SalesOffice.Length <> 4 Then
+        '        Exit Function
+        '    End If
+        '    If ProjectData.SalesOffice.Substring(0, 1) = "X" Then
+        '        Exit Function
+        '    End If
+        '    'If ProjectData.SalesOffice.Substring(0, 1) <> "9" Then
+        '    '    Exit Function
+        '    'End If
+        'End If
+
+
+        'If Not String.IsNullOrEmpty(sOfficeNumberOld) Then
+        '    If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, "MOD_OFFICE_SQL", sWhere, 0, sNewOffice) = RECORD_NOT_FOUND Then
+        '        TranslateOfficeNumber = sOfficeNumberOld
+        '    ElseIf sNewOffice <> "" Then
+        '        TranslateOfficeNumber = sNewOffice
+        '    End If
+        'End If
+
+        Static AppPath As String = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+        Static DbPath As String = Path.Combine(AppPath, "bin", "Options.accdb")
+
+        Static DbConnString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + DbPath + "';Persist Security Info=False;"
+
+
+
+    End Function
+
+    Public Function AssignListIndex_First(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
+        Dim result As Boolean = False
+
+        If Not AssignListIndex(ThisListBox, ThisValue) Then
+            If [ThisListBox].Items.Count > 0 Then
+                result = True
+                [ThisListBox].SelectedIndex = 0
+                DataChangedByProgram = True
+            End If
+        End If
+        Return result
+
+    End Function
+
+
+    Public Function AssignListIndex(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
+        Dim result As Boolean = False
+
+        If [ThisListBox].Items.Count > 0 Then
+            For i As Integer = 0 To ([ThisListBox].Items.Count - 1)
+                If [ThisListBox].Items(i).ToString = ThisValue Then
+                    [ThisListBox].SelectedIndex = i
+                    Return True
+                End If
+            Next
+        End If
+        Return result
+
+    End Function
+
+    Public Function FixSQLString(ByVal ThisFieldValue As String) As String
+        Dim j As Byte
+        Dim i As Byte = (ThisFieldValue.IndexOf("'"c) + 1)
+
+        Do While (i > 0)
+            j = i + 2
+            ThisFieldValue = Strings.Left(ThisFieldValue, i) & "'" & Strings.Mid(ThisFieldValue, i + 1)
+            i = Strings.InStr(j, ThisFieldValue, "'")
+        Loop
+        Return "'" & ThisFieldValue & "'"
+
+    End Function
+
+    Public Sub EndProgram()
+        Reset_Resolution()
+        Environment.Exit(0)
+    End Sub
 End Module

@@ -86,6 +86,9 @@
         Dim POHMidRise_Total As Single
         Dim POHHighRise_Total As Single
         Dim Incentive_Total As Single
+        Dim OpportunityToOfferDate As String
+        Dim ProposedDate As String
+        Dim OpportunityClosedDate As String
         Public Shared Function CreateInstance() As Contracts_TypeDec
             Dim result As New Contracts_TypeDec()
             result.EstimateNum = ""
@@ -145,6 +148,9 @@
             result.Area = String.Empty
             result.ManagerEscalationRequired = String.Empty
             result.CentralEscalationRequired = String.Empty
+            result.OpportunityToOfferDate = String.Empty
+            result.ProposedDate = String.Empty
+            result.OpportunityClosedDate = String.Empty
             Return result
         End Function
     End Structure
