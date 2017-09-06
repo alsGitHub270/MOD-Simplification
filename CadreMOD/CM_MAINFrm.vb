@@ -215,6 +215,7 @@ Partial Friend Class CM_MAIN_frm
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
+        initializing = True
 
         Load_ListBoxes()
 
@@ -419,6 +420,7 @@ Partial Friend Class CM_MAIN_frm
         SizeTotalsForm()
         LoadTopOfForm()
 
+        initializing = False
     End Sub
 
 
@@ -464,6 +466,9 @@ Partial Friend Class CM_MAIN_frm
 
         ProcessTotals()
 
+    End Sub
+    Private Sub FpSpread1_Change(sender As Object, e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
+        If Not initializing Then isDirty = True
     End Sub
 
 
@@ -642,9 +647,6 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub _Menu_tlb_0_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _Menu_tlb_0.Click
-        End
-    End Sub
 
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
@@ -1345,6 +1347,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
     Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cboSeismicZone.Leave, cboSeismicZone.SelectedIndexChanged
         ValidateTextBoxInput_Text(Me, cboSeismicZone, ENTRY_NOT_AN_INTEGER, True)
+        If Not initializing Then isDirty = True
     End Sub
 
     Private Sub ExpandCollapseFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseFrame_btn.Click
@@ -1394,6 +1397,7 @@ Partial Friend Class CM_MAIN_frm
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Writing Cadre Json file")
         End Try
+        isDirty = False
     End Sub
 
     Private Sub Deserialize()
@@ -1412,13 +1416,12 @@ Partial Friend Class CM_MAIN_frm
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Reading Input File")
         End Try
+        isDirty = False
     End Sub
 
 
     Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
-        SaveTopOfForm()
-        Serialize()
-        ' frmAddresses.Save()
+        SaveAll()
     End Sub
 
     Private Function GetItemList(sSQL As String) As List(Of String)
@@ -1644,9 +1647,13 @@ Partial Friend Class CM_MAIN_frm
 
         For Each row As DataRow In dtSummaryGroup.Rows
             dblProco += row("Total Bank Cost")
+            If Not IsDBNull(row("C1")) Then
             dblC1Sum += row("C1")
+            End If
+            If Not IsDBNull(row("Sell Price")) Then
             dblSellPrice += row("Sell Price")
-        Next
+            End If
+        Next row
         '
         dblC1 = Math.Round((dblC1Sum / dtSummaryGroup.Rows.Count), 3)
       
@@ -1685,4 +1692,69 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
    
+    Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
+        If isDirty Then
+            If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No negate all changes.", "Confirmation.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                Call SaveAll()
+            End If
+        End If
+        Application.Exit()
+    End Sub
+    Private Sub cboSalesOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSalesOffice.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub updateDtBuildingInfo(column_name As String, value As String)
+        Dim row As DataRow
+        row = dtBuildingInfo.Rows(0)
+        row(column_name) = value
+    End Sub
+    Private Sub cboInstallingOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboServiceOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboServiceOffice.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboStatus_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboStatus.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboProbabilityOfSale_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboProbabilityOfSale.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub txtBidDate_ValueChanged(sender As System.Object, e As System.EventArgs) Handles txtBidDate.ValueChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboNationalAccount_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboNationalAccount.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboTaxCode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboTaxCode.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboLocalCode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboLocalCode.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboANSICode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboANSICode.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboNFPA13CodeYear_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboNFPA13CodeYear.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub txtSDSlevel_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtSDSlevel.TextChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub chkOSHPD_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkOSHPD.CheckedChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub chkDSA_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkDSA.CheckedChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub chkHeadDetection_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkHeadDetection.CheckedChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub chkEngineeringSurvey_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub SaveAll()
+        SaveTopOfForm()
+        Serialize()
+    End Sub
 End Class

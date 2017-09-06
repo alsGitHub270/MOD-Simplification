@@ -46,7 +46,7 @@ Partial Class CM_MAIN_frm
     Private WithEvents _Menu_tlb_2 As System.Windows.Forms.Button
     Public WithEvents EstimateNum_txt As System.Windows.Forms.MaskedTextBox
     Public WithEvents Estimator_txt As System.Windows.Forms.MaskedTextBox
-    Private WithEvents _Menu_tlb_0 As System.Windows.Forms.Button
+    Private WithEvents btnExit As System.Windows.Forms.Button
     Private WithEvents btnSave As System.Windows.Forms.Button
     Private WithEvents _Menu_tlb_3 As System.Windows.Forms.Button
     Private WithEvents _Menu_tlb_4 As System.Windows.Forms.Button
@@ -134,7 +134,7 @@ Partial Class CM_MAIN_frm
         Me._Menu_tlb_2 = New System.Windows.Forms.Button()
         Me.EstimateNum_txt = New System.Windows.Forms.MaskedTextBox()
         Me.Estimator_txt = New System.Windows.Forms.MaskedTextBox()
-        Me._Menu_tlb_0 = New System.Windows.Forms.Button()
+        Me.btnExit = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me._Menu_tlb_3 = New System.Windows.Forms.Button()
         Me._Menu_tlb_4 = New System.Windows.Forms.Button()
@@ -989,7 +989,7 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_2)
         Me.Menu_pic.Controls.Add(Me.EstimateNum_txt)
         Me.Menu_pic.Controls.Add(Me.Estimator_txt)
-        Me.Menu_pic.Controls.Add(Me._Menu_tlb_0)
+        Me.Menu_pic.Controls.Add(Me.btnExit)
         Me.Menu_pic.Controls.Add(Me.btnSave)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_3)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_4)
@@ -1042,16 +1042,16 @@ Partial Class CM_MAIN_frm
         '
         '_Menu_tlb_0
         '
-        Me._Menu_tlb_0.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._Menu_tlb_0.Image = CType(resources.GetObject("_Menu_tlb_0.Image"), System.Drawing.Image)
-        Me._Menu_tlb_0.Location = New System.Drawing.Point(8, 1)
-        Me._Menu_tlb_0.Name = "_Menu_tlb_0"
-        Me._Menu_tlb_0.Size = New System.Drawing.Size(46, 46)
-        Me._Menu_tlb_0.TabIndex = 33
-        Me._Menu_tlb_0.TabStop = False
-        Me._Menu_tlb_0.Tag = "Exit System"
-        Me._Menu_tlb_0.Text = "Exit"
-        Me._Menu_tlb_0.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExit.Image = CType(resources.GetObject("btnExit.Image"), System.Drawing.Image)
+        Me.btnExit.Location = New System.Drawing.Point(8, 1)
+        Me.btnExit.Name = "btnExit"
+        Me.btnExit.Size = New System.Drawing.Size(46, 46)
+        Me.btnExit.TabIndex = 33
+        Me.btnExit.TabStop = False
+        Me.btnExit.Tag = "Exit System"
+        Me.btnExit.Text = "Exit"
+        Me.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'btnSave
         '
@@ -2325,7 +2325,7 @@ Partial Class CM_MAIN_frm
     Sub InitializeMenu_tlb()
         ReDim Menu_tlb(4)
         Me.Menu_tlb(2) = _Menu_tlb_2
-        Me.Menu_tlb(0) = _Menu_tlb_0
+        Me.Menu_tlb(0) = btnExit
         Me.Menu_tlb(1) = btnSave
         Me.Menu_tlb(3) = _Menu_tlb_3
         Me.Menu_tlb(4) = _Menu_tlb_4

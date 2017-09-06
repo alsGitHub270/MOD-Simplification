@@ -27,6 +27,7 @@
     Public dtBuildingInfo As DataTable
 
     Public BookingType As Integer
+    Public isDirty As Boolean = False
     Public AttachBookingFile As Boolean
 
     '  Paths
@@ -42,6 +43,7 @@
     Public EPCOPath As String = ""
     Public SpecAndDataPath As String = ""
     Public SuptPath As String = ""
+    Public initializing As Boolean
     Public EstimateModified As Boolean
 
     Public gsCommand As String = ""
