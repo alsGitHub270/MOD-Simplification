@@ -194,9 +194,9 @@ Partial Friend Class CM_MAIN_frm
 
         If dtSummaryGroup.Rows.Count = 0 Then
             dtSummaryGroup.Rows.Add()
-            dtSummaryGroup.Rows(0).Item(0) = "Summary"
+            dtSummaryGroup.Rows(0).Item("SummaryGroup") = "Summary"
             dtBaseGroup.Rows.Add()
-            dtBaseGroup.Rows(0).Item(0) = "Base"
+            dtBaseGroup.Rows(0).Item("BaseGroup") = "Base"
         End If
 
         If dtContactGroup.Rows.Count = 0 And Owner_Info.Name.Length > 0 Then
@@ -1727,7 +1727,6 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub SizeTotalsForm()
 
-
         sprTotals.ActiveSheet.Cells(0, 0).Column.Width = 58         'material_HQ
         sprTotals.ActiveSheet.Cells(0, 1).Column.Width = 60         'material_RL
         sprTotals.ActiveSheet.Cells(0, 2).Column.Width = 60         'sales tax
@@ -1748,7 +1747,6 @@ Partial Friend Class CM_MAIN_frm
         sprTotals.ActiveSheet.Cells(0, 17).Column.Width = 50       'Include
 
         sprTotals.ActiveSheet.Rows(0).Locked = True
-
 
     End Sub
 
@@ -1814,6 +1812,7 @@ Partial Friend Class CM_MAIN_frm
     Private Sub chkEngineeringSurvey_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
+
     Private Sub SaveAll()
         SaveTopOfForm()
         Serialize()
@@ -1821,7 +1820,6 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub UpdateContactGroupFromNotes()
         Dim _row As DataRow = dtContactGroup.NewRow
-
 
         ' Update new row as Master
         _row("contactType") = "owner"

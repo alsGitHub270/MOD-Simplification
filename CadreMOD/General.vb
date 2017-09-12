@@ -1,5 +1,4 @@
-﻿Imports System.IO
-Imports System.Linq
+﻿
 Imports System.Collections.Generic
 
 Module General
@@ -396,18 +395,18 @@ Query_Execute_Error:
         Return ReturnVal
     End Function
 
-    Public Function ConvertTwipsToPixels(ByVal UseCoordinate As Single) As Integer
-        Dim UseTwipsToPixels As Integer = UseCoordinate * 0.066666667
+    'Public Function ConvertTwipsToPixels(ByVal UseCoordinate As Single) As Integer
+    '    Dim UseTwipsToPixels As Integer = UseCoordinate * 0.066666667
 
-        Return UseTwipsToPixels
+    '    Return UseTwipsToPixels
 
-    End Function
-    Public Function ConvertPixelsToTwips(ByVal UseCoordinate As Single) As Integer
-        Dim UsePixelsToTwips As Integer = Conversion.Val(UseCoordinate / 0.066666667)
+    'End Function
+    'Public Function ConvertPixelsToTwips(ByVal UseCoordinate As Single) As Integer
+    '    Dim UsePixelsToTwips As Integer = Conversion.Val(UseCoordinate / 0.066666667)
 
-        Return UsePixelsToTwips
+    '    Return UsePixelsToTwips
 
-    End Function
+    'End Function
 
     Public Function TranslateOfficeNumber(ByVal sOfficeNumberOld As String, Optional ByVal bSalesOffice As Boolean = False, Optional ByVal bIgnoreShape As Boolean = False) As String
         Dim sWhere As String = "[Office] = " & FixSQLString(sOfficeNumberOld)

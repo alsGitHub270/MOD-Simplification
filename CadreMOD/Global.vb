@@ -18,6 +18,7 @@
     Public ADOCatalogRPTdata As ADOX.Catalog = Nothing
     Public ADOCatalogHapDatabase As ADOX.Catalog = Nothing
     Public _ADOCatalogOptionDataBase As ADOX.Catalog = Nothing
+    Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
 
     Public dsCadre As DataSet
     Public dtSummaryGroup As DataTable
@@ -49,9 +50,9 @@
     Public gsCommand As String = ""
     Public OpportunityID As String = String.Empty
 
-    'Public OpportunityID As String = ""
-    Public UserRoleCRM, UserRole, UserRoleOFF, UserLevel As String
-    Private PartnerNum As String = ""
+    'Public UserRoleCRM, UserRole, UserRoleOFF, UserLevel As String
+    Public UserRole As String
+    'Private PartnerNum As String = ""
 
     ' Cadre MOD Access Level
     Public FULL_ACCESS As Boolean
@@ -65,7 +66,12 @@
 
     Public DataChangedByProgram As Boolean
     
+    Public All_LocalCodeDep As New All_LocalCodeDepTYP()
 
+
+    Public MachineType As String = String.Empty
+    Public CurrentUnits As String = String.Empty
+    Public EstimateLevel As String = String.Empty
 
     Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
         Get
@@ -78,15 +84,12 @@
             _ADOCatalogOptionDataBase = Value
         End Set
     End Property
-    Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
-    Public MachineType As String = String.Empty
-    Public CurrentUnits As String = String.Empty
-    Public EstimateLevel As String = String.Empty
+
 
     Structure All_LocalCodeDepTYP
         Dim CanadaJob As Boolean
         Dim PuertoRicoJob As Boolean
         Dim MODJob As Boolean
     End Structure
-    Public All_LocalCodeDep As New All_LocalCodeDepTYP()
+
 End Module

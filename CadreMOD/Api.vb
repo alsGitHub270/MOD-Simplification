@@ -1,8 +1,8 @@
 Option Strict Off
 Option Explicit On
-Imports UpgradeHelpers.VB6.Gui
-Imports UpgradeHelpers.VB6.Utils
-Imports UpgradeHelpers.VB6.VB
+'Imports UpgradeHelpers.VB6.Gui
+'Imports UpgradeHelpers.VB6.Utils
+'Imports UpgradeHelpers.VB6.VB
 Imports System
 Imports System.Drawing
 Imports System.Runtime.InteropServices
