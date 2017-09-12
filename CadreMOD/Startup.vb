@@ -100,7 +100,7 @@ Module Startup
             Application.Run(New CM_MAIN_frm)
 
         Catch
-            MessageBox.Show("Error in Main: " & Environment.NewLine & CStr(Information.Err().Number) & ": " & Conversion.ErrorToString(Information.Err().Number) & Environment.NewLine & Information.Err().Number.ToString() & Conversion.ErrorToString(), Application.ProductName)
+            MessageBox.Show("Error in Startup.Main: " & Environment.NewLine & CStr(Information.Err().Number) & ": " & Conversion.ErrorToString(Information.Err().Number) & Environment.NewLine & Information.Err().Number.ToString() & Conversion.ErrorToString(), Application.ProductName)
 
         End Try
 

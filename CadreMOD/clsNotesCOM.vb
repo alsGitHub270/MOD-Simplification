@@ -1,6 +1,6 @@
 Option Strict Off
 Option Explicit On
-Imports UpgradeHelpers.VB6.Gui
+'Imports UpgradeHelpers.VB6.Gui
 Imports Microsoft.VisualBasic
 Imports System
 Imports System.IO

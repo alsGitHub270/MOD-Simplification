@@ -63,7 +63,8 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("C1", typeSingle), _
                                                           New DataColumn("Sell Price", typeInt), _
                                                           New DataColumn("Tax Rate", typeInt), _
-                                                          New DataColumn("Labor Rate", typeInt)
+                                                          New DataColumn("Labor Rate", typeInt), _
+                                                          New DataColumn("Include", typeBool)
                                                          })
 
         'dtSummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
@@ -100,7 +101,6 @@ Partial Friend Class CM_MAIN_frm
                                                         New DataColumn("Comment", typeStr)
                                                         })
        
-        dtBaseGroup.Columns("Material RL").DefaultValue = 0
 
         'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
         'dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
@@ -117,23 +117,23 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("Offer", typeStr), _
                                                       New DataColumn("Merge", typeStr), _
                                                       New DataColumn("Material HQ", typeInt), _
-                                                     New DataColumn("Material RL", typeInt), _
-                                                     New DataColumn("Tax", typeInt), _
-                                                     New DataColumn("Total BDP Hours", typeInt), _
-                                                     New DataColumn("Total Special Hours", typeInt), _
-                                                     New DataColumn("Total Labor Hours", typeInt), _
-                                                     New DataColumn("Overtime Hours Included", typeInt), _
-                                                     New DataColumn("Labor", typeInt), _
-                                                     New DataColumn("SubContract Work", typeInt), _
-                                                     New DataColumn("Misc Costs", typeInt), _
-                                                     New DataColumn("Freight", typeInt), _
-                                                     New DataColumn("NPS Cost", typeInt), _
-                                                     New DataColumn("Total Bank Cost", typeInt), _
-                                                     New DataColumn("C1", typeSingle), _
-                                                     New DataColumn("Sell Price", typeInt), _
-                                                     New DataColumn("Tax Rate", typeInt), _
-                                                     New DataColumn("Labor Rate", typeInt), _
-                                                       New DataColumn("Comment", typeStr)
+                                                      New DataColumn("Material RL", typeInt), _
+                                                      New DataColumn("Tax", typeInt), _
+                                                      New DataColumn("Total BDP Hours", typeInt), _
+                                                      New DataColumn("Total Special Hours", typeInt), _
+                                                      New DataColumn("Total Labor Hours", typeInt), _
+                                                      New DataColumn("Overtime Hours Included", typeInt), _
+                                                      New DataColumn("Labor", typeInt), _
+                                                      New DataColumn("SubContract Work", typeInt), _
+                                                      New DataColumn("Misc Costs", typeInt), _
+                                                      New DataColumn("Freight", typeInt), _
+                                                      New DataColumn("NPS Cost", typeInt), _
+                                                      New DataColumn("Total Bank Cost", typeInt), _
+                                                      New DataColumn("C1", typeSingle), _
+                                                      New DataColumn("Sell Price", typeInt), _
+                                                      New DataColumn("Tax Rate", typeInt), _
+                                                      New DataColumn("Labor Rate", typeInt), _
+                                                      New DataColumn("Comment", typeStr)
                                                      })
 
 
@@ -192,6 +192,17 @@ Partial Friend Class CM_MAIN_frm
 
         Deserialize()
 
+        If dtSummaryGroup.Rows.Count = 0 Then
+            dtSummaryGroup.Rows.Add()
+            dtSummaryGroup.Rows(0).Item(0) = "Summary"
+            dtBaseGroup.Rows.Add()
+            dtBaseGroup.Rows(0).Item(0) = "Base"
+        End If
+
+        If dtContactGroup.Rows.Count = 0 And Owner_Info.Name.Length > 0 Then
+            UpdateContactGroupFromNotes()
+        End If
+
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("Bank"), dsCadre.Tables("BaseGroup").Columns("Bank"))
         dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("id"), dsCadre.Tables("AltGroup").Columns("id"))
@@ -217,11 +228,22 @@ Partial Friend Class CM_MAIN_frm
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
         initializing = True
 
+        CreateDataSet()
+        Dim dt As DataTable
+        For Each dt In dsCadre.Tables
+            dt.DefaultView.AllowNew = False
+        Next
+
+        Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
+
+        model = FpSpread1.ActiveSheet.Models.Data
+        model.DataSource = dsCadre
+        FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
+        FpSpread1.ActiveSheet.SortRows(3, True, False)
+
         Load_ListBoxes()
 
-        '   BuildingInformation_fra.Left = ShiftDist
-        ' JobInformation_fra.Left = ShiftDist
-        ' Equipment_fra.Left = ShiftDist
+        Text2Fields()
 
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
 
@@ -237,31 +259,39 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.VerticalScrollBar.Renderer = Nothing
         FpSpread1.VisualStyles = FarPoint.Win.VisualStyles.Off
 
+        If dtSummaryGroup.Rows.Count > 0 Then
+            Try
+                'Init Spread
+                With FpSpread1.ActiveSheet
+                    .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
+                    .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
+                    .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
+                    '.ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).BackColor = Color.DarkGray
+                    .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
 
-        'Init Spread
-        With FpSpread1.ActiveSheet
-            .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
-            .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
-            .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
-            '.ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).BackColor = Color.DarkGray
-            .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
+                    .RowHeader.AutoText = FarPoint.Win.Spread.HeaderAutoText.Blank
+                    '  .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).BackColor = Color.DarkGray
+                    .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).ForeColor = Color.Black
+                    .SheetCornerStyle.BackColor = Color.DarkGray
 
-            .RowHeader.AutoText = FarPoint.Win.Spread.HeaderAutoText.Blank
-            '  .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).BackColor = Color.DarkGray
-            .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).ForeColor = Color.Black
-            .SheetCornerStyle.BackColor = Color.DarkGray
+                    .GrayAreaBackColor = Color.White
+                    .LockBackColor = Color.LightGray
+                End With
+            Catch ex As Exception
+                MessageBox.Show("Error in CM_Mainfrm.Load: & Environment.NewLine & CStr(Information.Err().Number) " & _
+                                Conversion.ErrorToString(Information.Err().Number) & Environment.NewLine & _
+                                Information.Err().Number.ToString() & Conversion.ErrorToString(), Application.ProductName)
 
-            .GrayAreaBackColor = Color.White
-            .LockBackColor = Color.LightGray
-        End With
+            End Try
 
+        End If
 
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType()
         percentType.DecimalPlaces = 1
 
         Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
         numberType.DecimalPlaces = 1
-       
+
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
@@ -270,6 +300,7 @@ Partial Friend Class CM_MAIN_frm
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
 
+        Dim ckbxcell As New FarPoint.Win.Spread.CellType.CheckBoxCellType()
 
         ' FpSpread1.Sheets(0).Rows(1).Locked = True
         'FpSpread1.Sheets(0).Rows(1).BackColor = Color.LightGray
@@ -309,6 +340,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 19).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 23).Locked = False
 
 
             FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary
@@ -331,8 +363,9 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'total bank cost
             FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 60        'project c1
             FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 60        'bank sell price
-            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 60        'tax rate
-            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 60        'Labor rate
+            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 50        'tax rate
+            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 50        'Labor rate
+            FpSpread1.ActiveSheet.Cells(i, 23).Column.Width = 45      'Include indicator
 
             FpSpread1.ActiveSheet.Cells(i, 3).CellType = cmbocell_Bank      ' bank
             FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell_Machine   ' machine/bank type
@@ -351,6 +384,9 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 22).CellType = currencyType
 
             FpSpread1.ActiveSheet.Cells(i, 19).CellType = percentType
+
+            FpSpread1.ActiveSheet.Cells(i, 23).CellType = ckbxcell
+            FpSpread1.ActiveSheet.Cells(i, 23).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 40
@@ -396,22 +432,26 @@ Partial Friend Class CM_MAIN_frm
         ''MasterGroup.Rows.Add(New Object() {"A Master", "A0", "A", "01-04", "Geared", "", "496,250", "", "", ""})
         'FpSpread1.ActiveSheet.AddRows(0, 1)
 
-
+        '#  commented out   prototype data?
         ' Create an instance of a text cell.
-        Dim t As New FarPoint.Win.Spread.CellType.TextCellType
-        Dim t1 As New FarPoint.Win.Spread.CellType.TextCellType
-        ' Load an image file and set it to BackgroundImage property.
-        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
-        t.BackgroundImage = p
-        Dim p1 As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+        'Dim t As New FarPoint.Win.Spread.CellType.TextCellType
+        'Dim t1 As New FarPoint.Win.Spread.CellType.TextCellType
+        '' Load an image file and set it to BackgroundImage property.
+        'Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+        't.BackgroundImage = p
+        'Dim p1 As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
 
-        ' Apply the text cell.
-        FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
-        t1.BackgroundImage = p1
-        FpSpread1.ActiveSheet.Cells(1, 2).CellType = t1
+        ' Apply the text cell.   
+        '##  commented out. was this used to hard code for prototypw?
+        'FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
+        't1.BackgroundImage = p1
+        'FpSpread1.ActiveSheet.Cells(1, 2).CellType = t1
         ' Set the size of the cell so the image is displayed
         'FpSpread1.ActiveSheet.Rows(1).Height = 50
         'FpSpread1.ActiveSheet.Columns(1).Width = 150
+
+
+
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
         CurrentBuildingInformationFrameHeight = BuildingInformation_fra.Height
         CurrentEquipmentFrameHeight = Equipment_fra.Height
@@ -419,6 +459,7 @@ Partial Friend Class CM_MAIN_frm
         Relocate_Equipment_Frame()
         SizeTotalsForm()
         LoadTopOfForm()
+        ProcessTotals()
 
         initializing = False
     End Sub
@@ -471,7 +512,7 @@ Partial Friend Class CM_MAIN_frm
         If Not initializing Then isDirty = True
     End Sub
 
-
+  
 
     Private Sub FpSpread1_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles FpSpread1.ChildViewCreated
 
@@ -531,6 +572,8 @@ Partial Friend Class CM_MAIN_frm
                 .SetColumnWidth(6, 75)
                 .SetColumnWidth(7, 75)
                 .SetColumnWidth(16, 70)
+                .SetColumnWidth(23, 50)
+                .SetColumnWidth(24, 50)
                 .SetColumnWidth(25, 175)
 
                 .Columns(5).CellType = currencyType
@@ -591,6 +634,8 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(21).Locked = False
 
                 .SetColumnWidth(16, 70)
+                .SetColumnWidth(23, 50)
+                .SetColumnWidth(24, 50)
                 .SetColumnWidth(25, 175)
 
                 .Columns(4).CellType = currencyType
@@ -612,11 +657,12 @@ Partial Friend Class CM_MAIN_frm
 
                 .Columns(21).CellType = percentType
 
-
                 .Columns(5).BackColor = Color.LightGoldenrodYellow
                 .Columns(6).BackColor = Color.LightGoldenrodYellow
                 .Columns(7).BackColor = Color.LightGoldenrodYellow
 
+                .Columns(6).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+                .Columns(7).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
 
                 'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
@@ -933,7 +979,7 @@ Partial Friend Class CM_MAIN_frm
     Private Sub FpSpread1_ComboSelChange(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboSelChange
 
         Debug.Print(e.Column)
-        '  Debug.Printe.
+
     End Sub
 
 
@@ -1154,13 +1200,16 @@ Partial Friend Class CM_MAIN_frm
         Next
 
         For Each dr As DataRow In dsCadre.Tables(0).Rows
-            bank = dr("Bank")
-            If bank <> "" Then
-                i = myList.IndexOf(bank)
-                If i > -1 Then
-                    myList.RemoveAt(i)
+            If Not IsDBNull(dr("Bank")) Then
+                bank = dr("Bank")
+                If bank <> "" Then
+                    i = myList.IndexOf(bank)
+                    If i > -1 Then
+                        myList.RemoveAt(i)
+                    End If
                 End If
             End If
+
         Next
 
         Return myList.ToArray
@@ -1191,14 +1240,14 @@ Partial Friend Class CM_MAIN_frm
                     "FROM [Building Code] " & _
                     "ORDER BY Code;"
 
-        myList = GetItemList(sSQL)
+        myList = GetDataFromOptions(sSQL)
         For Each code In myList
             cboBuildingType.Items.Add(code)
         Next
 
-        sSQL = "SELECT DISTINCTROW [Local Code] & ' - ' & IIf([City] Is Null,'',[City] & ',') & IIf([State] Is Null,' ',[State]) AS [Local Code/ID] FROM [Local Code] WHERE [State] = '" & JobState_txt.Text & "';"
+        sSQL = "SELECT DISTINCTROW [Local Code] & ' - ' & IIf([City] Is Null,'',[City] & ',') & IIf([State] Is Null,' ',[State]) AS [Local Code/ID] FROM [Local Code] WHERE [State] = '" & txtJobState.Text & "';"
 
-        myList = GetItemList(sSQL)
+        myList = GetDataFromOptions(sSQL)
         For Each code In myList
             cboLocalCode.Items.Add(code)
         Next
@@ -1251,7 +1300,7 @@ Partial Friend Class CM_MAIN_frm
         cboNFPA13CodeYear.Items.Add("2013")
 
         sSQL = "SELECT Office FROM [MOD OFFICE] WHERE Installing = True ORDER BY Office"
-        myList = GetItemList(sSQL)
+        myList = GetDataFromOptions(sSQL)
         For Each office In myList
             cboSalesOffice.Items.Add(office)
         Next
@@ -1262,7 +1311,7 @@ Partial Friend Class CM_MAIN_frm
         Next
 
         sSQL = "SELECT Office FROM [MOD OFFICE] WHERE Service = True ORDER BY Office"
-        myList = GetItemList(sSQL)
+        myList = GetDataFromOptions(sSQL)
         For Each office In myList
             cboServiceOffice.Items.Add(office)
         Next
@@ -1322,6 +1371,22 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    Private Sub Text2Fields()
+
+        txtEstimateNum.Text = Contracts.EstimateNum
+        txtEstimator.Text = Contracts.Estimator
+        txtJobName.Text = Contracts.JobName
+        txtJobAddress.Text = Contracts.JobAddress
+        txtJobAddress2.Text = Contracts.JobAddress2
+        txtJobCity.Text = Contracts.JobCity
+        txtJobState.Text = Contracts.JobState
+        txtJobZip.Text = Contracts.JobZip
+
+        txtOwner.Text = Owner_Info.Name
+
+        AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
+        AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
+    End Sub
 
     'Private Sub cmbBuildingType_DropDown(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmdBuildingType.DropDown
     '    cmdBuildingType.Width = 267
@@ -1387,11 +1452,16 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub Serialize()
         Dim json As String = ""
+        Dim directory = "C:\Temp\"
+        Dim file_name As String = Contracts.EstimateNum & ".json"
+
+        'HACK for testing
+        'file_name = "cadre.json"
 
         Try
             json = JsonConvert.SerializeObject(dsCadre, Formatting.Indented)
 
-            Using sw As StreamWriter = New StreamWriter("C:\Temp\cadre.json")
+            Using sw As StreamWriter = New StreamWriter(directory & file_name)
                 sw.Write(json)
             End Using
         Catch ex As Exception
@@ -1402,21 +1472,28 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub Deserialize()
         Dim json As String = ""
+        Dim directory = "C:\Temp\"
+        Dim file_name As String = Contracts.EstimateNum & ".json"
 
-        Try
-            Using sr As StreamReader = New StreamReader("C:\Temp\cadre.json")
-                json = sr.ReadToEnd
-            End Using
-            dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
-            'JsonSerializerSettings()
-            'NullValueHandling = NullValueHandling.Include
-            dsCadre.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
-            '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
-            FpSpread1.ActiveSheet.SortRows(3, True, False)
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Reading Input File")
-        End Try
-        isDirty = False
+        'HACK for testing
+        '  file_name = "cadre.json"
+
+        If File.Exists(directory & file_name) Then
+            Try
+                Using sr As StreamReader = New StreamReader(directory & file_name)
+                    json = sr.ReadToEnd
+                End Using
+                dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
+                'JsonSerializerSettings()
+                'NullValueHandling = NullValueHandling.Include
+                dsCadre.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
+                '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
+                FpSpread1.ActiveSheet.SortRows(3, True, False)
+            Catch ex As Exception
+                MessageBox.Show(ex.Message, "Error Reading Input File")
+            End Try
+            isDirty = False
+        End If
     End Sub
 
 
@@ -1424,29 +1501,6 @@ Partial Friend Class CM_MAIN_frm
         SaveAll()
     End Sub
 
-    Private Function GetItemList(sSQL As String) As List(Of String)
-        Dim dataSource As String = My.Application.Info.DirectoryPath & "\" & OPTION_DATABASE_NAME
-        Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
-        Dim result As String
-        Dim myList As New List(Of String)()
-
-
-        Using cn As New OleDb.OleDbConnection(cnstr)
-            cn.Open()
-
-            Dim cmd As New OleDb.OleDbCommand(sSQL, cn)
-            Dim reader As OleDb.OleDbDataReader = cmd.ExecuteReader
-            While reader.Read
-                If Not String.IsNullOrEmpty(reader(0).ToString) Then
-                result = (reader(0).ToString)
-                myList.Add(result)
-                End If
-            End While
-
-        End Using
-
-        Return myList
-    End Function
 
     Private Sub AddMasterRow(bank As String)
 
@@ -1595,48 +1649,50 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub SaveTopOfForm()
-        Dim row As DataRow
-
+        Dim _row As DataRow
+        Dim is_new_row As Boolean = False
         Try
             If dtBuildingInfo.Rows.Count = 0 Then   ' new row should have been created, but just in case
-                row = dtBuildingInfo.NewRow
+                _row = dtBuildingInfo.NewRow
+                is_new_row = True
             Else
-                row = dtBuildingInfo.Rows(0)
+                _row = dtBuildingInfo.Rows(0)
             End If
 
-            row("building_type") = cboBuildingType.Text
-            row("major_project") = chkMajorProject.CheckState
-            row("sales_rep") = cboSalesRep.SelectedText
-            row("sales_office") = cboSalesOffice.Text
-            row("installing_office") = cboInstallingOffice.Text
-            row("service_office") = cboServiceOffice.Text
+            _row("building_type") = cboBuildingType.Text
+            _row("major_project") = chkMajorProject.CheckState
+            _row("sales_rep") = cboSalesRep.Text
+            _row("sales_office") = cboSalesOffice.Text
+            _row("installing_office") = cboInstallingOffice.Text
+            _row("service_office") = cboServiceOffice.Text
             'row("status") = cboStatus.Text
             'row("probability_of_sale") = cboProbabilityOfSale.Text
-            row("bid_date") = txtBidDate.Text
-            row("national_account") = cboNationalAccount.Text
-            row("tax_code") = cboTaxCode.Text
-            row("seismic_zone") = cboSeismicZone.Text
-            row("local_code") = cboLocalCode.Text
-            row("ansi_csa_b44_code") = cboANSICode.Text
-            row("nfpa_code") = cboNFPA13CodeYear.Text
-            row("sds_level") = txtSDSlevel.Text
-            row("oshpd") = chkOSHPD.CheckState
-            row("dsa") = chkDSA.CheckState
-            row("head_detection") = chkDSA.CheckState
-            row("engineering_survey") = chkEngineeringSurvey.CheckState
-            row("nps_duration") = cboDurationMonths.Text
-            row("nps_call_back") = cboCallBackHours.Text
-            row("nps_material_cost") = txtNPSMaterialCost.Text
-            row("nps_labor_cost") = txtNPSLaborCost.Text
-            row("nps_one_time_cost") = txtNPSOneTimeCost.Text
-            row("ocpl") = txtOCPL.Text
+            _row("bid_date") = txtBidDate.Text
+            _row("national_account") = cboNationalAccount.Text
+            _row("tax_code") = cboTaxCode.Text
+            _row("seismic_zone") = cboSeismicZone.Text
+            _row("local_code") = cboLocalCode.Text
+            _row("ansi_csa_b44_code") = cboANSICode.Text
+            _row("nfpa_code") = cboNFPA13CodeYear.Text
+            _row("sds_level") = txtSDSlevel.Text
+            _row("oshpd") = chkOSHPD.CheckState
+            _row("dsa") = chkDSA.CheckState
+            _row("head_detection") = chkHeadDetection.CheckState
+            _row("engineering_survey") = chkEngineeringSurvey.CheckState
+            _row("nps_duration") = cboDurationMonths.Text
+            _row("nps_call_back") = cboCallBackHours.Text
+            _row("nps_material_cost") = txtNPSMaterialCost.Text
+            _row("nps_labor_cost") = txtNPSLaborCost.Text
+            _row("nps_one_time_cost") = txtNPSOneTimeCost.Text
+            _row("ocpl") = txtOCPL.Text
+            If is_new_row Then dtBuildingInfo.Rows.Add(_row)
 
         Catch ex As Exception
             MessageBox.Show("Error saving data at top of Contract Management Screen", "Error Saving to Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    
+
     Private Sub CM_MAIN_frm_Activated(sender As System.Object, e As System.EventArgs) Handles MyBase.Activated
         ProcessTotals()
         sprTotals.Refresh()
@@ -1645,29 +1701,33 @@ Partial Friend Class CM_MAIN_frm
     Private Sub ProcessTotals()
         Dim dblProco As Double, dblC1Sum As Double, dblC1 As Double, dblSellPrice As Double
 
-        For Each row As DataRow In dtSummaryGroup.Rows
-            dblProco += row("Total Bank Cost")
-            If Not IsDBNull(row("C1")) Then
-            dblC1Sum += row("C1")
-            End If
-            If Not IsDBNull(row("Sell Price")) Then
-            dblSellPrice += row("Sell Price")
-            End If
-        Next row
-        '
-        dblC1 = Math.Round((dblC1Sum / dtSummaryGroup.Rows.Count), 3)
-      
-        sprTotals.ActiveSheet.Cells(0, 12).Text = FormatCurrency(dblProco)
-        sprTotals.ActiveSheet.Cells(0, 13).Text = FormatPercent(dblC1, 1)
-        sprTotals.ActiveSheet.Cells(0, 14).Text = FormatCurrency(dblSellPrice)
+        If Not IsNothing(dtSummaryGroup) AndAlso dtSummaryGroup.Rows.Count > 0 Then
+            For Each row As DataRow In dtSummaryGroup.Rows
+                If Not IsDBNull(row("C1")) Then
+                    dblProco += row("Total Bank Cost")
+                End If
+                If Not IsDBNull(row("C1")) Then
+                    dblC1Sum += row("C1")
+                End If
+                If Not IsDBNull(row("Sell Price")) Then
+                    dblSellPrice += row("Sell Price")
+                End If
+            Next row
+            '
+            dblC1 = Math.Round((dblC1Sum / dtSummaryGroup.Rows.Count), 3)
 
-        sprTotals.Refresh()
+            sprTotals.ActiveSheet.Cells(0, 12).Text = FormatCurrency(dblProco)
+            sprTotals.ActiveSheet.Cells(0, 13).Text = FormatPercent(dblC1, 1)
+            sprTotals.ActiveSheet.Cells(0, 14).Text = FormatCurrency(dblSellPrice)
+
+            sprTotals.Refresh()
+        End If
 
     End Sub
 
     Private Sub SizeTotalsForm()
 
-        
+
         sprTotals.ActiveSheet.Cells(0, 0).Column.Width = 58         'material_HQ
         sprTotals.ActiveSheet.Cells(0, 1).Column.Width = 60         'material_RL
         sprTotals.ActiveSheet.Cells(0, 2).Column.Width = 60         'sales tax
@@ -1683,19 +1743,20 @@ Partial Friend Class CM_MAIN_frm
         sprTotals.ActiveSheet.Cells(0, 12).Column.Width = 60        'total bank cost
         sprTotals.ActiveSheet.Cells(0, 13).Column.Width = 60        'project c1
         sprTotals.ActiveSheet.Cells(0, 14).Column.Width = 60        'bank sell price
-        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 60        'tax rate
-        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 60        'Labor rate
+        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 50        'tax rate
+        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 50        'Labor rate
+        sprTotals.ActiveSheet.Cells(0, 17).Column.Width = 50       'Include
 
         sprTotals.ActiveSheet.Rows(0).Locked = True
 
-      
+
     End Sub
 
-   
+
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
         If isDirty Then
-            If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No negate all changes.", "Confirmation.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                Call SaveAll()
+            If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                SaveAll()
             End If
         End If
         Application.Exit()
@@ -1757,4 +1818,26 @@ Partial Friend Class CM_MAIN_frm
         SaveTopOfForm()
         Serialize()
     End Sub
+
+    Private Sub UpdateContactGroupFromNotes()
+        Dim _row As DataRow = dtContactGroup.NewRow
+
+
+        ' Update new row as Master
+        _row("contactType") = "owner"
+        _row("companyName") = Owner_Info.Name
+        _row("contactName") = ""
+        _row("address") = Owner_Info.Address
+        _row("address2") = Owner_Info.Address2
+        _row("city") = Owner_Info.City
+        _row("state") = Owner_Info.State
+        _row("zipcode") = Owner_Info.Zip
+        _row("phone") = Owner_Info.Phone
+        _row("ext") = Owner_Info.Ext
+        _row("fax") = Owner_Info.Fax
+        _row("email") = ""
+
+        dtContactGroup.Rows.Add(_row)
+    End Sub
+
 End Class

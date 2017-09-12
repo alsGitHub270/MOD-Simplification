@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Linq
+Imports System.Collections.Generic
 
 Module General
 
@@ -545,10 +546,6 @@ Query_Execute_Error:
         '    End If
         'End If
 
-        Static AppPath As String = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-        Static DbPath As String = Path.Combine(AppPath, "bin", "Options.accdb")
-
-        Static DbConnString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + DbPath + "';Persist Security Info=False;"
 
 
 
@@ -595,6 +592,29 @@ Query_Execute_Error:
         Loop
         Return "'" & ThisFieldValue & "'"
 
+    End Function
+
+    Public Function GetDataFromOptions(sSQL As String) As List(Of String)
+        Dim dataSource As String = My.Application.Info.DirectoryPath & "\" & OPTION_DATABASE_NAME
+        Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
+        Dim result As String
+        Dim myList As New List(Of String)()
+
+        Using cn As New OleDb.OleDbConnection(cnstr)
+            cn.Open()
+
+            Dim cmd As New OleDb.OleDbCommand(sSQL, cn)
+            Dim reader As OleDb.OleDbDataReader = cmd.ExecuteReader
+            While reader.Read
+                If Not String.IsNullOrEmpty(reader(0).ToString) Then
+                    result = (reader(0).ToString)
+                    myList.Add(result)
+                End If
+            End While
+
+        End Using
+
+        Return myList
     End Function
 
     Public Sub EndProgram()

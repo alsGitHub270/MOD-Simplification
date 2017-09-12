@@ -10,6 +10,7 @@ Imports System.Text
 Imports System.Windows.Forms
 Imports System.Environment
 Imports System.Net.Mail
+Imports System.Collections.Generic
 
 Module Lotuslnk
 
@@ -555,65 +556,69 @@ MISSINGMESSAGE:
         Contracts.OfficeRating = clsNotes.GetValue("officeRating")
         Contracts.PreBidPrice = Convert.ToSingle(clsNotes.GetValue("proposal_price_prebid"))
         Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(clsNotes.GetValue("approvedMaxAdder")) / 100), 4)
-        If Contracts.MaxPercentSpecial = 0 Then
-            Contracts.MaxPercentSpecial = 0.1
-            If clsNotes.NotesDBName(ComServer, HoldNotesFeedbackPath) Then
-                If clsNotes.NotesDocProfile("Cadre Access Control Profile") Then
-                    If clsNotes.GetValue_Readers("maxAdderLimit_level_1") Then
-                        Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(ReadersValue(0)) / 100), 4)
-                    End If
-                End If
-            End If
-        End If
+        'If Contracts.MaxPercentSpecial = 0 Then
+        '    Contracts.MaxPercentSpecial = 0.1
+        '    If clsNotes.NotesDBName(ComServer, HoldNotesFeedbackPath) Then
+        '        If clsNotes.NotesDocProfile("Cadre Access Control Profile") Then
+        '            If clsNotes.GetValue_Readers("maxAdderLimit_level_1") Then
+        '                Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(ReadersValue(0)) / 100), 4)
+        '            End If
+        '        End If
+        '    End If
+        'End If
+
+        Query_SM2ART()
+
+        
         Contracts.EngReviewStatus = clsNotes.GetValue("engineeringReqStatus")
         QueryFeedback = True
 
     End Function
-    '    Public Sub Query_SM2ART()
+    Public Sub Query_SM2ART()
 
-    '        Attach_To_Feedback()
-    '        Hold_Customer_ID = clsNotes.GetValue("unique")
-    '        Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
-    '        Attach_To_SmartCenter_Customer()
-    '        Contracts.JobName = TrimFields(clsNotes.GetValue("CustName"))
-    '        Contracts.SAPContactNumber = clsNotes.GetValue("SAPContactNumber")
-    '        Contracts.JobAddress = TrimFields(clsNotes.GetValue("Address"))
-    '        Contracts.JobAddress2 = TrimFields(clsNotes.GetValue("Address_1"))
-    '        Contracts.JobCity = TrimFields(clsNotes.GetValue("City"))
-    '        Contracts.JobState = clsNotes.GetValue("State")
-    '        Contracts.JobZip = clsNotes.GetValue("Zip")
-    '        OfficeFromSmart = TranslateOfficeNumber(clsNotes.GetValue("Office"))
-    '        If Contracts.SalesRepOffice = "" Then
-    '            Contracts.SalesRepOffice = TranslateOfficeNumber(clsNotes.GetValue("Office"))
-    '        End If
-    '        Contracts.ContractType = clsNotes.GetValue("ContractType")
-    '        Contracts.Country = clsNotes.GetValue("Country")
-    '        RetrieveBuildingType(clsNotes.GetValue("LocationsXML"))
-    '        Owner_Info.Name = TrimFields(clsNotes.GetValue("BillToName"))
-    '        Owner_Info.Address = TrimFields(clsNotes.GetValue("BillToAddress"))
-    '        Owner_Info.City = TrimFields(clsNotes.GetValue("BillToCity"))
-    '        Owner_Info.State = clsNotes.GetValue("BillToState")
-    '        Owner_Info.Zip = clsNotes.GetValue("BillToZip")
-    '        Owner_Info.Phone = clsNotes.GetValue("BillToPhone")
-    '        Owner_Info.Fax = clsNotes.GetValue("BillToFax")
-    '        Contracts.CustomerTier = clsNotes.GetValue("CUSTOMERTIER")
-    '        clsNotes.GetValue_Readers("Reader")
-    '        Contracts.Reader = ReadersValue
-    '        clsNotes.GetValue_Readers("reader_global")
-    '        Contracts.ReaderGlobal = ReadersValue
-    '        Attach_To_SmartCenter_Contact()
-    '        If Not MissingContactInfo Then
-    '            JobContact.Name = TrimFields(clsNotes.GetValue("fContact"))
-    '            JobContact.Name = JobContact.Name & " " & TrimFields(clsNotes.GetValue("LContact"))
-    '            JobContact.Address = TrimFields(clsNotes.GetValue("Address"))
-    '            JobContact.Address2 = TrimFields(clsNotes.GetValue("Address_1"))
-    '            JobContact.City = TrimFields(clsNotes.GetValue("City"))
-    '            JobContact.State = clsNotes.GetValue("State")
-    '            JobContact.Zip = clsNotes.GetValue("zip")
-    '            JobContact.Tel = clsNotes.GetValue("Phone")
-    '        End If
+        Attach_To_Feedback()
+        Hold_Customer_ID = clsNotes.GetValue("unique")
+        Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
+        Attach_To_SmartCenter_Customer()
+        Contracts.JobName = TrimFields(clsNotes.GetValue("CustName"))
+        Contracts.SAPContactNumber = clsNotes.GetValue("SAPContactNumber")
+        Contracts.JobAddress = TrimFields(clsNotes.GetValue("Address"))
+        Contracts.JobAddress2 = TrimFields(clsNotes.GetValue("Address_1"))
+        Contracts.JobCity = TrimFields(clsNotes.GetValue("City"))
+        Contracts.JobState = clsNotes.GetValue("State")
+        Contracts.JobZip = clsNotes.GetValue("Zip")
+        '        OfficeFromSmart = TranslateOfficeNumber(clsNotes.GetValue("Office"))
+        If Contracts.SalesRepOffice = "" Then
+            Contracts.SalesRepOffice = TranslateOfficeNumber(clsNotes.GetValue("Office"))
+        End If
+        '        Contracts.ContractType = clsNotes.GetValue("ContractType")
+        Contracts.Country = clsNotes.GetValue("Country")
+        RetrieveBuildingType(clsNotes.GetValue("LocationsXML"))
+        Owner_Info.Name = TrimFields(clsNotes.GetValue("BillToName"))
+        Owner_Info.Address = TrimFields(clsNotes.GetValue("BillToAddress"))
+        Owner_Info.City = TrimFields(clsNotes.GetValue("BillToCity"))
+        Owner_Info.State = clsNotes.GetValue("BillToState")
+        Owner_Info.Zip = clsNotes.GetValue("BillToZip")
+        Owner_Info.Phone = clsNotes.GetValue("BillToPhone")
+        Owner_Info.Fax = clsNotes.GetValue("BillToFax")
+        '        Contracts.CustomerTier = clsNotes.GetValue("CUSTOMERTIER")
+        '        clsNotes.GetValue_Readers("Reader")
+        '        Contracts.Reader = ReadersValue
+        '        clsNotes.GetValue_Readers("reader_global")
+        '        Contracts.ReaderGlobal = ReadersValue
+        '        Attach_To_SmartCenter_Contact()
+        '        If Not MissingContactInfo Then
+        '            JobContact.Name = TrimFields(clsNotes.GetValue("fContact"))
+        '            JobContact.Name = JobContact.Name & " " & TrimFields(clsNotes.GetValue("LContact"))
+        '            JobContact.Address = TrimFields(clsNotes.GetValue("Address"))
+        '            JobContact.Address2 = TrimFields(clsNotes.GetValue("Address_1"))
+        '            JobContact.City = TrimFields(clsNotes.GetValue("City"))
+        '            JobContact.State = clsNotes.GetValue("State")
+        '            JobContact.Zip = clsNotes.GetValue("zip")
+        '            JobContact.Tel = clsNotes.GetValue("Phone")
+        '        End If
 
-    '    End Sub
+    End Sub
     Public Function SetUpLotusLink() As Boolean
         Dim result As Boolean = False
         Dim sInteractionCommand As String = gsCommand
@@ -840,16 +845,16 @@ MISSINGMESSAGE:
         AttachToDBView("(LU Activity Unique)")
         Attach_To_Feedback = AttachToRecord(HoldUniqueActivity, "Feedback")
     End Function
-    '    Private Sub Attach_To_SmartCenter_Contact()
-    '        AttachToDBName(HoldNotesContactPath, SMART)
-    '        AttachToDBView("(LU Contact Unique)")
-    '        AttachToRecord(Hold_Contact_ID, "Contact")
-    '    End Sub
-    '    Private Sub Attach_To_SmartCenter_Customer()
-    '        AttachToDBName(HoldNotesCustomerPath, SMART)
-    '        AttachToDBView("(LU Unique Company)")
-    '        AttachToRecord(Hold_Customer_ID, "Company")
-    '    End Sub
+    Private Sub Attach_To_SmartCenter_Contact()
+        AttachToDBName(HoldNotesContactPath, SMART)
+        AttachToDBView("(LU Contact Unique)")
+        AttachToRecord(Hold_Contact_ID, "Contact")
+    End Sub
+    Private Sub Attach_To_SmartCenter_Customer()
+        AttachToDBName(HoldNotesCustomerPath, SMART)
+        AttachToDBView("(LU Unique Company)")
+        AttachToRecord(Hold_Customer_ID, "Company")
+    End Sub
     '    Public Function Attach_To_Estimating_Feedback() As Boolean
     '        Dim result As Boolean = False
 
@@ -860,15 +865,15 @@ MISSINGMESSAGE:
     '        Return result
 
     '    End Function
-    '    Private Function TrimFields(ByVal strField As String) As String
+    Private Function TrimFields(ByVal strField As String) As String
 
-    '        strField = strField.Trim()
-    '        Do Until Strings.Right(strField, 1) <> Strings.Chr(13) And Strings.Right(strField, 1) <> Environment.NewLine And Strings.Right(strField, 1) <> Constants.vbFormFeed And Strings.Right(strField, 1) <> Constants.vbLf And Strings.Right(strField, 1) <> Environment.NewLine
-    '            strField = Strings.Left(strField, strField.Length - 1)
-    '        Loop
-    '        Return strField
+        strField = strField.Trim()
+        Do Until Strings.Right(strField, 1) <> Strings.Chr(13) And Strings.Right(strField, 1) <> Environment.NewLine And Strings.Right(strField, 1) <> vbFormFeed And Strings.Right(strField, 1) <> vbLf And Strings.Right(strField, 1) <> Environment.NewLine
+            strField = Strings.Left(strField, strField.Length - 1)
+        Loop
+        Return strField
 
-    '    End Function
+    End Function
     '    Public Sub Get_FieldSupID()
 
     '        Try
@@ -923,33 +928,40 @@ MISSINGMESSAGE:
     '        End Try
 
 
-    '    End Sub
-    '    Private Sub RetrieveBuildingType(ByRef XML As String)
-    '        Dim iPos, iPos2 As Integer
-    '        Dim TempStr, ReturnValue, Where As String
+    'End Sub
 
-    '        Contracts.BuildingType = String.Empty
-    '        Contracts.IsCampus = False
-    '        If XML.Trim().Length > 0 Then
-    '            iPos = (XML.IndexOf("<building_type>") + 1) + 15
-    '            TempStr = Strings.Mid(XML, iPos).Trim()
-    '            iPos2 = TempStr.IndexOf("</building_type>")
-    '            TempStr = Strings.Left(TempStr, iPos2).Trim()
-    '            If TempStr = "*" Then
-    '                Contracts.BuildingType = TempStr
-    '            Else
-    '                ReturnValue = "Code"
-    '                Where = "Description = " & FixSQLString(TempStr)
-    '                If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, BUILDING_CODE_TABLE_QUERY_NAME, Where, 0, ReturnValue) <> RECORD_NOT_FOUND Then
-    '                    Contracts.BuildingType = ReturnValue
-    '                End If
-    '            End If
-    '            If Strings.InStr(iPos, XML, "<building_type>") > 0 Then
-    '                Contracts.IsCampus = True
-    '            End If
-    '        End If
+    Private Sub RetrieveBuildingType(ByRef XML As String)
+        Dim iPos, iPos2 As Integer
+        Dim TempStr, ReturnValue, Where As String
+        Dim _myList As New List(Of String)()
 
-    '    End Sub
+        Contracts.BuildingType = String.Empty
+        Contracts.IsCampus = False
+        If XML.Trim().Length > 0 Then
+            iPos = (XML.IndexOf("<building_type>") + 1) + 15
+            TempStr = Strings.Mid(XML, iPos).Trim()
+            iPos2 = TempStr.IndexOf("</building_type>")
+            TempStr = Strings.Left(TempStr, iPos2).Trim()
+            If TempStr = "*" Then
+                Contracts.BuildingType = TempStr
+            Else
+                ReturnValue = "Code"
+                '  Where = "Description = " & FixSQLString(TempStr)
+                Dim sql As String = "SELECT code & ' - ' &  Description AS BldgCode FROM [Building Code] WHERE Description = " & FixSQLString(TempStr)
+                _myList = GetDataFromOptions(sql)
+
+                'If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, BUILDING_CODE_TABLE_QUERY_NAME, Where, 0, ReturnValue) <> RECORD_NOT_FOUND Then
+                If _myList.Count <> 0 Then
+                    Contracts.BuildingType = _myList(0)
+                End If
+
+                End If
+                If Strings.InStr(iPos, XML, "<building_type>") > 0 Then
+                    Contracts.IsCampus = True
+                End If
+        End If
+    End Sub
+
     '    Private Function ReadDataFromA2BFile(ByRef sFileName As String) As String
     '        Dim ExportFileHandle As Integer
     '        Dim ThisInputFilePathAndName, RecordBuffer, ThisTag, ThisValue As String

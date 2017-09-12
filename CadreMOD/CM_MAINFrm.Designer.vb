@@ -8,22 +8,7 @@ Partial Class CM_MAIN_frm
         '   isInitializingComponent = False
         '    ReLoadForm(False)
         'Add any initialization after the InitializeComponent() call
-        CreateDataSet()
 
-        'Deserialize()
-
-        Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
-        model = FpSpread1.ActiveSheet.Models.Data
-
-        Dim dt As DataTable
-        For Each dt In dsCadre.Tables
-            dt.DefaultView.AllowNew = False
-        Next
-        '   model.DataMember = "artists"
-        model.DataSource = dsCadre
-
-        FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
-        FpSpread1.ActiveSheet.SortRows(3, True, False)
 
     End Sub
     Private visualControls() As String = New String() {"components", "ToolTipMain", "CostPriceView_cmb", "CostPrice_grd", "Totals_grd", "CostPriceView_lbl", "CostPrice_fra", "Comments_txt", "Comments_fra", "AgentFor_txt", "Company_txt", "ContactName_txt", "ContactCity_txt", "ContactAddress2_txt", "ContactAddress_txt", "ContactState_txt", "ContactZip_txt", "Agentfor_lbl", "Company_lbl", "ContactName_lbl", "ContactZip_lbl", "ContactState_lbl", "ContactCity_lbl", "ContactAddress_lbl", "Contact_fra", "ServiceOffice_cmb", "InstallingOffice_cmb", "SalesRep_lst", "ProbabilityOfSale_lst", "Status_cmb", "SalesOffice_lst", "ServiceOffice_lbl", "ProbabilityOfSale_lbl", "Status_lbl", "_label_7", "InstallingOffice_lbl", "SalesOffice_lbl", "Job_Info_Fra", "_Forms_btn_0", "JobAddress2_txt", "JobCity_txt", "JobAddress_txt", "JobName_txt", "JobState_txt", "JobZip_txt", "_label_14", "_label_12", "_label_10", "_label_9", "_label_8", "Customer_Info_Fra", "GO_grd", "_Forms_btn_1", "_Forms_btn_2", "_Action_btn_0", "_Action_btn_1", "_JobHighRiskFactor_lbl_1", "_JobHighRiskFactor_lbl_0", "Equipment_fra", "Scope_grd", "Scope_fra", "Hidden_pic", "_Menu_tlb_2", "EstimateNum_txt", "Estimator_txt", "_Menu_tlb_0", "_Menu_tlb_1", "_Menu_tlb_3", "_Menu_tlb_4", "_label_0", "_label_4", "TodaysDate_lbl", "Menu_pic", "_StatusBar1_Panel1", "_StatusBar1_Panel2", "_StatusBar1_Panel3", "_StatusBar1_Panel4", "StatusBar1", "Action_frm", "Action_btn", "Forms_btn", "JobHighRiskFactor_lbl", "Menu_tlb", "label", "Scope_grd_Sheet1", "GO_grd_Sheet1", "Totals_grd_Sheet1", "CostPrice_grd_Sheet1"}
@@ -32,20 +17,20 @@ Partial Class CM_MAIN_frm
     Public ToolTipMain As System.Windows.Forms.ToolTip
     Public WithEvents BuildingInformation_fra As System.Windows.Forms.GroupBox
     Private WithEvents btnContacts As System.Windows.Forms.Button
-    Public WithEvents JobAddress2_txt As System.Windows.Forms.TextBox
-    Public WithEvents JobCity_txt As System.Windows.Forms.TextBox
-    Public WithEvents JobAddress_txt As System.Windows.Forms.TextBox
-    Public WithEvents JobName_txt As System.Windows.Forms.TextBox
-    Public WithEvents JobState_txt As System.Windows.Forms.MaskedTextBox
-    Public WithEvents JobZip_txt As System.Windows.Forms.MaskedTextBox
+    Public WithEvents txtJobAddress2 As System.Windows.Forms.TextBox
+    Public WithEvents txtJobCity As System.Windows.Forms.TextBox
+    Public WithEvents txtJobAddress As System.Windows.Forms.TextBox
+    Public WithEvents txtJobName As System.Windows.Forms.TextBox
+    Public WithEvents txtJobState As System.Windows.Forms.MaskedTextBox
+    Public WithEvents txtJobZip As System.Windows.Forms.MaskedTextBox
     Private WithEvents _label_14 As System.Windows.Forms.Label
     Private WithEvents _label_12 As System.Windows.Forms.Label
     Private WithEvents _label_10 As System.Windows.Forms.Label
     Private WithEvents _label_9 As System.Windows.Forms.Label
     Private WithEvents _label_8 As System.Windows.Forms.Label
     Private WithEvents _Menu_tlb_2 As System.Windows.Forms.Button
-    Public WithEvents EstimateNum_txt As System.Windows.Forms.MaskedTextBox
-    Public WithEvents Estimator_txt As System.Windows.Forms.MaskedTextBox
+    Public WithEvents txtEstimateNum As System.Windows.Forms.MaskedTextBox
+    Public WithEvents txtEstimator As System.Windows.Forms.MaskedTextBox
     Private WithEvents btnExit As System.Windows.Forms.Button
     Private WithEvents btnSave As System.Windows.Forms.Button
     Private WithEvents _Menu_tlb_3 As System.Windows.Forms.Button
@@ -70,9 +55,9 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
-        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim NumberCellType1 As FarPoint.Win.Spread.CellType.NumberCellType = New FarPoint.Win.Spread.CellType.NumberCellType()
+        Dim EnhancedScrollBarRenderer3 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer4 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim NumberCellType2 As FarPoint.Win.Spread.CellType.NumberCellType = New FarPoint.Win.Spread.CellType.NumberCellType()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
@@ -80,9 +65,9 @@ Partial Class CM_MAIN_frm
         Me.cboTaxCode = New System.Windows.Forms.ComboBox()
         Me.lblNationalAccount = New System.Windows.Forms.Label()
         Me.cboNationalAccount = New System.Windows.Forms.ComboBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.txtConsultant = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.txtOwner = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtBidDate = New System.Windows.Forms.DateTimePicker()
         Me.cboBuildingType = New System.Windows.Forms.ComboBox()
@@ -103,12 +88,12 @@ Partial Class CM_MAIN_frm
         Me.cboProbabilityOfSale = New System.Windows.Forms.ComboBox()
         Me.ProbabilityOfSale_lbl = New System.Windows.Forms.Label()
         Me.btnContacts = New System.Windows.Forms.Button()
-        Me.JobAddress2_txt = New System.Windows.Forms.TextBox()
-        Me.JobCity_txt = New System.Windows.Forms.TextBox()
-        Me.JobAddress_txt = New System.Windows.Forms.TextBox()
-        Me.JobName_txt = New System.Windows.Forms.TextBox()
-        Me.JobState_txt = New System.Windows.Forms.MaskedTextBox()
-        Me.JobZip_txt = New System.Windows.Forms.MaskedTextBox()
+        Me.txtJobAddress2 = New System.Windows.Forms.TextBox()
+        Me.txtJobCity = New System.Windows.Forms.TextBox()
+        Me.txtJobAddress = New System.Windows.Forms.TextBox()
+        Me.txtJobName = New System.Windows.Forms.TextBox()
+        Me.txtJobState = New System.Windows.Forms.MaskedTextBox()
+        Me.txtJobZip = New System.Windows.Forms.MaskedTextBox()
         Me._label_14 = New System.Windows.Forms.Label()
         Me._label_12 = New System.Windows.Forms.Label()
         Me._label_10 = New System.Windows.Forms.Label()
@@ -132,8 +117,8 @@ Partial Class CM_MAIN_frm
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Menu_pic = New System.Windows.Forms.PictureBox()
         Me._Menu_tlb_2 = New System.Windows.Forms.Button()
-        Me.EstimateNum_txt = New System.Windows.Forms.MaskedTextBox()
-        Me.Estimator_txt = New System.Windows.Forms.MaskedTextBox()
+        Me.txtEstimateNum = New System.Windows.Forms.MaskedTextBox()
+        Me.txtEstimator = New System.Windows.Forms.MaskedTextBox()
         Me.btnExit = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me._Menu_tlb_3 = New System.Windows.Forms.Button()
@@ -194,9 +179,9 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.cboTaxCode)
         Me.BuildingInformation_fra.Controls.Add(Me.lblNationalAccount)
         Me.BuildingInformation_fra.Controls.Add(Me.cboNationalAccount)
-        Me.BuildingInformation_fra.Controls.Add(Me.TextBox2)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtConsultant)
         Me.BuildingInformation_fra.Controls.Add(Me.Label3)
-        Me.BuildingInformation_fra.Controls.Add(Me.TextBox1)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtOwner)
         Me.BuildingInformation_fra.Controls.Add(Me.Label2)
         Me.BuildingInformation_fra.Controls.Add(Me.txtBidDate)
         Me.BuildingInformation_fra.Controls.Add(Me.cboBuildingType)
@@ -217,12 +202,12 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.cboProbabilityOfSale)
         Me.BuildingInformation_fra.Controls.Add(Me.ProbabilityOfSale_lbl)
         Me.BuildingInformation_fra.Controls.Add(Me.btnContacts)
-        Me.BuildingInformation_fra.Controls.Add(Me.JobAddress2_txt)
-        Me.BuildingInformation_fra.Controls.Add(Me.JobCity_txt)
-        Me.BuildingInformation_fra.Controls.Add(Me.JobAddress_txt)
-        Me.BuildingInformation_fra.Controls.Add(Me.JobName_txt)
-        Me.BuildingInformation_fra.Controls.Add(Me.JobState_txt)
-        Me.BuildingInformation_fra.Controls.Add(Me.JobZip_txt)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtJobAddress2)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtJobCity)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtJobAddress)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtJobName)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtJobState)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtJobZip)
         Me.BuildingInformation_fra.Controls.Add(Me._label_14)
         Me.BuildingInformation_fra.Controls.Add(Me._label_12)
         Me.BuildingInformation_fra.Controls.Add(Me._label_10)
@@ -288,15 +273,14 @@ Partial Class CM_MAIN_frm
         Me.cboNationalAccount.Size = New System.Drawing.Size(81, 21)
         Me.cboNationalAccount.TabIndex = 95
         '
-        'TextBox2
+        'txtConsultant
         '
-        Me.TextBox2.Enabled = False
-        Me.TextBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(124, 136)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(336, 20)
-        Me.TextBox2.TabIndex = 94
-        Me.TextBox2.Text = "Sam Axe Consulting, Ltd."
+        Me.txtConsultant.Enabled = False
+        Me.txtConsultant.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtConsultant.Location = New System.Drawing.Point(124, 136)
+        Me.txtConsultant.Name = "txtConsultant"
+        Me.txtConsultant.Size = New System.Drawing.Size(336, 20)
+        Me.txtConsultant.TabIndex = 94
         '
         'Label3
         '
@@ -309,15 +293,14 @@ Partial Class CM_MAIN_frm
         Me.Label3.TabIndex = 93
         Me.Label3.Text = "Consultant:"
         '
-        'TextBox1
+        'txtOwner
         '
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(122, 110)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(336, 20)
-        Me.TextBox1.TabIndex = 92
-        Me.TextBox1.Text = "Queen Consolidated Enterprises"
+        Me.txtOwner.Enabled = False
+        Me.txtOwner.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtOwner.Location = New System.Drawing.Point(122, 110)
+        Me.txtOwner.Name = "txtOwner"
+        Me.txtOwner.Size = New System.Drawing.Size(336, 20)
+        Me.txtOwner.TabIndex = 92
         '
         'Label2
         '
@@ -576,90 +559,85 @@ Partial Class CM_MAIN_frm
         Me.btnContacts.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnContacts.UseVisualStyleBackColor = False
         '
-        'JobAddress2_txt
+        'txtJobAddress2
         '
-        Me.JobAddress2_txt.AcceptsReturn = True
-        Me.JobAddress2_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.JobAddress2_txt.Enabled = False
-        Me.JobAddress2_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JobAddress2_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.JobAddress2_txt.Location = New System.Drawing.Point(121, 63)
-        Me.JobAddress2_txt.MaxLength = 42
-        Me.JobAddress2_txt.Name = "JobAddress2_txt"
-        Me.JobAddress2_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.JobAddress2_txt.Size = New System.Drawing.Size(336, 20)
-        Me.JobAddress2_txt.TabIndex = 2
+        Me.txtJobAddress2.AcceptsReturn = True
+        Me.txtJobAddress2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtJobAddress2.Enabled = False
+        Me.txtJobAddress2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtJobAddress2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtJobAddress2.Location = New System.Drawing.Point(121, 63)
+        Me.txtJobAddress2.MaxLength = 42
+        Me.txtJobAddress2.Name = "txtJobAddress2"
+        Me.txtJobAddress2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtJobAddress2.Size = New System.Drawing.Size(336, 20)
+        Me.txtJobAddress2.TabIndex = 2
         '
-        'JobCity_txt
+        'txtJobCity
         '
-        Me.JobCity_txt.AcceptsReturn = True
-        Me.JobCity_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.JobCity_txt.Enabled = False
-        Me.JobCity_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JobCity_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.JobCity_txt.Location = New System.Drawing.Point(122, 86)
-        Me.JobCity_txt.MaxLength = 42
-        Me.JobCity_txt.Name = "JobCity_txt"
-        Me.JobCity_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.JobCity_txt.Size = New System.Drawing.Size(141, 20)
-        Me.JobCity_txt.TabIndex = 3
-        Me.JobCity_txt.Text = "Starling City"
+        Me.txtJobCity.AcceptsReturn = True
+        Me.txtJobCity.BackColor = System.Drawing.SystemColors.Window
+        Me.txtJobCity.Enabled = False
+        Me.txtJobCity.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtJobCity.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtJobCity.Location = New System.Drawing.Point(122, 86)
+        Me.txtJobCity.MaxLength = 42
+        Me.txtJobCity.Name = "txtJobCity"
+        Me.txtJobCity.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtJobCity.Size = New System.Drawing.Size(141, 20)
+        Me.txtJobCity.TabIndex = 3
         '
-        'JobAddress_txt
+        'txtJobAddress
         '
-        Me.JobAddress_txt.AcceptsReturn = True
-        Me.JobAddress_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.JobAddress_txt.Enabled = False
-        Me.JobAddress_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JobAddress_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.JobAddress_txt.Location = New System.Drawing.Point(121, 38)
-        Me.JobAddress_txt.MaxLength = 42
-        Me.JobAddress_txt.Name = "JobAddress_txt"
-        Me.JobAddress_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.JobAddress_txt.Size = New System.Drawing.Size(336, 20)
-        Me.JobAddress_txt.TabIndex = 1
-        Me.JobAddress_txt.Text = "456 Main Street"
+        Me.txtJobAddress.AcceptsReturn = True
+        Me.txtJobAddress.BackColor = System.Drawing.SystemColors.Window
+        Me.txtJobAddress.Enabled = False
+        Me.txtJobAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtJobAddress.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtJobAddress.Location = New System.Drawing.Point(121, 38)
+        Me.txtJobAddress.MaxLength = 42
+        Me.txtJobAddress.Name = "txtJobAddress"
+        Me.txtJobAddress.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtJobAddress.Size = New System.Drawing.Size(336, 20)
+        Me.txtJobAddress.TabIndex = 1
         '
-        'JobName_txt
+        'txtJobName
         '
-        Me.JobName_txt.AcceptsReturn = True
-        Me.JobName_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.JobName_txt.Enabled = False
-        Me.JobName_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JobName_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.JobName_txt.Location = New System.Drawing.Point(121, 16)
-        Me.JobName_txt.MaxLength = 0
-        Me.JobName_txt.Name = "JobName_txt"
-        Me.JobName_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.JobName_txt.Size = New System.Drawing.Size(336, 20)
-        Me.JobName_txt.TabIndex = 0
-        Me.JobName_txt.Text = "Queen Tower"
+        Me.txtJobName.AcceptsReturn = True
+        Me.txtJobName.BackColor = System.Drawing.SystemColors.Window
+        Me.txtJobName.Enabled = False
+        Me.txtJobName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtJobName.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtJobName.Location = New System.Drawing.Point(121, 16)
+        Me.txtJobName.MaxLength = 0
+        Me.txtJobName.Name = "txtJobName"
+        Me.txtJobName.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtJobName.Size = New System.Drawing.Size(336, 20)
+        Me.txtJobName.TabIndex = 0
         '
-        'JobState_txt
+        'txtJobState
         '
-        Me.JobState_txt.AllowPromptAsInput = False
-        Me.JobState_txt.Enabled = False
-        Me.JobState_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JobState_txt.Location = New System.Drawing.Point(314, 86)
-        Me.JobState_txt.Mask = ">AA"
-        Me.JobState_txt.Name = "JobState_txt"
-        Me.JobState_txt.Size = New System.Drawing.Size(34, 20)
-        Me.JobState_txt.TabIndex = 4
-        Me.JobState_txt.Text = "WA"
-        Me.JobState_txt.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        Me.txtJobState.AllowPromptAsInput = False
+        Me.txtJobState.Enabled = False
+        Me.txtJobState.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtJobState.Location = New System.Drawing.Point(314, 86)
+        Me.txtJobState.Mask = ">AA"
+        Me.txtJobState.Name = "txtJobState"
+        Me.txtJobState.Size = New System.Drawing.Size(34, 20)
+        Me.txtJobState.TabIndex = 4
+        Me.txtJobState.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
-        'JobZip_txt
+        'txtJobZip
         '
-        Me.JobZip_txt.AllowPromptAsInput = False
-        Me.JobZip_txt.Enabled = False
-        Me.JobZip_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.JobZip_txt.Location = New System.Drawing.Point(382, 86)
-        Me.JobZip_txt.Mask = "00000-9999"
-        Me.JobZip_txt.Name = "JobZip_txt"
-        Me.JobZip_txt.Size = New System.Drawing.Size(76, 20)
-        Me.JobZip_txt.TabIndex = 5
-        Me.JobZip_txt.Text = "000000000"
-        Me.JobZip_txt.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        Me.txtJobZip.AllowPromptAsInput = False
+        Me.txtJobZip.Enabled = False
+        Me.txtJobZip.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtJobZip.Location = New System.Drawing.Point(382, 86)
+        Me.txtJobZip.Mask = "00000-9999"
+        Me.txtJobZip.Name = "txtJobZip"
+        Me.txtJobZip.Size = New System.Drawing.Size(76, 20)
+        Me.txtJobZip.TabIndex = 5
+        Me.txtJobZip.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         '_label_14
         '
@@ -987,8 +965,8 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.BackColor = System.Drawing.SystemColors.Control
         Me.Menu_pic.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_2)
-        Me.Menu_pic.Controls.Add(Me.EstimateNum_txt)
-        Me.Menu_pic.Controls.Add(Me.Estimator_txt)
+        Me.Menu_pic.Controls.Add(Me.txtEstimateNum)
+        Me.Menu_pic.Controls.Add(Me.txtEstimator)
         Me.Menu_pic.Controls.Add(Me.btnExit)
         Me.Menu_pic.Controls.Add(Me.btnSave)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_3)
@@ -1016,31 +994,29 @@ Partial Class CM_MAIN_frm
         Me._Menu_tlb_2.Text = "Copy"
         Me._Menu_tlb_2.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        'EstimateNum_txt
+        'txtEstimateNum
         '
-        Me.EstimateNum_txt.AllowPromptAsInput = False
-        Me.EstimateNum_txt.Enabled = False
-        Me.EstimateNum_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.EstimateNum_txt.Location = New System.Drawing.Point(644, 8)
-        Me.EstimateNum_txt.Name = "EstimateNum_txt"
-        Me.EstimateNum_txt.Size = New System.Drawing.Size(137, 20)
-        Me.EstimateNum_txt.TabIndex = 6
-        Me.EstimateNum_txt.Text = "ZZZZ-00000"
-        Me.EstimateNum_txt.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        Me.txtEstimateNum.AllowPromptAsInput = False
+        Me.txtEstimateNum.Enabled = False
+        Me.txtEstimateNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEstimateNum.Location = New System.Drawing.Point(644, 8)
+        Me.txtEstimateNum.Name = "txtEstimateNum"
+        Me.txtEstimateNum.Size = New System.Drawing.Size(137, 20)
+        Me.txtEstimateNum.TabIndex = 6
+        Me.txtEstimateNum.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
-        'Estimator_txt
+        'txtEstimator
         '
-        Me.Estimator_txt.AllowPromptAsInput = False
-        Me.Estimator_txt.Enabled = False
-        Me.Estimator_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Estimator_txt.Location = New System.Drawing.Point(643, 30)
-        Me.Estimator_txt.Name = "Estimator_txt"
-        Me.Estimator_txt.Size = New System.Drawing.Size(137, 20)
-        Me.Estimator_txt.TabIndex = 7
-        Me.Estimator_txt.Text = "Chuck Finley"
-        Me.Estimator_txt.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        Me.txtEstimator.AllowPromptAsInput = False
+        Me.txtEstimator.Enabled = False
+        Me.txtEstimator.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEstimator.Location = New System.Drawing.Point(643, 30)
+        Me.txtEstimator.Name = "txtEstimator"
+        Me.txtEstimator.Size = New System.Drawing.Size(137, 20)
+        Me.txtEstimator.TabIndex = 7
+        Me.txtEstimator.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
-        '_Menu_tlb_0
+        'btnExit
         '
         Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnExit.Image = CType(resources.GetObject("btnExit.Image"), System.Drawing.Image)
@@ -1760,43 +1736,43 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
         Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.HorizontalScrollBar.Name = ""
-        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
-        Me.sprTotals.HorizontalScrollBar.TabIndex = 0
+        EnhancedScrollBarRenderer3.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer3.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer3
+        Me.sprTotals.HorizontalScrollBar.TabIndex = 16
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
         Me.sprTotals.Name = "sprTotals"
         Me.sprTotals.ScrollBarTrackPolicy = FarPoint.Win.Spread.ScrollBarTrackPolicy.Both
         Me.sprTotals.ScrollTipPolicy = FarPoint.Win.Spread.ScrollTipPolicy.Both
         Me.sprTotals.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.sprTotals_Sheet1})
-        Me.sprTotals.Size = New System.Drawing.Size(1398, 21)
+        Me.sprTotals.Size = New System.Drawing.Size(1421, 21)
         Me.sprTotals.Skin = FarPoint.Win.Spread.DefaultSpreadSkins.ArcticSea
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.VerticalScrollBar.Name = ""
-        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
-        Me.sprTotals.VerticalScrollBar.TabIndex = 11
+        EnhancedScrollBarRenderer4.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer4.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer4
+        Me.sprTotals.VerticalScrollBar.TabIndex = 17
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
         'sprTotals_Sheet1
@@ -1810,6 +1786,7 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.Cells.Get(0, 0).BackColor = System.Drawing.Color.Cyan
         Me.sprTotals_Sheet1.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold)
         Me.sprTotals_Sheet1.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 0).Locked = True
         Me.sprTotals_Sheet1.Cells.Get(0, 0).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
         Me.sprTotals_Sheet1.Cells.Get(0, 1).BackColor = System.Drawing.Color.Cyan
         Me.sprTotals_Sheet1.Cells.Get(0, 1).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
@@ -1887,12 +1864,12 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.Cells.Get(0, 15).Locked = True
         Me.sprTotals_Sheet1.Cells.Get(0, 15).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
         Me.sprTotals_Sheet1.Cells.Get(0, 16).BackColor = System.Drawing.Color.Cyan
-        NumberCellType1.DecimalPlaces = 2
-        NumberCellType1.DecimalSeparator = "."
-        NumberCellType1.MaximumValue = 9999.99R
-        NumberCellType1.MinimumValue = -9999.99R
-        NumberCellType1.ShowSeparator = True
-        Me.sprTotals_Sheet1.Cells.Get(0, 16).CellType = NumberCellType1
+        NumberCellType2.DecimalPlaces = 2
+        NumberCellType2.DecimalSeparator = "."
+        NumberCellType2.MaximumValue = 9999.99R
+        NumberCellType2.MinimumValue = -9999.99R
+        NumberCellType2.ShowSeparator = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).CellType = NumberCellType2
         Me.sprTotals_Sheet1.Cells.Get(0, 16).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
         Me.sprTotals_Sheet1.Cells.Get(0, 16).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
         Me.sprTotals_Sheet1.Cells.Get(0, 16).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
@@ -1903,12 +1880,12 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.ColumnFooterSheetCornerStyle.Parent = "CornerArcticSea"
         Me.sprTotals_Sheet1.ColumnHeader.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.ColumnHeader.DefaultStyle.Parent = "ColumnHeaderArcticSea"
-        Me.sprTotals_Sheet1.ColumnHeader.Rows.Get(0).Height = 27.0!
+        Me.sprTotals_Sheet1.ColumnHeader.Rows.Get(0).Height = 30.0!
         Me.sprTotals_Sheet1.ColumnHeader.Visible = False
         Me.sprTotals_Sheet1.Columns.Get(0).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(1).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(2).Width = 38.0!
-        Me.sprTotals_Sheet1.Columns.Get(3).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(3).Width = 36.0!
         Me.sprTotals_Sheet1.Columns.Get(4).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(5).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(6).Width = 38.0!
@@ -1931,10 +1908,11 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.RowHeader.Columns.Get(0).Width = 363.0!
         Me.sprTotals_Sheet1.RowHeader.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.RowHeader.DefaultStyle.Parent = "RowHeaderArcticSea"
-        Me.sprTotals_Sheet1.Rows.Get(0).BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sprTotals_Sheet1.Rows.Get(0).BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.sprTotals_Sheet1.Rows.Get(0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold)
         Me.sprTotals_Sheet1.Rows.Get(0).Height = 17.0!
         Me.sprTotals_Sheet1.Rows.Get(0).Label = "Summary Totals"
+        Me.sprTotals_Sheet1.Rows.Get(0).Locked = True
         Me.sprTotals_Sheet1.SheetCornerStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.SheetCornerStyle.Parent = "CornerArcticSea"
         Me.sprTotals_Sheet1.VerticalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
@@ -2070,7 +2048,7 @@ Partial Class CM_MAIN_frm
         Me.NewProductService_fra.Location = New System.Drawing.Point(1188, 57)
         Me.NewProductService_fra.Name = "NewProductService_fra"
         Me.NewProductService_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.NewProductService_fra.Size = New System.Drawing.Size(290, 143)
+        Me.NewProductService_fra.Size = New System.Drawing.Size(249, 143)
         Me.NewProductService_fra.TabIndex = 98
         Me.NewProductService_fra.TabStop = False
         Me.NewProductService_fra.Text = "New Product Service"
@@ -2082,11 +2060,11 @@ Partial Class CM_MAIN_frm
         Me.txtNPSLaborCost.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNPSLaborCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNPSLaborCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtNPSLaborCost.Location = New System.Drawing.Point(183, 85)
+        Me.txtNPSLaborCost.Location = New System.Drawing.Point(161, 80)
         Me.txtNPSLaborCost.MaxLength = 0
         Me.txtNPSLaborCost.Name = "txtNPSLaborCost"
         Me.txtNPSLaborCost.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtNPSLaborCost.Size = New System.Drawing.Size(101, 20)
+        Me.txtNPSLaborCost.Size = New System.Drawing.Size(78, 20)
         Me.txtNPSLaborCost.TabIndex = 16
         '
         'txtNPSOneTimeCost
@@ -2096,11 +2074,11 @@ Partial Class CM_MAIN_frm
         Me.txtNPSOneTimeCost.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNPSOneTimeCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNPSOneTimeCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtNPSOneTimeCost.Location = New System.Drawing.Point(183, 109)
+        Me.txtNPSOneTimeCost.Location = New System.Drawing.Point(161, 104)
         Me.txtNPSOneTimeCost.MaxLength = 0
         Me.txtNPSOneTimeCost.Name = "txtNPSOneTimeCost"
         Me.txtNPSOneTimeCost.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtNPSOneTimeCost.Size = New System.Drawing.Size(101, 20)
+        Me.txtNPSOneTimeCost.Size = New System.Drawing.Size(78, 20)
         Me.txtNPSOneTimeCost.TabIndex = 17
         '
         'txtNPSMaterialCost
@@ -2110,11 +2088,11 @@ Partial Class CM_MAIN_frm
         Me.txtNPSMaterialCost.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNPSMaterialCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNPSMaterialCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtNPSMaterialCost.Location = New System.Drawing.Point(183, 61)
+        Me.txtNPSMaterialCost.Location = New System.Drawing.Point(161, 56)
         Me.txtNPSMaterialCost.MaxLength = 0
         Me.txtNPSMaterialCost.Name = "txtNPSMaterialCost"
         Me.txtNPSMaterialCost.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtNPSMaterialCost.Size = New System.Drawing.Size(101, 20)
+        Me.txtNPSMaterialCost.Size = New System.Drawing.Size(78, 20)
         Me.txtNPSMaterialCost.TabIndex = 15
         '
         'cboDurationMonths
@@ -2124,10 +2102,10 @@ Partial Class CM_MAIN_frm
         Me.cboDurationMonths.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboDurationMonths.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboDurationMonths.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboDurationMonths.Location = New System.Drawing.Point(183, 13)
+        Me.cboDurationMonths.Location = New System.Drawing.Point(161, 8)
         Me.cboDurationMonths.Name = "cboDurationMonths"
         Me.cboDurationMonths.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboDurationMonths.Size = New System.Drawing.Size(101, 21)
+        Me.cboDurationMonths.Size = New System.Drawing.Size(78, 21)
         Me.cboDurationMonths.TabIndex = 13
         '
         'cboCallBackHours
@@ -2137,10 +2115,10 @@ Partial Class CM_MAIN_frm
         Me.cboCallBackHours.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboCallBackHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboCallBackHours.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboCallBackHours.Location = New System.Drawing.Point(183, 37)
+        Me.cboCallBackHours.Location = New System.Drawing.Point(161, 32)
         Me.cboCallBackHours.Name = "cboCallBackHours"
         Me.cboCallBackHours.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboCallBackHours.Size = New System.Drawing.Size(101, 21)
+        Me.cboCallBackHours.Size = New System.Drawing.Size(78, 21)
         Me.cboCallBackHours.TabIndex = 14
         '
         'lblNPSLaborCosts
@@ -2150,7 +2128,7 @@ Partial Class CM_MAIN_frm
         Me.lblNPSLaborCosts.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblNPSLaborCosts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNPSLaborCosts.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblNPSLaborCosts.Location = New System.Drawing.Point(31, 90)
+        Me.lblNPSLaborCosts.Location = New System.Drawing.Point(9, 85)
         Me.lblNPSLaborCosts.Name = "lblNPSLaborCosts"
         Me.lblNPSLaborCosts.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblNPSLaborCosts.Size = New System.Drawing.Size(141, 18)
@@ -2165,7 +2143,7 @@ Partial Class CM_MAIN_frm
         Me.lblNPSOneTimeCost_.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblNPSOneTimeCost_.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNPSOneTimeCost_.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblNPSOneTimeCost_.Location = New System.Drawing.Point(31, 114)
+        Me.lblNPSOneTimeCost_.Location = New System.Drawing.Point(9, 109)
         Me.lblNPSOneTimeCost_.Name = "lblNPSOneTimeCost_"
         Me.lblNPSOneTimeCost_.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblNPSOneTimeCost_.Size = New System.Drawing.Size(141, 18)
@@ -2180,7 +2158,7 @@ Partial Class CM_MAIN_frm
         Me.lblDuration.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblDuration.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDuration.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblDuration.Location = New System.Drawing.Point(31, 18)
+        Me.lblDuration.Location = New System.Drawing.Point(9, 13)
         Me.lblDuration.Name = "lblDuration"
         Me.lblDuration.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblDuration.Size = New System.Drawing.Size(141, 18)
@@ -2195,10 +2173,10 @@ Partial Class CM_MAIN_frm
         Me.lblNPSMaterialCost.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblNPSMaterialCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNPSMaterialCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblNPSMaterialCost.Location = New System.Drawing.Point(12, 66)
+        Me.lblNPSMaterialCost.Location = New System.Drawing.Point(1, 61)
         Me.lblNPSMaterialCost.Name = "lblNPSMaterialCost"
         Me.lblNPSMaterialCost.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblNPSMaterialCost.Size = New System.Drawing.Size(160, 18)
+        Me.lblNPSMaterialCost.Size = New System.Drawing.Size(149, 18)
         Me.lblNPSMaterialCost.TabIndex = 31
         Me.lblNPSMaterialCost.Text = "Material Cost (per month):"
         Me.lblNPSMaterialCost.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2210,7 +2188,7 @@ Partial Class CM_MAIN_frm
         Me.lblCallBackHours.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblCallBackHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCallBackHours.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblCallBackHours.Location = New System.Drawing.Point(31, 42)
+        Me.lblCallBackHours.Location = New System.Drawing.Point(9, 37)
         Me.lblCallBackHours.Name = "lblCallBackHours"
         Me.lblCallBackHours.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblCallBackHours.Size = New System.Drawing.Size(141, 18)
@@ -2225,11 +2203,11 @@ Partial Class CM_MAIN_frm
         Me.txtOCPL.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtOCPL.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtOCPL.Location = New System.Drawing.Point(1371, 206)
+        Me.txtOCPL.Location = New System.Drawing.Point(1349, 206)
         Me.txtOCPL.MaxLength = 0
         Me.txtOCPL.Name = "txtOCPL"
         Me.txtOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtOCPL.Size = New System.Drawing.Size(101, 20)
+        Me.txtOCPL.Size = New System.Drawing.Size(78, 20)
         Me.txtOCPL.TabIndex = 99
         '
         'lblOCPL
@@ -2239,7 +2217,7 @@ Partial Class CM_MAIN_frm
         Me.lblOCPL.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOCPL.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblOCPL.Location = New System.Drawing.Point(1222, 209)
+        Me.lblOCPL.Location = New System.Drawing.Point(1200, 209)
         Me.lblOCPL.Name = "lblOCPL"
         Me.lblOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblOCPL.Size = New System.Drawing.Size(138, 18)
@@ -2370,9 +2348,9 @@ Partial Class CM_MAIN_frm
     Public WithEvents cboBuildingType As System.Windows.Forms.ComboBox
     Public WithEvents lblBuildingType As System.Windows.Forms.Label
     Public WithEvents txtBidDate As System.Windows.Forms.DateTimePicker
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents txtConsultant As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents txtOwner As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents lblNationalAccount As System.Windows.Forms.Label
     Friend WithEvents cboNationalAccount As System.Windows.Forms.ComboBox
