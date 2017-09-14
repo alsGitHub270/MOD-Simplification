@@ -616,6 +616,11 @@ Query_Execute_Error:
         Return myList
     End Function
 
+    Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
+        Dim Generator As System.Random = New System.Random()
+        Return Generator.Next(Min, Max)
+    End Function
+
     Public Sub EndProgram()
         Reset_Resolution()
         Environment.Exit(0)

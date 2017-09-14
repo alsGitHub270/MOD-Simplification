@@ -74,10 +74,10 @@ Partial Friend Class CM_MAIN_frm
 
         dtBaseGroup = dsCadre.Tables.Add("BaseGroup")
         dtBaseGroup.Columns.AddRange(New DataColumn() {New DataColumn("BaseGroup", typeStr), _
-                                                        New DataColumn("Id", typeStr), _
-                                                        New DataColumn("Bank", typeStr), _
-                                                        New DataColumn("Units", typeStr), _
-                                                        New DataColumn("Machine", typeStr), _
+                                                        New DataColumn("id", typeStr), _
+                                                        New DataColumn("sort_fld", typeStr), _
+                                                        New DataColumn("filler1", typeStr), _
+                                                        New DataColumn("filler2", typeStr), _
                                                         New DataColumn("Target", typeInt), _
                                                         New DataColumn("Bid", typeStr), _
                                                         New DataColumn("Award", typeStr), _
@@ -110,8 +110,8 @@ Partial Friend Class CM_MAIN_frm
         dtAltGroup = dsCadre.Tables.Add("AltGroup")
         dtAltGroup.Columns.AddRange(New DataColumn() {New DataColumn("AltGroup", typeStr), _
                                                       New DataColumn("id", typeStr), _
-                                                      New DataColumn("Units", typeStr), _
-                                                      New DataColumn("Machine", typeStr), _
+                                                      New DataColumn("filler1", typeStr), _
+                                                      New DataColumn("filler2", typeStr), _
                                                       New DataColumn("Target", typeStr), _
                                                       New DataColumn("Bid", typeStr), _
                                                       New DataColumn("Offer", typeStr), _
@@ -192,11 +192,9 @@ Partial Friend Class CM_MAIN_frm
 
         Deserialize()
 
+        ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
         If dtSummaryGroup.Rows.Count = 0 Then
-            dtSummaryGroup.Rows.Add()
-            dtSummaryGroup.Rows(0).Item("SummaryGroup") = "Summary"
-            dtBaseGroup.Rows.Add()
-            dtBaseGroup.Rows(0).Item("BaseGroup") = "Base"
+            AddBankRow()
         End If
 
         If dtContactGroup.Rows.Count = 0 And Owner_Info.Name.Length > 0 Then
@@ -204,7 +202,7 @@ Partial Friend Class CM_MAIN_frm
         End If
 
         'Add the relations
-        dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("Bank"), dsCadre.Tables("BaseGroup").Columns("Bank"))
+        dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("id"), dsCadre.Tables("BaseGroup").Columns("id"))
         dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("id"), dsCadre.Tables("AltGroup").Columns("id"))
 
     End Sub
@@ -544,7 +542,7 @@ Partial Friend Class CM_MAIN_frm
 
         e.SheetView.LockBackColor = Color.LightGray
 
-        If e.SheetView.ParentRelationName = "Summary_Base_Relationship" Then
+        If e.SheetView.ParentRelationName = "Summary_Base_Relationship" Then  'Bank Row
             With e.SheetView
                 .RowHeader.AutoText = False
                 .DataAutoCellTypes = False
@@ -745,24 +743,27 @@ Partial Friend Class CM_MAIN_frm
             Case "Master"
             Case "Base", "Alt"
                
-                Dim bank As String
-                bank = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 3).Text
+                Dim _id As String
+                _id = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
+
+                Dim _bank As String
+                _bank = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 3).Text
 
                 Dim foundRows() As Data.DataRow
                 Dim criteria As String
-                criteria = "BaseGroup = 'Master' AND bank = '" & bank & "'"
+                criteria = "BaseGroup = 'Master' AND id = '" & _id & "'"
                 foundRows = dtBaseGroup.Select(criteria)
                 If foundRows.Count = 0 Then
 
-                    update_message = "You are about to create a 'Master' for Bank " & bank & ".  Are you sure?"
+                    update_message = "You are about to create a 'Master' for Bank " & _bank & ".  Are you sure?"
 
                     If MessageBox.Show(update_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
                         '  dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", altID, bank, "01-04", "Geared", target, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""}))
-                        AddMasterRow(bank)
+                        AddMasterRow(_id)
 
                         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurSummaryRow, 0)
-                        ChildSheetView1.SortRows(1, True, True)
+                        ChildSheetView1.SortRows(1, True, False)
                         ChildSheetView1.SetRowExpandable(0, False)
 
                         ChildSheetView1.Cells(0, 6).Locked = True
@@ -781,8 +782,10 @@ Partial Friend Class CM_MAIN_frm
                     MessageBox.Show("A Master Has Already Been Created", "Cannot Create Master", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If
             Case Else
+
         End Select
 
+        FpSpread1.Refresh()
 
     End Sub
 
@@ -913,11 +916,23 @@ Partial Friend Class CM_MAIN_frm
 
         dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisID, baseID, units, machine, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
         FpSpread1.Refresh()
+
+        MessageBox.Show("Alternate row added")
+        isDirty = True
     End Sub
 
     Private Sub AddBankRow()
         ' Add a new summary row to the grid
         ' Add a new base row to the grid
+        Dim _id As String = ""
+        Dim _bank As String = ""
+
+        ' Initialize bank to A if no banks currently exist
+        If dtSummaryGroup.Rows.Count = 0 Then
+            _id = GetRandom(100000, 999999).ToString
+            _id = "_id" & _id
+            _bank = "A"
+        End If
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
@@ -926,7 +941,7 @@ Partial Friend Class CM_MAIN_frm
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
 
-        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"Summary", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
         FpSpread1.Refresh()
         FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
@@ -966,6 +981,8 @@ Partial Friend Class CM_MAIN_frm
         cmbocell_bank.MaxDrop = 4
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
 
+        dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+
         FpSpread1.Refresh()
     End Sub
 
@@ -996,9 +1013,12 @@ Partial Friend Class CM_MAIN_frm
                 '        e.Cancel = True
                 '    End If
                 '    FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 4, False)
-                Dim bank As String = FpSpread1.ActiveSheet.GetValue(e.Row, 3)
-                Dim thisID As String = bank & "1"
-                dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+
+                ' now, a base row is added in 'AddBankRow' so this need to update the base row id's, not add
+                'Dim bank As String = FpSpread1.ActiveSheet.GetValue(e.Row, 3)
+                'Dim thisID As String = bank & "1"
+                'dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+
             Case 4
                 If IsNothing(FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value) Then
                     MessageBox.Show("Please select a machine.", "Missing Data")
@@ -1384,6 +1404,11 @@ Partial Friend Class CM_MAIN_frm
 
         txtOwner.Text = Owner_Info.Name
 
+        If Contracts.NationalAccount Then
+            cboNationalAccount.SelectedItem = "Yes"
+        Else
+            cboNationalAccount.SelectedItem = "No"
+        End If
         AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
         AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
     End Sub
@@ -1476,7 +1501,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        '  file_name = "cadre.json"
+        'file_name = "cadre.json"
 
         If File.Exists(directory & file_name) Then
             Try
@@ -1502,7 +1527,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub AddMasterRow(bank As String)
+    Private Sub AddMasterRow(_id As String)
 
         Dim baseID As String
         Dim target As Integer = 0
@@ -1527,7 +1552,7 @@ Partial Friend Class CM_MAIN_frm
             End If
         Next
 
-        criteria = "bank = '" & bank & "'"
+        criteria = "id = '" & _id & "'"
         Dim baseRow() As Data.DataRow
         baseRow = dtBaseGroup.Select(criteria)
         target += baseRow(0).Item("Target")
@@ -1535,16 +1560,19 @@ Partial Friend Class CM_MAIN_frm
         ' Copy existing Bank Row data into a new row
         Dim newRow As DataRow = dtBaseGroup.NewRow
 
+        ' Add each column value from base to new row for master
         For i As Integer = 0 To dtBaseGroup.Columns.Count - 1
             newRow.Item(i) = baseRow(0).Item(i)
         Next
 
-        ' Update new row as Master
+        ' Update new row as Master.
         newRow("Target") = target
-        newRow("Id") = bank.Trim & "0"
+        newRow("Id") = _id
+        newRow("sort_fld") = "0"
         newRow("BaseGroup") = "Master"
 
         dtBaseGroup.Rows.Add(newRow)
+        isDirty = True
 
     End Sub
 
@@ -1594,7 +1622,7 @@ Partial Friend Class CM_MAIN_frm
         ElseIf EstimateLevel = "Master" Then
             MessageBox.Show("You cannot add an alternate row to the Master Row.  Please select a Base Row where you wish to add an alternate.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
-            MessageBox.Show("Please click on the Target Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
+            MessageBox.Show("Please click on the Target Column of the Row.", "Cannot Determine Which Row Selected!")
         End If
 
     End Sub
