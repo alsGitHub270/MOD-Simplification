@@ -1795,6 +1795,10 @@ Partial Friend Class CM_MAIN_frm
         row = dtBuildingInfo.Rows(0)
         row(column_name) = value
     End Sub
+
+    Private Sub cboBuildingType_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboBuildingType.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
     Private Sub cboInstallingOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
