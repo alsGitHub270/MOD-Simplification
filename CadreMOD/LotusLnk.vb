@@ -1,7 +1,6 @@
 Option Strict Off
 Option Explicit On
-Imports UpgradeHelpers.VB6.Gui
-Imports UpgradeHelpers.VB6.Utils
+
 Imports Microsoft.VisualBasic
 Imports System
 Imports System.Data.Common
@@ -534,6 +533,7 @@ MISSINGMESSAGE:
         Contracts.OpportunityToOfferDate = clsNotes.GetValue("oppToOfferDate").ToString
         Contracts.ProposedDate = clsNotes.GetValue("proposedDate").ToString
         Contracts.OpportunityClosedDate = clsNotes.GetValue("oppOfferClosedDate").ToString
+        Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
         Select Case clsNotes.GetValue("Status").ToUpper()
             Case "PRE-BID"
                 Contracts.Status = Status_OpportunityInProgress
