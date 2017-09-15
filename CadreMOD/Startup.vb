@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic
 Imports System
 Imports System.IO
 Imports System.Windows.Forms
+Imports System.Collections.Generic
 
 Module Startup
     Private HoldDirectory As String = String.Empty
@@ -95,7 +96,11 @@ Module Startup
             '    Get_CRMProjectData()
             'End If
             GetSalesRepData()
+            DetermineTaxability()
+
             EstimateModified = False
+
+
             '  Splash.Close()
             Application.Run(New CM_MAIN_frm)
 
@@ -176,4 +181,42 @@ Module Startup
 
     End Function
 
+    Private Sub DetermineTaxability()
+        Dim sql_string As String
+        Dim my_list As New List(Of String)()
+
+        Try
+            If All_LocalCodeDep.CanadaJob Then
+
+                sql_string = "SELECT PSTRate FROM [Rate (Canada Tax)] Where Province ='" & Contracts.JobState & "'"
+                my_list = GetDataFromOptions(sql_string)
+                If my_list.Count = 0 OrElse my_list("0") = 0 Then
+                    DefaultTaxCode = "Tax Excluded"
+                Else
+                    DefaultTaxCode = "Taxable"
+                End If
+
+            Else
+                sql_string = "SELECT [Tax Type], [Tax Rate], ExemptionAllowed FROM [Rate (US Tax)] WHERE State = '" & Contracts.JobState & "'"
+                my_list = GetDataFromOptions(sql_string, True)
+
+                If my_list(0) = "S" Or my_list(0) = "S*" Then
+                    DefaultTaxCode = "Taxable"
+                ElseIf my_list(1) = 0 Then
+                    DefaultTaxCode = "Tax Excluded"
+                ElseIf my_list(2) = "True" Then
+                    DefaultTaxCode = "Tax Exempt"
+                Else
+                    DefaultTaxCode = "Taxable"
+                End If
+            End If
+
+
+        Catch
+
+            MessageBox.Show(Conversion.ErrorToString(), "DetermineTaxability", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+
+
+    End Sub
 End Module

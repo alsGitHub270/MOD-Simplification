@@ -1,12 +1,21 @@
+Imports System.IO
+Imports Newtonsoft.Json
+Imports System.Collections.Generic
+
 Public Class frmEstimatingBase
     Inherits System.Windows.Forms.Form
-    Dim sv As New FarPoint.Win.Spread.SheetView()
-    Dim svCollection As New System.Collections.ArrayList(10)
-    Dim myDataSet As System.Data.DataSet
+    Private sv As New FarPoint.Win.Spread.SheetView()
+    Private svCollection As New System.Collections.ArrayList(10)
+    Private EstimatingDataset As System.Data.DataSet
+    Private MainGroups As DataTable = Nothing
+    Private SubGroups As DataTable = Nothing
+    Private GeneralInfo As DataTable
+    Private isInitializingComponent As Boolean
+    Public FormIsDirty As Boolean
 
-    'Data Types
     Private dtStr As System.Type = System.Type.GetType("System.String")
     Private dtInt As System.Type = System.Type.GetType("System.Int32")
+    Private dtSng As System.Type = System.Type.GetType("System.Single")
 
     Public Structure a_SheetHeaders_typ
         Dim HeaderDesc As String
@@ -18,9 +27,13 @@ Public Class frmEstimatingBase
         End Function
     End Structure
     Private SheetHeaders(,) As a_SheetHeaders_typ
-    Public Const TotalMaterialColumns As Integer = 10
+    Public Const TotalMaterialColumns As Integer = 11
     Public Const MAIN_COL_MAIN_GROUP As Integer = 0
     Public Const MAIN_COL_MAIN_ID As Integer = 1
+    Public Const MAIN_COL_TOTAL_COST As Integer = 2
+    Public Const MAIN_COL_TOTAL_STD_HRS As Integer = 3
+    Public Const MAIN_COL_TOTAL_SPEC_HRS As Integer = 4
+
     Public Const MAT_COL_MATERIAL_DESC As Integer = 0
     Public Const MAT_COL_MAIN_ID As Integer = 1
     Public Const MAT_COL_MATERIAL_ID As Integer = 2
@@ -32,6 +45,7 @@ Public Class frmEstimatingBase
     Public Const MAT_COL_MATERIAL_COST As Integer = 8
     Public Const MAT_COL_STANDARD_HOURS As Integer = 9
     Public Const MAT_COL_SPECIAL_HOURS As Integer = 10
+    Public Const MAT_COL_COMMENTS As Integer = 11
 
     Public Structure a_MainGroup_typ
         Dim MainID As String
@@ -75,212 +89,246 @@ Public Class frmEstimatingBase
     Private CurrentGenInfoFrameHeight As Integer = 0, CurrentBillofMaterialsandTaskListFrameHeight As Integer = 0
     Private MaterialItemRecordSet As New ADODB.Recordset
 
+    ' Main ID's in table ***********************************************************************
+    Public Const MAIN_ID_Controller As String = "00CON"
+    Public Const MAIN_ID_ReuseGearedMachine As String = "05RGD"
+    Public Const MAIN_ID_NewGearedMachine As String = "10NGD"
+    Public Const MAIN_ID_FMM200 As String = "15FMM"
+    Public Const MAIN_ID_ReuseGearlessMachine As String = "20RGL"
+    Public Const MAIN_ID_NewGearlessMachine As String = "25NGL"
+    Public Const MAIN_ID_Governor As String = "30GOV"
+    Public Const MAIN_ID_ACUM As String = "35ACU"
+    Public Const MAIN_ID_CarItems As String = "40CAR"
+    Public Const MAIN_ID_DoorOperator As String = "45DOP"
+    Public Const MAIN_ID_RollerGuides As String = "50RGS"
+    Public Const MAIN_ID_PassengerCab As String = "55PAS"
+    Public Const MAIN_ID_FreightCab As String = "60FRT"
+    Public Const MAIN_ID_LandingDoor As String = "65LND"
+    Public Const MAIN_ID_Hoistway As String = "70HST"
+    Public Const MAIN_ID_Fixtures As String = "75FIX"
+    Public Const MAIN_ID_Pit As String = "80PIT"
+    Public Const MAIN_ID_Miscellaneous As String = "85MSC"
+    Public Const MAIN_ID_SubcontractingWork As String = "90SUB"
+
     ' Material ID's in table ***********************************************************************
-    Public Const Controller As String = "00CON"
-    Public Const SecurityPackage As String = "01CON"
-    Public Const InterGroupEmergencyPower As String = "02CON"
-    Public Const TractionBatteryLowering As String = "03CON"
-    Public Const CodeBlueOption As String = "04CON"
-    Public Const PanicFeatureRiotControl As String = "05CON"
-    Public Const CodePinkOption As String = "06CON"
-    Public Const InconspicuousRiser As String = "07CON"
-    Public Const ReuseGearedACMotor As String = "00RGD"
-    Public Const MotorAdapterPlateKit As String = "01RGD"
-    Public Const ReuseGearedMachineRefurbishmentWork As String = "02RGD"
-    Public Const BrakeWork As String = "03RGD"
-    Public Const NitroCleaning As String = "04RGD"
-    Public Const Machine As String = "00NGD"
-    Public Const NewGearedACMotor As String = "01NGD"
-    Public Const NewGearedBrakeSwitch As String = "02NGD"
-    Public Const MachineIsolation As String = "03NGD"
-    Public Const NewGearedSheaves As String = "04NGD"
-    Public Const NewGearedSheaveGuard As String = "05NGD"
-    Public Const BedPlate As String = "06NGD"
-    Public Const FMM200Machine As String = "00FMM"
-    Public Const BlockingAssembly As String = "01FMM"
-    Public Const STM As String = "02FMM"
-    Public Const KSSContacts As String = "03FMM"
-    Public Const CarAdapter As String = "04FMM"
-    Public Const CwtAdapter As String = "05FMM"
-    Public Const Encoder As String = "00RGL"
-    Public Const Sheave As String = "01RGL"
-    Public Const ReuseGearlessSheaveGuard As String = "02RGL"
-    Public Const ReuseGearlessBrakeSwitch As String = "03RGL"
-    Public Const BrakeWorkforreuserefurbish As String = "04RGL"
-    Public Const NitroCleaningforreuserefurbish As String = "05RGL"
-    Public Const ReuseGearlessMachineRefurbishmentWork As String = "06RGL"
-    Public Const NewGearlessMachine As String = "00NGL"
-    Public Const MachineBedplateIsolation As String = "01NGL"
-    Public Const NewGearlessSheaves As String = "02NGL"
-    Public Const SheaveGuard As String = "03NGL"
-    Public Const MachineDisassembly As String = "04NGL"
-    Public Const Governor As String = "00GOV"
-    Public Const GovernorMountingSlaborRail As String = "01GOV"
-    Public Const GovernorEncoder As String = "02GOV"
-    Public Const GovernorCwt As String = "03GOV"
-    Public Const RopeGripper As String = "00ACU"
-    Public Const RopeGripperMountingKit As String = "01ACU"
-    Public Const CarTopMaintenanceStation As String = "00CAR"
-    Public Const SALSISLevelingUnit As String = "01CAR"
-    Public Const ETSETSL As String = "02CAR"
-    Public Const LoadWeighingDevice As String = "03CAR"
-    Public Const CarDuct As String = "04CAR"
-    Public Const OKRCarTopBox As String = "05CAR"
-    Public Const ToeGuard As String = "06CAR"
-    Public Const FrontCarDoorOperatorPackage As String = "00DOP"
-    Public Const FrontCarDoorOperator As String = "01DOP"
-    Public Const FrontClutch As String = "02DOP"
-    Public Const FrontCarDoorTrack As String = "03DOP"
-    Public Const FrontCarDoorHanger As String = "04DOP"
-    Public Const FrontCarDoorGateSwitch As String = "05DOP"
-    Public Const RearCarDoorOperatorPackage As String = "06DOP"
-    Public Const RearCarDoorOperator As String = "07DOP"
-    Public Const RearClutch As String = "08DOP"
-    Public Const RearCarDoorTrack As String = "09DOP"
-    Public Const RearCarDoorHanger As String = "10DOP"
-    Public Const RearCarDoorGateSwitch As String = "11DOP"
-    Public Const DoorRestrictor As String = "12DOP"
-    Public Const DoorDetectors As String = "13DOP"
-    Public Const RollerGuidesCar As String = "00RGS"
-    Public Const CarRollerGuideAdapterPlate As String = "01RGS"
-    Public Const NewCabComplete As String = "00PAS"
-    Public Const CabShell As String = "01PAS"
-    Public Const CeilingLighting As String = "02PAS"
-    Public Const EmergencyLightCanopyType As String = "03PAS"
-    Public Const CabReturns As String = "04PAS"
-    Public Const CabPanels As String = "05PAS"
-    Public Const CarDoor As String = "06PAS"
-    Public Const Handrails As String = "07PAS"
-    Public Const CarSill As String = "08PAS"
-    Public Const Fan As String = "09PAS"
-    Public Const EmergencyExitSwitch As String = "10PAS"
-    Public Const CabFlooring As String = "11PAS"
-    Public Const Subflooring As String = "12PAS"
-    Public Const CabPads As String = "13PAS"
-    Public Const CarTopHandRail As String = "14PAS"
-    Public Const CarPlatform As String = "15PAS"
-    Public Const CarSling As String = "16PAS"
-    Public Const IsolationPads As String = "17PAS"
-    Public Const CarSafety As String = "18PAS"
-    Public Const FreightEnclosure As String = "00FRT"
-    Public Const Gate As String = "01FRT"
-    Public Const HoistwayFrame As String = "00LND"
-    Public Const HoistwayDoor As String = "01LND"
-    Public Const HoistwayDoorTracks As String = "02LND"
-    Public Const NylonTrackInserts As String = "03LND"
-    Public Const HoistwayDoorHangers As String = "04LND"
-    Public Const HoistwayDoorRollers As String = "05LND"
-    Public Const InterlocksandPickups As String = "06LND"
-    Public Const DoorClosers As String = "07LND"
-    Public Const Escutheons As String = "08LND"
-    Public Const HoistwayDoorGibs As String = "09LND"
-    Public Const FireTabs As String = "10LND"
-    Public Const SightGuard As String = "11LND"
-    Public Const Astragals As String = "12LND"
-    Public Const HoistwaySill As String = "13LND"
-    Public Const Struts As String = "14LND"
-    Public Const HoistwayHeaders As String = "15LND"
-    Public Const HoistwayDoorPackage As String = "16LND"
-    Public Const FreightDoorPackage As String = "17LND"
-    Public Const TravellingCableHoistwayWiring As String = "00HST"
-    Public Const HoistwayDuct As String = "01HST"
-    Public Const TravelCableHangers As String = "02HST"
-    Public Const HoistRopes As String = "03HST"
-    Public Const STMs As String = "04HST"
-    Public Const AntitwistDevice As String = "05HST"
-    Public Const STMCarCwtAdapter As String = "06HST"
-    Public Const Shackles As String = "07HST"
-    Public Const CarGovernorRope As String = "08HST"
-    Public Const CwtGovernorRope As String = "09HST"
-    Public Const CarSheaveandGuard As String = "10HST"
-    Public Const CwtSheaveandGuard As String = "11HST"
-    Public Const RollerGuidesCwt As String = "12HST"
-    Public Const CwtRollerGuideAdapterPlate As String = "13HST"
-    Public Const SeismicSwitch As String = "14HST"
-    Public Const SeismicEquipment As String = "15HST"
-    Public Const GuideRails As String = "16HST"
-    Public Const RailBrackets As String = "17HST"
-    Public Const CounterweightFrame As String = "18HST"
-    Public Const CounterweightSubWeights As String = "19HST"
-    Public Const CwtSafety As String = "20HST"
-    Public Const HoistwayScreening As String = "21HST"
-    Public Const HoistwayLimitSwitch As String = "22HST"
-    Public Const Fascia As String = "23HST"
-    Public Const RopeSplayClamp As String = "24HST"
-    Public Const MainCarStation As String = "00FIX"
-    Public Const AuxCarStation As String = "01FIX"
-    Public Const CarTravelingLantern As String = "02FIX"
-    Public Const CarPositionIndicatorInTransom As String = "03FIX"
-    Public Const VoiceAnnunciator As String = "04FIX"
-    Public Const HandsFreePhone As String = "05FIX"
-    Public Const HallStations As String = "06FIX"
-    Public Const HallPositionIndicator As String = "07FIX"
-    Public Const HallLantern As String = "08FIX"
-    Public Const HallPILanternCombo As String = "09FIX"
-    Public Const HoistwayAccessSwitch As String = "10FIX"
-    Public Const FERSwitch As String = "11FIX"
-    Public Const InconspicuousRisers As String = "12FIX"
-    Public Const JambBraille As String = "13FIX"
-    Public Const EmergencyPowerPanel As String = "14FIX"
-    Public Const StatusPanel As String = "15FIX"
-    Public Const LobbyVision As String = "16FIX"
-    Public Const IntercomSystem As String = "17FIX"
-    Public Const CarBuffer As String = "00PIT"
-    Public Const CarBufferBlocking As String = "01PIT"
-    Public Const CarBufferFootingChannels As String = "02PIT"
-    Public Const CwtBuffer As String = "03PIT"
-    Public Const CwtBufferBlocking As String = "04PIT"
-    Public Const CWTBufferFootingChannels As String = "05PIT"
-    Public Const BufferSwitch As String = "06PIT"
-    Public Const GovernorTensionSheaveCar As String = "07PIT"
-    Public Const GovernorTensionSheaveCwt As String = "08PIT"
-    Public Const PitSwitch As String = "09PIT"
-    Public Const PitLadder As String = "10PIT"
-    Public Const PitLight As String = "11PIT"
-    Public Const WhisperFlex As String = "12PIT"
-    Public Const SwayDevice As String = "13PIT"
-    Public Const CompensationRope As String = "14PIT"
-    Public Const CompensationSheave As String = "15PIT"
-    Public Const CompensationSwitch As String = "16PIT"
-    Public Const CounterweightGuard As String = "17PIT"
-    Public Const CleaningandPainting As String = "00MSC"
-    Public Const SAISInspection As String = "01MSC"
-    Public Const ConsultantGSAInspection As String = "02MSC"
-    Public Const FireServiceEPTesting As String = "03MSC"
-    Public Const MachineRoomSpecialAccess As String = "04MSC"
-    Public Const Miscellaneous As String = "05MSC"
-    Public Const FrontRecladding As String = "00SUB"
-    Public Const FireAlarmSystem As String = "01SUB"
-    Public Const ElectricalWork As String = "02SUB"
-    Public Const CabWork As String = "03SUB"
-    Public Const BuildingGCWork As String = "04SUB"
-    Public Const Crane As String = "05SUB"
+    Public Const MATID_Controller As String = "00CON"
+    Public Const MATID_SecurityPackage As String = "01CON"
+    Public Const MATID_IntergroupEmergencyPower As String = "02CON"
+    Public Const MATID_TractionBatteryLowering As String = "03CON"
+    Public Const MATID_CodeBlueOption As String = "04CON"
+    Public Const MATID_PanicFeatureRiotControl As String = "05CON"
+    Public Const MATID_CodePinkOption As String = "06CON"
+    Public Const MATID_InconspicuousRiser As String = "07CON"
+    Public Const MATID_Drive As String = "08CON"
+    Public Const MATID_Transformer As String = "09CON"
+    Public Const MATID_MTO As String = "10CON"
+    Public Const MATID_MachineRoomWiring As String = "11CON"
+    Public Const MATID_MachineRoomDuct As String = "12CON"
+    Public Const MATID_ReuseGearedACMotor As String = "00RGD"
+    Public Const MATID_ReuseGearedMotorAdapterPlateKit As String = "01RGD"
+    Public Const MATID_ReuseGearedMachineRefurbishmentWork As String = "02RGD"
+    Public Const MATID_ReuseGearedBrakeWork As String = "03RGD"
+    Public Const MATID_ReuseGearedNitroCleaning As String = "04RGD"
+    Public Const MATID_NewGearedMachine As String = "00NGD"
+    Public Const MATID_NewGearedACMotor As String = "01NGD"
+    Public Const MATID_NewGearedBrakeSwitch As String = "02NGD"
+    Public Const MATID_NewGearedMachineIsolation As String = "03NGD"
+    Public Const MATID_NewGearedSheaves As String = "04NGD"
+    Public Const MATID_NewGearedSheaveGuard As String = "05NGD"
+    Public Const MATID_NewGearedBedPlate As String = "06NGD"
+    Public Const MATID_FMM200Machine As String = "00FMM"
+    Public Const MATID_FMM200BlockingAssembly As String = "01FMM"
+    Public Const MATID_FMM200STM As String = "02FMM"
+    Public Const MATID_FMM200KSSContacts As String = "03FMM"
+    Public Const MATID_FMM200CarAdapter As String = "04FMM"
+    Public Const MATID_FMM200CwtAdapter As String = "05FMM"
+    Public Const MATID_ReuseGearlessEncoder As String = "00RGL"
+    Public Const MATID_ReuseGearlessSheave As String = "01RGL"
+    Public Const MATID_ReuseGearlessSheaveGuard As String = "02RGL"
+    Public Const MATID_ReuseGearlessBrakeSwitch As String = "03RGL"
+    Public Const MATID_ReuseGearlessBrakeWork As String = "04RGL"
+    Public Const MATID_ReuseGearlessNitroCleaning As String = "05RGL"
+    Public Const MATID_ReuseGearlessMachineRefurbishmentWork As String = "06RGL"
+    Public Const MATID_NewGearlessMachine As String = "00NGL"
+    Public Const MATID_NewGearlessMachineBedplateIsolation As String = "01NGL"
+    Public Const MATID_NewGearlessSheaves As String = "02NGL"
+    Public Const MATID_NewGearlessSheaveGuard As String = "03NGL"
+    Public Const MATID_NewGearlessMachineDisassembly As String = "04NGL"
+    Public Const MATID_CarGovernor As String = "00GOV"
+    Public Const MATID_CarGovernorEncoder As String = "01GOV"
+    Public Const MATID_CarGovernorMounting As String = "02GOV"
+    Public Const MATID_CwtGovernor As String = "03GOV"
+    Public Const MATID_CwtGovernorEncoder As String = "04GOV"
+    Public Const MATID_CwtGovernorMounting As String = "05GOV"
+    Public Const MATID_RopeGripper As String = "00ACU"
+    Public Const MATID_RopeGripperMountingKit As String = "01ACU"
+    Public Const MATID_CarTopMaintenanceStation As String = "00CAR"
+    Public Const MATID_SALSISLevelingUnit As String = "01CAR"
+    Public Const MATID_ETS_ETSL As String = "02CAR"
+    Public Const MATID_LoadWeighingDevice As String = "03CAR"
+    Public Const MATID_CarDuct As String = "04CAR"
+    Public Const MATID_OKRCarTopBox As String = "05CAR"
+    Public Const MATID_ToeGuard As String = "06CAR"
+    Public Const MATID_FrontCarDoorOperatorPackage As String = "00DOP"
+    Public Const MATID_FrontCarDoorOperator As String = "01DOP"
+    Public Const MATID_FrontClutch As String = "02DOP"
+    Public Const MATID_FrontCarDoorTrack As String = "03DOP"
+    Public Const MATID_FrontCarDoorHanger As String = "04DOP"
+    Public Const MATID_FrontCarDoorGateSwitch As String = "05DOP"
+    Public Const MATID_RearCarDoorOperatorPackage As String = "06DOP"
+    Public Const MATID_RearCarDoorOperator As String = "07DOP"
+    Public Const MATID_RearClutch As String = "08DOP"
+    Public Const MATID_RearCarDoorTrack As String = "09DOP"
+    Public Const MATID_RearCarDoorHanger As String = "10DOP"
+    Public Const MATID_RearCarDoorGateSwitch As String = "11DOP"
+    Public Const MATID_DoorRestrictor As String = "12DOP"
+    Public Const MATID_DoorDetectors As String = "13DOP"
+    Public Const MATID_CarRollerGuides As String = "00RGS"
+    Public Const MATID_CarRollerGuideAdapterPlate As String = "01RGS"
+    Public Const MATID_CarRGShoeCovers As String = "02RGS"
+    Public Const MATID_CwtRollerGuides As String = "03RGS"
+    Public Const MATID_CwtRollerGuideAdapterPlate As String = "04RGS"
+    Public Const MATID_CwtRGShoeCovers As String = "05RGS"
+    Public Const MATID_NewCabComplete As String = "00PAS"
+    Public Const MATID_CabShell As String = "01PAS"
+    Public Const MATID_CeilingLighting As String = "02PAS"
+    Public Const MATID_EmergencyLightCanopyType As String = "03PAS"
+    Public Const MATID_CabReturns As String = "04PAS"
+    Public Const MATID_CabPanels As String = "05PAS"
+    Public Const MATID_CarDoor As String = "06PAS"
+    Public Const MATID_Handrails As String = "07PAS"
+    Public Const MATID_CarSill As String = "08PAS"
+    Public Const MATID_Fan As String = "09PAS"
+    Public Const MATID_EmergencyExitSwitch As String = "10PAS"
+    Public Const MATID_CabFlooring As String = "11PAS"
+    Public Const MATID_Subflooring As String = "12PAS"
+    Public Const MATID_CabPads As String = "13PAS"
+    Public Const MATID_CarTopHandRail As String = "14PAS"
+    Public Const MATID_CarPlatform As String = "15PAS"
+    Public Const MATID_CarSling As String = "16PAS"
+    Public Const MATID_IsolationPads As String = "17PAS"
+    Public Const MATID_CarSafety As String = "18PAS"
+    Public Const MATID_FreightEnclosure As String = "00FRT"
+    Public Const MATID_Gate As String = "01FRT"
+    Public Const MATID_HoistwayFrame As String = "00LND"
+    Public Const MATID_HoistwayDoor As String = "01LND"
+    Public Const MATID_HoistwayDoorTracks As String = "02LND"
+    Public Const MATID_NylonTrackInserts As String = "03LND"
+    Public Const MATID_HoistwayDoorHangers As String = "04LND"
+    Public Const MATID_HoistwayDoorRollers As String = "05LND"
+    Public Const MATID_InterlocksandPickups As String = "06LND"
+    Public Const MATID_DoorClosers As String = "07LND"
+    Public Const MATID_Escutheons As String = "08LND"
+    Public Const MATID_HoistwayDoorGibs As String = "09LND"
+    Public Const MATID_FireTabs As String = "10LND"
+    Public Const MATID_SightGuard As String = "11LND"
+    Public Const MATID_Astragals As String = "12LND"
+    Public Const MATID_HoistwaySill As String = "13LND"
+    Public Const MATID_Struts As String = "14LND"
+    Public Const MATID_HoistwayHeaders As String = "15LND"
+    Public Const MATID_HoistwayDoorPackage As String = "16LND"
+    Public Const MATID_FreightDoorPackage As String = "21LND"
+    Public Const MATID_TravellingCableHoistwayWiring As String = "00HST"
+    Public Const MATID_HoistwayDuct As String = "01HST"
+    Public Const MATID_TravelCableHangers As String = "02HST"
+    Public Const MATID_HoistRopes As String = "03HST"
+    Public Const MATID_STMs As String = "04HST"
+    Public Const MATID_AntitwistDevice As String = "05HST"
+    Public Const MATID_STMCarCwtAdapter As String = "06HST"
+    Public Const MATID_Shackles As String = "07HST"
+    Public Const MATID_CarGovernorRope As String = "08HST"
+    Public Const MATID_CwtGovernorRope As String = "09HST"
+    Public Const MATID_CarSheaveandGuard As String = "10HST"
+    Public Const MATID_CwtSheaveandGuard As String = "11HST"
+    Public Const MATID_RollerGuidesCwt As String = "12HST"
+    Public Const MATID_SeismicSwitch As String = "14HST"
+    Public Const MATID_SeismicEquipment As String = "15HST"
+    Public Const MATID_GuideRails As String = "16HST"
+    Public Const MATID_RailBrackets As String = "17HST"
+    Public Const MATID_CounterweightFrame As String = "18HST"
+    Public Const MATID_CounterweightSubWeights As String = "19HST"
+    Public Const MATID_CwtSafety As String = "20HST"
+    Public Const MATID_HoistwayScreening As String = "21HST"
+    Public Const MATID_HoistwayLimitSwitch As String = "22HST"
+    Public Const MATID_Fascia As String = "23HST"
+    Public Const MATID_RopeSplayClamp As String = "24HST"
+    Public Const MATID_MainCarStation As String = "00FIX"
+    Public Const MATID_AuxCarStation As String = "01FIX"
+    Public Const MATID_CarTravelingLantern As String = "02FIX"
+    Public Const MATID_CarPositionIndicatorInTransom As String = "03FIX"
+    Public Const MATID_VoiceAnnunciator As String = "04FIX"
+    Public Const MATID_HandsFreePhone As String = "05FIX"
+    Public Const MATID_HallStations As String = "06FIX"
+    Public Const MATID_HallPositionIndicator As String = "07FIX"
+    Public Const MATID_HallLantern As String = "08FIX"
+    Public Const MATID_HallPILanternCombo As String = "09FIX"
+    Public Const MATID_HoistwayAccessSwitch As String = "10FIX"
+    Public Const MATID_FERSwitch As String = "11FIX"
+    Public Const MATID_InconspicuousRisers As String = "12FIX"
+    Public Const MATID_JambBraille As String = "13FIX"
+    Public Const MATID_EmergencyPowerPanel As String = "14FIX"
+    Public Const MATID_StatusPanel As String = "15FIX"
+    Public Const MATID_LobbyVision As String = "16FIX"
+    Public Const MATID_IntercomSystem As String = "17FIX"
+    Public Const MATID_CarBuffer As String = "00PIT"
+    Public Const MATID_CarBufferBlocking As String = "01PIT"
+    Public Const MATID_CarBufferFootingChannels As String = "02PIT"
+    Public Const MATID_CwtBuffer As String = "03PIT"
+    Public Const MATID_CwtBufferBlocking As String = "04PIT"
+    Public Const MATID_CWTBufferFootingChannels As String = "05PIT"
+    Public Const MATID_BufferSwitch As String = "06PIT"
+    Public Const MATID_GovernorTensionSheaveCar As String = "07PIT"
+    Public Const MATID_GovernorTensionSheaveCwt As String = "08PIT"
+    Public Const MATID_PitSwitch As String = "09PIT"
+    Public Const MATID_PitLadder As String = "10PIT"
+    Public Const MATID_PitLight As String = "11PIT"
+    Public Const MATID_WhisperFlex As String = "12PIT"
+    Public Const MATID_SwayDevice As String = "13PIT"
+    Public Const MATID_CompensationRope As String = "14PIT"
+    Public Const MATID_CompensationSheave As String = "15PIT"
+    Public Const MATID_CompensationSwitch As String = "16PIT"
+    Public Const MATID_CounterweightGuard As String = "17PIT"
+    Public Const MATID_CleaningandPainting As String = "00MSC"
+    Public Const MATID_SAISInspection As String = "01MSC"
+    Public Const MATID_ConsultantGSAInspection As String = "02MSC"
+    Public Const MATID_FireServiceEPTesting As String = "03MSC"
+    Public Const MATID_MachineRoomSpecialAccess As String = "04MSC"
+    Public Const MATID_Miscellaneous As String = "05MSC"
+    Public Const MATID_FrontRecladding As String = "00SUB"
+    Public Const MATID_FireAlarmSystem As String = "01SUB"
+    Public Const MATID_ElectricalWork As String = "02SUB"
+    Public Const MATID_CabWork As String = "03SUB"
+    Public Const MATID_BuildingGCWork As String = "04SUB"
+    Public Const MATID_Crane As String = "05SUB"
 
     Private Const EST_Prefix As String = "EST: "
     Private Const ORD_Prefix As String = "ORD: "
 
-    Private Sub CreateDataSet()
-        Dim MainGroups As DataTable = Nothing
-        Dim SubGroups As DataTable = Nothing
-        Dim iIndex As Integer = -1, jIndex As Integer = 0, kIndex As Integer
+    Private CurParentRow As Integer = 0
+    Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
+    Private SheetCornerColWidth As Integer = 0
+
+    Private Sub CreateDataSet(ByVal CurUnits As String)
+        Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer
         Dim HeaderSetup() As System.Data.DataColumn = Nothing
-        Dim CurMainID As String = String.Empty
-        Dim Action As Integer = MOVE_FIRST
-        Dim AddToMaterialGroup As Boolean = True
 
-        DAO2ADO(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, My.Application.Info.DirectoryPath & "\", OPTION_DATABASE_NAME, True)
-        Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, GROUP_SETUP_QRY)
-
-        myDataSet = New DataSet()
-        myDataSet.EnforceConstraints = False
+        EstimatingDataset = Nothing
+        EstimatingDataset = New DataSet()
+        EstimatingDataset.EnforceConstraints = False
 
         Erase SheetHeaders
         ReDim SheetHeaders(MATERIAL_GROUP, TotalMaterialColumns)
 
         SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_GROUP).HeaderDesc = "Main Group"
         SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_ID).HeaderDesc = "MainID"
+        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_COST).HeaderDesc = "Total Cost"
+        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_STD_HRS).HeaderDesc = "Total Std Hours"
+        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_SPEC_HRS).HeaderDesc = "Total Spec Hours"
         SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_GROUP).HeaderType = dtStr
         SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_ID).HeaderType = dtStr
+        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_COST).HeaderType = dtInt
+        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_STD_HRS).HeaderType = dtInt
+        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_SPEC_HRS).HeaderType = dtInt
 
         SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderDesc = "Material Description"
         SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderDesc = "MainID"
@@ -293,6 +341,7 @@ Public Class frmEstimatingBase
         SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderDesc = "Unit Material Cost"
         SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderDesc = "Unit Standard Hours"
         SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderDesc = "Unit Special Hours"
+        SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderDesc = "Comments"
         SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderType = dtStr
         SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderType = dtStr
         SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderType = dtStr
@@ -301,49 +350,52 @@ Public Class frmEstimatingBase
         SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderType = dtStr
         SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderType = dtStr
         SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderType = dtInt
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderType = dtInt
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderType = dtInt
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderType = dtInt
+        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderType = dtSng
+        SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderType = dtSng
+        SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderType = dtSng
+        SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderType = dtStr
 
         Erase a_MainGroup
-        Erase a_MaterialGroup
-        Do Until Query_Execute(ADOConnectionRPTDataDB, MaterialItemRecordSet, 1, Action) <> 0
-            If MaterialItemRecordSet.Fields("MainID").Value.ToString.Trim <> CurMainID Then
-                CurMainID = MaterialItemRecordSet.Fields("MainID").Value.ToString.Trim
+        Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "MainGroup")
+        If MaterialItemRecordSet.RecordCount > 0 Then
+            Array.Resize(a_MainGroup, MaterialItemRecordSet.RecordCount)
+            MaterialItemRecordSet.MoveFirst()
+            iIndex = 0
+            Do Until MaterialItemRecordSet.EOF
+                a_MainGroup(iIndex).MainID = MaterialItemRecordSet.Fields("MainID").Value.ToString.Trim
+                a_MainGroup(iIndex).Description = MaterialItemRecordSet.Fields("Main Group").Value.ToString.Trim
+                a_MainGroup(iIndex).Units = CurUnits
+                MaterialItemRecordSet.MoveNext()
                 iIndex += 1
-                ReDim Preserve a_MainGroup(iIndex)
-            End If
-            a_MainGroup(iIndex).MainID = CurMainID
-            a_MainGroup(iIndex).Description = MaterialItemRecordSet.Fields("Main Group").Value.ToString.Trim
-            a_MainGroup(iIndex).Units = "01-03"
-            AddToMaterialGroup = True
-            If Not IsNothing(a_MaterialGroup) Then
-                For kIndex = a_MaterialGroup.GetLowerBound(0) To a_MaterialGroup.GetUpperBound(0)
-                    If a_MaterialGroup(kIndex).MaterialID = MaterialItemRecordSet.Fields("MaterialID").Value.ToString.Trim Then
-                        AddToMaterialGroup = False
-                        Exit For
-                    End If
-                Next kIndex
-            End If
-            If AddToMaterialGroup Then
-                ReDim Preserve a_MaterialGroup(jIndex)
-                a_MaterialGroup(jIndex).MainID = CurMainID
-                a_MaterialGroup(jIndex).MaterialID = MaterialItemRecordSet.Fields("MaterialID").Value.ToString.Trim
-                a_MaterialGroup(jIndex).Description = MaterialItemRecordSet.Fields("Material Description").Value.ToString.Trim
-                a_MaterialGroup(jIndex).Units = "01-03"
-                a_MaterialGroup(jIndex).OptionStr = Nothing
-                a_MaterialGroup(jIndex).Type = Nothing
-                a_MaterialGroup(jIndex).OrderBy = Nothing
-                a_MaterialGroup(jIndex).Qty = CalculateNumberOfCarsInEstimate("01-03")
-                a_MaterialGroup(jIndex).MaterialCost = 0
-                a_MaterialGroup(jIndex).StandardHours = 0
-                a_MaterialGroup(jIndex).SpecialHours = 0
-                jIndex += 1
-            End If
-            Action = MOVE_NEXT
-        Loop
+            Loop
+        End If
         Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
-
+        Erase a_MaterialGroup
+        jIndex = 0
+        For iIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
+            Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "SubGroup")
+            MaterialItemRecordSet.Filter = "MainID = '" & a_MainGroup(iIndex).MainID & "'"
+            If MaterialItemRecordSet.RecordCount > 0 Then
+                MaterialItemRecordSet.MoveFirst()
+                Do Until MaterialItemRecordSet.EOF
+                    ReDim Preserve a_MaterialGroup(jIndex)
+                    a_MaterialGroup(jIndex).MainID = a_MainGroup(iIndex).MainID
+                    a_MaterialGroup(jIndex).MaterialID = MaterialItemRecordSet.Fields("MaterialID").Value.ToString.Trim
+                    a_MaterialGroup(jIndex).Description = MaterialItemRecordSet.Fields("Material Description").Value.ToString.Trim
+                    a_MaterialGroup(jIndex).Units = CurUnits
+                    a_MaterialGroup(jIndex).OptionStr = Nothing
+                    a_MaterialGroup(jIndex).Type = Nothing
+                    a_MaterialGroup(jIndex).OrderBy = Nothing
+                    a_MaterialGroup(jIndex).Qty = CalculateNumberOfCarsInEstimate(CurUnits)
+                    a_MaterialGroup(jIndex).MaterialCost = 0
+                    a_MaterialGroup(jIndex).StandardHours = 0
+                    a_MaterialGroup(jIndex).SpecialHours = 0
+                    MaterialItemRecordSet.MoveNext()
+                    jIndex += 1
+                Loop
+            End If
+            Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+        Next iIndex
         For iIndex = SheetHeaders.GetLowerBound(0) To SheetHeaders.GetUpperBound(0)
             Erase HeaderSetup
             kIndex = 0
@@ -356,13 +408,13 @@ Public Class frmEstimatingBase
             Next jIndex
             Select Case iIndex
                 Case MAIN_GROUP
-                    MainGroups = myDataSet.Tables.Add("EstMainGroup")
+                    MainGroups = EstimatingDataset.Tables.Add("EstMainGroup")
                     MainGroups.Columns.AddRange(HeaderSetup)
                     For jIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
                         MainGroups.Rows.Add(New Object() {a_MainGroup(jIndex).Description, a_MainGroup(jIndex).MainID})
                     Next jIndex
                 Case MATERIAL_GROUP
-                    SubGroups = myDataSet.Tables.Add("EstMaterials")
+                    SubGroups = EstimatingDataset.Tables.Add("EstMaterials")
                     SubGroups.Columns.AddRange(HeaderSetup)
                     For jIndex = a_MaterialGroup.GetLowerBound(0) To a_MaterialGroup.GetUpperBound(0)
                         SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description, a_MaterialGroup(jIndex).MainID, a_MaterialGroup(jIndex).MaterialID,
@@ -374,86 +426,17 @@ Public Class frmEstimatingBase
                 Case Else
             End Select
         Next iIndex
-
-        myDataSet.Relations.Add("EstMaterials", MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+        Deserialize()
+        EstimatingDataset.Relations.Add("EstMaterials", MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
 
     End Sub
     Private Sub PrepareThisForm()
-        Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
         Dim TabToRemove As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
+        isInitializingComponent = True
+        DAO2ADO(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, My.Application.Info.DirectoryPath & "\", OPTION_DATABASE_NAME, True)
         Load_ListBoxes()
-        FpSpread1.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
-        FpSpread1.ActiveSheet.RowHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.RowHeaderRenderer
-        FpSpread1.ActiveSheet.SheetCorner.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.CornerRenderer
-        FpSpread1.InterfaceRenderer = Nothing
-        FpSpread1.HorizontalScrollBar.Renderer = Nothing
-        FpSpread1.VerticalScrollBar.Renderer = Nothing
-        FpSpread1.VisualStyles = FarPoint.Win.VisualStyles.Off
-        'Init Spread
-        With FpSpread1.ActiveSheet
-            .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
-            .Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
-            .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
-            .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).BackColor = Color.DarkGray
-            .ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
-            .RowHeader.AutoText = FarPoint.Win.Spread.HeaderAutoText.Blank
-            .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).BackColor = Color.DarkGray
-            .RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).ForeColor = Color.Black
-            .SheetCornerStyle.BackColor = Color.DarkGray
-            .SetColumnWidth(0, 150)
-            .SetColumnVisible(1, False)
-            .GrayAreaBackColor = Color.White
-        End With
-        TabControl1.Left = 3
-        TabControl1.Width = GroupBox1.Width - TabControl1.Left - 5
-        GeneralInformation_fra.Left = 6
-        GeneralInformation_fra.Width = CarData_fra.Width - GeneralInformation_fra.Left - 10
-        CurrentGenInfoFrameHeight = GeneralInformation_fra.Height
-        BillofMaterialsandTaskList_fra.Left = 6
-        BillofMaterialsandTaskList_fra.Width = CarData_fra.Width - BillofMaterialsandTaskList_fra.Left - 10
-        CurrentBillofMaterialsandTaskListFrameHeight = BillofMaterialsandTaskList_fra.Height
-        Relocate_BillofMaterialsandTaskList_Frame()
-        FpSpread1.Left = 6
-        'FpSpread1.Width = GroupBox1.Width - FpSpread1.Left - 10
-        FpSpread1.Visible = False
-        ExpandCollapseAll("Expand")
-        ExpandCollapseAll("Collapse")
-        FpSpread1.Visible = True
-        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
-        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If Not ChildSheetView1 Is Nothing Then
-                ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 200)
-                ChildSheetView1.SetColumnVisible(MAT_COL_MAIN_ID, False)
-                ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
-                ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
-
-                ChildSheetView1.SetColumnWidth(MAT_COL_OPTION, 100)
-                ChildSheetView1.SetColumnWidth(MAT_COL_TYPE, 100)
-                ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY, 100)
-                If iIndex = 0 Then
-                    For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).CellType = SetCombo("Options", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).CellType = SetCombo("Types", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).CellType = SetCombo("OrderBys", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value = CalculateNumberOfCarsInEstimate("01-03")         'TabControl1.TabPages(0).Text)
-                    Next jIndex
-                End If
-                ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST, 100)
-                ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS, 120)
-                ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS, 100)
-
-                'For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
-                '    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
-                '    If Not ChildSheetView2 Is Nothing Then
-
-                '        ChildSheetView2.SetColumnVisible(1, False)
-                '    End If
-                'Next jindex
-            End If
-        Next iIndex
         OrderingTabs.Top = CarData_fra.Top
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
         CarTab.Text = EST_Prefix & CurrentUnits
@@ -473,8 +456,13 @@ Public Class frmEstimatingBase
             Next iIndex
         End If
         TabControl1.SelectTab(0)
-        DisplayEST_vs_ORD()
+        TabControl1.Left = 3
+        TabControl1.Width = GroupBox1.Width - TabControl1.Left - 5
+        CurrentGenInfoFrameHeight = GeneralInformation_fra.Height
+        CurrentBillofMaterialsandTaskListFrameHeight = BillofMaterialsandTaskList_fra.Height
         ExpensesPerDayDetails_btn.Left = ExpensesPerDay_txt.Left
+        DisplayEST_vs_ORD()
+        isInitializingComponent = False
         Me.Cursor = Cursors.Default
 
     End Sub
@@ -490,28 +478,24 @@ Public Class frmEstimatingBase
         FpSpread1.HorizontalScrollBar.Renderer = Nothing
         FpSpread1.VerticalScrollBar.Renderer = Nothing
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
-        'Display child
-        'e.SheetView.Cells(0, 0, e.SheetView.RowCount - 1, e.SheetView.ColumnCount - 1).Font = fpFont
-        'e.SheetView.Cells(0, 0, e.SheetView.RowCount - 1, e.SheetView.ColumnCount - 1).ForeColor = Color.Black
-        'e.SheetView.ColumnHeader.Cells(0, 0, 0, e.SheetView.ColumnCount - 1).Font = fpFont
-        'e.SheetView.ColumnHeader.Cells(0, 0, 0, e.SheetView.ColumnCount - 1).BackColor = FpSpread1.ActiveSheet.ColumnHeader.Cells(0, 0).BackColor
-        'e.SheetView.ColumnHeader.Cells(0, 0, 0, e.SheetView.ColumnCount - 1).ForeColor = FpSpread1.ActiveSheet.ColumnHeader.Cells(0, 0).ForeColor
         e.SheetView.RowHeader.AutoText = FarPoint.Win.Spread.HeaderAutoText.Blank
-        'e.SheetView.RowHeader.Cells(0, 0, e.SheetView.RowCount - 1, 0).BackColor = FpSpread1.ActiveSheet.RowHeader.Cells(0, 0).BackColor
-        'e.SheetView.RowHeader.Cells(0, 0, e.SheetView.RowCount - 1, 0).ForeColor = FpSpread1.ActiveSheet.RowHeader.Cells(0, 0).ForeColor
         e.SheetView.SheetCornerStyle.BackColor = FpSpread1.ActiveSheet.SheetCornerStyle.BackColor
         e.SheetView.GrayAreaBackColor = Color.Gray
         e.SheetView.LockBackColor = Color.DarkGray
-        'e.SheetView.SetColumnWidth(1, 110)
-        'e.SheetView.SetColumnWidth(2, 110)
-        'e.SheetView.SetColumnVisible(3, False)
         svCollection.Add(e.SheetView)
 
     End Sub
-    Private Sub _IconButton_cmd_0_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _IconButton_cmd_0.Click
-        End
+    Private Sub Exit_cmd_0_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Exit_cmd.Click
+
+        If FormIsDirty Then
+            If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                Call SaveEstimatingData()
+            End If
+        End If
+        EndProgram()
+
     End Sub
-    Private Sub _IconButton_cmd_6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _IconButton_cmd_6.Click
+    Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
         CM_MAIN_frm.Show()
         Me.Dispose()
     End Sub
@@ -672,8 +656,11 @@ Public Class frmEstimatingBase
         LayoutEntranceDrawing_cmb.Items.Add("Full")
 
         MachineType_cmb.Items.Clear()
-        MachineType_cmb.Items.Add(GEARED_TYPE)
-        MachineType_cmb.Items.Add(GEARLESS_TYPE)
+        MachineType_cmb.Items.Add("Reuse " & GEARED_TYPE)
+        MachineType_cmb.Items.Add("New " & GEARED_TYPE)
+        MachineType_cmb.Items.Add("FMM200")
+        MachineType_cmb.Items.Add("Reuse " & GEARLESS_TYPE)
+        MachineType_cmb.Items.Add("New " & GEARLESS_TYPE)
 
         DriveType_cmb.Items.Clear()
         DriveType_cmb.Items.Add(AC_TYPE)
@@ -941,54 +928,68 @@ Public Class frmEstimatingBase
     End Sub
     Private Function SetCombo(ByVal ArrayType As String, ByVal CurrentSheet As FarPoint.Win.Spread.SheetView, ByVal RowNum As Integer) As FarPoint.Win.Spread.CellType.ComboBoxCellType
         Dim ReturnCmb As New FarPoint.Win.Spread.CellType.ComboBoxCellType
-        Dim UseWhere As String = String.Empty
-        Dim Options As String() = Nothing
+        Dim UseWhere As String = "MaterialID = '" & CurrentSheet.Cells(RowNum, MAT_COL_MATERIAL_ID).Text & "'"
+        Dim Options As String() = {"Option1", "Option2", "Option3"}
         Dim Action As Integer = MOVE_FIRST
+        Dim myList As New List(Of String)()
 
-        Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, GROUP_SETUP_QRY)
-        UseWhere = "MaterialID = '" & CurrentSheet.Cells(RowNum, MAT_COL_MATERIAL_ID).Text & "'"
-        If Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, FIND_FIRST, "", UseWhere) = RECORD_NOT_FOUND Then
-            Options = {"Option1", "Option2", "Option3"}
-        Else
-            Do Until Query_Execute(ADOConnectionRPTDataDB, MaterialItemRecordSet, 1, Action) <> 0
-                If MaterialItemRecordSet.Fields("MaterialID").Value.ToString = CurrentSheet.Cells(RowNum, MAT_COL_MATERIAL_ID).Text Then
-                    Select Case ArrayType
-                        Case "Options"
-                            If MaterialItemRecordSet.Fields("OptionNew").Value = True Then
-                                CheckForAryValue(Options, "New")
-                            End If
-                            If MaterialItemRecordSet.Fields("OptionReuse").Value = True Then
-                                CheckForAryValue(Options, "Reuse")
-                            End If
-                            If MaterialItemRecordSet.Fields("OptionRefurbish").Value = True Then
-                                CheckForAryValue(Options, "Refurbish")
-                            End If
-                            If MaterialItemRecordSet.Fields("OptionNA").Value = True Then
-                                CheckForAryValue(Options, "NA")
-                            End If
-                            If Not Convert.IsDBNull(MaterialItemRecordSet.Fields("OptionOther").Value) Then
-                                CheckForAryValue(Options, MaterialItemRecordSet.Fields("OptionOther").Value.ToString)
-                            End If
-                        Case "Types"
-                            If Not Convert.IsDBNull(MaterialItemRecordSet.Fields("Type")) Then
-                                CheckForAryValue(Options, MaterialItemRecordSet.Fields("Type").Value.ToString)
-                            End If
-                        Case "OrderBys"
-                            If MaterialItemRecordSet.Fields("OrderByHQ").Value = True Then
-                                CheckForAryValue(Options, "HQ")
-                            End If
-                            If MaterialItemRecordSet.Fields("OrderByRL").Value = True Then
-                                CheckForAryValue(Options, "RL")
-                            End If
-                        Case Else
-                            Options = {"Option1", "Option2", "Option3"}
-                            Exit Do
-                    End Select
+        Select Case ArrayType
+            Case "Options"
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "Options")
+                If MaterialItemRecordSet.RecordCount > 0 Then
+                    MaterialItemRecordSet.Filter = UseWhere
+                    If MaterialItemRecordSet.RecordCount > 0 Then
+                        MaterialItemRecordSet.MoveFirst()
+                        Erase Options
+                        If MaterialItemRecordSet.Fields("OptionNew").Value = True Then
+                            AddToArray(Options, "New")
+                        End If
+                        If MaterialItemRecordSet.Fields("OptionReuse").Value = True Then
+                            AddToArray(Options, "Reuse")
+                        End If
+                        If MaterialItemRecordSet.Fields("OptionRefurbish").Value = True Then
+                            AddToArray(Options, "Refurbish")
+                        End If
+                        If MaterialItemRecordSet.Fields("OptionNA").Value = True Then
+                            AddToArray(Options, "NA")
+                        End If
+                        If Not Convert.IsDBNull(MaterialItemRecordSet.Fields("OptionOther").Value) Then
+                            AddToArray(Options, MaterialItemRecordSet.Fields("OptionOther").Value.ToString)
+                        End If
+                    End If
                 End If
-                Action = MOVE_NEXT
-            Loop
-        End If
-        Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+            Case "Types"
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "Type_Cost_Hours")
+                If MaterialItemRecordSet.RecordCount > 0 Then
+                    MaterialItemRecordSet.Filter = UseWhere
+                    If MaterialItemRecordSet.RecordCount > 0 Then
+                        MaterialItemRecordSet.MoveFirst()
+                        Erase Options
+                        Do Until MaterialItemRecordSet.EOF
+                            AddToArray(Options, MaterialItemRecordSet.Fields("Type").Value.ToString)
+                            MaterialItemRecordSet.MoveNext()
+                        Loop
+                    End If
+                End If
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+            Case "OrderBys"
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "OrderBys")
+                If MaterialItemRecordSet.RecordCount > 0 Then
+                    MaterialItemRecordSet.Filter = UseWhere
+                    If MaterialItemRecordSet.RecordCount > 0 Then
+                        Erase Options
+                        If MaterialItemRecordSet.Fields("OrderByHQ").Value = True Then
+                            AddToArray(Options, "HQ")
+                        End If
+                        If MaterialItemRecordSet.Fields("OrderByRL").Value = True Then
+                            AddToArray(Options, "RL")
+                        End If
+                    End If
+                End If
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+            Case Else
+        End Select
         ReturnCmb.Items = Options
         ReturnCmb.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
         ReturnCmb.Editable = False
@@ -996,38 +997,28 @@ Public Class frmEstimatingBase
         Return ReturnCmb
 
     End Function
-    Private Sub CheckForAryValue(ByRef CurAry() As String, ByVal SetValue As String)
-        Dim iIndex As Integer = 0, jIndex As Integer = 0
-        Dim FoundValue As Boolean = False
+    Private Sub AddToArray(ByRef CurAry() As String, ByVal SetValue As String)
+        Dim iIndex As Integer = 1
 
         If IsNothing(CurAry) Then
-            ReDim CurAry(iIndex)
-            CurAry(iIndex) = SetValue
+            Array.Resize(CurAry, iIndex)
+            CurAry.SetValue(SetValue, iIndex - 1)
         Else
-            For jIndex = CurAry.GetLowerBound(0) To CurAry.GetUpperBound(0)
-                If CurAry(jIndex) = SetValue Then
-                    FoundValue = True
-                    Exit For
-                End If
-            Next jIndex
-            If Not FoundValue Then
-                iIndex = CurAry.GetUpperBound(0) + 1
-                ReDim Preserve CurAry(iIndex)
-                CurAry(iIndex) = SetValue
+            If Array.BinarySearch(CurAry, SetValue) < 0 Then
+                iIndex = CurAry.Length + 1
+                Array.Resize(CurAry, iIndex)
+                CurAry.SetValue(SetValue, iIndex - 1)
             End If
         End If
 
     End Sub
     Private Sub GetCostHours(ByVal MaterialID As String, ByVal CurOption As String, ByVal CurType As String, ByVal CurOrderBy As String,
-                             ByVal CostOrHours As String, ByRef CurField As Integer, ByVal CurQty As Integer)
+                             ByVal CostOrHours As String, ByRef CurField As Single, ByVal CurQty As Integer)
         Dim UseWhere As String = "MaterialID = '" & MaterialID & "'"
+        Dim MachineType As String = GEARLESS_TYPE
+        Dim UseFrontWidth As Single = 0, UseFrontHeight As Single = 0, UseRearWidth As Single = 0, UseRearHeight As Single = 0
 
         If String.IsNullOrEmpty(CurOption) Then
-            Exit Sub
-        ElseIf CurOption <> "New" Then
-            Exit Sub
-        End If
-        If String.IsNullOrEmpty(CurType) Then
             Exit Sub
         End If
         If String.IsNullOrEmpty(CurOrderBy) Then
@@ -1037,76 +1028,158 @@ Public Class frmEstimatingBase
         End If
         Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, GROUP_SETUP_QRY)
         Select Case MaterialID
-            Case Controller
-                If String.IsNullOrEmpty(MachineType_cmb.Text) Or String.IsNullOrEmpty(DriveType_cmb.Text) Then
+            Case MATID_Controller
+                If String.IsNullOrEmpty(MachineType_cmb.Text) Or String.IsNullOrEmpty(DriveType_cmb.Text) Or String.IsNullOrEmpty(CurType) Then
                     Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
                     Exit Sub
                 Else
                     UseWhere &= " AND Type = '" & CurType & "'"
                     Select Case CurType
                         Case "SCH - TXR5", "SCH - TX2R7"
-                            UseWhere &= " AND [Criteria 1] = '" & MachineType_cmb.Text & "' AND [Criteria 2] = '" & DriveType_cmb.Text & "'"
+                            Select Case MachineType_cmb.Text
+                                Case "Reuse " & GEARED_TYPE, "New " & GEARED_TYPE
+                                    MachineType = GEARED_TYPE
+                                Case "FMM200", "Reuse " & GEARLESS_TYPE, "New " & GEARLESS_TYPE
+                                    MachineType = GEARLESS_TYPE
+                                Case Else
+                            End Select
+                            UseWhere &= " AND [Criteria 1] = '" & MachineType & "' AND [Criteria 2] = '" & DriveType_cmb.Text & "'"
                         Case Else
                     End Select
                     If Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, FIND_FIRST, "", UseWhere) <> RECORD_NOT_FOUND Then
-                        If CostOrHours = "Cost" Then
+                        If CostOrHours = "Cost" And CurOption = "New" Then
                             CurField = MaterialItemRecordSet.Fields("Material Cost").Value          ' * CurQty
                         ElseIf CostOrHours = "Hours" Then
-                            CurField = MaterialItemRecordSet.Fields("Standard Hours").Value         ' * CurQty
+                            Select Case CurOption
+                                Case "New"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours New").Value         ' * CurQty
+                                Case "Reuse"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours Reuse").Value         ' * CurQty
+                                Case "Refurbish"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours Refurbish").Value         ' * CurQty
+                                Case Else
+                            End Select
                         End If
                     End If
                 End If
-            Case SecurityPackage, InterGroupEmergencyPower, TractionBatteryLowering, CodeBlueOption, PanicFeatureRiotControl, CodePinkOption,
-                 InconspicuousRiser
+            Case MATID_SecurityPackage, MATID_IntergroupEmergencyPower, MATID_TractionBatteryLowering, MATID_CodeBlueOption, MATID_PanicFeatureRiotControl, MATID_CodePinkOption,
+                 MATID_InconspicuousRiser, MATID_MachineRoomWiring, MATID_MachineRoomDuct
                 If Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, FIND_FIRST, "", UseWhere) <> RECORD_NOT_FOUND Then
                     If CostOrHours = "Cost" Then
                         CurField = MaterialItemRecordSet.Fields("Material Cost").Value
                     ElseIf CostOrHours = "Hours" Then
-                        CurField = MaterialItemRecordSet.Fields("Standard Hours").Value
+                        Select Case CurOption
+                            Case "New"
+                                CurField = MaterialItemRecordSet.Fields("Standard Hours New").Value         ' * CurQty
+                            Case "Reuse"
+                                CurField = MaterialItemRecordSet.Fields("Standard Hours Reuse").Value         ' * CurQty
+                            Case "Refurbish"
+                                CurField = MaterialItemRecordSet.Fields("Standard Hours Refurbish").Value         ' * CurQty
+                            Case Else
+                        End Select
                     End If
                 End If
+            Case MATID_CarRollerGuides, MATID_CarRollerGuideAdapterPlate, MATID_CarRGShoeCovers, MATID_CwtRollerGuides, MATID_CwtRollerGuideAdapterPlate,
+                 MATID_CwtRGShoeCovers
+                If String.IsNullOrEmpty(CurType) Then
+                    Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+                    Exit Sub
+                Else
+                    UseWhere &= " AND Type = '" & CurType & "'"
+                    If Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, FIND_FIRST, "", UseWhere) <> RECORD_NOT_FOUND Then
+                        If CostOrHours = "Cost" And CurOption = "New" Then
+                            CurField = MaterialItemRecordSet.Fields("Material Cost").Value          ' * CurQty
+                        ElseIf CostOrHours = "Hours" Then
+                            Select Case CurOption
+                                Case "New"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours New").Value         ' * CurQty
+                                Case "Reuse"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours Reuse").Value         ' * CurQty
+                                Case "Refurbish"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours Refurbish").Value         ' * CurQty
+                                Case Else
+                            End Select
+                        End If
+                    End If
+                End If
+            Case MATID_ToeGuard
+                If String.IsNullOrEmpty(CarDoorOpeningWidthFtFront_txt.Text) And String.IsNullOrEmpty(CarDoorOpeningWidthInFront_txt.Text) And
+                   String.IsNullOrEmpty(CarDoorOpeningWidthFtRear_txt.Text) And String.IsNullOrEmpty(CarDoorOpeningWidthInRear_txt.Text) Then
+                    Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+                    Exit Sub
+                Else
+                    UseFrontWidth = Math.Round(Conversion.Val(CarDoorOpeningWidthFtFront_lbl.Text) * 12 +
+                                               Conversion.Val(CarDoorOpeningWidthInFront_txt.Text), 2)
+                    Select Case UseFrontWidth
+                        Case Is <= 36
+                            UseFrontWidth = 36
+                        Case Is <= 42
+                            UseFrontWidth = 42
+                        Case Is <= 48
+                            UseFrontWidth = 48
+                        Case Is <= 54
+                            UseFrontWidth = 54
+                        Case Else       '<= 60
+                            UseFrontWidth = 60
+                    End Select
+                    UseWhere &= " AND [Criteria 1] = '" & UseFrontWidth & "'"
+                    If Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, FIND_FIRST, "", UseWhere) <> RECORD_NOT_FOUND Then
+                        If CostOrHours = "Cost" And CurOption = "New" Then
+                            CurField = MaterialItemRecordSet.Fields("Material Cost").Value          ' * CurQty
+                        ElseIf CostOrHours = "Hours" Then
+                            Select Case CurOption
+                                Case "New"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours New").Value         ' * CurQty
+                                Case "Reuse"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours Reuse").Value         ' * CurQty
+                                Case "Refurbish"
+                                    CurField = MaterialItemRecordSet.Fields("Standard Hours Refurbish").Value         ' * CurQty
+                                Case Else
+                            End Select
+                        End If
+                    End If
+                    'UseRearWidth = Math.Round(Conversion.Val(CarDoorOpeningWidthFtRear_lbl.Text) * 12 +
+                    '                           Conversion.Val(CarDoorOpeningWidthInRear_txt.Text), 2)
+                End If
+
             Case Else
         End Select
         Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+        CurField = Math.Round(CurField, 2)
 
     End Sub
     Private Sub MachineType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.SelectedIndexChanged
-        RetrieveCostHours_Controller()
+        Dim GetRow As Integer = FindRowByMaterialID(MATID_Controller)
+
+        If GetRow <> -999 Then
+            RetrieveCostHours(GetRow)
+            PopulateEstimating()
+        End If
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+
     End Sub
     Private Sub DriveType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.SelectedIndexChanged
-        RetrieveCostHours_Controller()
+        Dim GetRow As Integer = FindRowByMaterialID(MATID_Controller)
+
+        If GetRow <> -999 Then
+            RetrieveCostHours(GetRow)
+            PopulateEstimating()
+        End If
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+
     End Sub
     Private Sub FpSpread1_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
-        Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
-        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
-
-        ChildSheetView = FpSpread1.ActiveSheet.FindChildView(CurRow, 0)
-        If Not ChildSheetView Is Nothing Then
-            Select Case ChildSheetView.Cells(e.Row, MAT_COL_MATERIAL_ID).Text
-                Case Controller
-                    RetrieveCostHours_Controller()
-                Case Else
-            End Select
+        RetrieveCostHours(e.Row)
+        If Not isInitializingComponent Then
+            FormIsDirty = EstimatingDataset.HasChanges()
         End If
-
     End Sub
     Private Sub FpSpread1_ComboCloseUp(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboCloseUp
-        RetrieveCostHours_Controller()
-    End Sub
-    Private Sub RetrieveCostHours_Controller()
-        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
-
-        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurRow, 0)
-        If Not ChildSheetView1 Is Nothing Then
-            GetCostHours(ChildSheetView1.Cells(CurRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(CurRow, MAT_COL_OPTION).Text,
-                         ChildSheetView1.Cells(CurRow, MAT_COL_TYPE).Text, ChildSheetView1.Cells(CurRow, MAT_COL_ORDER_BY).Text, "Cost",
-                         ChildSheetView1.Cells(CurRow, MAT_COL_MATERIAL_COST).Value, ChildSheetView1.Cells(CurRow, MAT_COL_QTY).Value)
-            GetCostHours(ChildSheetView1.Cells(CurRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(CurRow, MAT_COL_OPTION).Text,
-                         ChildSheetView1.Cells(CurRow, MAT_COL_TYPE).Text, ChildSheetView1.Cells(CurRow, MAT_COL_ORDER_BY).Text, "Hours",
-                         ChildSheetView1.Cells(CurRow, MAT_COL_STANDARD_HOURS).Value, ChildSheetView1.Cells(CurRow, MAT_COL_QTY).Value)
-        End If
-
+        RetrieveCostHours(e.Row)
     End Sub
     Private Sub TabControl1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.Click
         Dim LastIndex As Integer = TabControl1.TabPages.Count - 1
@@ -1117,6 +1190,7 @@ Public Class frmEstimatingBase
             If Not String.IsNullOrEmpty(UseUnits) Then
                 TabControl1.TabPages.Insert(LastIndex, EST_Prefix & UseUnits)
                 TabControl1.SelectTab(LastIndex)
+                DisplayEST_vs_ORD()
             End If
         Else
             DisplayEST_vs_ORD()
@@ -1126,15 +1200,18 @@ Public Class frmEstimatingBase
     Private Sub DisplayEST_vs_ORD()
 
         If TabControl1.SelectedTab.Text.IndexOf(EST_Prefix) > -1 Then
+            PopulateEstimating()
             CarData_fra.Visible = True
             If EstimateLevel = "Master" Then
                 OrderingTabs.Visible = False
             End If
         ElseIf TabControl1.SelectedTab.Text.IndexOf(ORD_Prefix) > -1 Then
+            PopulateOrdering()
             CarData_fra.Visible = False
             OrderingTabs.Visible = True
-        ElseIf TabControl1.SelectedTab.Text.IndexOf("+") Then
+        ElseIf TabControl1.SelectedTab.Text.IndexOf("+") > -1 Then
             CarData_fra.Visible = False
+            OrderingTabs.Visible = False
         End If
 
     End Sub
@@ -1295,5 +1372,452 @@ Public Class frmEstimatingBase
     Private Sub ExpensesPerDayDetails_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDayDetails_btn.Click
         ExpensesPerDay_frm.ShowDialog()
         ExpensesPerDay_txt.Text = FormatNumber(SubcontractedLaborCost.TotalCost, 2)
+    End Sub
+    Private Sub FpSpread1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FpSpread1.Click
+        CurParentRow = FpSpread1.ActiveSheet.ActiveRowIndex
+        CurChildSheetView = FpSpread1.ActiveSheet.FindChildView(CurParentRow, 0)
+    End Sub
+    Private Sub RetrieveCostHours(ByVal UseRow As Integer)
+        Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
+        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+
+        ChildSheetView = FpSpread1.ActiveSheet.FindChildView(CurRow, 0)
+        If Not ChildSheetView Is Nothing Then
+            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION).Text,
+                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY).Text, "Cost",
+                         ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_COST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY).Value)
+            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION).Text,
+                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY).Text, "Hours",
+                         ChildSheetView.Cells(UseRow, MAT_COL_STANDARD_HOURS).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY).Value)
+        End If
+
+    End Sub
+    Private Sub PopulateEstimating()
+        Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
+        Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
+        Dim dt As DataTable
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim UseUnits As String = Strings.Mid(TabControl1.SelectedTab.Text.Trim, 6)
+
+        CreateDataSet(UseUnits)
+        model = FpSpread1.ActiveSheet.Models.Data
+        For Each dt In EstimatingDataset.Tables
+            dt.DefaultView.AllowNew = False
+        Next
+        model.DataMember = "artists"
+        model.DataSource = EstimatingDataset
+        FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
+        FpSpread1.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
+        FpSpread1.ActiveSheet.RowHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.RowHeaderRenderer
+        FpSpread1.ActiveSheet.SheetCorner.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.CornerRenderer
+        FpSpread1.InterfaceRenderer = Nothing
+        FpSpread1.HorizontalScrollBar.Renderer = Nothing
+        FpSpread1.VerticalScrollBar.Renderer = Nothing
+        FpSpread1.VisualStyles = FarPoint.Win.VisualStyles.Off
+        FpSpread1.ActiveSheet.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
+        FpSpread1.ActiveSheet.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
+        FpSpread1.ActiveSheet.ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).Font = fpFont
+        FpSpread1.ActiveSheet.ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).BackColor = Color.DarkGray
+        FpSpread1.ActiveSheet.ColumnHeader.Cells(0, 0, 0, FpSpread1.ActiveSheet.ColumnCount - 1).ForeColor = Color.Black
+        FpSpread1.ActiveSheet.RowHeader.AutoText = FarPoint.Win.Spread.HeaderAutoText.Blank
+        FpSpread1.ActiveSheet.RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).BackColor = Color.DarkGray
+        FpSpread1.ActiveSheet.RowHeader.Cells(0, 0, FpSpread1.ActiveSheet.RowCount - 1, 0).ForeColor = Color.Black
+        FpSpread1.ActiveSheet.SheetCornerStyle.BackColor = Color.DarkGray
+        FpSpread1.ActiveSheet.SetColumnWidth(MAIN_COL_MAIN_GROUP, 150)
+        FpSpread1.ActiveSheet.SetColumnWidth(MAIN_COL_TOTAL_COST, 100)
+        FpSpread1.ActiveSheet.SetColumnWidth(MAIN_COL_TOTAL_STD_HRS, 100)
+        FpSpread1.ActiveSheet.SetColumnWidth(MAIN_COL_TOTAL_SPEC_HRS, 100)
+        FpSpread1.ActiveSheet.SetColumnVisible(1, False)
+        FpSpread1.ActiveSheet.GrayAreaBackColor = Color.White
+        GeneralInformation_fra.Left = 6
+        GeneralInformation_fra.Width = CarData_fra.Width - GeneralInformation_fra.Left - 10
+        BillofMaterialsandTaskList_fra.Left = 6
+        BillofMaterialsandTaskList_fra.Width = CarData_fra.Width - BillofMaterialsandTaskList_fra.Left - 10
+        Relocate_BillofMaterialsandTaskList_Frame()
+        FpSpread1.Left = 6
+        FpSpread1.Visible = False
+        ExpandCollapseAll("Expand")
+        ExpandCollapseAll("Collapse")
+        FpSpread1.Visible = True
+        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+            If Not ChildSheetView1 Is Nothing Then
+                ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 200)
+                ChildSheetView1.SetColumnVisible(MAT_COL_MAIN_ID, False)
+                ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
+                ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
+
+                ChildSheetView1.SetColumnWidth(MAT_COL_OPTION, 100)
+                ChildSheetView1.SetColumnWidth(MAT_COL_TYPE, 100)
+                ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY, 100)
+
+                For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                    ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).CellType = SetCombo("Options", ChildSheetView1, jIndex)
+                    ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).CellType = SetCombo("Types", ChildSheetView1, jIndex)
+                    ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).CellType = SetCombo("OrderBys", ChildSheetView1, jIndex)
+                    ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value = CalculateNumberOfCarsInEstimate(UseUnits)
+                Next jIndex
+
+                ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST, 100)
+                ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS, 120)
+                ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS, 100)
+                ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS, 200)
+                If SheetCornerColWidth = 0 Then
+                    SheetCornerColWidth = ChildSheetView1.SheetCorner.Columns(0, 0).Width
+                Else
+                    ChildSheetView1.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth
+                End If
+            End If
+            Dim ShowGroup As Boolean = False
+            Select Case FpSpread1.ActiveSheet.GetValue(iIndex, MAT_COL_MAIN_ID)
+                Case MAIN_ID_ReuseGearedMachine
+                    If MachineType_cmb.Text = "Reuse " & GEARED_TYPE Then
+                        ShowGroup = True
+                    End If
+                Case MAIN_ID_NewGearedMachine
+                    If MachineType_cmb.Text = "New " & GEARED_TYPE Then
+                        ShowGroup = True
+                    End If
+                Case MAIN_ID_FMM200
+                    If MachineType_cmb.Text = "FMM200" Then
+                        ShowGroup = True
+                    End If
+                Case MAIN_ID_ReuseGearlessMachine
+                    If MachineType_cmb.Text = "Reuse " & GEARLESS_TYPE Then
+                        ShowGroup = True
+                    End If
+                Case MAIN_ID_NewGearlessMachine
+                    If MachineType_cmb.Text = "New " & GEARLESS_TYPE Then
+                        ShowGroup = True
+                    End If
+                Case Else
+                    ShowGroup = True
+            End Select
+            If ShowGroup Then
+                FpSpread1.ActiveSheet.SetRowVisible(iIndex, True)
+            Else
+                FpSpread1.ActiveSheet.SetRowVisible(iIndex, False)
+            End If
+        Next iIndex
+
+    End Sub
+    Private Sub PopulateOrdering()
+
+    End Sub
+    Private Function FindRowByMaterialID(ByVal UseMaterialID As String) As Integer
+        Dim ReturnVal As Integer = -999
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim CurRow As Integer = 0, iIndex As Integer = 0
+
+        For iIndex = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            If FpSpread1.ActiveSheet.GetValue(iIndex, MAIN_COL_MAIN_ID) = MAIN_ID_Controller Then
+                CurRow = iIndex
+                Exit For
+            End If
+        Next iIndex
+        ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurRow, 0)
+        If Not ChildSheetView1 Is Nothing Then
+            For iIndex = 0 To ChildSheetView1.RowCount - 1
+                If ChildSheetView1.GetValue(iIndex, MAT_COL_MATERIAL_ID) = UseMaterialID Then
+                    ReturnVal = iIndex
+                    Exit For
+                End If
+            Next iIndex
+        End If
+        Return ReturnVal
+
+    End Function
+    Private Sub SaveEstimatingData()
+        Dim _row As DataRow
+        Dim is_new_row As Boolean = False
+
+        Try
+            If GeneralInfo.Rows.Count = 0 Then
+                _row = GeneralInfo.NewRow
+                is_new_row = True
+            Else
+                _row = GeneralInfo.Rows(0)
+            End If
+
+            '_row("building_type") = cboBuildingType.Text
+            '_row("major_project") = chkMajorProject.CheckState
+            '_row("sales_rep") = cboSalesRep.Text
+            '_row("sales_office") = cboSalesOffice.Text
+            '_row("installing_office") = cboInstallingOffice.Text
+            '_row("service_office") = cboServiceOffice.Text
+            '_row("status") = cboStatus.Text
+            '_row("probability_of_sale") = cboProbabilityOfSale.Text
+            '_row("bid_date") = txtBidDate.Text
+            '_row("national_account") = cboNationalAccount.Text
+            '_row("tax_code") = cboTaxCode.Text
+            '_row("seismic_zone") = cboSeismicZone.Text
+            '_row("local_code") = cboLocalCode.Text
+            '_row("ansi_csa_b44_code") = cboANSICode.Text
+            '_row("nfpa_code") = cboNFPA13CodeYear.Text
+            '_row("sds_level") = txtSDSlevel.Text
+            '_row("oshpd") = chkOSHPD.CheckState
+            '_row("dsa") = chkDSA.CheckState
+            '_row("head_detection") = chkHeadDetection.CheckState
+            '_row("engineering_survey") = chkEngineeringSurvey.CheckState
+            '_row("nps_duration") = cboDurationMonths.Text
+            '_row("nps_call_back") = cboCallBackHours.Text
+            '_row("nps_material_cost") = txtNPSMaterialCost.Text
+            '_row("nps_labor_cost") = txtNPSLaborCost.Text
+            '_row("nps_one_time_cost") = txtNPSOneTimeCost.Text
+            '_row("ocpl") = txtOCPL.Text
+            If is_new_row Then
+                GeneralInfo.Rows.Add(_row)
+            End If
+            Serialize()
+
+        Catch ex As Exception
+            MessageBox.Show("Error saving data", "Error Saving Estimating Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+
+
+    End Sub
+    Private Sub Serialize()
+        Dim json As String = ""
+        Dim EST_Filename As String = Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units)
+
+        Try
+            json = JsonConvert.SerializeObject(EstimatingDataset, Formatting.Indented)
+            Using sw As StreamWriter = New StreamWriter(EstimatePath & EST_Filename & "MODEST.json")
+                sw.Write(json)
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Writing Cadre Json file")
+
+        End Try
+        FormIsDirty = False
+
+    End Sub
+    Private Sub Deserialize()
+        Dim json As String = ""
+        Dim EST_Filename As String = Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units)
+
+        Try
+            Using sr As StreamReader = New StreamReader(EstimatePath & EST_Filename & "MODEST.json")
+                json = sr.ReadToEnd
+            End Using
+            EstimatingDataset = JsonConvert.DeserializeObject(Of DataSet)(json)
+            EstimatingDataset.Merge(EstimatingDataset, True, MissingSchemaAction.Ignore)
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Reading Input File")
+
+        End Try
+        FormIsDirty = False
+
+    End Sub
+    Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
+        SaveEstimatingData()
+    End Sub
+    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub SpeedNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub NumberofStopsFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub NumberofStopsRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub PowerSupply_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PowerSupply_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub Application_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Application_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub LayoutEntranceDrawing_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LayoutEntranceDrawing_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub DoorOperatorTypeFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeFront_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningWidthFtFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtFront_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningWidthInFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInFront_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightFtFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtFront_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightInFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInFront_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub DoorOperatorTypeRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeRear_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningWidthFtRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtRear_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningWidthInRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInRear_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightFtRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtRear_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightInRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInRear_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub CarWeight_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarWeight_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub HoistMotorHP_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorHP_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub HoistMotorRpm_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorRpm_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub MachineLocation_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineLocation_Cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub RopingNew_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub TopFloorToOverhead_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub Travel_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Travel_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub PitDepth_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PitDepth_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub RiserQtyExistingFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyExistingFront_Cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub RiserQtyExistingRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyExistingRear_Cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub FixtureFinish_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FixtureFinish_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub DTRequestedShipDate_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DTRequestedShipDate.ValueChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub BankCompleteDate_txt_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BankCompleteDate_txt.ValueChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub ExistingControlVendor_lst_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub ExistingControlModel_lst_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub OriginalGONumberAvailable_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGONumberAvailable_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub OriginalGOnumber_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGOnumber_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub PEStampRequired_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PEStampRequired_cmb.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub MinimumFloorDistance_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MinimumFloorDistance_chk.CheckedChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub Permits_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Permits_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub Bonds_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Bonds_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub ExpensesPerDay_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDay_txt.TextChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
+    End Sub
+    Private Sub GatewayReviewRequired_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GatewayReviewRequired_chk.CheckedChanged
+        If Not isInitializingComponent Then
+            FormIsDirty = True
+        End If
     End Sub
 End Class

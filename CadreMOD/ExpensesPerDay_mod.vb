@@ -1,6 +1,5 @@
 Option Strict Off
 Option Explicit On
-Imports UpgradeHelpers.VB6.Utils
 Imports System
 Module ExpensesPerDay_mod
 	Public Structure SubcontractedLaborCost_TypeDec

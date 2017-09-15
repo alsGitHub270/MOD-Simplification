@@ -10,7 +10,6 @@ Partial Friend Class ExpensesPerDay_frm
     Const ACTION_TYPE_CLEAR_FORM As Integer = 0
     Const ACTION_TYPE_UNLOADME As Integer = 1
     Dim i As Integer
-    Dim bFormIsDirty As Boolean
 
     Private Sub InitializeCost()
         Dim i As Integer
@@ -95,7 +94,7 @@ Partial Friend Class ExpensesPerDay_frm
         If isInitializingComponent Then
             Exit Sub
         End If
-        bFormIsDirty = True
+        frmEstimatingBase.FormIsDirty = True
     End Sub
     Private Sub Cost_txt_KeyPress(ByVal eventSender As Object, ByVal eventArgs As KeyPressEventArgs) Handles _Cost_txt_4.KeyPress, _Cost_txt_3.KeyPress, _Cost_txt_2.KeyPress, _Cost_txt_1.KeyPress, _Cost_txt_5.KeyPress
         Dim KeyAscii As Integer = Strings.Asc(eventArgs.KeyChar)
@@ -127,7 +126,7 @@ Partial Friend Class ExpensesPerDay_frm
             Exit Sub
         End If
         Dim Index As Integer = Array.IndexOf(Description_txt, eventSender)
-        bFormIsDirty = True
+        frmEstimatingBase.FormIsDirty = True
         If Description_txt(Index).Text.Trim() = "" Then
             SystemSounds.Beep.Play()
             Cost_txt(Index).Text = ""

@@ -1,8 +1,30 @@
-﻿
+﻿Imports System.Globalization
 Imports System.Collections.Generic
-
 Module General
 
+    Public Function AssignListIndex(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
+        Dim result As Boolean = False
+        If [ThisListBox].Items.Count > 0 Then
+            For i As Integer = 0 To ([ThisListBox].Items.Count - 1)
+                If [ThisListBox].Items(i).ToString = ThisValue Then
+                    [ThisListBox].SelectedIndex = i
+                    Return True
+                End If
+            Next
+        End If
+        Return result
+    End Function
+    Public Function AssignListIndex_First(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
+        Dim result As Boolean = False
+        If Not AssignListIndex(ThisListBox, ThisValue) Then
+            If [ThisListBox].Items.Count > 0 Then
+                result = True
+                [ThisListBox].SelectedIndex = 0
+                DataChangedByProgram = True
+            End If
+        End If
+        Return result
+    End Function
     Public Sub SelectInputArea(ByRef ThisControl As Object, ByRef ThisStartSel As Byte, ByRef ThisStartLen As Byte)
 
         ThisControl.SelectionStart = ThisStartSel
@@ -313,6 +335,8 @@ Query_Execute_Error:
                     Else
                         ReturnCode = ENTRY_NOT_A_NUMBER
                     End If
+                ElseIf (Not Double.TryParse(ThisControlText, NumberStyles.Number, CultureInfo.CurrentCulture.NumberFormat, dbNumericTemp)) Or (ThisControlText.IndexOf(","c) >= 0) Then
+                    ReturnCode = ENTRY_NOT_A_NUMBER
                 End If
             Case ENTRY_NOT_AN_INTEGER
                 Dim dbNumericTemp2 As Double
@@ -323,6 +347,8 @@ Query_Execute_Error:
                     Else
                         ReturnCode = ENTRY_NOT_AN_INTEGER
                     End If
+                ElseIf (Not Double.TryParse(ThisControlText, NumberStyles.Number, CultureInfo.CurrentCulture.NumberFormat, dbNumericTemp2)) Or (ThisControlText.IndexOf(","c) >= 0) Then
+                    ReturnCode = ENTRY_NOT_AN_INTEGER
                 Else
                     If (ThisControlText) < -32768 Or (ThisControlText) > 32767 Then
                         ReturnCode = ENTRY_NOT_AN_INTEGER
@@ -349,6 +375,8 @@ Query_Execute_Error:
                     Else
                         ReturnCode = ENTRY_NOT_A_NUMBER
                     End If
+                ElseIf Not Double.TryParse(ThisControlText, NumberStyles.Number, CultureInfo.CurrentCulture.NumberFormat, dbNumericTemp3) Then
+                    ReturnCode = ENTRY_NOT_A_NUMBER
                 ElseIf Conversion.Val([ThisControlText]) < (minvalue) Or Conversion.Val([ThisControlText]) > (MaxValue) Then
                     ReturnCode = ENTRY_NOT_IN_THE_NUMBER_RANGE
                 End If
@@ -394,19 +422,10 @@ Query_Execute_Error:
         ReturnVal = UnitsInEstimate.GetUpperBound(0) + 1
         Return ReturnVal
     End Function
-
-    'Public Function ConvertTwipsToPixels(ByVal UseCoordinate As Single) As Integer
-    '    Dim UseTwipsToPixels As Integer = UseCoordinate * 0.066666667
-
-    '    Return UseTwipsToPixels
-
-    'End Function
-    'Public Function ConvertPixelsToTwips(ByVal UseCoordinate As Single) As Integer
-    '    Dim UsePixelsToTwips As Integer = Conversion.Val(UseCoordinate / 0.066666667)
-
-    '    Return UsePixelsToTwips
-
-    'End Function
+    Public Sub EndProgram()
+        Reset_Resolution()
+        Environment.Exit(0)
+    End Sub
 
     Public Function TranslateOfficeNumber(ByVal sOfficeNumberOld As String, Optional ByVal bSalesOffice As Boolean = False, Optional ByVal bIgnoreShape As Boolean = False) As String
         Dim sWhere As String = "[Office] = " & FixSQLString(sOfficeNumberOld)
@@ -521,64 +540,31 @@ Query_Execute_Error:
         If Not gbShape And Not bIgnoreShape Then
             Exit Function
         End If
-        'If Not bSalesOffice Then
-        '    'If String.IsNullOrEmpty(ProjectData.SalesOffice) Then
-        '    '    Exit Function
-        '    'End If
-        '    If ProjectData.SalesOffice.Length <> 4 Then
-        '        Exit Function
-        '    End If
-        '    If ProjectData.SalesOffice.Substring(0, 1) = "X" Then
-        '        Exit Function
-        '    End If
-        '    'If ProjectData.SalesOffice.Substring(0, 1) <> "9" Then
-        '    '    Exit Function
-        '    'End If
-        'End If
-
-
-        'If Not String.IsNullOrEmpty(sOfficeNumberOld) Then
-        '    If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, "MOD_OFFICE_SQL", sWhere, 0, sNewOffice) = RECORD_NOT_FOUND Then
-        '        TranslateOfficeNumber = sOfficeNumberOld
-        '    ElseIf sNewOffice <> "" Then
-        '        TranslateOfficeNumber = sNewOffice
-        '    End If
-        'End If
-
-
-
-
-    End Function
-
-    Public Function AssignListIndex_First(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
-        Dim result As Boolean = False
-
-        If Not AssignListIndex(ThisListBox, ThisValue) Then
-            If [ThisListBox].Items.Count > 0 Then
-                result = True
-                [ThisListBox].SelectedIndex = 0
-                DataChangedByProgram = True
+        If Not bSalesOffice Then
+            If String.IsNullOrEmpty(ProjectData.SalesOffice) Then
+                Exit Function
             End If
+            If ProjectData.SalesOffice.Length <> 4 Then
+                Exit Function
+            End If
+            If ProjectData.SalesOffice.Substring(0, 1) = "X" Then
+                Exit Function
+            End If
+            'If ProjectData.SalesOffice.Substring(0, 1) <> "9" Then
+            '    Exit Function
+            'End If
         End If
-        Return result
+        If Not String.IsNullOrEmpty(sOfficeNumberOld) Then
+            'If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, "MOD_OFFICE_SQL", sWhere, 0, sNewOffice) = RECORD_NOT_FOUND Then
+            '    TranslateOfficeNumber = sOfficeNumberOld
+            'ElseIf sNewOffice <> "" Then
+            '    TranslateOfficeNumber = sNewOffice
+            'End If
+        End If
 
     End Function
 
 
-    Public Function AssignListIndex(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
-        Dim result As Boolean = False
-
-        If [ThisListBox].Items.Count > 0 Then
-            For i As Integer = 0 To ([ThisListBox].Items.Count - 1)
-                If [ThisListBox].Items(i).ToString = ThisValue Then
-                    [ThisListBox].SelectedIndex = i
-                    Return True
-                End If
-            Next
-        End If
-        Return result
-
-    End Function
 
     Public Function FixSQLString(ByVal ThisFieldValue As String) As String
         Dim j As Byte
@@ -593,7 +579,12 @@ Query_Execute_Error:
 
     End Function
 
-    Public Function GetDataFromOptions(sSQL As String) As List(Of String)
+    Public Function Get_FileName(ByRef ThisNegNum As String, ByRef ThisBank As String, ByRef ThisAlt As String, ByRef ThisUnits As String) As String
+        Dim AddExt As String = CStr(Conversion.Val(Strings.Left(ThisUnits, 2)))
+        Return ThisNegNum & ThisBank & ThisAlt & "M" & AddExt
+    End Function
+
+    Public Function GetDataFromOptions(sSQL As String, Optional ByVal multiple_fields As Boolean = False) As List(Of String)
         Dim dataSource As String = My.Application.Info.DirectoryPath & "\" & OPTION_DATABASE_NAME
         Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
         Dim result As String
@@ -606,8 +597,17 @@ Query_Execute_Error:
             Dim reader As OleDb.OleDbDataReader = cmd.ExecuteReader
             While reader.Read
                 If Not String.IsNullOrEmpty(reader(0).ToString) Then
-                    result = (reader(0).ToString)
-                    myList.Add(result)
+                    If multiple_fields Then
+                        For i As Integer = 0 To (reader.FieldCount - 1)
+                            myList.Add(reader(i).ToString)
+                        Next i
+
+                    Else
+                        result = (reader(0).ToString)
+                        myList.Add(result)
+                    End If
+
+
                 End If
             End While
 
@@ -621,8 +621,4 @@ Query_Execute_Error:
         Return Generator.Next(Min, Max)
     End Function
 
-    Public Sub EndProgram()
-        Reset_Resolution()
-        Environment.Exit(0)
-    End Sub
 End Module

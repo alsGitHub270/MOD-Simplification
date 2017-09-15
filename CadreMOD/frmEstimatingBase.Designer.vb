@@ -3,25 +3,7 @@ Partial Class frmEstimatingBase
 
     Public Sub New()
         MyBase.New()
-
-        'This call is required by the Windows Form Designer.
         InitializeComponent()
-
-        'Add any initialization after the InitializeComponent() call
-        CreateDataSet()
-        Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
-        model = FpSpread1.ActiveSheet.Models.Data
-
-        Dim dt As DataTable
-        For Each dt In myDataSet.Tables
-            dt.DefaultView.AllowNew = False
-        Next
-        model.DataMember = "artists"
-        model.DataSource = myDataSet
-
-        FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
-
-
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -43,59 +25,9 @@ Partial Class frmEstimatingBase
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEstimatingBase))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.OrderingTabs = New System.Windows.Forms.TabControl()
-        Me.InitTab = New System.Windows.Forms.TabPage()
-        Me.Gov_img = New System.Windows.Forms.PictureBox()
-        Me.CwtGovernor_fra = New System.Windows.Forms.GroupBox()
-        Me.CwtGovernor1TensionSheaveB_txt = New System.Windows.Forms.TextBox()
-        Me.CwtGovernor1TensionSheaveBIn_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernor1TensionSheaveB_lbl = New System.Windows.Forms.Label()
-        Me.CwtMeetsMinimumClearances_chk = New System.Windows.Forms.CheckBox()
-        Me.CwtGovernor1TensionSheaveA_txt = New System.Windows.Forms.TextBox()
-        Me.CwtGovernor1TensionSheaveAIn_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernor1TensionSheaveA_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernorMounting_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovernorMounting_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernor1Hand_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovernor1Hand_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernorPullthrough_txt = New System.Windows.Forms.TextBox()
-        Me.CwtGovernorPullthrough_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernorNewModel_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovernorNewModel_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernorExistingModel_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovernorExistingModel_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernorExistingVendor_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovernorExistingVendor_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovernorExistingSheaveDiameter_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovCableSize_cmb = New System.Windows.Forms.ComboBox()
-        Me.CwtGovernorExistingSheaveDiameter_lbl = New System.Windows.Forms.Label()
-        Me.CwtGovCableSize_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernor_fra = New System.Windows.Forms.GroupBox()
-        Me.CarGovernor1TensionSheaveB_txt = New System.Windows.Forms.TextBox()
-        Me.CarMeetsMinimumClearances_chk = New System.Windows.Forms.CheckBox()
-        Me.CarGovernor1TensionSheaveA_txt = New System.Windows.Forms.TextBox()
-        Me.CarGovernor1TensionSheaveBIn_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorMounting_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovernor1TensionSheaveA_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorMounting_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernor1TensionSheaveB_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernor1Hand_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovernor1TensionSheaveAIn_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernor1Hand_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorNewModel_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovernorNewModel_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorPullthrough_txt = New System.Windows.Forms.TextBox()
-        Me.CarGovernorPullthrough_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorExistingModel_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovernorExistingModel_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorExistingVendor_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovernorExistingVendor_lbl = New System.Windows.Forms.Label()
-        Me.CarGovernorExistingSheaveDiameter_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovCableSize_cmb = New System.Windows.Forms.ComboBox()
-        Me.CarGovernorExistingSheaveDiameter_lbl = New System.Windows.Forms.Label()
-        Me.CarGovCableSize_lbl = New System.Windows.Forms.Label()
         Me.CarData_fra = New System.Windows.Forms.GroupBox()
         Me.GeneralInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.GatewayReviewRequired_chk = New System.Windows.Forms.CheckBox()
         Me.ExpensesPerDayDetails_btn = New System.Windows.Forms.Button()
         Me.ExpensesPerDay_txt = New System.Windows.Forms.TextBox()
         Me.ExpensesPerDay_lbl = New System.Windows.Forms.Label()
@@ -187,6 +119,57 @@ Partial Class frmEstimatingBase
         Me.CapacityLabel_lbl = New System.Windows.Forms.Label()
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
         Me.BillofMaterialsandTaskList_fra = New System.Windows.Forms.GroupBox()
+        Me.OrderingTabs = New System.Windows.Forms.TabControl()
+        Me.InitTab = New System.Windows.Forms.TabPage()
+        Me.Gov_img = New System.Windows.Forms.PictureBox()
+        Me.CwtGovernor_fra = New System.Windows.Forms.GroupBox()
+        Me.CwtGovernor1TensionSheaveB_txt = New System.Windows.Forms.TextBox()
+        Me.CwtGovernor1TensionSheaveBIn_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernor1TensionSheaveB_lbl = New System.Windows.Forms.Label()
+        Me.CwtMeetsMinimumClearances_chk = New System.Windows.Forms.CheckBox()
+        Me.CwtGovernor1TensionSheaveA_txt = New System.Windows.Forms.TextBox()
+        Me.CwtGovernor1TensionSheaveAIn_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernor1TensionSheaveA_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernorMounting_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovernorMounting_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernor1Hand_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovernor1Hand_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernorPullthrough_txt = New System.Windows.Forms.TextBox()
+        Me.CwtGovernorPullthrough_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernorNewModel_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovernorNewModel_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernorExistingModel_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovernorExistingModel_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernorExistingVendor_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovernorExistingVendor_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovernorExistingSheaveDiameter_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovCableSize_cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtGovernorExistingSheaveDiameter_lbl = New System.Windows.Forms.Label()
+        Me.CwtGovCableSize_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernor_fra = New System.Windows.Forms.GroupBox()
+        Me.CarGovernor1TensionSheaveB_txt = New System.Windows.Forms.TextBox()
+        Me.CarMeetsMinimumClearances_chk = New System.Windows.Forms.CheckBox()
+        Me.CarGovernor1TensionSheaveA_txt = New System.Windows.Forms.TextBox()
+        Me.CarGovernor1TensionSheaveBIn_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorMounting_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovernor1TensionSheaveA_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorMounting_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernor1TensionSheaveB_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernor1Hand_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovernor1TensionSheaveAIn_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernor1Hand_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorNewModel_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovernorNewModel_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorPullthrough_txt = New System.Windows.Forms.TextBox()
+        Me.CarGovernorPullthrough_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorExistingModel_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovernorExistingModel_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorExistingVendor_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovernorExistingVendor_lbl = New System.Windows.Forms.Label()
+        Me.CarGovernorExistingSheaveDiameter_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovCableSize_cmb = New System.Windows.Forms.ComboBox()
+        Me.CarGovernorExistingSheaveDiameter_lbl = New System.Windows.Forms.Label()
+        Me.CarGovCableSize_lbl = New System.Windows.Forms.Label()
         Me.ExpandAll_cmd = New System.Windows.Forms.Button()
         Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
@@ -209,24 +192,24 @@ Partial Class frmEstimatingBase
         Me.HdrGONum_lbl = New System.Windows.Forms.Label()
         Me.lblHdrBldgNme = New System.Windows.Forms.Label()
         Me.fraHdrIcons = New System.Windows.Forms.GroupBox()
-        Me._IconButton_cmd_22 = New System.Windows.Forms.Button()
+        Me.Supt_cmd = New System.Windows.Forms.Button()
         Me.FreezeSave_btn = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_0 = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_1 = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_6 = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_10 = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_11 = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_15 = New System.Windows.Forms.Button()
-        Me._IconButton_cmd_16 = New System.Windows.Forms.Button()
+        Me.Exit_cmd = New System.Windows.Forms.Button()
+        Me.Save_cmd = New System.Windows.Forms.Button()
+        Me.CMMain_cmd = New System.Windows.Forms.Button()
+        Me.Screen_cmd = New System.Windows.Forms.Button()
+        Me.Forms_cmd = New System.Windows.Forms.Button()
+        Me.Book_cmd = New System.Windows.Forms.Button()
+        Me.Config_cmd = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
+        Me.CarData_fra.SuspendLayout()
+        Me.GeneralInformation_fra.SuspendLayout()
+        Me.BillofMaterialsandTaskList_fra.SuspendLayout()
         Me.OrderingTabs.SuspendLayout()
         Me.InitTab.SuspendLayout()
         CType(Me.Gov_img, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CwtGovernor_fra.SuspendLayout()
         Me.CarGovernor_fra.SuspendLayout()
-        Me.CarData_fra.SuspendLayout()
-        Me.GeneralInformation_fra.SuspendLayout()
-        Me.BillofMaterialsandTaskList_fra.SuspendLayout()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
@@ -242,7 +225,6 @@ Partial Class frmEstimatingBase
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.Color.White
-        Me.GroupBox1.Controls.Add(Me.OrderingTabs)
         Me.GroupBox1.Controls.Add(Me.CarData_fra)
         Me.GroupBox1.Controls.Add(Me.TabControl1)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -251,765 +233,6 @@ Partial Class frmEstimatingBase
         Me.GroupBox1.Size = New System.Drawing.Size(1446, 690)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
-        '
-        'OrderingTabs
-        '
-        Me.OrderingTabs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OrderingTabs.Controls.Add(Me.InitTab)
-        Me.OrderingTabs.Location = New System.Drawing.Point(10, 294)
-        Me.OrderingTabs.Name = "OrderingTabs"
-        Me.OrderingTabs.SelectedIndex = 0
-        Me.OrderingTabs.Size = New System.Drawing.Size(1434, 663)
-        Me.OrderingTabs.TabIndex = 12
-        Me.OrderingTabs.Visible = False
-        '
-        'InitTab
-        '
-        Me.InitTab.Controls.Add(Me.Gov_img)
-        Me.InitTab.Controls.Add(Me.CwtGovernor_fra)
-        Me.InitTab.Controls.Add(Me.CarGovernor_fra)
-        Me.InitTab.Location = New System.Drawing.Point(4, 25)
-        Me.InitTab.Name = "InitTab"
-        Me.InitTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.InitTab.Size = New System.Drawing.Size(1426, 634)
-        Me.InitTab.TabIndex = 1
-        Me.InitTab.Text = "Car & Cwt Gov "
-        Me.InitTab.UseVisualStyleBackColor = True
-        '
-        'Gov_img
-        '
-        Me.Gov_img.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Gov_img.Location = New System.Drawing.Point(786, 9)
-        Me.Gov_img.Name = "Gov_img"
-        Me.Gov_img.Size = New System.Drawing.Size(325, 294)
-        Me.Gov_img.TabIndex = 49
-        Me.Gov_img.TabStop = False
-        '
-        'CwtGovernor_fra
-        '
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveB_txt)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveBIn_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveB_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtMeetsMinimumClearances_chk)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveA_txt)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveAIn_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveA_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorMounting_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorMounting_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1Hand_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1Hand_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorPullthrough_txt)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorPullthrough_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorNewModel_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorNewModel_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingModel_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingModel_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingVendor_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingVendor_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingSheaveDiameter_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovCableSize_cmb)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingSheaveDiameter_lbl)
-        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovCableSize_lbl)
-        Me.CwtGovernor_fra.Location = New System.Drawing.Point(381, 1)
-        Me.CwtGovernor_fra.Name = "CwtGovernor_fra"
-        Me.CwtGovernor_fra.Size = New System.Drawing.Size(370, 302)
-        Me.CwtGovernor_fra.TabIndex = 48
-        Me.CwtGovernor_fra.TabStop = False
-        Me.CwtGovernor_fra.Text = "Cwt Governor"
-        '
-        'CwtGovernor1TensionSheaveB_txt
-        '
-        Me.CwtGovernor1TensionSheaveB_txt.AcceptsReturn = True
-        Me.CwtGovernor1TensionSheaveB_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1TensionSheaveB_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.CwtGovernor1TensionSheaveB_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1TensionSheaveB_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1TensionSheaveB_txt.Location = New System.Drawing.Point(222, 245)
-        Me.CwtGovernor1TensionSheaveB_txt.MaxLength = 0
-        Me.CwtGovernor1TensionSheaveB_txt.Name = "CwtGovernor1TensionSheaveB_txt"
-        Me.CwtGovernor1TensionSheaveB_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1TensionSheaveB_txt.Size = New System.Drawing.Size(109, 20)
-        Me.CwtGovernor1TensionSheaveB_txt.TabIndex = 117
-        Me.CwtGovernor1TensionSheaveB_txt.Tag = "Print Me"
-        Me.CwtGovernor1TensionSheaveB_txt.Text = " "
-        '
-        'CwtGovernor1TensionSheaveBIn_lbl
-        '
-        Me.CwtGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1TensionSheaveBIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernor1TensionSheaveBIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernor1TensionSheaveBIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1TensionSheaveBIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1TensionSheaveBIn_lbl.Location = New System.Drawing.Point(338, 247)
-        Me.CwtGovernor1TensionSheaveBIn_lbl.Name = "CwtGovernor1TensionSheaveBIn_lbl"
-        Me.CwtGovernor1TensionSheaveBIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1TensionSheaveBIn_lbl.Size = New System.Drawing.Size(15, 16)
-        Me.CwtGovernor1TensionSheaveBIn_lbl.TabIndex = 119
-        Me.CwtGovernor1TensionSheaveBIn_lbl.Text = "In"
-        '
-        'CwtGovernor1TensionSheaveB_lbl
-        '
-        Me.CwtGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1TensionSheaveB_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernor1TensionSheaveB_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernor1TensionSheaveB_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1TensionSheaveB_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1TensionSheaveB_lbl.Location = New System.Drawing.Point(32, 247)
-        Me.CwtGovernor1TensionSheaveB_lbl.Name = "CwtGovernor1TensionSheaveB_lbl"
-        Me.CwtGovernor1TensionSheaveB_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1TensionSheaveB_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernor1TensionSheaveB_lbl.TabIndex = 118
-        Me.CwtGovernor1TensionSheaveB_lbl.Tag = "Print Me"
-        Me.CwtGovernor1TensionSheaveB_lbl.Text = "Gov Tension Sheave            B="
-        '
-        'CwtMeetsMinimumClearances_chk
-        '
-        Me.CwtMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtMeetsMinimumClearances_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CwtMeetsMinimumClearances_chk.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtMeetsMinimumClearances_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtMeetsMinimumClearances_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtMeetsMinimumClearances_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtMeetsMinimumClearances_chk.Location = New System.Drawing.Point(32, 196)
-        Me.CwtMeetsMinimumClearances_chk.Name = "CwtMeetsMinimumClearances_chk"
-        Me.CwtMeetsMinimumClearances_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtMeetsMinimumClearances_chk.Size = New System.Drawing.Size(298, 19)
-        Me.CwtMeetsMinimumClearances_chk.TabIndex = 111
-        Me.CwtMeetsMinimumClearances_chk.Text = "Meets minimum clearances"
-        Me.CwtMeetsMinimumClearances_chk.UseVisualStyleBackColor = False
-        '
-        'CwtGovernor1TensionSheaveA_txt
-        '
-        Me.CwtGovernor1TensionSheaveA_txt.AcceptsReturn = True
-        Me.CwtGovernor1TensionSheaveA_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1TensionSheaveA_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.CwtGovernor1TensionSheaveA_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1TensionSheaveA_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1TensionSheaveA_txt.Location = New System.Drawing.Point(222, 220)
-        Me.CwtGovernor1TensionSheaveA_txt.MaxLength = 0
-        Me.CwtGovernor1TensionSheaveA_txt.Name = "CwtGovernor1TensionSheaveA_txt"
-        Me.CwtGovernor1TensionSheaveA_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1TensionSheaveA_txt.Size = New System.Drawing.Size(109, 20)
-        Me.CwtGovernor1TensionSheaveA_txt.TabIndex = 108
-        Me.CwtGovernor1TensionSheaveA_txt.Tag = "Print Me"
-        Me.CwtGovernor1TensionSheaveA_txt.Text = " "
-        '
-        'CwtGovernor1TensionSheaveAIn_lbl
-        '
-        Me.CwtGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1TensionSheaveAIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernor1TensionSheaveAIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernor1TensionSheaveAIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1TensionSheaveAIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1TensionSheaveAIn_lbl.Location = New System.Drawing.Point(338, 222)
-        Me.CwtGovernor1TensionSheaveAIn_lbl.Name = "CwtGovernor1TensionSheaveAIn_lbl"
-        Me.CwtGovernor1TensionSheaveAIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1TensionSheaveAIn_lbl.Size = New System.Drawing.Size(15, 16)
-        Me.CwtGovernor1TensionSheaveAIn_lbl.TabIndex = 110
-        Me.CwtGovernor1TensionSheaveAIn_lbl.Text = "In"
-        '
-        'CwtGovernor1TensionSheaveA_lbl
-        '
-        Me.CwtGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1TensionSheaveA_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernor1TensionSheaveA_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernor1TensionSheaveA_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1TensionSheaveA_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1TensionSheaveA_lbl.Location = New System.Drawing.Point(32, 222)
-        Me.CwtGovernor1TensionSheaveA_lbl.Name = "CwtGovernor1TensionSheaveA_lbl"
-        Me.CwtGovernor1TensionSheaveA_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1TensionSheaveA_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernor1TensionSheaveA_lbl.TabIndex = 109
-        Me.CwtGovernor1TensionSheaveA_lbl.Tag = "Print Me"
-        Me.CwtGovernor1TensionSheaveA_lbl.Text = "Gov Tension Sheave            A="
-        '
-        'CwtGovernorMounting_cmb
-        '
-        Me.CwtGovernorMounting_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorMounting_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorMounting_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovernorMounting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorMounting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorMounting_cmb.Location = New System.Drawing.Point(222, 170)
-        Me.CwtGovernorMounting_cmb.Name = "CwtGovernorMounting_cmb"
-        Me.CwtGovernorMounting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorMounting_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovernorMounting_cmb.TabIndex = 84
-        '
-        'CwtGovernorMounting_lbl
-        '
-        Me.CwtGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorMounting_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorMounting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernorMounting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorMounting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovernorMounting_lbl.Location = New System.Drawing.Point(32, 172)
-        Me.CwtGovernorMounting_lbl.Name = "CwtGovernorMounting_lbl"
-        Me.CwtGovernorMounting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorMounting_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernorMounting_lbl.TabIndex = 85
-        Me.CwtGovernorMounting_lbl.Text = "Mounting"
-        '
-        'CwtGovernor1Hand_cmb
-        '
-        Me.CwtGovernor1Hand_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1Hand_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernor1Hand_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovernor1Hand_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1Hand_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernor1Hand_cmb.Location = New System.Drawing.Point(222, 145)
-        Me.CwtGovernor1Hand_cmb.Name = "CwtGovernor1Hand_cmb"
-        Me.CwtGovernor1Hand_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1Hand_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovernor1Hand_cmb.TabIndex = 83
-        Me.CwtGovernor1Hand_cmb.Tag = "Print Me"
-        '
-        'CwtGovernor1Hand_lbl
-        '
-        Me.CwtGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernor1Hand_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernor1Hand_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernor1Hand_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernor1Hand_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovernor1Hand_lbl.Location = New System.Drawing.Point(32, 147)
-        Me.CwtGovernor1Hand_lbl.Name = "CwtGovernor1Hand_lbl"
-        Me.CwtGovernor1Hand_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernor1Hand_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernor1Hand_lbl.TabIndex = 82
-        Me.CwtGovernor1Hand_lbl.Tag = "Print Me"
-        Me.CwtGovernor1Hand_lbl.Text = "Governor Hand"
-        '
-        'CwtGovernorPullthrough_txt
-        '
-        Me.CwtGovernorPullthrough_txt.AcceptsReturn = True
-        Me.CwtGovernorPullthrough_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorPullthrough_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.CwtGovernorPullthrough_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorPullthrough_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorPullthrough_txt.Location = New System.Drawing.Point(222, 120)
-        Me.CwtGovernorPullthrough_txt.MaxLength = 0
-        Me.CwtGovernorPullthrough_txt.Name = "CwtGovernorPullthrough_txt"
-        Me.CwtGovernorPullthrough_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorPullthrough_txt.Size = New System.Drawing.Size(109, 20)
-        Me.CwtGovernorPullthrough_txt.TabIndex = 81
-        Me.CwtGovernorPullthrough_txt.Tag = "Print Me"
-        Me.CwtGovernorPullthrough_txt.Text = " "
-        '
-        'CwtGovernorPullthrough_lbl
-        '
-        Me.CwtGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorPullthrough_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorPullthrough_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernorPullthrough_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorPullthrough_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorPullthrough_lbl.Location = New System.Drawing.Point(32, 122)
-        Me.CwtGovernorPullthrough_lbl.Name = "CwtGovernorPullthrough_lbl"
-        Me.CwtGovernorPullthrough_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorPullthrough_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernorPullthrough_lbl.TabIndex = 80
-        Me.CwtGovernorPullthrough_lbl.Tag = "Print Me"
-        Me.CwtGovernorPullthrough_lbl.Text = "Pullthrough"
-        '
-        'CwtGovernorNewModel_cmb
-        '
-        Me.CwtGovernorNewModel_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorNewModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorNewModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovernorNewModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorNewModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorNewModel_cmb.Location = New System.Drawing.Point(222, 18)
-        Me.CwtGovernorNewModel_cmb.Name = "CwtGovernorNewModel_cmb"
-        Me.CwtGovernorNewModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorNewModel_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovernorNewModel_cmb.TabIndex = 78
-        '
-        'CwtGovernorNewModel_lbl
-        '
-        Me.CwtGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorNewModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorNewModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernorNewModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorNewModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovernorNewModel_lbl.Location = New System.Drawing.Point(6, 20)
-        Me.CwtGovernorNewModel_lbl.Name = "CwtGovernorNewModel_lbl"
-        Me.CwtGovernorNewModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorNewModel_lbl.Size = New System.Drawing.Size(105, 16)
-        Me.CwtGovernorNewModel_lbl.TabIndex = 79
-        Me.CwtGovernorNewModel_lbl.Text = "New Model"
-        '
-        'CwtGovernorExistingModel_cmb
-        '
-        Me.CwtGovernorExistingModel_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorExistingModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorExistingModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovernorExistingModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorExistingModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorExistingModel_cmb.Location = New System.Drawing.Point(222, 68)
-        Me.CwtGovernorExistingModel_cmb.Name = "CwtGovernorExistingModel_cmb"
-        Me.CwtGovernorExistingModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorExistingModel_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovernorExistingModel_cmb.TabIndex = 70
-        '
-        'CwtGovernorExistingModel_lbl
-        '
-        Me.CwtGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorExistingModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorExistingModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernorExistingModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorExistingModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovernorExistingModel_lbl.Location = New System.Drawing.Point(32, 70)
-        Me.CwtGovernorExistingModel_lbl.Name = "CwtGovernorExistingModel_lbl"
-        Me.CwtGovernorExistingModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorExistingModel_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernorExistingModel_lbl.TabIndex = 77
-        Me.CwtGovernorExistingModel_lbl.Text = "Existing Model"
-        '
-        'CwtGovernorExistingVendor_cmb
-        '
-        Me.CwtGovernorExistingVendor_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorExistingVendor_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorExistingVendor_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovernorExistingVendor_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorExistingVendor_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorExistingVendor_cmb.Location = New System.Drawing.Point(222, 43)
-        Me.CwtGovernorExistingVendor_cmb.Name = "CwtGovernorExistingVendor_cmb"
-        Me.CwtGovernorExistingVendor_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorExistingVendor_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovernorExistingVendor_cmb.TabIndex = 69
-        '
-        'CwtGovernorExistingVendor_lbl
-        '
-        Me.CwtGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorExistingVendor_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorExistingVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernorExistingVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorExistingVendor_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovernorExistingVendor_lbl.Location = New System.Drawing.Point(32, 45)
-        Me.CwtGovernorExistingVendor_lbl.Name = "CwtGovernorExistingVendor_lbl"
-        Me.CwtGovernorExistingVendor_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorExistingVendor_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernorExistingVendor_lbl.TabIndex = 76
-        Me.CwtGovernorExistingVendor_lbl.Text = "Existing Vendor"
-        '
-        'CwtGovernorExistingSheaveDiameter_cmb
-        '
-        Me.CwtGovernorExistingSheaveDiameter_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorExistingSheaveDiameter_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorExistingSheaveDiameter_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovernorExistingSheaveDiameter_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorExistingSheaveDiameter_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovernorExistingSheaveDiameter_cmb.Location = New System.Drawing.Point(222, 270)
-        Me.CwtGovernorExistingSheaveDiameter_cmb.Name = "CwtGovernorExistingSheaveDiameter_cmb"
-        Me.CwtGovernorExistingSheaveDiameter_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorExistingSheaveDiameter_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovernorExistingSheaveDiameter_cmb.TabIndex = 71
-        '
-        'CwtGovCableSize_cmb
-        '
-        Me.CwtGovCableSize_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovCableSize_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovCableSize_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CwtGovCableSize_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovCableSize_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CwtGovCableSize_cmb.Location = New System.Drawing.Point(222, 94)
-        Me.CwtGovCableSize_cmb.Name = "CwtGovCableSize_cmb"
-        Me.CwtGovCableSize_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovCableSize_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CwtGovCableSize_cmb.TabIndex = 72
-        '
-        'CwtGovernorExistingSheaveDiameter_lbl
-        '
-        Me.CwtGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovernorExistingSheaveDiameter_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovernorExistingSheaveDiameter_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovernorExistingSheaveDiameter_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovernorExistingSheaveDiameter_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovernorExistingSheaveDiameter_lbl.Location = New System.Drawing.Point(32, 272)
-        Me.CwtGovernorExistingSheaveDiameter_lbl.Name = "CwtGovernorExistingSheaveDiameter_lbl"
-        Me.CwtGovernorExistingSheaveDiameter_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovernorExistingSheaveDiameter_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovernorExistingSheaveDiameter_lbl.TabIndex = 74
-        Me.CwtGovernorExistingSheaveDiameter_lbl.Text = "Existing Sheave Dia."
-        '
-        'CwtGovCableSize_lbl
-        '
-        Me.CwtGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CwtGovCableSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CwtGovCableSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CwtGovCableSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CwtGovCableSize_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CwtGovCableSize_lbl.Location = New System.Drawing.Point(32, 96)
-        Me.CwtGovCableSize_lbl.Name = "CwtGovCableSize_lbl"
-        Me.CwtGovCableSize_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CwtGovCableSize_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CwtGovCableSize_lbl.TabIndex = 73
-        Me.CwtGovCableSize_lbl.Text = "Cable Size:"
-        '
-        'CarGovernor_fra
-        '
-        Me.CarGovernor_fra.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveB_txt)
-        Me.CarGovernor_fra.Controls.Add(Me.CarMeetsMinimumClearances_chk)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveA_txt)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveBIn_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorMounting_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveA_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorMounting_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveB_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1Hand_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveAIn_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1Hand_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorNewModel_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorNewModel_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorPullthrough_txt)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorPullthrough_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingModel_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingModel_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingVendor_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingVendor_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingSheaveDiameter_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovCableSize_cmb)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingSheaveDiameter_lbl)
-        Me.CarGovernor_fra.Controls.Add(Me.CarGovCableSize_lbl)
-        Me.CarGovernor_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor_fra.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernor_fra.Location = New System.Drawing.Point(9, 1)
-        Me.CarGovernor_fra.Name = "CarGovernor_fra"
-        Me.CarGovernor_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor_fra.Size = New System.Drawing.Size(358, 300)
-        Me.CarGovernor_fra.TabIndex = 47
-        Me.CarGovernor_fra.TabStop = False
-        Me.CarGovernor_fra.Text = "Car Governor"
-        '
-        'CarGovernor1TensionSheaveB_txt
-        '
-        Me.CarGovernor1TensionSheaveB_txt.AcceptsReturn = True
-        Me.CarGovernor1TensionSheaveB_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1TensionSheaveB_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.CarGovernor1TensionSheaveB_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1TensionSheaveB_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1TensionSheaveB_txt.Location = New System.Drawing.Point(222, 245)
-        Me.CarGovernor1TensionSheaveB_txt.MaxLength = 0
-        Me.CarGovernor1TensionSheaveB_txt.Name = "CarGovernor1TensionSheaveB_txt"
-        Me.CarGovernor1TensionSheaveB_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1TensionSheaveB_txt.Size = New System.Drawing.Size(109, 20)
-        Me.CarGovernor1TensionSheaveB_txt.TabIndex = 114
-        Me.CarGovernor1TensionSheaveB_txt.Tag = "Print Me"
-        Me.CarGovernor1TensionSheaveB_txt.Text = " "
-        '
-        'CarMeetsMinimumClearances_chk
-        '
-        Me.CarMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Window
-        Me.CarMeetsMinimumClearances_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CarMeetsMinimumClearances_chk.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarMeetsMinimumClearances_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarMeetsMinimumClearances_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarMeetsMinimumClearances_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarMeetsMinimumClearances_chk.Location = New System.Drawing.Point(32, 196)
-        Me.CarMeetsMinimumClearances_chk.Name = "CarMeetsMinimumClearances_chk"
-        Me.CarMeetsMinimumClearances_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarMeetsMinimumClearances_chk.Size = New System.Drawing.Size(298, 19)
-        Me.CarMeetsMinimumClearances_chk.TabIndex = 29
-        Me.CarMeetsMinimumClearances_chk.Text = "Meets minimum clearances"
-        Me.CarMeetsMinimumClearances_chk.UseVisualStyleBackColor = False
-        '
-        'CarGovernor1TensionSheaveA_txt
-        '
-        Me.CarGovernor1TensionSheaveA_txt.AcceptsReturn = True
-        Me.CarGovernor1TensionSheaveA_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1TensionSheaveA_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.CarGovernor1TensionSheaveA_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1TensionSheaveA_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1TensionSheaveA_txt.Location = New System.Drawing.Point(222, 220)
-        Me.CarGovernor1TensionSheaveA_txt.MaxLength = 0
-        Me.CarGovernor1TensionSheaveA_txt.Name = "CarGovernor1TensionSheaveA_txt"
-        Me.CarGovernor1TensionSheaveA_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1TensionSheaveA_txt.Size = New System.Drawing.Size(109, 20)
-        Me.CarGovernor1TensionSheaveA_txt.TabIndex = 111
-        Me.CarGovernor1TensionSheaveA_txt.Tag = "Print Me"
-        Me.CarGovernor1TensionSheaveA_txt.Text = " "
-        '
-        'CarGovernor1TensionSheaveBIn_lbl
-        '
-        Me.CarGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1TensionSheaveBIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernor1TensionSheaveBIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernor1TensionSheaveBIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1TensionSheaveBIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1TensionSheaveBIn_lbl.Location = New System.Drawing.Point(338, 247)
-        Me.CarGovernor1TensionSheaveBIn_lbl.Name = "CarGovernor1TensionSheaveBIn_lbl"
-        Me.CarGovernor1TensionSheaveBIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1TensionSheaveBIn_lbl.Size = New System.Drawing.Size(15, 16)
-        Me.CarGovernor1TensionSheaveBIn_lbl.TabIndex = 116
-        Me.CarGovernor1TensionSheaveBIn_lbl.Text = "In"
-        '
-        'CarGovernorMounting_cmb
-        '
-        Me.CarGovernorMounting_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorMounting_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorMounting_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovernorMounting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorMounting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorMounting_cmb.Location = New System.Drawing.Point(222, 170)
-        Me.CarGovernorMounting_cmb.Name = "CarGovernorMounting_cmb"
-        Me.CarGovernorMounting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorMounting_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovernorMounting_cmb.TabIndex = 71
-        '
-        'CarGovernor1TensionSheaveA_lbl
-        '
-        Me.CarGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1TensionSheaveA_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernor1TensionSheaveA_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernor1TensionSheaveA_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1TensionSheaveA_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1TensionSheaveA_lbl.Location = New System.Drawing.Point(32, 222)
-        Me.CarGovernor1TensionSheaveA_lbl.Name = "CarGovernor1TensionSheaveA_lbl"
-        Me.CarGovernor1TensionSheaveA_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1TensionSheaveA_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernor1TensionSheaveA_lbl.TabIndex = 112
-        Me.CarGovernor1TensionSheaveA_lbl.Tag = "Print Me"
-        Me.CarGovernor1TensionSheaveA_lbl.Text = "Gov Tension Sheave            A="
-        '
-        'CarGovernorMounting_lbl
-        '
-        Me.CarGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorMounting_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorMounting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernorMounting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorMounting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernorMounting_lbl.Location = New System.Drawing.Point(32, 172)
-        Me.CarGovernorMounting_lbl.Name = "CarGovernorMounting_lbl"
-        Me.CarGovernorMounting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorMounting_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernorMounting_lbl.TabIndex = 72
-        Me.CarGovernorMounting_lbl.Text = "Mounting"
-        '
-        'CarGovernor1TensionSheaveB_lbl
-        '
-        Me.CarGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1TensionSheaveB_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernor1TensionSheaveB_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernor1TensionSheaveB_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1TensionSheaveB_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1TensionSheaveB_lbl.Location = New System.Drawing.Point(32, 247)
-        Me.CarGovernor1TensionSheaveB_lbl.Name = "CarGovernor1TensionSheaveB_lbl"
-        Me.CarGovernor1TensionSheaveB_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1TensionSheaveB_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernor1TensionSheaveB_lbl.TabIndex = 115
-        Me.CarGovernor1TensionSheaveB_lbl.Tag = "Print Me"
-        Me.CarGovernor1TensionSheaveB_lbl.Text = "Gov Tension Sheave            B="
-        '
-        'CarGovernor1Hand_cmb
-        '
-        Me.CarGovernor1Hand_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1Hand_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernor1Hand_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovernor1Hand_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1Hand_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1Hand_cmb.Location = New System.Drawing.Point(222, 145)
-        Me.CarGovernor1Hand_cmb.Name = "CarGovernor1Hand_cmb"
-        Me.CarGovernor1Hand_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1Hand_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovernor1Hand_cmb.TabIndex = 69
-        Me.CarGovernor1Hand_cmb.Tag = "Print Me"
-        '
-        'CarGovernor1TensionSheaveAIn_lbl
-        '
-        Me.CarGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1TensionSheaveAIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernor1TensionSheaveAIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernor1TensionSheaveAIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1TensionSheaveAIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernor1TensionSheaveAIn_lbl.Location = New System.Drawing.Point(338, 222)
-        Me.CarGovernor1TensionSheaveAIn_lbl.Name = "CarGovernor1TensionSheaveAIn_lbl"
-        Me.CarGovernor1TensionSheaveAIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1TensionSheaveAIn_lbl.Size = New System.Drawing.Size(15, 16)
-        Me.CarGovernor1TensionSheaveAIn_lbl.TabIndex = 113
-        Me.CarGovernor1TensionSheaveAIn_lbl.Text = "In"
-        '
-        'CarGovernor1Hand_lbl
-        '
-        Me.CarGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernor1Hand_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernor1Hand_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernor1Hand_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernor1Hand_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernor1Hand_lbl.Location = New System.Drawing.Point(32, 147)
-        Me.CarGovernor1Hand_lbl.Name = "CarGovernor1Hand_lbl"
-        Me.CarGovernor1Hand_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernor1Hand_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernor1Hand_lbl.TabIndex = 70
-        Me.CarGovernor1Hand_lbl.Tag = "Print Me"
-        Me.CarGovernor1Hand_lbl.Text = "Governor Hand"
-        '
-        'CarGovernorNewModel_cmb
-        '
-        Me.CarGovernorNewModel_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorNewModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorNewModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovernorNewModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorNewModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorNewModel_cmb.Location = New System.Drawing.Point(222, 18)
-        Me.CarGovernorNewModel_cmb.Name = "CarGovernorNewModel_cmb"
-        Me.CarGovernorNewModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorNewModel_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovernorNewModel_cmb.TabIndex = 67
-        '
-        'CarGovernorNewModel_lbl
-        '
-        Me.CarGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorNewModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorNewModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernorNewModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorNewModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernorNewModel_lbl.Location = New System.Drawing.Point(6, 20)
-        Me.CarGovernorNewModel_lbl.Name = "CarGovernorNewModel_lbl"
-        Me.CarGovernorNewModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorNewModel_lbl.Size = New System.Drawing.Size(105, 16)
-        Me.CarGovernorNewModel_lbl.TabIndex = 68
-        Me.CarGovernorNewModel_lbl.Text = "New Model"
-        '
-        'CarGovernorPullthrough_txt
-        '
-        Me.CarGovernorPullthrough_txt.AcceptsReturn = True
-        Me.CarGovernorPullthrough_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorPullthrough_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.CarGovernorPullthrough_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorPullthrough_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorPullthrough_txt.Location = New System.Drawing.Point(222, 120)
-        Me.CarGovernorPullthrough_txt.MaxLength = 0
-        Me.CarGovernorPullthrough_txt.Name = "CarGovernorPullthrough_txt"
-        Me.CarGovernorPullthrough_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorPullthrough_txt.Size = New System.Drawing.Size(109, 20)
-        Me.CarGovernorPullthrough_txt.TabIndex = 65
-        Me.CarGovernorPullthrough_txt.Tag = "Print Me"
-        Me.CarGovernorPullthrough_txt.Text = " "
-        '
-        'CarGovernorPullthrough_lbl
-        '
-        Me.CarGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorPullthrough_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorPullthrough_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernorPullthrough_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorPullthrough_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorPullthrough_lbl.Location = New System.Drawing.Point(32, 122)
-        Me.CarGovernorPullthrough_lbl.Name = "CarGovernorPullthrough_lbl"
-        Me.CarGovernorPullthrough_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorPullthrough_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernorPullthrough_lbl.TabIndex = 66
-        Me.CarGovernorPullthrough_lbl.Tag = "Print Me"
-        Me.CarGovernorPullthrough_lbl.Text = "Pullthrough"
-        '
-        'CarGovernorExistingModel_cmb
-        '
-        Me.CarGovernorExistingModel_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorExistingModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorExistingModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovernorExistingModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorExistingModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorExistingModel_cmb.Location = New System.Drawing.Point(222, 68)
-        Me.CarGovernorExistingModel_cmb.Name = "CarGovernorExistingModel_cmb"
-        Me.CarGovernorExistingModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorExistingModel_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovernorExistingModel_cmb.TabIndex = 13
-        '
-        'CarGovernorExistingModel_lbl
-        '
-        Me.CarGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorExistingModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorExistingModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernorExistingModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorExistingModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernorExistingModel_lbl.Location = New System.Drawing.Point(32, 70)
-        Me.CarGovernorExistingModel_lbl.Name = "CarGovernorExistingModel_lbl"
-        Me.CarGovernorExistingModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorExistingModel_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernorExistingModel_lbl.TabIndex = 64
-        Me.CarGovernorExistingModel_lbl.Text = "Existing Model"
-        '
-        'CarGovernorExistingVendor_cmb
-        '
-        Me.CarGovernorExistingVendor_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorExistingVendor_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorExistingVendor_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovernorExistingVendor_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorExistingVendor_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorExistingVendor_cmb.Location = New System.Drawing.Point(222, 43)
-        Me.CarGovernorExistingVendor_cmb.Name = "CarGovernorExistingVendor_cmb"
-        Me.CarGovernorExistingVendor_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorExistingVendor_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovernorExistingVendor_cmb.TabIndex = 12
-        '
-        'CarGovernorExistingVendor_lbl
-        '
-        Me.CarGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorExistingVendor_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorExistingVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernorExistingVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorExistingVendor_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernorExistingVendor_lbl.Location = New System.Drawing.Point(32, 45)
-        Me.CarGovernorExistingVendor_lbl.Name = "CarGovernorExistingVendor_lbl"
-        Me.CarGovernorExistingVendor_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorExistingVendor_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernorExistingVendor_lbl.TabIndex = 62
-        Me.CarGovernorExistingVendor_lbl.Text = "Existing Vendor"
-        '
-        'CarGovernorExistingSheaveDiameter_cmb
-        '
-        Me.CarGovernorExistingSheaveDiameter_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorExistingSheaveDiameter_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorExistingSheaveDiameter_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovernorExistingSheaveDiameter_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorExistingSheaveDiameter_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovernorExistingSheaveDiameter_cmb.Location = New System.Drawing.Point(222, 270)
-        Me.CarGovernorExistingSheaveDiameter_cmb.Name = "CarGovernorExistingSheaveDiameter_cmb"
-        Me.CarGovernorExistingSheaveDiameter_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorExistingSheaveDiameter_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovernorExistingSheaveDiameter_cmb.TabIndex = 14
-        '
-        'CarGovCableSize_cmb
-        '
-        Me.CarGovCableSize_cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovCableSize_cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovCableSize_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CarGovCableSize_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovCableSize_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarGovCableSize_cmb.Location = New System.Drawing.Point(222, 94)
-        Me.CarGovCableSize_cmb.Name = "CarGovCableSize_cmb"
-        Me.CarGovCableSize_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovCableSize_cmb.Size = New System.Drawing.Size(109, 21)
-        Me.CarGovCableSize_cmb.TabIndex = 16
-        '
-        'CarGovernorExistingSheaveDiameter_lbl
-        '
-        Me.CarGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovernorExistingSheaveDiameter_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovernorExistingSheaveDiameter_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovernorExistingSheaveDiameter_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovernorExistingSheaveDiameter_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovernorExistingSheaveDiameter_lbl.Location = New System.Drawing.Point(32, 272)
-        Me.CarGovernorExistingSheaveDiameter_lbl.Name = "CarGovernorExistingSheaveDiameter_lbl"
-        Me.CarGovernorExistingSheaveDiameter_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovernorExistingSheaveDiameter_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovernorExistingSheaveDiameter_lbl.TabIndex = 57
-        Me.CarGovernorExistingSheaveDiameter_lbl.Text = "Existing Sheave Dia."
-        '
-        'CarGovCableSize_lbl
-        '
-        Me.CarGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.CarGovCableSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.CarGovCableSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CarGovCableSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CarGovCableSize_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarGovCableSize_lbl.Location = New System.Drawing.Point(32, 96)
-        Me.CarGovCableSize_lbl.Name = "CarGovCableSize_lbl"
-        Me.CarGovCableSize_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CarGovCableSize_lbl.Size = New System.Drawing.Size(191, 16)
-        Me.CarGovCableSize_lbl.TabIndex = 50
-        Me.CarGovCableSize_lbl.Text = "Cable Size:"
         '
         'CarData_fra
         '
@@ -1029,6 +252,7 @@ Partial Class frmEstimatingBase
         '
         Me.GeneralInformation_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GeneralInformation_fra.Controls.Add(Me.GatewayReviewRequired_chk)
         Me.GeneralInformation_fra.Controls.Add(Me.ExpensesPerDayDetails_btn)
         Me.GeneralInformation_fra.Controls.Add(Me.ExpensesPerDay_txt)
         Me.GeneralInformation_fra.Controls.Add(Me.ExpensesPerDay_lbl)
@@ -1127,6 +351,22 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.TabStop = False
         Me.GeneralInformation_fra.Text = "   General Information"
         '
+        'GatewayReviewRequired_chk
+        '
+        Me.GatewayReviewRequired_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.GatewayReviewRequired_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.GatewayReviewRequired_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.GatewayReviewRequired_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.GatewayReviewRequired_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GatewayReviewRequired_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.GatewayReviewRequired_chk.Location = New System.Drawing.Point(1065, 172)
+        Me.GatewayReviewRequired_chk.Name = "GatewayReviewRequired_chk"
+        Me.GatewayReviewRequired_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.GatewayReviewRequired_chk.Size = New System.Drawing.Size(227, 15)
+        Me.GatewayReviewRequired_chk.TabIndex = 180
+        Me.GatewayReviewRequired_chk.Text = "Gateway Review Required"
+        Me.GatewayReviewRequired_chk.UseVisualStyleBackColor = False
+        '
         'ExpensesPerDayDetails_btn
         '
         Me.ExpensesPerDayDetails_btn.Anchor = System.Windows.Forms.AnchorStyles.Top
@@ -1212,7 +452,7 @@ Partial Class frmEstimatingBase
         Me.MinimumFloorDistance_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.MinimumFloorDistance_chk.Size = New System.Drawing.Size(227, 15)
         Me.MinimumFloorDistance_chk.TabIndex = 174
-        Me.MinimumFloorDistance_chk.Text = "Floor is >= "
+        Me.MinimumFloorDistance_chk.Text = "Short Floor Operation <14.75"""
         Me.MinimumFloorDistance_chk.UseVisualStyleBackColor = False
         '
         'Permits_txt
@@ -2390,6 +1630,7 @@ Partial Class frmEstimatingBase
         Me.BillofMaterialsandTaskList_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.OrderingTabs)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.ExpandAll_cmd)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.FpSpread1)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.CollapseAll_cmd)
@@ -2399,6 +1640,765 @@ Partial Class frmEstimatingBase
         Me.BillofMaterialsandTaskList_fra.TabIndex = 80
         Me.BillofMaterialsandTaskList_fra.TabStop = False
         Me.BillofMaterialsandTaskList_fra.Text = "Bill of Materials and Task List"
+        '
+        'OrderingTabs
+        '
+        Me.OrderingTabs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OrderingTabs.Controls.Add(Me.InitTab)
+        Me.OrderingTabs.Location = New System.Drawing.Point(1, 109)
+        Me.OrderingTabs.Name = "OrderingTabs"
+        Me.OrderingTabs.SelectedIndex = 0
+        Me.OrderingTabs.Size = New System.Drawing.Size(1434, 663)
+        Me.OrderingTabs.TabIndex = 12
+        Me.OrderingTabs.Visible = False
+        '
+        'InitTab
+        '
+        Me.InitTab.Controls.Add(Me.Gov_img)
+        Me.InitTab.Controls.Add(Me.CwtGovernor_fra)
+        Me.InitTab.Controls.Add(Me.CarGovernor_fra)
+        Me.InitTab.Location = New System.Drawing.Point(4, 25)
+        Me.InitTab.Name = "InitTab"
+        Me.InitTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.InitTab.Size = New System.Drawing.Size(1426, 634)
+        Me.InitTab.TabIndex = 1
+        Me.InitTab.Text = "Car & Cwt Gov "
+        Me.InitTab.UseVisualStyleBackColor = True
+        '
+        'Gov_img
+        '
+        Me.Gov_img.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Gov_img.Location = New System.Drawing.Point(786, 9)
+        Me.Gov_img.Name = "Gov_img"
+        Me.Gov_img.Size = New System.Drawing.Size(325, 294)
+        Me.Gov_img.TabIndex = 49
+        Me.Gov_img.TabStop = False
+        '
+        'CwtGovernor_fra
+        '
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveB_txt)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveBIn_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveB_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtMeetsMinimumClearances_chk)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveA_txt)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveAIn_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1TensionSheaveA_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorMounting_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorMounting_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1Hand_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernor1Hand_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorPullthrough_txt)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorPullthrough_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorNewModel_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorNewModel_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingModel_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingModel_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingVendor_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingVendor_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingSheaveDiameter_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovCableSize_cmb)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovernorExistingSheaveDiameter_lbl)
+        Me.CwtGovernor_fra.Controls.Add(Me.CwtGovCableSize_lbl)
+        Me.CwtGovernor_fra.Location = New System.Drawing.Point(381, 1)
+        Me.CwtGovernor_fra.Name = "CwtGovernor_fra"
+        Me.CwtGovernor_fra.Size = New System.Drawing.Size(370, 302)
+        Me.CwtGovernor_fra.TabIndex = 48
+        Me.CwtGovernor_fra.TabStop = False
+        Me.CwtGovernor_fra.Text = "Cwt Governor"
+        '
+        'CwtGovernor1TensionSheaveB_txt
+        '
+        Me.CwtGovernor1TensionSheaveB_txt.AcceptsReturn = True
+        Me.CwtGovernor1TensionSheaveB_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveB_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CwtGovernor1TensionSheaveB_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1TensionSheaveB_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1TensionSheaveB_txt.Location = New System.Drawing.Point(222, 245)
+        Me.CwtGovernor1TensionSheaveB_txt.MaxLength = 0
+        Me.CwtGovernor1TensionSheaveB_txt.Name = "CwtGovernor1TensionSheaveB_txt"
+        Me.CwtGovernor1TensionSheaveB_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1TensionSheaveB_txt.Size = New System.Drawing.Size(109, 20)
+        Me.CwtGovernor1TensionSheaveB_txt.TabIndex = 117
+        Me.CwtGovernor1TensionSheaveB_txt.Tag = "Print Me"
+        Me.CwtGovernor1TensionSheaveB_txt.Text = " "
+        '
+        'CwtGovernor1TensionSheaveBIn_lbl
+        '
+        Me.CwtGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveBIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernor1TensionSheaveBIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernor1TensionSheaveBIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1TensionSheaveBIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1TensionSheaveBIn_lbl.Location = New System.Drawing.Point(338, 247)
+        Me.CwtGovernor1TensionSheaveBIn_lbl.Name = "CwtGovernor1TensionSheaveBIn_lbl"
+        Me.CwtGovernor1TensionSheaveBIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1TensionSheaveBIn_lbl.Size = New System.Drawing.Size(15, 16)
+        Me.CwtGovernor1TensionSheaveBIn_lbl.TabIndex = 119
+        Me.CwtGovernor1TensionSheaveBIn_lbl.Text = "In"
+        '
+        'CwtGovernor1TensionSheaveB_lbl
+        '
+        Me.CwtGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveB_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernor1TensionSheaveB_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernor1TensionSheaveB_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1TensionSheaveB_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1TensionSheaveB_lbl.Location = New System.Drawing.Point(32, 247)
+        Me.CwtGovernor1TensionSheaveB_lbl.Name = "CwtGovernor1TensionSheaveB_lbl"
+        Me.CwtGovernor1TensionSheaveB_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1TensionSheaveB_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernor1TensionSheaveB_lbl.TabIndex = 118
+        Me.CwtGovernor1TensionSheaveB_lbl.Tag = "Print Me"
+        Me.CwtGovernor1TensionSheaveB_lbl.Text = "Gov Tension Sheave            B="
+        '
+        'CwtMeetsMinimumClearances_chk
+        '
+        Me.CwtMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtMeetsMinimumClearances_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CwtMeetsMinimumClearances_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtMeetsMinimumClearances_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtMeetsMinimumClearances_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtMeetsMinimumClearances_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtMeetsMinimumClearances_chk.Location = New System.Drawing.Point(32, 196)
+        Me.CwtMeetsMinimumClearances_chk.Name = "CwtMeetsMinimumClearances_chk"
+        Me.CwtMeetsMinimumClearances_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtMeetsMinimumClearances_chk.Size = New System.Drawing.Size(298, 19)
+        Me.CwtMeetsMinimumClearances_chk.TabIndex = 111
+        Me.CwtMeetsMinimumClearances_chk.Text = "Meets minimum clearances"
+        Me.CwtMeetsMinimumClearances_chk.UseVisualStyleBackColor = False
+        '
+        'CwtGovernor1TensionSheaveA_txt
+        '
+        Me.CwtGovernor1TensionSheaveA_txt.AcceptsReturn = True
+        Me.CwtGovernor1TensionSheaveA_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveA_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CwtGovernor1TensionSheaveA_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1TensionSheaveA_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1TensionSheaveA_txt.Location = New System.Drawing.Point(222, 220)
+        Me.CwtGovernor1TensionSheaveA_txt.MaxLength = 0
+        Me.CwtGovernor1TensionSheaveA_txt.Name = "CwtGovernor1TensionSheaveA_txt"
+        Me.CwtGovernor1TensionSheaveA_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1TensionSheaveA_txt.Size = New System.Drawing.Size(109, 20)
+        Me.CwtGovernor1TensionSheaveA_txt.TabIndex = 108
+        Me.CwtGovernor1TensionSheaveA_txt.Tag = "Print Me"
+        Me.CwtGovernor1TensionSheaveA_txt.Text = " "
+        '
+        'CwtGovernor1TensionSheaveAIn_lbl
+        '
+        Me.CwtGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveAIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernor1TensionSheaveAIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernor1TensionSheaveAIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1TensionSheaveAIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1TensionSheaveAIn_lbl.Location = New System.Drawing.Point(338, 222)
+        Me.CwtGovernor1TensionSheaveAIn_lbl.Name = "CwtGovernor1TensionSheaveAIn_lbl"
+        Me.CwtGovernor1TensionSheaveAIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1TensionSheaveAIn_lbl.Size = New System.Drawing.Size(15, 16)
+        Me.CwtGovernor1TensionSheaveAIn_lbl.TabIndex = 110
+        Me.CwtGovernor1TensionSheaveAIn_lbl.Text = "In"
+        '
+        'CwtGovernor1TensionSheaveA_lbl
+        '
+        Me.CwtGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveA_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernor1TensionSheaveA_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernor1TensionSheaveA_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1TensionSheaveA_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1TensionSheaveA_lbl.Location = New System.Drawing.Point(32, 222)
+        Me.CwtGovernor1TensionSheaveA_lbl.Name = "CwtGovernor1TensionSheaveA_lbl"
+        Me.CwtGovernor1TensionSheaveA_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1TensionSheaveA_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernor1TensionSheaveA_lbl.TabIndex = 109
+        Me.CwtGovernor1TensionSheaveA_lbl.Tag = "Print Me"
+        Me.CwtGovernor1TensionSheaveA_lbl.Text = "Gov Tension Sheave            A="
+        '
+        'CwtGovernorMounting_cmb
+        '
+        Me.CwtGovernorMounting_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorMounting_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorMounting_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovernorMounting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorMounting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorMounting_cmb.Location = New System.Drawing.Point(222, 170)
+        Me.CwtGovernorMounting_cmb.Name = "CwtGovernorMounting_cmb"
+        Me.CwtGovernorMounting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorMounting_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovernorMounting_cmb.TabIndex = 84
+        '
+        'CwtGovernorMounting_lbl
+        '
+        Me.CwtGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorMounting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorMounting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernorMounting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorMounting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovernorMounting_lbl.Location = New System.Drawing.Point(32, 172)
+        Me.CwtGovernorMounting_lbl.Name = "CwtGovernorMounting_lbl"
+        Me.CwtGovernorMounting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorMounting_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernorMounting_lbl.TabIndex = 85
+        Me.CwtGovernorMounting_lbl.Text = "Mounting"
+        '
+        'CwtGovernor1Hand_cmb
+        '
+        Me.CwtGovernor1Hand_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1Hand_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernor1Hand_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovernor1Hand_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1Hand_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernor1Hand_cmb.Location = New System.Drawing.Point(222, 145)
+        Me.CwtGovernor1Hand_cmb.Name = "CwtGovernor1Hand_cmb"
+        Me.CwtGovernor1Hand_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1Hand_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovernor1Hand_cmb.TabIndex = 83
+        Me.CwtGovernor1Hand_cmb.Tag = "Print Me"
+        '
+        'CwtGovernor1Hand_lbl
+        '
+        Me.CwtGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1Hand_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernor1Hand_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernor1Hand_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernor1Hand_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovernor1Hand_lbl.Location = New System.Drawing.Point(32, 147)
+        Me.CwtGovernor1Hand_lbl.Name = "CwtGovernor1Hand_lbl"
+        Me.CwtGovernor1Hand_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernor1Hand_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernor1Hand_lbl.TabIndex = 82
+        Me.CwtGovernor1Hand_lbl.Tag = "Print Me"
+        Me.CwtGovernor1Hand_lbl.Text = "Governor Hand"
+        '
+        'CwtGovernorPullthrough_txt
+        '
+        Me.CwtGovernorPullthrough_txt.AcceptsReturn = True
+        Me.CwtGovernorPullthrough_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorPullthrough_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CwtGovernorPullthrough_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorPullthrough_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorPullthrough_txt.Location = New System.Drawing.Point(222, 120)
+        Me.CwtGovernorPullthrough_txt.MaxLength = 0
+        Me.CwtGovernorPullthrough_txt.Name = "CwtGovernorPullthrough_txt"
+        Me.CwtGovernorPullthrough_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorPullthrough_txt.Size = New System.Drawing.Size(109, 20)
+        Me.CwtGovernorPullthrough_txt.TabIndex = 81
+        Me.CwtGovernorPullthrough_txt.Tag = "Print Me"
+        Me.CwtGovernorPullthrough_txt.Text = " "
+        '
+        'CwtGovernorPullthrough_lbl
+        '
+        Me.CwtGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorPullthrough_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorPullthrough_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernorPullthrough_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorPullthrough_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorPullthrough_lbl.Location = New System.Drawing.Point(32, 122)
+        Me.CwtGovernorPullthrough_lbl.Name = "CwtGovernorPullthrough_lbl"
+        Me.CwtGovernorPullthrough_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorPullthrough_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernorPullthrough_lbl.TabIndex = 80
+        Me.CwtGovernorPullthrough_lbl.Tag = "Print Me"
+        Me.CwtGovernorPullthrough_lbl.Text = "Pullthrough"
+        '
+        'CwtGovernorNewModel_cmb
+        '
+        Me.CwtGovernorNewModel_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorNewModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorNewModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovernorNewModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorNewModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorNewModel_cmb.Location = New System.Drawing.Point(222, 18)
+        Me.CwtGovernorNewModel_cmb.Name = "CwtGovernorNewModel_cmb"
+        Me.CwtGovernorNewModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorNewModel_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovernorNewModel_cmb.TabIndex = 78
+        '
+        'CwtGovernorNewModel_lbl
+        '
+        Me.CwtGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorNewModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorNewModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernorNewModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorNewModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovernorNewModel_lbl.Location = New System.Drawing.Point(6, 20)
+        Me.CwtGovernorNewModel_lbl.Name = "CwtGovernorNewModel_lbl"
+        Me.CwtGovernorNewModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorNewModel_lbl.Size = New System.Drawing.Size(105, 16)
+        Me.CwtGovernorNewModel_lbl.TabIndex = 79
+        Me.CwtGovernorNewModel_lbl.Text = "New Model"
+        '
+        'CwtGovernorExistingModel_cmb
+        '
+        Me.CwtGovernorExistingModel_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorExistingModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovernorExistingModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorExistingModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorExistingModel_cmb.Location = New System.Drawing.Point(222, 68)
+        Me.CwtGovernorExistingModel_cmb.Name = "CwtGovernorExistingModel_cmb"
+        Me.CwtGovernorExistingModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorExistingModel_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovernorExistingModel_cmb.TabIndex = 70
+        '
+        'CwtGovernorExistingModel_lbl
+        '
+        Me.CwtGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorExistingModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernorExistingModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorExistingModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovernorExistingModel_lbl.Location = New System.Drawing.Point(32, 70)
+        Me.CwtGovernorExistingModel_lbl.Name = "CwtGovernorExistingModel_lbl"
+        Me.CwtGovernorExistingModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorExistingModel_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernorExistingModel_lbl.TabIndex = 77
+        Me.CwtGovernorExistingModel_lbl.Text = "Existing Model"
+        '
+        'CwtGovernorExistingVendor_cmb
+        '
+        Me.CwtGovernorExistingVendor_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingVendor_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorExistingVendor_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovernorExistingVendor_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorExistingVendor_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorExistingVendor_cmb.Location = New System.Drawing.Point(222, 43)
+        Me.CwtGovernorExistingVendor_cmb.Name = "CwtGovernorExistingVendor_cmb"
+        Me.CwtGovernorExistingVendor_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorExistingVendor_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovernorExistingVendor_cmb.TabIndex = 69
+        '
+        'CwtGovernorExistingVendor_lbl
+        '
+        Me.CwtGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingVendor_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorExistingVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernorExistingVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorExistingVendor_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovernorExistingVendor_lbl.Location = New System.Drawing.Point(32, 45)
+        Me.CwtGovernorExistingVendor_lbl.Name = "CwtGovernorExistingVendor_lbl"
+        Me.CwtGovernorExistingVendor_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorExistingVendor_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernorExistingVendor_lbl.TabIndex = 76
+        Me.CwtGovernorExistingVendor_lbl.Text = "Existing Vendor"
+        '
+        'CwtGovernorExistingSheaveDiameter_cmb
+        '
+        Me.CwtGovernorExistingSheaveDiameter_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingSheaveDiameter_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorExistingSheaveDiameter_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovernorExistingSheaveDiameter_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorExistingSheaveDiameter_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovernorExistingSheaveDiameter_cmb.Location = New System.Drawing.Point(222, 270)
+        Me.CwtGovernorExistingSheaveDiameter_cmb.Name = "CwtGovernorExistingSheaveDiameter_cmb"
+        Me.CwtGovernorExistingSheaveDiameter_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorExistingSheaveDiameter_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovernorExistingSheaveDiameter_cmb.TabIndex = 71
+        '
+        'CwtGovCableSize_cmb
+        '
+        Me.CwtGovCableSize_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovCableSize_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovCableSize_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtGovCableSize_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovCableSize_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtGovCableSize_cmb.Location = New System.Drawing.Point(222, 94)
+        Me.CwtGovCableSize_cmb.Name = "CwtGovCableSize_cmb"
+        Me.CwtGovCableSize_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovCableSize_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CwtGovCableSize_cmb.TabIndex = 72
+        '
+        'CwtGovernorExistingSheaveDiameter_lbl
+        '
+        Me.CwtGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingSheaveDiameter_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovernorExistingSheaveDiameter_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovernorExistingSheaveDiameter_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovernorExistingSheaveDiameter_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovernorExistingSheaveDiameter_lbl.Location = New System.Drawing.Point(32, 272)
+        Me.CwtGovernorExistingSheaveDiameter_lbl.Name = "CwtGovernorExistingSheaveDiameter_lbl"
+        Me.CwtGovernorExistingSheaveDiameter_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovernorExistingSheaveDiameter_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovernorExistingSheaveDiameter_lbl.TabIndex = 74
+        Me.CwtGovernorExistingSheaveDiameter_lbl.Text = "Existing Sheave Dia."
+        '
+        'CwtGovCableSize_lbl
+        '
+        Me.CwtGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovCableSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtGovCableSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtGovCableSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtGovCableSize_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtGovCableSize_lbl.Location = New System.Drawing.Point(32, 96)
+        Me.CwtGovCableSize_lbl.Name = "CwtGovCableSize_lbl"
+        Me.CwtGovCableSize_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtGovCableSize_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CwtGovCableSize_lbl.TabIndex = 73
+        Me.CwtGovCableSize_lbl.Text = "Cable Size:"
+        '
+        'CarGovernor_fra
+        '
+        Me.CarGovernor_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveB_txt)
+        Me.CarGovernor_fra.Controls.Add(Me.CarMeetsMinimumClearances_chk)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveA_txt)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveBIn_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorMounting_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveA_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorMounting_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveB_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1Hand_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1TensionSheaveAIn_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernor1Hand_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorNewModel_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorNewModel_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorPullthrough_txt)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorPullthrough_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingModel_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingModel_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingVendor_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingVendor_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingSheaveDiameter_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovCableSize_cmb)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovernorExistingSheaveDiameter_lbl)
+        Me.CarGovernor_fra.Controls.Add(Me.CarGovCableSize_lbl)
+        Me.CarGovernor_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor_fra.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernor_fra.Location = New System.Drawing.Point(9, 1)
+        Me.CarGovernor_fra.Name = "CarGovernor_fra"
+        Me.CarGovernor_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor_fra.Size = New System.Drawing.Size(358, 300)
+        Me.CarGovernor_fra.TabIndex = 47
+        Me.CarGovernor_fra.TabStop = False
+        Me.CarGovernor_fra.Text = "Car Governor"
+        '
+        'CarGovernor1TensionSheaveB_txt
+        '
+        Me.CarGovernor1TensionSheaveB_txt.AcceptsReturn = True
+        Me.CarGovernor1TensionSheaveB_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveB_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CarGovernor1TensionSheaveB_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1TensionSheaveB_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1TensionSheaveB_txt.Location = New System.Drawing.Point(222, 245)
+        Me.CarGovernor1TensionSheaveB_txt.MaxLength = 0
+        Me.CarGovernor1TensionSheaveB_txt.Name = "CarGovernor1TensionSheaveB_txt"
+        Me.CarGovernor1TensionSheaveB_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1TensionSheaveB_txt.Size = New System.Drawing.Size(109, 20)
+        Me.CarGovernor1TensionSheaveB_txt.TabIndex = 114
+        Me.CarGovernor1TensionSheaveB_txt.Tag = "Print Me"
+        Me.CarGovernor1TensionSheaveB_txt.Text = " "
+        '
+        'CarMeetsMinimumClearances_chk
+        '
+        Me.CarMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.CarMeetsMinimumClearances_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CarMeetsMinimumClearances_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarMeetsMinimumClearances_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarMeetsMinimumClearances_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarMeetsMinimumClearances_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarMeetsMinimumClearances_chk.Location = New System.Drawing.Point(32, 196)
+        Me.CarMeetsMinimumClearances_chk.Name = "CarMeetsMinimumClearances_chk"
+        Me.CarMeetsMinimumClearances_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarMeetsMinimumClearances_chk.Size = New System.Drawing.Size(298, 19)
+        Me.CarMeetsMinimumClearances_chk.TabIndex = 29
+        Me.CarMeetsMinimumClearances_chk.Text = "Meets minimum clearances"
+        Me.CarMeetsMinimumClearances_chk.UseVisualStyleBackColor = False
+        '
+        'CarGovernor1TensionSheaveA_txt
+        '
+        Me.CarGovernor1TensionSheaveA_txt.AcceptsReturn = True
+        Me.CarGovernor1TensionSheaveA_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveA_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CarGovernor1TensionSheaveA_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1TensionSheaveA_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1TensionSheaveA_txt.Location = New System.Drawing.Point(222, 220)
+        Me.CarGovernor1TensionSheaveA_txt.MaxLength = 0
+        Me.CarGovernor1TensionSheaveA_txt.Name = "CarGovernor1TensionSheaveA_txt"
+        Me.CarGovernor1TensionSheaveA_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1TensionSheaveA_txt.Size = New System.Drawing.Size(109, 20)
+        Me.CarGovernor1TensionSheaveA_txt.TabIndex = 111
+        Me.CarGovernor1TensionSheaveA_txt.Tag = "Print Me"
+        Me.CarGovernor1TensionSheaveA_txt.Text = " "
+        '
+        'CarGovernor1TensionSheaveBIn_lbl
+        '
+        Me.CarGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveBIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernor1TensionSheaveBIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernor1TensionSheaveBIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1TensionSheaveBIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1TensionSheaveBIn_lbl.Location = New System.Drawing.Point(338, 247)
+        Me.CarGovernor1TensionSheaveBIn_lbl.Name = "CarGovernor1TensionSheaveBIn_lbl"
+        Me.CarGovernor1TensionSheaveBIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1TensionSheaveBIn_lbl.Size = New System.Drawing.Size(15, 16)
+        Me.CarGovernor1TensionSheaveBIn_lbl.TabIndex = 116
+        Me.CarGovernor1TensionSheaveBIn_lbl.Text = "In"
+        '
+        'CarGovernorMounting_cmb
+        '
+        Me.CarGovernorMounting_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorMounting_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorMounting_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovernorMounting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorMounting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorMounting_cmb.Location = New System.Drawing.Point(222, 170)
+        Me.CarGovernorMounting_cmb.Name = "CarGovernorMounting_cmb"
+        Me.CarGovernorMounting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorMounting_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovernorMounting_cmb.TabIndex = 71
+        '
+        'CarGovernor1TensionSheaveA_lbl
+        '
+        Me.CarGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveA_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernor1TensionSheaveA_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernor1TensionSheaveA_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1TensionSheaveA_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1TensionSheaveA_lbl.Location = New System.Drawing.Point(32, 222)
+        Me.CarGovernor1TensionSheaveA_lbl.Name = "CarGovernor1TensionSheaveA_lbl"
+        Me.CarGovernor1TensionSheaveA_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1TensionSheaveA_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernor1TensionSheaveA_lbl.TabIndex = 112
+        Me.CarGovernor1TensionSheaveA_lbl.Tag = "Print Me"
+        Me.CarGovernor1TensionSheaveA_lbl.Text = "Gov Tension Sheave            A="
+        '
+        'CarGovernorMounting_lbl
+        '
+        Me.CarGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorMounting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorMounting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernorMounting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorMounting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernorMounting_lbl.Location = New System.Drawing.Point(32, 172)
+        Me.CarGovernorMounting_lbl.Name = "CarGovernorMounting_lbl"
+        Me.CarGovernorMounting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorMounting_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernorMounting_lbl.TabIndex = 72
+        Me.CarGovernorMounting_lbl.Text = "Mounting"
+        '
+        'CarGovernor1TensionSheaveB_lbl
+        '
+        Me.CarGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveB_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernor1TensionSheaveB_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernor1TensionSheaveB_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1TensionSheaveB_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1TensionSheaveB_lbl.Location = New System.Drawing.Point(32, 247)
+        Me.CarGovernor1TensionSheaveB_lbl.Name = "CarGovernor1TensionSheaveB_lbl"
+        Me.CarGovernor1TensionSheaveB_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1TensionSheaveB_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernor1TensionSheaveB_lbl.TabIndex = 115
+        Me.CarGovernor1TensionSheaveB_lbl.Tag = "Print Me"
+        Me.CarGovernor1TensionSheaveB_lbl.Text = "Gov Tension Sheave            B="
+        '
+        'CarGovernor1Hand_cmb
+        '
+        Me.CarGovernor1Hand_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1Hand_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernor1Hand_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovernor1Hand_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1Hand_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1Hand_cmb.Location = New System.Drawing.Point(222, 145)
+        Me.CarGovernor1Hand_cmb.Name = "CarGovernor1Hand_cmb"
+        Me.CarGovernor1Hand_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1Hand_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovernor1Hand_cmb.TabIndex = 69
+        Me.CarGovernor1Hand_cmb.Tag = "Print Me"
+        '
+        'CarGovernor1TensionSheaveAIn_lbl
+        '
+        Me.CarGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveAIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernor1TensionSheaveAIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernor1TensionSheaveAIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1TensionSheaveAIn_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernor1TensionSheaveAIn_lbl.Location = New System.Drawing.Point(338, 222)
+        Me.CarGovernor1TensionSheaveAIn_lbl.Name = "CarGovernor1TensionSheaveAIn_lbl"
+        Me.CarGovernor1TensionSheaveAIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1TensionSheaveAIn_lbl.Size = New System.Drawing.Size(15, 16)
+        Me.CarGovernor1TensionSheaveAIn_lbl.TabIndex = 113
+        Me.CarGovernor1TensionSheaveAIn_lbl.Text = "In"
+        '
+        'CarGovernor1Hand_lbl
+        '
+        Me.CarGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1Hand_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernor1Hand_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernor1Hand_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernor1Hand_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernor1Hand_lbl.Location = New System.Drawing.Point(32, 147)
+        Me.CarGovernor1Hand_lbl.Name = "CarGovernor1Hand_lbl"
+        Me.CarGovernor1Hand_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernor1Hand_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernor1Hand_lbl.TabIndex = 70
+        Me.CarGovernor1Hand_lbl.Tag = "Print Me"
+        Me.CarGovernor1Hand_lbl.Text = "Governor Hand"
+        '
+        'CarGovernorNewModel_cmb
+        '
+        Me.CarGovernorNewModel_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorNewModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorNewModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovernorNewModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorNewModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorNewModel_cmb.Location = New System.Drawing.Point(222, 18)
+        Me.CarGovernorNewModel_cmb.Name = "CarGovernorNewModel_cmb"
+        Me.CarGovernorNewModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorNewModel_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovernorNewModel_cmb.TabIndex = 67
+        '
+        'CarGovernorNewModel_lbl
+        '
+        Me.CarGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorNewModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorNewModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernorNewModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorNewModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernorNewModel_lbl.Location = New System.Drawing.Point(6, 20)
+        Me.CarGovernorNewModel_lbl.Name = "CarGovernorNewModel_lbl"
+        Me.CarGovernorNewModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorNewModel_lbl.Size = New System.Drawing.Size(105, 16)
+        Me.CarGovernorNewModel_lbl.TabIndex = 68
+        Me.CarGovernorNewModel_lbl.Text = "New Model"
+        '
+        'CarGovernorPullthrough_txt
+        '
+        Me.CarGovernorPullthrough_txt.AcceptsReturn = True
+        Me.CarGovernorPullthrough_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorPullthrough_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CarGovernorPullthrough_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorPullthrough_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorPullthrough_txt.Location = New System.Drawing.Point(222, 120)
+        Me.CarGovernorPullthrough_txt.MaxLength = 0
+        Me.CarGovernorPullthrough_txt.Name = "CarGovernorPullthrough_txt"
+        Me.CarGovernorPullthrough_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorPullthrough_txt.Size = New System.Drawing.Size(109, 20)
+        Me.CarGovernorPullthrough_txt.TabIndex = 65
+        Me.CarGovernorPullthrough_txt.Tag = "Print Me"
+        Me.CarGovernorPullthrough_txt.Text = " "
+        '
+        'CarGovernorPullthrough_lbl
+        '
+        Me.CarGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorPullthrough_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorPullthrough_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernorPullthrough_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorPullthrough_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorPullthrough_lbl.Location = New System.Drawing.Point(32, 122)
+        Me.CarGovernorPullthrough_lbl.Name = "CarGovernorPullthrough_lbl"
+        Me.CarGovernorPullthrough_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorPullthrough_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernorPullthrough_lbl.TabIndex = 66
+        Me.CarGovernorPullthrough_lbl.Tag = "Print Me"
+        Me.CarGovernorPullthrough_lbl.Text = "Pullthrough"
+        '
+        'CarGovernorExistingModel_cmb
+        '
+        Me.CarGovernorExistingModel_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingModel_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorExistingModel_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovernorExistingModel_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorExistingModel_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorExistingModel_cmb.Location = New System.Drawing.Point(222, 68)
+        Me.CarGovernorExistingModel_cmb.Name = "CarGovernorExistingModel_cmb"
+        Me.CarGovernorExistingModel_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorExistingModel_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovernorExistingModel_cmb.TabIndex = 13
+        '
+        'CarGovernorExistingModel_lbl
+        '
+        Me.CarGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorExistingModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernorExistingModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorExistingModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernorExistingModel_lbl.Location = New System.Drawing.Point(32, 70)
+        Me.CarGovernorExistingModel_lbl.Name = "CarGovernorExistingModel_lbl"
+        Me.CarGovernorExistingModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorExistingModel_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernorExistingModel_lbl.TabIndex = 64
+        Me.CarGovernorExistingModel_lbl.Text = "Existing Model"
+        '
+        'CarGovernorExistingVendor_cmb
+        '
+        Me.CarGovernorExistingVendor_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingVendor_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorExistingVendor_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovernorExistingVendor_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorExistingVendor_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorExistingVendor_cmb.Location = New System.Drawing.Point(222, 43)
+        Me.CarGovernorExistingVendor_cmb.Name = "CarGovernorExistingVendor_cmb"
+        Me.CarGovernorExistingVendor_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorExistingVendor_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovernorExistingVendor_cmb.TabIndex = 12
+        '
+        'CarGovernorExistingVendor_lbl
+        '
+        Me.CarGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingVendor_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorExistingVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernorExistingVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorExistingVendor_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernorExistingVendor_lbl.Location = New System.Drawing.Point(32, 45)
+        Me.CarGovernorExistingVendor_lbl.Name = "CarGovernorExistingVendor_lbl"
+        Me.CarGovernorExistingVendor_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorExistingVendor_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernorExistingVendor_lbl.TabIndex = 62
+        Me.CarGovernorExistingVendor_lbl.Text = "Existing Vendor"
+        '
+        'CarGovernorExistingSheaveDiameter_cmb
+        '
+        Me.CarGovernorExistingSheaveDiameter_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingSheaveDiameter_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorExistingSheaveDiameter_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovernorExistingSheaveDiameter_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorExistingSheaveDiameter_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovernorExistingSheaveDiameter_cmb.Location = New System.Drawing.Point(222, 270)
+        Me.CarGovernorExistingSheaveDiameter_cmb.Name = "CarGovernorExistingSheaveDiameter_cmb"
+        Me.CarGovernorExistingSheaveDiameter_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorExistingSheaveDiameter_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovernorExistingSheaveDiameter_cmb.TabIndex = 14
+        '
+        'CarGovCableSize_cmb
+        '
+        Me.CarGovCableSize_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovCableSize_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovCableSize_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarGovCableSize_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovCableSize_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarGovCableSize_cmb.Location = New System.Drawing.Point(222, 94)
+        Me.CarGovCableSize_cmb.Name = "CarGovCableSize_cmb"
+        Me.CarGovCableSize_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovCableSize_cmb.Size = New System.Drawing.Size(109, 21)
+        Me.CarGovCableSize_cmb.TabIndex = 16
+        '
+        'CarGovernorExistingSheaveDiameter_lbl
+        '
+        Me.CarGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingSheaveDiameter_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovernorExistingSheaveDiameter_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovernorExistingSheaveDiameter_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovernorExistingSheaveDiameter_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovernorExistingSheaveDiameter_lbl.Location = New System.Drawing.Point(32, 272)
+        Me.CarGovernorExistingSheaveDiameter_lbl.Name = "CarGovernorExistingSheaveDiameter_lbl"
+        Me.CarGovernorExistingSheaveDiameter_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovernorExistingSheaveDiameter_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovernorExistingSheaveDiameter_lbl.TabIndex = 57
+        Me.CarGovernorExistingSheaveDiameter_lbl.Text = "Existing Sheave Dia."
+        '
+        'CarGovCableSize_lbl
+        '
+        Me.CarGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovCableSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarGovCableSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarGovCableSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarGovCableSize_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarGovCableSize_lbl.Location = New System.Drawing.Point(32, 96)
+        Me.CarGovCableSize_lbl.Name = "CarGovCableSize_lbl"
+        Me.CarGovCableSize_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarGovCableSize_lbl.Size = New System.Drawing.Size(191, 16)
+        Me.CarGovCableSize_lbl.TabIndex = 50
+        Me.CarGovCableSize_lbl.Text = "Cable Size:"
         '
         'ExpandAll_cmd
         '
@@ -2417,11 +2417,13 @@ Partial Class frmEstimatingBase
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         Me.FpSpread1.Location = New System.Drawing.Point(6, 43)
         Me.FpSpread1.Name = "FpSpread1"
         Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
         Me.FpSpread1.Size = New System.Drawing.Size(1407, 337)
         Me.FpSpread1.TabIndex = 80
+        Me.FpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         '
         'SheetView1
         '
@@ -2702,15 +2704,15 @@ Partial Class frmEstimatingBase
         'fraHdrIcons
         '
         Me.fraHdrIcons.BackColor = System.Drawing.SystemColors.Control
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_22)
+        Me.fraHdrIcons.Controls.Add(Me.Supt_cmd)
         Me.fraHdrIcons.Controls.Add(Me.FreezeSave_btn)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_0)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_1)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_6)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_10)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_11)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_15)
-        Me.fraHdrIcons.Controls.Add(Me._IconButton_cmd_16)
+        Me.fraHdrIcons.Controls.Add(Me.Exit_cmd)
+        Me.fraHdrIcons.Controls.Add(Me.Save_cmd)
+        Me.fraHdrIcons.Controls.Add(Me.CMMain_cmd)
+        Me.fraHdrIcons.Controls.Add(Me.Screen_cmd)
+        Me.fraHdrIcons.Controls.Add(Me.Forms_cmd)
+        Me.fraHdrIcons.Controls.Add(Me.Book_cmd)
+        Me.fraHdrIcons.Controls.Add(Me.Config_cmd)
         Me.fraHdrIcons.Dock = System.Windows.Forms.DockStyle.Top
         Me.fraHdrIcons.Font = New System.Drawing.Font("Arial", 3.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.fraHdrIcons.ForeColor = System.Drawing.SystemColors.ControlText
@@ -2721,18 +2723,18 @@ Partial Class frmEstimatingBase
         Me.fraHdrIcons.TabIndex = 24
         Me.fraHdrIcons.TabStop = False
         '
-        '_IconButton_cmd_22
+        'Supt_cmd
         '
-        Me._IconButton_cmd_22.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_22.Image = CType(resources.GetObject("_IconButton_cmd_22.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_22.Location = New System.Drawing.Point(909, 7)
-        Me._IconButton_cmd_22.Name = "_IconButton_cmd_22"
-        Me._IconButton_cmd_22.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_22.TabIndex = 40
-        Me._IconButton_cmd_22.TabStop = False
-        Me._IconButton_cmd_22.Tag = "Supt"
-        Me._IconButton_cmd_22.Text = "Supt"
-        Me._IconButton_cmd_22.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Supt_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Supt_cmd.Image = CType(resources.GetObject("Supt_cmd.Image"), System.Drawing.Image)
+        Me.Supt_cmd.Location = New System.Drawing.Point(909, 7)
+        Me.Supt_cmd.Name = "Supt_cmd"
+        Me.Supt_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Supt_cmd.TabIndex = 40
+        Me.Supt_cmd.TabStop = False
+        Me.Supt_cmd.Tag = "Supt"
+        Me.Supt_cmd.Text = "Supt"
+        Me.Supt_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'FreezeSave_btn
         '
@@ -2746,95 +2748,95 @@ Partial Class frmEstimatingBase
         Me.FreezeSave_btn.Text = "Freeze"
         Me.FreezeSave_btn.Visible = False
         '
-        '_IconButton_cmd_0
+        'Exit_cmd
         '
-        Me._IconButton_cmd_0.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_0.Image = CType(resources.GetObject("_IconButton_cmd_0.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_0.Location = New System.Drawing.Point(0, 8)
-        Me._IconButton_cmd_0.Name = "_IconButton_cmd_0"
-        Me._IconButton_cmd_0.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_0.TabIndex = 0
-        Me._IconButton_cmd_0.TabStop = False
-        Me._IconButton_cmd_0.Tag = "Exit System"
-        Me._IconButton_cmd_0.Text = "Exit"
-        Me._IconButton_cmd_0.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Exit_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Exit_cmd.Image = CType(resources.GetObject("Exit_cmd.Image"), System.Drawing.Image)
+        Me.Exit_cmd.Location = New System.Drawing.Point(0, 8)
+        Me.Exit_cmd.Name = "Exit_cmd"
+        Me.Exit_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Exit_cmd.TabIndex = 0
+        Me.Exit_cmd.TabStop = False
+        Me.Exit_cmd.Tag = "Exit System"
+        Me.Exit_cmd.Text = "Exit"
+        Me.Exit_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_IconButton_cmd_1
+        'Save_cmd
         '
-        Me._IconButton_cmd_1.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_1.Image = CType(resources.GetObject("_IconButton_cmd_1.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_1.Location = New System.Drawing.Point(48, 8)
-        Me._IconButton_cmd_1.Name = "_IconButton_cmd_1"
-        Me._IconButton_cmd_1.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_1.TabIndex = 1
-        Me._IconButton_cmd_1.TabStop = False
-        Me._IconButton_cmd_1.Tag = "Save Changes"
-        Me._IconButton_cmd_1.Text = "Save"
-        Me._IconButton_cmd_1.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Save_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Save_cmd.Image = CType(resources.GetObject("Save_cmd.Image"), System.Drawing.Image)
+        Me.Save_cmd.Location = New System.Drawing.Point(48, 8)
+        Me.Save_cmd.Name = "Save_cmd"
+        Me.Save_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Save_cmd.TabIndex = 1
+        Me.Save_cmd.TabStop = False
+        Me.Save_cmd.Tag = "Save Changes"
+        Me.Save_cmd.Text = "Save"
+        Me.Save_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_IconButton_cmd_6
+        'CMMain_cmd
         '
-        Me._IconButton_cmd_6.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_6.Image = CType(resources.GetObject("_IconButton_cmd_6.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_6.Location = New System.Drawing.Point(96, 8)
-        Me._IconButton_cmd_6.Name = "_IconButton_cmd_6"
-        Me._IconButton_cmd_6.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_6.TabIndex = 6
-        Me._IconButton_cmd_6.Tag = "Return to Contract Manager"
-        Me._IconButton_cmd_6.Text = "Main"
-        Me._IconButton_cmd_6.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.CMMain_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CMMain_cmd.Image = CType(resources.GetObject("CMMain_cmd.Image"), System.Drawing.Image)
+        Me.CMMain_cmd.Location = New System.Drawing.Point(96, 8)
+        Me.CMMain_cmd.Name = "CMMain_cmd"
+        Me.CMMain_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.CMMain_cmd.TabIndex = 6
+        Me.CMMain_cmd.Tag = "Return to Contract Manager"
+        Me.CMMain_cmd.Text = "Main"
+        Me.CMMain_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_IconButton_cmd_10
+        'Screen_cmd
         '
-        Me._IconButton_cmd_10.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_10.Image = CType(resources.GetObject("_IconButton_cmd_10.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_10.Location = New System.Drawing.Point(440, 8)
-        Me._IconButton_cmd_10.Name = "_IconButton_cmd_10"
-        Me._IconButton_cmd_10.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_10.TabIndex = 10
-        Me._IconButton_cmd_10.TabStop = False
-        Me._IconButton_cmd_10.Tag = "Print Screen"
-        Me._IconButton_cmd_10.Text = "Screen"
-        Me._IconButton_cmd_10.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Screen_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Screen_cmd.Image = CType(resources.GetObject("Screen_cmd.Image"), System.Drawing.Image)
+        Me.Screen_cmd.Location = New System.Drawing.Point(440, 8)
+        Me.Screen_cmd.Name = "Screen_cmd"
+        Me.Screen_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Screen_cmd.TabIndex = 10
+        Me.Screen_cmd.TabStop = False
+        Me.Screen_cmd.Tag = "Print Screen"
+        Me.Screen_cmd.Text = "Screen"
+        Me.Screen_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_IconButton_cmd_11
+        'Forms_cmd
         '
-        Me._IconButton_cmd_11.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_11.Image = CType(resources.GetObject("_IconButton_cmd_11.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_11.Location = New System.Drawing.Point(145, 8)
-        Me._IconButton_cmd_11.Name = "_IconButton_cmd_11"
-        Me._IconButton_cmd_11.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_11.TabIndex = 11
-        Me._IconButton_cmd_11.TabStop = False
-        Me._IconButton_cmd_11.Tag = "Print Forms"
-        Me._IconButton_cmd_11.Text = "Forms"
-        Me._IconButton_cmd_11.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Forms_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Forms_cmd.Image = CType(resources.GetObject("Forms_cmd.Image"), System.Drawing.Image)
+        Me.Forms_cmd.Location = New System.Drawing.Point(145, 8)
+        Me.Forms_cmd.Name = "Forms_cmd"
+        Me.Forms_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Forms_cmd.TabIndex = 11
+        Me.Forms_cmd.TabStop = False
+        Me.Forms_cmd.Tag = "Print Forms"
+        Me.Forms_cmd.Text = "Forms"
+        Me.Forms_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_IconButton_cmd_15
+        'Book_cmd
         '
-        Me._IconButton_cmd_15.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_15.Image = CType(resources.GetObject("_IconButton_cmd_15.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_15.Location = New System.Drawing.Point(762, 8)
-        Me._IconButton_cmd_15.Name = "_IconButton_cmd_15"
-        Me._IconButton_cmd_15.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_15.TabIndex = 15
-        Me._IconButton_cmd_15.TabStop = False
-        Me._IconButton_cmd_15.Tag = "Create Booking File"
-        Me._IconButton_cmd_15.Text = "Book"
-        Me._IconButton_cmd_15.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Book_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Book_cmd.Image = CType(resources.GetObject("Book_cmd.Image"), System.Drawing.Image)
+        Me.Book_cmd.Location = New System.Drawing.Point(762, 8)
+        Me.Book_cmd.Name = "Book_cmd"
+        Me.Book_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Book_cmd.TabIndex = 15
+        Me.Book_cmd.TabStop = False
+        Me.Book_cmd.Tag = "Create Booking File"
+        Me.Book_cmd.Text = "Book"
+        Me.Book_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        '_IconButton_cmd_16
+        'Config_cmd
         '
-        Me._IconButton_cmd_16.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._IconButton_cmd_16.Image = CType(resources.GetObject("_IconButton_cmd_16.Image"), System.Drawing.Image)
-        Me._IconButton_cmd_16.Location = New System.Drawing.Point(810, 8)
-        Me._IconButton_cmd_16.Name = "_IconButton_cmd_16"
-        Me._IconButton_cmd_16.Size = New System.Drawing.Size(46, 46)
-        Me._IconButton_cmd_16.TabIndex = 34
-        Me._IconButton_cmd_16.TabStop = False
-        Me._IconButton_cmd_16.Tag = "Create Config File"
-        Me._IconButton_cmd_16.Text = "Config"
-        Me._IconButton_cmd_16.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Config_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Config_cmd.Image = CType(resources.GetObject("Config_cmd.Image"), System.Drawing.Image)
+        Me.Config_cmd.Location = New System.Drawing.Point(810, 8)
+        Me.Config_cmd.Name = "Config_cmd"
+        Me.Config_cmd.Size = New System.Drawing.Size(46, 46)
+        Me.Config_cmd.TabIndex = 34
+        Me.Config_cmd.TabStop = False
+        Me.Config_cmd.Tag = "Create Config File"
+        Me.Config_cmd.Text = "Config"
+        Me.Config_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'frmEstimatingBase
         '
@@ -2850,6 +2852,10 @@ Partial Class frmEstimatingBase
         Me.Text = "MOD Estimating"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.GroupBox1.ResumeLayout(False)
+        Me.CarData_fra.ResumeLayout(False)
+        Me.GeneralInformation_fra.ResumeLayout(False)
+        Me.GeneralInformation_fra.PerformLayout()
+        Me.BillofMaterialsandTaskList_fra.ResumeLayout(False)
         Me.OrderingTabs.ResumeLayout(False)
         Me.InitTab.ResumeLayout(False)
         CType(Me.Gov_img, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2857,10 +2863,6 @@ Partial Class frmEstimatingBase
         Me.CwtGovernor_fra.PerformLayout()
         Me.CarGovernor_fra.ResumeLayout(False)
         Me.CarGovernor_fra.PerformLayout()
-        Me.CarData_fra.ResumeLayout(False)
-        Me.GeneralInformation_fra.ResumeLayout(False)
-        Me.GeneralInformation_fra.PerformLayout()
-        Me.BillofMaterialsandTaskList_fra.ResumeLayout(False)
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabControl1.ResumeLayout(False)
@@ -2887,15 +2889,15 @@ Partial Class frmEstimatingBase
     Public WithEvents HdrGONum_lbl As System.Windows.Forms.Label
     Public WithEvents lblHdrBldgNme As System.Windows.Forms.Label
     Public WithEvents fraHdrIcons As System.Windows.Forms.GroupBox
-    Private WithEvents _IconButton_cmd_22 As System.Windows.Forms.Button
+    Private WithEvents Supt_cmd As System.Windows.Forms.Button
     Public WithEvents FreezeSave_btn As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_0 As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_1 As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_6 As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_10 As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_11 As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_15 As System.Windows.Forms.Button
-    Private WithEvents _IconButton_cmd_16 As System.Windows.Forms.Button
+    Private WithEvents Exit_cmd As System.Windows.Forms.Button
+    Private WithEvents Save_cmd As System.Windows.Forms.Button
+    Private WithEvents CMMain_cmd As System.Windows.Forms.Button
+    Private WithEvents Screen_cmd As System.Windows.Forms.Button
+    Private WithEvents Forms_cmd As System.Windows.Forms.Button
+    Private WithEvents Book_cmd As System.Windows.Forms.Button
+    Private WithEvents Config_cmd As System.Windows.Forms.Button
     Friend WithEvents GeneralInformation_fra As System.Windows.Forms.GroupBox
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
@@ -2986,6 +2988,17 @@ Partial Class frmEstimatingBase
     Public WithEvents ExistingControlModel_lbl As System.Windows.Forms.Label
     Public WithEvents ExistingControlVendor_lbl As System.Windows.Forms.Label
     Friend WithEvents OrderTab As System.Windows.Forms.TabPage
+    Public WithEvents Permits_txt As System.Windows.Forms.TextBox
+    Public WithEvents Permits_lbl As System.Windows.Forms.Label
+    Public WithEvents PEStampRequired_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents PEStampRequired_lbl As System.Windows.Forms.Label
+    Public WithEvents ExpensesPerDay_txt As System.Windows.Forms.TextBox
+    Public WithEvents ExpensesPerDay_lbl As System.Windows.Forms.Label
+    Public WithEvents Bonds_txt As System.Windows.Forms.TextBox
+    Public WithEvents Bonds_lbl As System.Windows.Forms.Label
+    Public WithEvents MinimumFloorDistance_chk As System.Windows.Forms.CheckBox
+    Friend WithEvents ExpensesPerDayDetails_btn As System.Windows.Forms.Button
+    Friend WithEvents AddTab As System.Windows.Forms.TabPage
     Friend WithEvents OrderingTabs As System.Windows.Forms.TabControl
     Friend WithEvents InitTab As System.Windows.Forms.TabPage
     Public WithEvents Gov_img As System.Windows.Forms.PictureBox
@@ -3037,17 +3050,7 @@ Partial Class frmEstimatingBase
     Public WithEvents CarGovCableSize_cmb As System.Windows.Forms.ComboBox
     Public WithEvents CarGovernorExistingSheaveDiameter_lbl As System.Windows.Forms.Label
     Public WithEvents CarGovCableSize_lbl As System.Windows.Forms.Label
-    Public WithEvents Permits_txt As System.Windows.Forms.TextBox
-    Public WithEvents Permits_lbl As System.Windows.Forms.Label
-    Public WithEvents PEStampRequired_cmb As System.Windows.Forms.ComboBox
-    Public WithEvents PEStampRequired_lbl As System.Windows.Forms.Label
-    Public WithEvents ExpensesPerDay_txt As System.Windows.Forms.TextBox
-    Public WithEvents ExpensesPerDay_lbl As System.Windows.Forms.Label
-    Public WithEvents Bonds_txt As System.Windows.Forms.TextBox
-    Public WithEvents Bonds_lbl As System.Windows.Forms.Label
-    Public WithEvents MinimumFloorDistance_chk As System.Windows.Forms.CheckBox
-    Friend WithEvents ExpensesPerDayDetails_btn As System.Windows.Forms.Button
-    Friend WithEvents AddTab As System.Windows.Forms.TabPage
+    Public WithEvents GatewayReviewRequired_chk As System.Windows.Forms.CheckBox
 
 #End Region
 End Class

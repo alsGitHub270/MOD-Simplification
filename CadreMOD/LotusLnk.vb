@@ -932,7 +932,7 @@ MISSINGMESSAGE:
 
     Private Sub RetrieveBuildingType(ByRef XML As String)
         Dim iPos, iPos2 As Integer
-        Dim TempStr, ReturnValue, Where As String
+        Dim TempStr, ReturnValue As String
         Dim _myList As New List(Of String)()
 
         Contracts.BuildingType = String.Empty

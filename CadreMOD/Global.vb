@@ -28,7 +28,7 @@
     Public dtBuildingInfo As DataTable
 
     Public BookingType As Integer
-    Public isDirty As Boolean = False
+    Public DefaultTaxCode As String = ""
     Public AttachBookingFile As Boolean
 
     '  Paths
@@ -44,7 +44,7 @@
     Public EPCOPath As String = ""
     Public SpecAndDataPath As String = ""
     Public SuptPath As String = ""
-    Public initializing As Boolean
+
     Public EstimateModified As Boolean
 
     Public gsCommand As String = ""
@@ -72,6 +72,7 @@
     Public MachineType As String = String.Empty
     Public CurrentUnits As String = String.Empty
     Public EstimateLevel As String = String.Empty
+    Public TaxRate As Single = -999.99
 
     Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
         Get
@@ -86,10 +87,91 @@
     End Property
 
 
+    Public CalledToRunReconfig As Boolean
+    Public CarProductCode As Integer
+    'Public GONumbers() As CM_MAIN_IO.GONumbers_TypeDec = Nothing
+    Public CurrentGOSelection As Byte
+    '  Public CM_GridStatus As New CM_MAIN_IO.CM_GridStatus_TypeDec()
+    Public Structure tagCostGridType_Data
+        Dim MenuIndex As Byte
+        Dim FormsName As String
+        <Microsoft.VisualBasic.VBFixedArray(9)> _
+        Dim Col() As String
+        <Microsoft.VisualBasic.VBFixedArray(9)> _
+        Dim RunCol() As String
+        Dim ReferenceNumber As String
+        Dim FCG As Byte
+        Dim PriceNotFound As Boolean
+        Dim CheckProductCode As Boolean
+        Dim ComponentName As String
+        Dim ComponentIncludedWith As String
+        Dim EngineeringHrs As Single
+        Dim RunEngineeringHrs As Single
+        Dim BDPLocation As String
+        <VBFixedString(1), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst:=1)> _
+        Dim AutomatedComponent As String
+        Dim Quotable As Boolean
+        Dim OptionName As String
+        Public Shared Function CreateInstance() As tagCostGridType_Data
+            Dim result As New tagCostGridType_Data()
+            result.FormsName = String.Empty
+            ReDim result.Col(9)
+            ReDim result.RunCol(9)
+            result.ReferenceNumber = String.Empty
+            result.ComponentName = String.Empty
+            result.ComponentIncludedWith = String.Empty
+            result.AutomatedComponent = ""
+            result.BDPLocation = String.Empty
+            result.OptionName = String.Empty
+            Return result
+        End Function
+    End Structure
+    Public CostGridType_Data() As tagCostGridType_Data = Nothing
     Structure All_LocalCodeDepTYP
         Dim CanadaJob As Boolean
         Dim PuertoRicoJob As Boolean
         Dim MODJob As Boolean
     End Structure
 
+    Public Structure CRM_typ
+        Dim SalesRepName As String
+        Dim SalesOffice As String
+        Dim NameValue As String
+        Dim Street As String
+        Dim City1 As String
+        Dim City2 As String
+        Dim State As String
+        Dim Country As String
+        Dim PostalCode As String
+        Public Shared Function CreateInstance() As CRM_typ
+            Dim result As New CRM_typ()
+            result.SalesRepName = String.Empty
+            result.SalesOffice = String.Empty
+            result.NameValue = String.Empty
+            result.Street = String.Empty
+            result.City1 = String.Empty
+            result.City2 = String.Empty
+            result.State = String.Empty
+            result.Country = String.Empty
+            result.PostalCode = String.Empty
+            Return result
+        End Function
+    End Structure
+    Public ProjectData As CRM_typ = CRM_typ.CreateInstance()
+    Public Structure CurrentGOData_Type
+        Dim Type As String
+        Dim Bank As String
+        Dim Alt As String
+        Dim Units As String
+        Dim GONumbersID As Integer
+        Public Shared Function CreateInstance() As CurrentGOData_Type
+            Dim result As New CurrentGOData_Type()
+            result.Type = String.Empty
+            result.Bank = String.Empty
+            result.Alt = String.Empty
+            result.Units = String.Empty
+            Return result
+        End Function
+    End Structure
+    Public CurrentGOData_Typ As CurrentGOData_Type = CurrentGOData_Type.CreateInstance()
 End Module

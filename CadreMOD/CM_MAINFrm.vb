@@ -18,10 +18,12 @@ Partial Friend Class CM_MAIN_frm
     Dim svCollection As New System.Collections.ArrayList(10)
 
     Dim dsTemp As DataSet
-   
+    Dim isDirty As Boolean = False
+    Dim initializing As Boolean
+
 
     Private CurrentBuildingInformationFrameHeight As Integer = 0, CurrentEquipmentFrameHeight As Integer = 0
-    Public DefaultTaxCode As String = ""
+
 
     Const _BANK_COLUMN As Integer = 3
 
@@ -50,10 +52,10 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("Material HQ", typeInt), _
                                                           New DataColumn("Material RL", typeInt), _
                                                           New DataColumn("Tax", typeInt), _
-                                                          New DataColumn("Total BDP Hours", typeInt), _
-                                                          New DataColumn("Total Special Hours", typeInt), _
-                                                          New DataColumn("Total Labor Hours", typeInt), _
-                                                          New DataColumn("Overtime Hours Included", typeInt), _
+                                                          New DataColumn("BDP Hours", typeInt), _
+                                                          New DataColumn("Special Hours", typeInt), _
+                                                          New DataColumn("Labor Hours", typeInt), _
+                                                          New DataColumn("OT Hours Included", typeInt), _
                                                           New DataColumn("Labor", typeInt), _
                                                           New DataColumn("SubContract Work", typeInt), _
                                                           New DataColumn("Misc Costs", typeInt), _
@@ -190,6 +192,7 @@ Partial Friend Class CM_MAIN_frm
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
 
 
+
         Deserialize()
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
@@ -210,11 +213,16 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnEstimate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEstimate.Click
         Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+        CurrentGOData_Typ.Units = FpSpread1.ActiveSheet.Cells(CurRow, 2).Text
+        CurrentGOData_Typ.Bank = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
         MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
         CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
         Select Case EstimateLevel
             Case "Summary"
-            Case "Master", "Base", "Alt"
+            Case "Master", "Base"
+                frmEstimatingBase.Show()
+                Me.Hide()
+            Case "Alt"
                 frmEstimatingBase.Show()
                 Me.Hide()
             Case Else
@@ -389,6 +397,10 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Columns(1).Visible = False
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 40
 
+            ' FpSpread1.Sheets(0).ColumnHeader.Columns(12).Label = "Permit OCPL Bonds"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(15).Label = "Permit OCPL Bonds"
+
+
 
             'FpSpread1.ActiveSheet.Cells(i, 25).BackColor = Color.LightGray
         Next
@@ -479,6 +491,7 @@ Partial Friend Class CM_MAIN_frm
 
 
         EstimateLevel = String.Empty
+        CurrentGOData_Typ.Alt = "A"
         If usex.TitleInfo.Text.ToUpper.IndexOf("SUMMARY") > -1 Then
             EstimateLevel = "Summary"
         Else
@@ -490,6 +503,7 @@ Partial Friend Class CM_MAIN_frm
                 End If
             Next iIndex
             If usex.TitleInfo.Text.ToUpper.IndexOf("GRANDCHILD") > -1 Then
+                CurrentGOData_Typ.Alt = usex.ActiveRowIndex + 1
                 EstimateLevel = "Alt"
             Else
                 ChildSheetView1 = FpSpread1.ActiveSheet.GetChildView(CurSummaryRow, 0)
@@ -510,7 +524,7 @@ Partial Friend Class CM_MAIN_frm
         If Not initializing Then isDirty = True
     End Sub
 
-  
+
 
     Private Sub FpSpread1_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles FpSpread1.ChildViewCreated
 
@@ -742,7 +756,7 @@ Partial Friend Class CM_MAIN_frm
             Case "Summary"
             Case "Master"
             Case "Base", "Alt"
-               
+
                 Dim _id As String
                 _id = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
 
@@ -763,7 +777,7 @@ Partial Friend Class CM_MAIN_frm
 
                         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurSummaryRow, 0)
-                        ChildSheetView1.SortRows(1, True, False)
+                        ChildSheetView1.SortRows(1, True, True)
                         ChildSheetView1.SetRowExpandable(0, False)
 
                         ChildSheetView1.Cells(0, 6).Locked = True
@@ -1217,7 +1231,7 @@ Partial Friend Class CM_MAIN_frm
 
         For i = 65 To 90     'build the initial list (A...Z)
             myList.Add(Chr(i))
-        Next
+        Next i
 
         For Each dr As DataRow In dsCadre.Tables(0).Rows
             If Not IsDBNull(dr("Bank")) Then
@@ -1230,7 +1244,7 @@ Partial Friend Class CM_MAIN_frm
                 End If
             End If
 
-        Next
+        Next dr
 
         Return myList.ToArray
 
@@ -1409,6 +1423,8 @@ Partial Friend Class CM_MAIN_frm
         Else
             cboNationalAccount.SelectedItem = "No"
         End If
+
+
         AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
         AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
     End Sub
@@ -1785,7 +1801,7 @@ Partial Friend Class CM_MAIN_frm
                 SaveAll()
             End If
         End If
-        Application.Exit()
+        EndProgram()
     End Sub
     Private Sub cboSalesOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSalesOffice.SelectedIndexChanged
         If Not initializing Then isDirty = True
@@ -1870,4 +1886,28 @@ Partial Friend Class CM_MAIN_frm
         dtContactGroup.Rows.Add(_row)
     End Sub
 
+
+    Private Function GetTaxRate() As Object
+        Dim sql_string As String
+        Dim my_list As New List(Of String)()
+        Dim tax_rate As Single
+
+        Try
+            If All_LocalCodeDep.CanadaJob Then
+                sql_string = "SELECT PSTRate FROM [Rate (Canada Tax)] Where Province ='" & Contracts.JobState & "'"
+            Else
+                sql_string = "SELECT [Tax Rate] FROM [Rate (US Tax)] WHERE State = '" & Contracts.JobState & "'"
+            End If
+
+            my_list = GetDataFromOptions(sql_string)
+            tax_rate = CSng(my_list(0))
+
+        Catch
+            MessageBox.Show(Conversion.ErrorToString(), "GetTaxRate", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+        Return tax_rate
+
+    End Function
+
+  
 End Class

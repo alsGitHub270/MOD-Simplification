@@ -60,6 +60,8 @@ Partial Class CM_MAIN_frm
         Dim NumberCellType1 As FarPoint.Win.Spread.CellType.NumberCellType = New FarPoint.Win.Spread.CellType.NumberCellType()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.txtTaxRate = New System.Windows.Forms.TextBox()
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.cboTaxCode = New System.Windows.Forms.ComboBox()
@@ -174,6 +176,8 @@ Partial Class CM_MAIN_frm
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingInformation_fra.Controls.Add(Me.Label7)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtTaxRate)
         Me.BuildingInformation_fra.Controls.Add(Me.ExpandCollapseFrame_btn)
         Me.BuildingInformation_fra.Controls.Add(Me.Label6)
         Me.BuildingInformation_fra.Controls.Add(Me.cboTaxCode)
@@ -222,6 +226,24 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(682, 171)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(63, 13)
+        Me.Label7.TabIndex = 101
+        Me.Label7.Text = "Tax Rate:"
+        '
+        'txtTaxRate
+        '
+        Me.txtTaxRate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTaxRate.Location = New System.Drawing.Point(749, 168)
+        Me.txtTaxRate.Name = "txtTaxRate"
+        Me.txtTaxRate.Size = New System.Drawing.Size(87, 20)
+        Me.txtTaxRate.TabIndex = 100
         '
         'ExpandCollapseFrame_btn
         '
@@ -319,9 +341,9 @@ Partial Class CM_MAIN_frm
         Me.txtBidDate.CustomFormat = "MM/dd/yyyy"
         Me.txtBidDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtBidDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.txtBidDate.Location = New System.Drawing.Point(596, 170)
+        Me.txtBidDate.Location = New System.Drawing.Point(597, 141)
         Me.txtBidDate.Name = "txtBidDate"
-        Me.txtBidDate.Size = New System.Drawing.Size(133, 20)
+        Me.txtBidDate.Size = New System.Drawing.Size(108, 20)
         Me.txtBidDate.TabIndex = 88
         '
         'cboBuildingType
@@ -355,7 +377,7 @@ Partial Class CM_MAIN_frm
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(534, 170)
+        Me.Label1.Location = New System.Drawing.Point(535, 141)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(60, 13)
         Me.Label1.TabIndex = 84
@@ -524,10 +546,10 @@ Partial Class CM_MAIN_frm
         Me.cboProbabilityOfSale.BackColor = System.Drawing.SystemColors.Window
         Me.cboProbabilityOfSale.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboProbabilityOfSale.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboProbabilityOfSale.Location = New System.Drawing.Point(596, 143)
+        Me.cboProbabilityOfSale.Location = New System.Drawing.Point(597, 168)
         Me.cboProbabilityOfSale.Name = "cboProbabilityOfSale"
         Me.cboProbabilityOfSale.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboProbabilityOfSale.Size = New System.Drawing.Size(231, 21)
+        Me.cboProbabilityOfSale.Size = New System.Drawing.Size(81, 21)
         Me.cboProbabilityOfSale.TabIndex = 74
         '
         'ProbabilityOfSale_lbl
@@ -536,7 +558,7 @@ Partial Class CM_MAIN_frm
         Me.ProbabilityOfSale_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ProbabilityOfSale_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ProbabilityOfSale_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ProbabilityOfSale_lbl.Location = New System.Drawing.Point(483, 147)
+        Me.ProbabilityOfSale_lbl.Location = New System.Drawing.Point(484, 171)
         Me.ProbabilityOfSale_lbl.Name = "ProbabilityOfSale_lbl"
         Me.ProbabilityOfSale_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ProbabilityOfSale_lbl.Size = New System.Drawing.Size(107, 17)
@@ -2389,5 +2411,7 @@ Partial Class CM_MAIN_frm
     Public WithEvents lblOCPL As System.Windows.Forms.Label
     Friend WithEvents sprTotals As FarPoint.Win.Spread.FpSpread
     Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents txtTaxRate As System.Windows.Forms.TextBox
 #End Region
 End Class
