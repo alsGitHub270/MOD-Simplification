@@ -973,7 +973,7 @@ Partial Friend Class CM_MAIN_frm
                         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
                         t.BackgroundImage = p
                         ' Apply the text cell.
-                        FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
+                        FpSpread1.ActiveSheet.Cells(CurSummaryRow, 2).CellType = t
                     End If
                 Else
                     MessageBox.Show("A Master Has Already Been Created", "Cannot Create Master", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -1917,6 +1917,7 @@ Partial Friend Class CM_MAIN_frm
             _row("nps_labor_cost") = txtNPSLaborCost.Text
             _row("nps_one_time_cost") = txtNPSOneTimeCost.Text
             _row("ocpl") = txtOCPL.Text
+
             If is_new_row Then dtBuildingInfo.Rows.Add(_row)
 
         Catch ex As Exception

@@ -49,11 +49,7 @@
 
     Public gsCommand As String = ""
     Public OpportunityID As String = String.Empty
-
-    'Public UserRoleCRM, UserRole, UserRoleOFF, UserLevel As String
     Public UserRole As String
-    'Private PartnerNum As String = ""
-
     ' Cadre MOD Access Level
     Public FULL_ACCESS As Boolean
     Public SHELL_ACCESS As Boolean
@@ -91,9 +87,11 @@
 
     Public CalledToRunReconfig As Boolean
     Public CarProductCode As Integer
+
     'Public GONumbers() As CM_MAIN_IO.GONumbers_TypeDec = Nothing
     Public CurrentGOSelection As Byte
     '  Public CM_GridStatus As New CM_MAIN_IO.CM_GridStatus_TypeDec()
+
     Public Structure tagCostGridType_Data
         Dim MenuIndex As Byte
         Dim FormsName As String
@@ -129,12 +127,15 @@
         End Function
     End Structure
     Public CostGridType_Data() As tagCostGridType_Data = Nothing
+
+
     Structure All_LocalCodeDepTYP
         Dim CanadaJob As Boolean
         Dim PuertoRicoJob As Boolean
         Dim MODJob As Boolean
     End Structure
 
+    '  Paths
     Public Structure CRM_typ
         Dim SalesRepName As String
         Dim SalesOffice As String
@@ -160,6 +161,7 @@
         End Function
     End Structure
     Public ProjectData As CRM_typ = CRM_typ.CreateInstance()
+
     Public Structure CurrentGOData_Type
         Dim Type As String
         Dim Bank As String

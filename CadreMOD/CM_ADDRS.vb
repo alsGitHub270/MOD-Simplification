@@ -59,12 +59,11 @@ Module CM_ADDRS_IO
         End Function
     End Structure
 
-    Private AddressIndex As Byte
 
     Public Sub ReadData(Optional ByVal TypeIndex As Byte = ADDRESS_TYPE_OWNER, Optional ByVal CurrentName As String = "")
 
         InitializeStruct_Address(TypeIndex)
-        For AddressIndex = 1 To Addresses.GetUpperBound(0)
+        For AddressIndex As Integer = 1 To Addresses.GetUpperBound(0)
             If Addresses(AddressIndex).Type = TypeIndex Then
                 If CurrentName.Trim.Length = 0 Then
                     Address.Type = Addresses(AddressIndex).Type
@@ -99,7 +98,7 @@ Module CM_ADDRS_IO
         Dim AddressAdded As Boolean = False
         Dim iAddresses As Integer = Addresses.GetUpperBound(0)
 
-        For AddressIndex = 1 To iAddresses
+        For AddressIndex As Integer = 1 To iAddresses
             If Addresses(AddressIndex).Name = Address.Name And Addresses(AddressIndex).Type = Address.Type Then
                 Addresses(AddressIndex).Name = Address.Name
                 Addresses(AddressIndex).Address = Address.Address
@@ -117,16 +116,16 @@ Module CM_ADDRS_IO
         If Not AddressAdded Then
             iAddresses += 1
             ReDim Preserve Addresses(iAddresses)
-            Addresses(AddressIndex).Type = Address.Type
-            Addresses(AddressIndex).Name = Address.Name
-            Addresses(AddressIndex).Address = Address.Address
-            Addresses(AddressIndex).Address2 = Address.Address2
-            Addresses(AddressIndex).City = Address.City
-            Addresses(AddressIndex).State = Address.State
-            Addresses(AddressIndex).Zip = Address.Zip
-            Addresses(AddressIndex).Phone = Address.Phone
-            Addresses(AddressIndex).Ext = Address.Ext
-            Addresses(AddressIndex).Fax = Address.Fax
+            Addresses(iAddresses).Type = Address.Type
+            Addresses(iAddresses).Name = Address.Name
+            Addresses(iAddresses).Address = Address.Address
+            Addresses(iAddresses).Address2 = Address.Address2
+            Addresses(iAddresses).City = Address.City
+            Addresses(iAddresses).State = Address.State
+            Addresses(iAddresses).Zip = Address.Zip
+            Addresses(iAddresses).Phone = Address.Phone
+            Addresses(iAddresses).Ext = Address.Ext
+            Addresses(iAddresses).Fax = Address.Fax
         End If
 
     End Sub
@@ -198,23 +197,23 @@ Module CM_ADDRS_IO
     Public Sub AddAddress4Owner()
         Dim iAddresses As Integer = Addresses.GetUpperBound(0)
 
-        For AddressIndex = 1 To iAddresses
+        For AddressIndex As Integer = 1 To iAddresses
             If Addresses(AddressIndex).Type = ADDRESS_TYPE_OWNER Then
                 Exit Sub
             End If
         Next
         iAddresses += 1
         ReDim Preserve Addresses(iAddresses)
-        Addresses(AddressIndex).Type = ADDRESS_TYPE_OWNER
-        Addresses(AddressIndex).Name = Owner_Info.Name
-        Addresses(AddressIndex).Address = Owner_Info.Address
-        Addresses(AddressIndex).Address2 = ""
-        Addresses(AddressIndex).City = Owner_Info.City
-        Addresses(AddressIndex).State = Owner_Info.State
-        Addresses(AddressIndex).Zip = Owner_Info.Zip
-        Addresses(AddressIndex).Phone = Owner_Info.Phone
-        Addresses(AddressIndex).Ext = ""
-        Addresses(AddressIndex).Fax = Owner_Info.Fax
+        Addresses(iAddresses).Type = ADDRESS_TYPE_OWNER
+        Addresses(iAddresses).Name = Owner_Info.Name
+        Addresses(iAddresses).Address = Owner_Info.Address
+        Addresses(iAddresses).Address2 = ""
+        Addresses(iAddresses).City = Owner_Info.City
+        Addresses(iAddresses).State = Owner_Info.State
+        Addresses(iAddresses).Zip = Owner_Info.Zip
+        Addresses(iAddresses).Phone = Owner_Info.Phone
+        Addresses(iAddresses).Ext = ""
+        Addresses(iAddresses).Fax = Owner_Info.Fax
 
     End Sub
 End Module
