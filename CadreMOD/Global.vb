@@ -62,6 +62,7 @@
     Public HYDRO_ONLY_ACCESS As Boolean
 
     'Mod Related Veriables
+
     Public ENABLE_BOOKING_BTN As Boolean
 
     Public DataChangedByProgram As Boolean
@@ -73,6 +74,7 @@
     Public CurrentUnits As String = String.Empty
     Public EstimateLevel As String = String.Empty
     Public TaxRate As Single = -999.99
+
 
     Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
         Get

@@ -57,7 +57,6 @@ Partial Class CM_MAIN_frm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
         Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim NumberCellType1 As FarPoint.Win.Spread.CellType.NumberCellType = New FarPoint.Win.Spread.CellType.NumberCellType()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -146,7 +145,7 @@ Partial Class CM_MAIN_frm
         Me.Button2 = New System.Windows.Forms.Button()
         Me.btnForms = New System.Windows.Forms.Button()
         Me.btnEstimate = New System.Windows.Forms.Button()
-        Me.btnPreOrder = New System.Windows.Forms.Button()
+        Me.btnMerge = New System.Windows.Forms.Button()
         Me.NewProductService_fra = New System.Windows.Forms.GroupBox()
         Me.txtNPSLaborCost = New System.Windows.Forms.TextBox()
         Me.txtNPSOneTimeCost = New System.Windows.Forms.TextBox()
@@ -239,7 +238,7 @@ Partial Class CM_MAIN_frm
         '
         'txtTaxRate
         '
-        Me.txtTaxRate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTaxRate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtTaxRate.Location = New System.Drawing.Point(749, 168)
         Me.txtTaxRate.Name = "txtTaxRate"
         Me.txtTaxRate.Size = New System.Drawing.Size(87, 20)
@@ -1740,7 +1739,7 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.Controls.Add(Me.Button2)
         Me.Equipment_fra.Controls.Add(Me.btnForms)
         Me.Equipment_fra.Controls.Add(Me.btnEstimate)
-        Me.Equipment_fra.Controls.Add(Me.btnPreOrder)
+        Me.Equipment_fra.Controls.Add(Me.btnMerge)
         Me.Equipment_fra.Controls.Add(Me.FpSpread1)
         Me.Equipment_fra.Controls.Add(Me._JobHighRiskFactor_lbl_1)
         Me.Equipment_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1770,14 +1769,14 @@ Partial Class CM_MAIN_frm
         EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
         EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
         Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
-        Me.sprTotals.HorizontalScrollBar.TabIndex = 16
+        Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
         Me.sprTotals.Name = "sprTotals"
         Me.sprTotals.ScrollBarTrackPolicy = FarPoint.Win.Spread.ScrollBarTrackPolicy.Both
         Me.sprTotals.ScrollTipPolicy = FarPoint.Win.Spread.ScrollTipPolicy.Both
         Me.sprTotals.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.sprTotals_Sheet1})
-        Me.sprTotals.Size = New System.Drawing.Size(1421, 21)
+        Me.sprTotals.Size = New System.Drawing.Size(1481, 21)
         Me.sprTotals.Skin = FarPoint.Win.Spread.DefaultSpreadSkins.ArcticSea
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
@@ -1794,7 +1793,7 @@ Partial Class CM_MAIN_frm
         EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
         EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
         Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
-        Me.sprTotals.VerticalScrollBar.TabIndex = 17
+        Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
         'sprTotals_Sheet1
@@ -1806,7 +1805,7 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.ColumnCount = 23
         Me.sprTotals_Sheet1.RowCount = 1
         Me.sprTotals_Sheet1.Cells.Get(0, 0).BackColor = System.Drawing.Color.Cyan
-        Me.sprTotals_Sheet1.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold)
+        Me.sprTotals_Sheet1.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
         Me.sprTotals_Sheet1.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
         Me.sprTotals_Sheet1.Cells.Get(0, 0).Locked = True
         Me.sprTotals_Sheet1.Cells.Get(0, 0).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
@@ -1886,23 +1885,24 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.Cells.Get(0, 15).Locked = True
         Me.sprTotals_Sheet1.Cells.Get(0, 15).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
         Me.sprTotals_Sheet1.Cells.Get(0, 16).BackColor = System.Drawing.Color.Cyan
-        NumberCellType1.DecimalPlaces = 2
-        NumberCellType1.DecimalSeparator = "."
-        NumberCellType1.MaximumValue = 9999.99R
-        NumberCellType1.MinimumValue = -9999.99R
-        NumberCellType1.ShowSeparator = True
-        Me.sprTotals_Sheet1.Cells.Get(0, 16).CellType = NumberCellType1
         Me.sprTotals_Sheet1.Cells.Get(0, 16).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
         Me.sprTotals_Sheet1.Cells.Get(0, 16).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 16).Locked = True
         Me.sprTotals_Sheet1.Cells.Get(0, 16).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
         Me.sprTotals_Sheet1.Cells.Get(0, 17).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Cells.Get(0, 17).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 17).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 17).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
+        Me.sprTotals_Sheet1.Cells.Get(0, 18).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Right
+        Me.sprTotals_Sheet1.Cells.Get(0, 18).Locked = True
+        Me.sprTotals_Sheet1.Cells.Get(0, 18).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
         Me.sprTotals_Sheet1.ColumnFooter.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.ColumnFooter.DefaultStyle.Parent = "ColumnHeaderArcticSea"
         Me.sprTotals_Sheet1.ColumnFooterSheetCornerStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.ColumnFooterSheetCornerStyle.Parent = "CornerArcticSea"
         Me.sprTotals_Sheet1.ColumnHeader.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.ColumnHeader.DefaultStyle.Parent = "ColumnHeaderArcticSea"
-        Me.sprTotals_Sheet1.ColumnHeader.Rows.Get(0).Height = 30.0!
+        Me.sprTotals_Sheet1.ColumnHeader.Rows.Get(0).Height = 33.0!
         Me.sprTotals_Sheet1.ColumnHeader.Visible = False
         Me.sprTotals_Sheet1.Columns.Get(0).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(1).Width = 38.0!
@@ -1924,17 +1924,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
-        Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Value = "Summary Totals"
+        Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Value = "Neg Summary"
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).VerticalAlignment = FarPoint.Win.Spread.CellVerticalAlignment.Center
         Me.sprTotals_Sheet1.RowHeader.Columns.Default.Resizable = False
-        Me.sprTotals_Sheet1.RowHeader.Columns.Get(0).Width = 363.0!
+        Me.sprTotals_Sheet1.RowHeader.Columns.Get(0).Width = 296.0!
         Me.sprTotals_Sheet1.RowHeader.DefaultStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.RowHeader.DefaultStyle.Parent = "RowHeaderArcticSea"
-        Me.sprTotals_Sheet1.Rows.Get(0).BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.sprTotals_Sheet1.Rows.Get(0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold)
-        Me.sprTotals_Sheet1.Rows.Get(0).Height = 17.0!
-        Me.sprTotals_Sheet1.Rows.Get(0).Label = "Summary Totals"
+        Me.sprTotals_Sheet1.Rows.Get(0).BackColor = System.Drawing.Color.Cyan
+        Me.sprTotals_Sheet1.Rows.Get(0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.sprTotals_Sheet1.Rows.Get(0).Height = 13.0!
+        Me.sprTotals_Sheet1.Rows.Get(0).Label = "Neg Summary"
         Me.sprTotals_Sheet1.Rows.Get(0).Locked = True
+        Me.sprTotals_Sheet1.Rows.Get(0).NoteIndicatorColor = System.Drawing.Color.Cyan
         Me.sprTotals_Sheet1.SheetCornerStyle.NoteIndicatorColor = System.Drawing.Color.Red
         Me.sprTotals_Sheet1.SheetCornerStyle.Parent = "CornerArcticSea"
         Me.sprTotals_Sheet1.VerticalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
@@ -2036,21 +2037,21 @@ Partial Class CM_MAIN_frm
         Me.btnEstimate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnEstimate.UseVisualStyleBackColor = False
         '
-        'btnPreOrder
+        'btnMerge
         '
-        Me.btnPreOrder.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btnPreOrder.BackColor = System.Drawing.SystemColors.Control
-        Me.btnPreOrder.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnPreOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPreOrder.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnPreOrder.Location = New System.Drawing.Point(573, 21)
-        Me.btnPreOrder.Name = "btnPreOrder"
-        Me.btnPreOrder.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnPreOrder.Size = New System.Drawing.Size(77, 22)
-        Me.btnPreOrder.TabIndex = 72
-        Me.btnPreOrder.Text = "Pre-Order"
-        Me.btnPreOrder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnPreOrder.UseVisualStyleBackColor = False
+        Me.btnMerge.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnMerge.BackColor = System.Drawing.SystemColors.Control
+        Me.btnMerge.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnMerge.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnMerge.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnMerge.Location = New System.Drawing.Point(573, 21)
+        Me.btnMerge.Name = "btnMerge"
+        Me.btnMerge.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnMerge.Size = New System.Drawing.Size(77, 22)
+        Me.btnMerge.TabIndex = 72
+        Me.btnMerge.Text = "Merge"
+        Me.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnMerge.UseVisualStyleBackColor = False
         '
         'NewProductService_fra
         '
@@ -2364,7 +2365,7 @@ Partial Class CM_MAIN_frm
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Private WithEvents btnForms As System.Windows.Forms.Button
     Private WithEvents btnEstimate As System.Windows.Forms.Button
-    Private WithEvents btnPreOrder As System.Windows.Forms.Button
+    Private WithEvents btnMerge As System.Windows.Forms.Button
     Friend WithEvents btnPrint As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Public WithEvents cboBuildingType As System.Windows.Forms.ComboBox

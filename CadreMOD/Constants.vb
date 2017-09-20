@@ -2,6 +2,7 @@
     ' Contract Manager
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
+    Public DEFAULT_C1 As Single = 0.2
 
 
     Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification\CadreMOD"

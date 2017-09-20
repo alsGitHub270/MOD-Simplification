@@ -31,12 +31,9 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub CreateDataSet()
 
-        Dim typeStr As System.Type
-        Dim typeInt As System.Type
-        Dim typeBool As System.Type
-        typeStr = System.Type.GetType("System.String")
-        typeInt = System.Type.GetType("System.Int64")
-        typeBool = System.Type.GetType("System.Boolean")
+        Dim typeStr As System.Type = System.Type.GetType("System.String")
+        Dim typeInt As System.Type = System.Type.GetType("System.Int64")
+        Dim typeBool As System.Type = System.Type.GetType("System.Boolean")
         Dim typeSingle As System.Type = System.Type.GetType("System.Single")
 
         dsCadre = New DataSet()
@@ -47,25 +44,27 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("id", typeStr), _
                                                           New DataColumn("_", typeStr), _
                                                           New DataColumn("Bank", typeStr), _
-                                                          New DataColumn("Bank Type", typeStr), _
+                                                          New DataColumn("Bank_Type", typeStr), _
                                                           New DataColumn("Units", typeStr), _
-                                                          New DataColumn("Material HQ", typeInt), _
-                                                          New DataColumn("Material RL", typeInt), _
+                                                          New DataColumn("Material_HQ", typeInt), _
+                                                          New DataColumn("Material_RL", typeInt), _
                                                           New DataColumn("Tax", typeInt), _
-                                                          New DataColumn("BDP Hours", typeInt), _
-                                                          New DataColumn("Special Hours", typeInt), _
-                                                          New DataColumn("Labor Hours", typeInt), _
-                                                          New DataColumn("OT Hours Included", typeInt), _
-                                                          New DataColumn("Labor", typeInt), _
-                                                          New DataColumn("SubContract Work", typeInt), _
-                                                          New DataColumn("Misc Costs", typeInt), _
-                                                          New DataColumn("Freight", typeInt), _
-                                                          New DataColumn("NPS Cost", typeInt), _
-                                                          New DataColumn("Total Bank Cost", typeInt), _
+                                                          New DataColumn("BDP_Hours", typeInt), _
+                                                          New DataColumn("Special_Hours", typeInt), _
+                                                          New DataColumn("Labor_Hours", typeInt), _
+                                                          New DataColumn("OT_Hours_Included", typeInt), _
+                                                          New DataColumn("Labor_cost", typeInt), _
+                                                          New DataColumn("SubContract_Work", typeInt), _
+                                                          New DataColumn("misc_costs", typeInt), _
+                                                          New DataColumn("expenses", typeInt), _
+                                                          New DataColumn("freight", typeInt), _
+                                                          New DataColumn("NPS_Cost", typeInt), _
+                                                          New DataColumn("Total_Bank_Cost", typeInt), _
                                                           New DataColumn("C1", typeSingle), _
-                                                          New DataColumn("Sell Price", typeInt), _
-                                                          New DataColumn("Tax Rate", typeInt), _
-                                                          New DataColumn("Labor Rate", typeInt), _
+                                                          New DataColumn("bank_net_Price", typeInt), _
+                                                          New DataColumn("sales_commission", typeInt), _
+                                                          New DataColumn("sell_price", typeInt), _
+                                                          New DataColumn("Labor_Rate", typeInt), _
                                                           New DataColumn("Include", typeBool)
                                                          })
 
@@ -76,31 +75,30 @@ Partial Friend Class CM_MAIN_frm
 
         dtBaseGroup = dsCadre.Tables.Add("BaseGroup")
         dtBaseGroup.Columns.AddRange(New DataColumn() {New DataColumn("BaseGroup", typeStr), _
-                                                        New DataColumn("id", typeStr), _
-                                                        New DataColumn("sort_fld", typeStr), _
-                                                        New DataColumn("filler1", typeStr), _
-                                                        New DataColumn("filler2", typeStr), _
-                                                        New DataColumn("Target", typeInt), _
-                                                        New DataColumn("Bid", typeStr), _
-                                                        New DataColumn("Award", typeStr), _
-                                                        New DataColumn("Material HQ", typeInt), _
-                                                        New DataColumn("Material RL", typeInt), _
-                                                        New DataColumn("Tax", typeInt), _
-                                                        New DataColumn("Total BDP Hours", typeInt), _
-                                                        New DataColumn("Total Special Hours", typeInt), _
-                                                        New DataColumn("Total Labor Hours", typeInt), _
-                                                        New DataColumn("Overtime Hours Included", typeInt), _
-                                                        New DataColumn("Labor", typeInt), _
-                                                        New DataColumn("SubContract Work", typeInt), _
-                                                        New DataColumn("Misc Costs", typeInt), _
-                                                        New DataColumn("Freight", typeInt), _
-                                                        New DataColumn("NPS Cost", typeInt), _
-                                                        New DataColumn("Total Bank Cost", typeInt), _
-                                                        New DataColumn("C1", typeSingle), _
-                                                        New DataColumn("Sell Price", typeInt), _
-                                                        New DataColumn("Tax Rate", typeInt), _
-                                                        New DataColumn("Labor Rate", typeInt), _
-                                                        New DataColumn("Comment", typeStr)
+                                                       New DataColumn("id", typeStr), _
+                                                       New DataColumn("sort_fld", typeStr), _
+                                                       New DataColumn("filler1", typeStr), _
+                                                       New DataColumn("alt_id", typeStr), _
+                                                       New DataColumn("Material_HQ", typeInt), _
+                                                       New DataColumn("Material_RL", typeInt), _
+                                                       New DataColumn("Tax", typeInt), _
+                                                       New DataColumn("BDP_Hours", typeInt), _
+                                                       New DataColumn("Special_Hours", typeInt), _
+                                                       New DataColumn("Labor_Hours", typeInt), _
+                                                       New DataColumn("OT_Hours_Included", typeInt), _
+                                                       New DataColumn("Labor_cost", typeInt), _
+                                                       New DataColumn("SubContract_Work", typeInt), _
+                                                       New DataColumn("Misc_Costs", typeInt), _
+                                                       New DataColumn("expenses", typeInt), _
+                                                       New DataColumn("Freight", typeInt), _
+                                                       New DataColumn("NPS_Cost", typeInt), _
+                                                       New DataColumn("Total_Bank_Cost", typeInt), _
+                                                       New DataColumn("C1", typeSingle), _
+                                                       New DataColumn("bank_net_Price", typeInt), _
+                                                       New DataColumn("sales_commission", typeInt), _
+                                                       New DataColumn("sell_price", typeInt), _
+                                                       New DataColumn("Labor_Rate", typeInt), _
+                                                       New DataColumn("Comment", typeStr)
                                                         })
        
 
@@ -114,27 +112,27 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("id", typeStr), _
                                                       New DataColumn("filler1", typeStr), _
                                                       New DataColumn("filler2", typeStr), _
-                                                      New DataColumn("Target", typeStr), _
-                                                      New DataColumn("Bid", typeStr), _
                                                       New DataColumn("Offer", typeStr), _
                                                       New DataColumn("Merge", typeStr), _
-                                                      New DataColumn("Material HQ", typeInt), _
-                                                      New DataColumn("Material RL", typeInt), _
+                                                      New DataColumn("Material_HQ", typeInt), _
+                                                      New DataColumn("Material_RL", typeInt), _
                                                       New DataColumn("Tax", typeInt), _
-                                                      New DataColumn("Total BDP Hours", typeInt), _
-                                                      New DataColumn("Total Special Hours", typeInt), _
-                                                      New DataColumn("Total Labor Hours", typeInt), _
-                                                      New DataColumn("Overtime Hours Included", typeInt), _
-                                                      New DataColumn("Labor", typeInt), _
-                                                      New DataColumn("SubContract Work", typeInt), _
-                                                      New DataColumn("Misc Costs", typeInt), _
-                                                      New DataColumn("Freight", typeInt), _
-                                                      New DataColumn("NPS Cost", typeInt), _
-                                                      New DataColumn("Total Bank Cost", typeInt), _
+                                                      New DataColumn("BDP_Hours", typeInt), _
+                                                      New DataColumn("Special_Hours", typeInt), _
+                                                      New DataColumn("Labor_Hours", typeInt), _
+                                                      New DataColumn("OT_Hours_Included", typeInt), _
+                                                      New DataColumn("Labor_cost", typeInt), _
+                                                      New DataColumn("SubContract_Work", typeInt), _
+                                                      New DataColumn("Misc_Costs", typeInt), _
+                                                      New DataColumn("expenses", typeInt), _
+                                                      New DataColumn("freight", typeInt), _
+                                                      New DataColumn("NPS_Cost", typeInt), _
+                                                      New DataColumn("Total_Bank_Cost", typeInt), _
                                                       New DataColumn("C1", typeSingle), _
-                                                      New DataColumn("Sell Price", typeInt), _
-                                                      New DataColumn("Tax Rate", typeInt), _
-                                                      New DataColumn("Labor Rate", typeInt), _
+                                                      New DataColumn("bank_net_price", typeInt), _
+                                                      New DataColumn("sales_commission", typeInt), _
+                                                      New DataColumn("sell_price", typeInt), _
+                                                      New DataColumn("Labor_Rate", typeInt), _
                                                       New DataColumn("Comment", typeStr)
                                                      })
 
@@ -206,7 +204,7 @@ Partial Friend Class CM_MAIN_frm
 
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("id"), dsCadre.Tables("BaseGroup").Columns("id"))
-        dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("id"), dsCadre.Tables("AltGroup").Columns("id"))
+        dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("alt_id"), dsCadre.Tables("AltGroup").Columns("id"))
 
     End Sub
 
@@ -227,6 +225,19 @@ Partial Friend Class CM_MAIN_frm
                 Me.Hide()
             Case Else
         End Select
+    End Sub
+
+    Private Sub CM_MAIN_frm_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If isDirty Then
+            Dim response As DialogResult = MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+            If response = DialogResult.Yes Then
+                SaveAll()
+            ElseIf response = DialogResult.Cancel Then
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
+        EndProgram()
     End Sub
 
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -258,6 +269,7 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.VerticalGridLine = gl
 
         FpSpread1.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
+        FpSpread1.ActiveSheet.RowHeader.Columns(0).Width = 30
         FpSpread1.ActiveSheet.RowHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.RowHeaderRenderer
         FpSpread1.ActiveSheet.SheetCorner.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.CornerRenderer
         FpSpread1.InterfaceRenderer = Nothing
@@ -296,7 +308,8 @@ Partial Friend Class CM_MAIN_frm
         percentType.DecimalPlaces = 1
 
         Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
-        numberType.DecimalPlaces = 1
+        numberType.DecimalPlaces = 0
+        numberType.ShowSeparator = True
 
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
@@ -305,6 +318,7 @@ Partial Friend Class CM_MAIN_frm
         currencyType.ShowSeparator = True
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
+        currencyType.MaximumValue = 99999999
 
         Dim ckbxcell As New FarPoint.Win.Spread.CellType.CheckBoxCellType()
 
@@ -340,22 +354,20 @@ Partial Friend Class CM_MAIN_frm
             cbstr_Bank = BuildBanks(FpSpread1.ActiveSheet.GetValue(i, 3))
             cmbocell_Bank.Items = cbstr_Bank
 
-
             FpSpread1.ActiveSheet.Rows(i).Locked = True
             FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
             FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 19).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 23).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 20).Locked = False
+            FpSpread1.ActiveSheet.Cells(i, 25).Locked = False
 
-
-            FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 100        'summary
-            FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 25         'STATUS
-            FpSpread1.ActiveSheet.Cells(i, 3).Column.Width = 50         'bank
+            FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 75        'summary
+            FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 20         'STATUS
+            FpSpread1.ActiveSheet.Cells(i, 3).Column.Width = 35         'bank
             FpSpread1.ActiveSheet.Cells(i, 4).Column.Width = 75         'bank_type
             FpSpread1.ActiveSheet.Cells(i, 5).Column.Width = 60         'units
-            FpSpread1.ActiveSheet.Cells(i, 6).Column.Width = 60         'material_HQ
-            FpSpread1.ActiveSheet.Cells(i, 7).Column.Width = 60         'material_RL
+            FpSpread1.ActiveSheet.Cells(i, 6).Column.Width = 65         'material_HQ
+            FpSpread1.ActiveSheet.Cells(i, 7).Column.Width = 63         'material_RL
             FpSpread1.ActiveSheet.Cells(i, 8).Column.Width = 60         'sales tax
             FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 60         'total BDP Hours
             FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'total special hours
@@ -363,15 +375,17 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 60        'Overtime hours included
             FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'labor $
             FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 70        'Subcontract work
-            FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 60        'mics costs
-            FpSpread1.ActiveSheet.Cells(i, 16).Column.Width = 60        'freight
-            FpSpread1.ActiveSheet.Cells(i, 17).Column.Width = 60        'NPS Cost
-            FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'total bank cost
-            FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 60        'project c1
-            FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 60        'bank sell price
-            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 50        'tax rate
-            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 50        'Labor rate
-            FpSpread1.ActiveSheet.Cells(i, 23).Column.Width = 45      'Include indicator
+            FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 60        'expenses
+            FpSpread1.ActiveSheet.Cells(i, 16).Column.Width = 60        'misc costs
+            FpSpread1.ActiveSheet.Cells(i, 17).Column.Width = 60        'freight
+            FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 65        'NPS Cost
+            FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 70        'total bank cost
+            FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 50        'project c1
+            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 70        'bank net price
+            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 60        'sales commission
+            FpSpread1.ActiveSheet.Cells(i, 23).Column.Width = 70        'bank final price
+            FpSpread1.ActiveSheet.Cells(i, 24).Column.Width = 60        'Labor rate
+            FpSpread1.ActiveSheet.Cells(i, 25).Column.Width = 45      'Include indicator
 
             FpSpread1.ActiveSheet.Cells(i, 3).CellType = cmbocell_Bank      ' bank
             FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell_Machine   ' machine/bank type
@@ -385,24 +399,50 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 16).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 17).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 18).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 20).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 19).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 21).CellType = currencyType
             FpSpread1.ActiveSheet.Cells(i, 22).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 23).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(i, 24).CellType = currencyType
 
-            FpSpread1.ActiveSheet.Cells(i, 19).CellType = percentType
+            FpSpread1.ActiveSheet.Cells(i, 9).CellType = numberType
+            FpSpread1.ActiveSheet.Cells(i, 10).CellType = numberType
+            FpSpread1.ActiveSheet.Cells(i, 11).CellType = numberType
+            FpSpread1.ActiveSheet.Cells(i, 12).CellType = numberType
 
-            FpSpread1.ActiveSheet.Cells(i, 23).CellType = ckbxcell
-            FpSpread1.ActiveSheet.Cells(i, 23).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+            percentType.ReadOnly = True
+            FpSpread1.ActiveSheet.Cells(i, 20).CellType = percentType
+
+            FpSpread1.ActiveSheet.Cells(i, 25).CellType = ckbxcell
+            FpSpread1.ActiveSheet.Cells(i, 25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
-            FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 40
+            FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 30
 
-            ' FpSpread1.Sheets(0).ColumnHeader.Columns(12).Label = "Permit OCPL Bonds"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(15).Label = "Permit OCPL Bonds"
+            ' Column Headers
 
+            FpSpread1.Sheets(0).ColumnHeader.Columns(0).Label = "Group"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(6).Label = "Material HQ"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(7).Label = "Material RL"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(8).Label = "Sales Tax"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(9).Label = "BDP Hours"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(10).Label = "Special Hours"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(11).Label = "Labor Hours"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(12).Label = "OT Hrs Included"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(13).Label = "Labor"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(14).Label = "Subcontact Work"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(15).Label = "Expenses"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(16).Label = "P/O/B"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(17).Label = "Freight"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(18).Label = "NPS Cost"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(19).Label = "Total Bank Cost"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(20).Label = "C1"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(21).Label = "Bank Net Price"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(22).Label = "Sales Com"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Sell Price"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(24).Label = "Labor Rate"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(25).Label = "Include"
 
-
-            'FpSpread1.ActiveSheet.Cells(i, 25).BackColor = Color.LightGray
         Next
 
         ExpandCollapseAll("Expand")
@@ -467,9 +507,11 @@ Partial Friend Class CM_MAIN_frm
         CurrentEquipmentFrameHeight = Equipment_fra.Height
 
         Relocate_Equipment_Frame()
-        SizeTotalsForm()
+        SizeTotalsGrid()
         LoadTopOfForm()
         ProcessTotals()
+        SetSummaryC1Colors()
+        ' FpSpread1.ActiveSheet.Cells(0, 20).Locked = True
 
         initializing = False
     End Sub
@@ -522,6 +564,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
     Private Sub FpSpread1_Change(sender As Object, e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
         If Not initializing Then isDirty = True
+        SetBaseAltC1Colors()
     End Sub
 
 
@@ -541,6 +584,9 @@ Partial Friend Class CM_MAIN_frm
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
         percentType.DecimalPlaces = 1
 
+        Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
+        numberType.DecimalPlaces = 0
+        numberType.ShowSeparator = True
 
         Dim ckbxcell As New FarPoint.Win.Spread.CellType.CheckBoxCellType()
         ' ckbxcell.TextTrue = "Included In Bid"
@@ -561,50 +607,116 @@ Partial Friend Class CM_MAIN_frm
                 .RowHeader.AutoText = False
                 .DataAutoCellTypes = False
                 .DataAutoSizeColumns = False
-                .ColumnHeader.Rows(0).Height = 40
+                .ColumnHeader.Rows(0).Height = 30
+
+                .Columns(0).Label = "Group"
+                .Columns(0).Locked = True
+                .Columns(0).Width = 230
 
                 .Columns(1).Visible = False
                 .Columns(2).Visible = False
                 .Columns(3).Visible = False
                 .Columns(4).Visible = False
 
-                .Columns(0).Locked = True
+
+                .Columns(5).Label = "Material HQ"
                 .Columns(5).Locked = True
-                For i As Integer = 7 To 24
-                    .Columns(i).Locked = True
-                    .SetColumnWidth(i, 60)
-                Next i
-
-                .Columns(21).Locked = False
-
-                .SetColumnWidth(0, 65)
-                .SetColumnWidth(3, 75)
-                .SetColumnWidth(4, 75)
-                .SetColumnWidth(5, 60)
-                .SetColumnWidth(6, 75)
-                .SetColumnWidth(7, 75)
-                .SetColumnWidth(16, 70)
-                .SetColumnWidth(23, 50)
-                .SetColumnWidth(24, 50)
-                .SetColumnWidth(25, 175)
-
                 .Columns(5).CellType = currencyType
-                .Columns(6).CellType = currencyType
-                .Columns(7).CellType = currencyType
-                .Columns(8).CellType = currencyType
-                .Columns(9).CellType = currencyType
-                .Columns(10).CellType = currencyType
-                .Columns(15).CellType = currencyType
-                .Columns(16).CellType = currencyType
-                .Columns(17).CellType = currencyType
-                .Columns(18).CellType = currencyType
-                .Columns(19).CellType = currencyType
-                .Columns(20).CellType = currencyType
-                .Columns(22).CellType = currencyType
-                .Columns(23).CellType = currencyType
-                .Columns(24).CellType = currencyType
+                .Columns(5).Width = 65
 
-                .Columns(21).CellType = percentType
+                .Columns(6).Label = "Material RL"
+                .Columns(6).Locked = True
+                .Columns(6).CellType = currencyType
+                .Columns(6).Width = 63
+
+                .Columns(7).Label = "Sales Tax"
+                .Columns(7).Locked = True
+                .Columns(7).CellType = currencyType
+                .Columns(7).Width = 60
+
+                .Columns(8).Label = "BDP Hours"
+                .Columns(8).Locked = True
+                .Columns(8).CellType = numberType
+                .Columns(8).Width = 60
+
+                .Columns(9).Label = "Special Hours"
+                .Columns(9).Locked = True
+                .Columns(9).CellType = numberType
+                .Columns(9).Width = 60
+
+                .Columns(10).Label = "Labor Hours"
+                .Columns(10).Locked = True
+                .Columns(10).CellType = numberType
+                .Columns(10).Width = 60
+
+                .Columns(11).Label = "OT Hrs Included"
+                .Columns(11).Locked = True
+                .Columns(11).CellType = numberType
+                .Columns(11).Width = 60
+
+                .Columns(12).Label = "Labor"
+                .Columns(12).Locked = True
+                .Columns(12).CellType = currencyType
+                .Columns(12).Width = 60
+
+                .Columns(13).Label = "Subcontact Work"
+                .Columns(13).Locked = True
+                .Columns(13).CellType = currencyType
+                .Columns(13).Width = 70
+
+                .Columns(14).Label = "Expenses"
+                .Columns(14).Locked = True
+                .Columns(14).CellType = currencyType
+                .Columns(14).Width = 60
+
+                .Columns(15).Label = "P/O/B"
+                .Columns(15).Locked = True
+                .Columns(15).CellType = currencyType
+                .Columns(15).Width = 60
+
+                .Columns(16).Label = "Freight"
+                .Columns(16).Locked = True
+                .Columns(16).CellType = currencyType
+                .Columns(16).Width = 60
+
+                .Columns(17).Label = "NPS Cost"
+                .Columns(17).Locked = True
+                .Columns(17).CellType = currencyType
+                .Columns(17).Width = 65
+
+                .Columns(18).Label = "Total Bank Cost"
+                .Columns(18).Locked = True
+                .Columns(18).CellType = currencyType
+                .Columns(18).Width = 70
+
+                .Columns(19).Label = "C1"
+                .Columns(19).Locked = False
+                .Columns(19).CellType = percentType
+                .Columns(19).Width = 50
+
+                .Columns(20).Label = "Bank Net Price"
+                .Columns(20).Locked = True
+                .Columns(20).CellType = currencyType
+                .Columns(20).Width = 70
+
+                .Columns(21).Label = "Sales Com"
+                .Columns(21).Locked = True
+                .Columns(21).CellType = currencyType
+                .Columns(21).Width = 60
+
+                .Columns(22).Label = "Sell Price"
+                .Columns(22).Locked = True
+                .Columns(22).CellType = currencyType
+                .Columns(22).Width = 70
+
+                .Columns(23).Label = "Labor Rate"
+                .Columns(23).Locked = True
+                .Columns(23).CellType = currencyType
+                .Columns(23).Width = 60
+
+                .Columns(24).Label = "Comments"
+                .Columns(24).Locked = False
+                .Columns(24).Width = 100
 
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
@@ -620,61 +732,126 @@ Partial Friend Class CM_MAIN_frm
 
                 .DataAutoCellTypes = False
                 .DataAutoSizeColumns = False
-                .ColumnHeader.Rows(0).Height = 40
+                .ColumnHeader.Rows(0).Height = 30
 
-                .Columns(0).Visible = False
+                .Columns(0).Label = "Group"
+                .Columns(0).Locked = True
+                .Columns(0).Width = 114
+
                 .Columns(1).Visible = False
                 .Columns(2).Visible = False
                 .Columns(3).Visible = False
 
-                .Columns(2).Locked = True
-                .Columns(3).Locked = True
-                .Columns(4).Locked = True
+                .Columns(4).Label = "Offer"
+                .Columns(4).Locked = False
+                .Columns(4).CellType = ckbxcell
+                .Columns(4).Width = 45
+                .Columns(4).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
-                .SetColumnWidth(2, 50)
-                .SetColumnWidth(3, 100)
-                .SetColumnWidth(4, 75)
-                .SetColumnWidth(5, 75)
-                .SetColumnWidth(6, 50)
-                .SetColumnWidth(7, 50)
+                .Columns(5).Label = "Merge"
+                .Columns(5).Locked = False
+                .Columns(5).CellType = ckbxcell
+                .Columns(5).Width = 45
+                .Columns(5).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
-                For i As Integer = 8 To 24
-                    .Columns(i).Locked = True
-                    .SetColumnWidth(i, 60)
-                Next
+                .Columns(6).Label = "Material HQ"
+                .Columns(6).Locked = True
+                .Columns(6).CellType = currencyType
+                .Columns(6).Width = 65
 
-                .Columns(21).Locked = False
+                .Columns(7).Label = "Material RL"
+                .Columns(7).Locked = True
+                .Columns(7).CellType = currencyType
+                .Columns(7).Width = 63
 
-                .SetColumnWidth(16, 70)
-                .SetColumnWidth(23, 50)
-                .SetColumnWidth(24, 50)
-                .SetColumnWidth(25, 175)
-
-                .Columns(4).CellType = currencyType
-                .Columns(5).CellType = currencyType
-                .Columns(6).CellType = ckbxcell
-                .Columns(7).CellType = ckbxcell
+                .Columns(8).Label = "Sales Tax"
+                .Columns(8).Locked = True
                 .Columns(8).CellType = currencyType
-                .Columns(9).CellType = currencyType
-                .Columns(10).CellType = currencyType
+                .Columns(8).Width = 60
+
+                .Columns(9).Label = "BDP Hours"
+                .Columns(9).Locked = True
+                .Columns(9).CellType = numberType
+                .Columns(9).Width = 60
+
+                .Columns(10).Label = "Special Hours"
+                .Columns(10).Locked = True
+                .Columns(10).CellType = numberType
+                .Columns(10).Width = 60
+
+                .Columns(11).Label = "Labor Hours"
+                .Columns(11).Locked = True
+                .Columns(11).CellType = numberType
+                .Columns(11).Width = 60
+
+                .Columns(12).Label = "OT Hrs Included"
+                .Columns(12).Locked = True
+                .Columns(12).CellType = numberType
+                .Columns(12).Width = 60
+
+                .Columns(13).Label = "Labor"
+                .Columns(13).Locked = True
+                .Columns(13).CellType = currencyType
+                .Columns(13).Width = 60
+
+                .Columns(14).Label = "Subcontact Work"
+                .Columns(14).Locked = True
+                .Columns(14).CellType = currencyType
+                .Columns(14).Width = 70
+
+                .Columns(15).Label = "Expenses"
+                .Columns(15).Locked = True
                 .Columns(15).CellType = currencyType
+                .Columns(15).Width = 60
+
+                .Columns(16).Label = "P/O/B"
+                .Columns(16).Locked = True
                 .Columns(16).CellType = currencyType
+                .Columns(16).Width = 60
+
+                .Columns(17).Label = "Freight"
+                .Columns(17).Locked = True
                 .Columns(17).CellType = currencyType
+                .Columns(17).Width = 60
+
+                .Columns(18).Label = "NPS Cost"
+                .Columns(18).Locked = True
                 .Columns(18).CellType = currencyType
+                .Columns(18).Width = 65
+
+                .Columns(19).Label = "Total Bank Cost"
+                .Columns(19).Locked = True
                 .Columns(19).CellType = currencyType
-                .Columns(20).CellType = currencyType
+                .Columns(19).Width = 70
+
+                .Columns(20).Label = "C1"
+                .Columns(20).Locked = False
+                .Columns(20).CellType = percentType
+                .Columns(20).Width = 50
+
+                .Columns(21).Label = "Bank Net Price"
+                .Columns(21).Locked = True
+                .Columns(21).CellType = currencyType
+                .Columns(21).Width = 70
+
+                .Columns(22).Label = "Sales Com"
+                .Columns(22).Locked = True
                 .Columns(22).CellType = currencyType
+                .Columns(22).Width = 60
+
+                .Columns(23).Label = "Sell Price"
+                .Columns(23).Locked = True
                 .Columns(23).CellType = currencyType
+                .Columns(23).Width = 70
+
+                .Columns(24).Label = "Labor Rate"
+                .Columns(24).Locked = True
                 .Columns(24).CellType = currencyType
+                .Columns(24).Width = 60
 
-                .Columns(21).CellType = percentType
-
-                .Columns(5).BackColor = Color.LightGoldenrodYellow
-                .Columns(6).BackColor = Color.LightGoldenrodYellow
-                .Columns(7).BackColor = Color.LightGoldenrodYellow
-
-                .Columns(6).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
-                .Columns(7).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+                .Columns(25).Label = "Comments"
+                .Columns(25).Locked = False
+                .Columns(25).Width = 100
 
 
                 'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
@@ -702,9 +879,9 @@ Partial Friend Class CM_MAIN_frm
             End With
         End If
 
+        SetBaseAltC1Colors()
+        RefineMasterRow()
     End Sub
-
-
 
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
@@ -745,7 +922,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub btnPreOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPreOrder.Click
+    Private Sub btnMerge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMerge.Click
 
         Dim update_message As String
         Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
@@ -776,14 +953,20 @@ Partial Friend Class CM_MAIN_frm
                         AddMasterRow(_id)
 
                         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+                        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+                        percentType.DecimalPlaces = 1
                         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurSummaryRow, 0)
                         ChildSheetView1.SortRows(1, True, True)
                         ChildSheetView1.SetRowExpandable(0, False)
 
-                        ChildSheetView1.Cells(0, 6).Locked = True
-                        ChildSheetView1.Cells(0, 6).BackColor = Color.LightGray
+                        percentType.ReadOnly = True
+                        ChildSheetView1.Cells(0, 19).CellType = percentType
 
-                        ChildSheetView1.Cells(0, 7).Locked = False
+                        ChildSheetView1.Cells(0, 22).Locked = False
+                        SetBaseAltC1Colors()
+
+
+                        'ChildSheetView1.Cells(0, 7).Locked = False
                         ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
 
                         Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
@@ -900,7 +1083,7 @@ Partial Friend Class CM_MAIN_frm
 
         'MsgBox(FpSpread1.ActiveSheet.ActiveRowIndex)
         Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim baseID As String, thisID As String, units As String, machine As String
+        Dim baseID As String, thisRowDescription As String
         Dim summaryRowIndex As Integer, baseRowIndex As Integer, altCount As Integer
 
         Dim activeRows As Array
@@ -923,12 +1106,15 @@ Partial Friend Class CM_MAIN_frm
         If ChildSheetView.Cells(baseRowIndex, 0).Text = "Master" Then
             baseRowIndex += 1
         End If
-        baseID = ChildSheetView.Cells(baseRowIndex, 1).Value
-        thisID = "Alt"
-        units = ChildSheetView.Cells(baseRowIndex, 3).Value
-        machine = ChildSheetView.Cells(baseRowIndex, 4).Value
+        baseID = ChildSheetView.Cells(baseRowIndex, 4).Value
+        thisRowDescription = "Alt"
+        'units = ChildSheetView.Cells(baseRowIndex, 3).Value
+        'machine = ChildSheetView.Cells(baseRowIndex, 4).Value
 
-        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisID, baseID, units, machine, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisRowDescription, baseID, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0, ""})
+
+        SetBaseAltC1Colors()
+
         FpSpread1.Refresh()
 
         MessageBox.Show("Alternate row added")
@@ -943,7 +1129,7 @@ Partial Friend Class CM_MAIN_frm
 
         ' Initialize bank to A if no banks currently exist
         If dtSummaryGroup.Rows.Count = 0 Then
-            _id = GetRandom(100000, 999999).ToString
+            _id = GetRandom(10000000, 99999999).ToString
             _id = "_id" & _id
             _bank = "A"
         End If
@@ -955,7 +1141,12 @@ Partial Friend Class CM_MAIN_frm
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
 
-        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+        percentType.ReadOnly = True
+        percentType.DecimalPlaces = 1
+
+
+        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"GO Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0})
 
         FpSpread1.Refresh()
         FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
@@ -964,14 +1155,18 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Locked = False
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 19).Locked = False
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).Locked = False
 
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 8).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 21).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 22).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 23).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 24).CellType = currencyType
+
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = percentType
+
         For i As Integer = 13 To 18
             FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
         Next
@@ -995,7 +1190,15 @@ Partial Friend Class CM_MAIN_frm
         cmbocell_bank.MaxDrop = 4
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
 
-        dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+      
+
+        FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+
+        dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", _id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0, ""})
+        isDirty = True
+
+        SetSummaryC1Colors()
+        SetBaseAltC1Colors()
 
         FpSpread1.Refresh()
     End Sub
@@ -1158,6 +1361,7 @@ Partial Friend Class CM_MAIN_frm
             If Not IsNothing(ChildSheetView2) Then
                 Try
                     ChildSheetView2.RemoveRows(activeRows(2), 1)
+                    isDirty = True
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "Cannot Delete the Alt Row")
                 End Try
@@ -1179,6 +1383,7 @@ Partial Friend Class CM_MAIN_frm
         Try
             If MessageBox.Show("You are about to delete all data for Bank '" & FpSpread1.ActiveSheet.Cells(summaryRow, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 FpSpread1.ActiveSheet.RemoveRows(summaryRow, 1)
+                isDirty = True
             Else
                 MessageBox.Show("Delete Canceled!", "Delete Canceled!")
             End If
@@ -1424,16 +1629,11 @@ Partial Friend Class CM_MAIN_frm
             cboNationalAccount.SelectedItem = "No"
         End If
 
+        txtTaxRate.Text = GetTaxRate()
 
         AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
         AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
     End Sub
-
-    'Private Sub cmbBuildingType_DropDown(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cmdBuildingType.DropDown
-    '    cmdBuildingType.Width = 267
-    '    cmdBuildingType.Left = 40
-    'End Sub
-
 
     Private Sub txtBidDate_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
         If IsDate(txtBidDate.Text) Then
@@ -1497,7 +1697,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        'file_name = "cadre.json"
+        file_name = "cadre.json"
 
         Try
             json = JsonConvert.SerializeObject(dsCadre, Formatting.Indented)
@@ -1517,7 +1717,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        'file_name = "cadre.json"
+        file_name = "cadre.json"
 
         If File.Exists(directory & file_name) Then
             Try
@@ -1531,7 +1731,7 @@ Partial Friend Class CM_MAIN_frm
                 '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
                 FpSpread1.ActiveSheet.SortRows(3, True, False)
             Catch ex As Exception
-                MessageBox.Show(ex.Message, "Error Reading Input File")
+                MessageBox.Show(ex.Message, "Error Reading Input Json File")
             End Try
             isDirty = False
         End If
@@ -1554,24 +1754,9 @@ Partial Friend Class CM_MAIN_frm
 
         baseID = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
 
-        ' dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", altID, bank, "01-04", "Geared", target, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""}))
-
-        ' Build the target amount.  Bid overrides Target at Alt level
-        criteria = "id = '" & baseID & "' and merge = 'True'"
-        datarows = dtAltGroup.Select(criteria)
-
-        For Each row In datarows
-            If row("Bid") <> "" Then
-                target += row("Bid")
-            Else
-                target += row("Target")
-            End If
-        Next
-
         criteria = "id = '" & _id & "'"
         Dim baseRow() As Data.DataRow
         baseRow = dtBaseGroup.Select(criteria)
-        target += baseRow(0).Item("Target")
 
         ' Copy existing Bank Row data into a new row
         Dim newRow As DataRow = dtBaseGroup.NewRow
@@ -1582,12 +1767,14 @@ Partial Friend Class CM_MAIN_frm
         Next
 
         ' Update new row as Master.
-        newRow("Target") = target
+
         newRow("Id") = _id
         newRow("sort_fld") = "0"
         newRow("BaseGroup") = "Master"
+        newRow("alt_id") = ""
 
         dtBaseGroup.Rows.Add(newRow)
+
         isDirty = True
 
     End Sub
@@ -1599,6 +1786,7 @@ Partial Friend Class CM_MAIN_frm
         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(activeRows(0), 0)
         If ChildSheetView1.RowCount > 1 Then
             ChildSheetView1.RemoveRows(0, 1)
+            isDirty = True
         End If
 
         Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
@@ -1606,7 +1794,7 @@ Partial Friend Class CM_MAIN_frm
         t.BackgroundImage = p
         ' Apply the text cell.
         FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
-
+        FpSpread1.Refresh()
 
     End Sub
 
@@ -1636,7 +1824,7 @@ Partial Friend Class CM_MAIN_frm
         ElseIf EstimateLevel = "Summary" Then
             AddBankRow()
         ElseIf EstimateLevel = "Master" Then
-            MessageBox.Show("You cannot add an alternate row to the Master Row.  Please select a Base Row where you wish to add an alternate.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("You cannot add an alternate row to the Master Row.  Please select the Base Row where you wish to add an alternate.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
             MessageBox.Show("Please click on the Target Column of the Row.", "Cannot Determine Which Row Selected!")
         End If
@@ -1738,41 +1926,45 @@ Partial Friend Class CM_MAIN_frm
 
 
     Private Sub CM_MAIN_frm_Activated(sender As System.Object, e As System.EventArgs) Handles MyBase.Activated
-        ProcessTotals()
         sprTotals.Refresh()
     End Sub
 
     Private Sub ProcessTotals()
-        Dim dblProco As Double, dblC1Sum As Double, dblC1 As Double, dblSellPrice As Double
+        Dim dblC1 As Double
+        Dim dblValue As Double
+        Dim summaryColumn As Integer = 0
 
         If Not IsNothing(dtSummaryGroup) AndAlso dtSummaryGroup.Rows.Count > 0 Then
-            For Each row As DataRow In dtSummaryGroup.Rows
-                If Not IsDBNull(row("C1")) Then
-                    dblProco += row("Total Bank Cost")
-                End If
-                If Not IsDBNull(row("C1")) Then
-                    dblC1Sum += row("C1")
-                End If
-                If Not IsDBNull(row("Sell Price")) Then
-                    dblSellPrice += row("Sell Price")
-                End If
-            Next row
-            '
-            dblC1 = Math.Round((dblC1Sum / dtSummaryGroup.Rows.Count), 3)
 
-            sprTotals.ActiveSheet.Cells(0, 12).Text = FormatCurrency(dblProco)
-            sprTotals.ActiveSheet.Cells(0, 13).Text = FormatPercent(dblC1, 1)
-            sprTotals.ActiveSheet.Cells(0, 14).Text = FormatCurrency(dblSellPrice)
+            For i As Integer = 6 To (dtSummaryGroup.Columns.Count - 2)  '# don't want the 'include' column
+                dblValue = 0
+                For Each row As DataRow In dtSummaryGroup.Rows
+                    If Not IsDBNull(row.Item(i)) Then
+                        dblValue += row.Item(i)
+                    End If
+                Next row
+                Select Case i
+                    Case 6 To 8, 13 To 19, 21 To 24
+                        sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatCurrency(dblValue, 0)
+                    Case 9 To 12
+                        sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatNumber(dblValue, 0)
+                    Case 20
+                        dblC1 = Math.Round((dblValue / dtSummaryGroup.Rows.Count), 3)
+                        sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatPercent(dblC1, 1)
+                End Select
+
+                summaryColumn += 1
+            Next i
 
             sprTotals.Refresh()
         End If
 
     End Sub
 
-    Private Sub SizeTotalsForm()
+    Private Sub SizeTotalsGrid()
 
-        sprTotals.ActiveSheet.Cells(0, 0).Column.Width = 58         'material_HQ
-        sprTotals.ActiveSheet.Cells(0, 1).Column.Width = 60         'material_RL
+        sprTotals.ActiveSheet.Cells(0, 0).Column.Width = 63         'material_HQ
+        sprTotals.ActiveSheet.Cells(0, 1).Column.Width = 63         'material_RL
         sprTotals.ActiveSheet.Cells(0, 2).Column.Width = 60         'sales tax
         sprTotals.ActiveSheet.Cells(0, 3).Column.Width = 60         'total BDP Hours
         sprTotals.ActiveSheet.Cells(0, 4).Column.Width = 60        'total special hours
@@ -1780,15 +1972,16 @@ Partial Friend Class CM_MAIN_frm
         sprTotals.ActiveSheet.Cells(0, 6).Column.Width = 60        'Overtime hours included
         sprTotals.ActiveSheet.Cells(0, 7).Column.Width = 60        'labor $
         sprTotals.ActiveSheet.Cells(0, 8).Column.Width = 70        'Subcontract work
-        sprTotals.ActiveSheet.Cells(0, 9).Column.Width = 60        'mics costs
-        sprTotals.ActiveSheet.Cells(0, 10).Column.Width = 60        'freight
-        sprTotals.ActiveSheet.Cells(0, 11).Column.Width = 60        'NPS Cost
-        sprTotals.ActiveSheet.Cells(0, 12).Column.Width = 60        'total bank cost
-        sprTotals.ActiveSheet.Cells(0, 13).Column.Width = 60        'project c1
-        sprTotals.ActiveSheet.Cells(0, 14).Column.Width = 60        'bank sell price
-        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 50        'tax rate
-        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 50        'Labor rate
-        sprTotals.ActiveSheet.Cells(0, 17).Column.Width = 50       'Include
+        sprTotals.ActiveSheet.Cells(0, 9).Column.Width = 60        'expenses
+        sprTotals.ActiveSheet.Cells(0, 10).Column.Width = 60        'misc costs
+        sprTotals.ActiveSheet.Cells(0, 11).Column.Width = 60        'freight
+        sprTotals.ActiveSheet.Cells(0, 12).Column.Width = 65        'NPS Cost
+        sprTotals.ActiveSheet.Cells(0, 13).Column.Width = 70        'total bank cost
+        sprTotals.ActiveSheet.Cells(0, 14).Column.Width = 50        'project c1
+        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 70        'bank sell price
+        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 60        'sales commission
+        sprTotals.ActiveSheet.Cells(0, 17).Column.Width = 70        'bank final price
+        sprTotals.ActiveSheet.Cells(0, 18).Column.Width = 60       'labor rate
 
         sprTotals.ActiveSheet.Rows(0).Locked = True
 
@@ -1797,8 +1990,11 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
         If isDirty Then
-            If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+            Dim response As DialogResult = MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+            If response = DialogResult.Yes Then
                 SaveAll()
+            ElseIf response = DialogResult.Cancel Then
+                Exit Sub
             End If
         End If
         EndProgram()
@@ -1812,7 +2008,14 @@ Partial Friend Class CM_MAIN_frm
         row(column_name) = value
     End Sub
 
+
+    Private Sub FpSpread1_SubEditorOpening(sender As Object, e As FarPoint.Win.Spread.SubEditorOpeningEventArgs) Handles FpSpread1.SubEditorOpening
+        e.Cancel = True     ' to prevent calculator from automatically opening on number cell double click
+    End Sub
     Private Sub cboBuildingType_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboBuildingType.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub cboSalesRep_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSalesRep.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
     Private Sub cboInstallingOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
@@ -1831,6 +2034,9 @@ Partial Friend Class CM_MAIN_frm
         If Not initializing Then isDirty = True
     End Sub
     Private Sub cboNationalAccount_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboNationalAccount.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
+    Private Sub txtTaxRate_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtTaxRate.TextChanged
         If Not initializing Then isDirty = True
     End Sub
     Private Sub cboTaxCode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboTaxCode.SelectedIndexChanged
@@ -1886,6 +2092,16 @@ Partial Friend Class CM_MAIN_frm
         dtContactGroup.Rows.Add(_row)
     End Sub
 
+    Private Sub UpdateBldgInfoFromNotets()
+
+        Dim _row As DataRow = dtBuildingInfo.NewRow
+
+        _row("building_type") = Contracts.BuildingType
+        _row("sales_rep") = Contracts.SalesRepName
+        _row("sales_office") = Contracts.SalesOffice
+
+    End Sub
+
 
     Private Function GetTaxRate() As Object
         Dim sql_string As String
@@ -1909,5 +2125,78 @@ Partial Friend Class CM_MAIN_frm
 
     End Function
 
-  
+    Private Sub SetSummaryC1Colors()
+
+        Dim i As Integer
+
+        For i = 0 To dtSummaryGroup.Rows.Count - 1
+            If dtSummaryGroup.Rows(i).Item("C1") < DEFAULT_C1 Then
+                FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Red
+            ElseIf dtSummaryGroup.Rows(i).Item("C1") >= DEFAULT_C1 + 0.02 Then
+                FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Green
+            Else
+                FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Yellow
+            End If
+        Next
+
+    End Sub
+
+    Private Sub SetBaseAltC1Colors()
+
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+            If Not ChildSheetView1 Is Nothing Then
+                For i As Integer = 0 To ChildSheetView1.RowCount - 1
+                    If ChildSheetView1.Cells(i, 19).Value < DEFAULT_C1 Then
+                        ChildSheetView1.Cells(i, 19).BackColor = Color.Red
+                    ElseIf ChildSheetView1.Cells(i, 19).Value > DEFAULT_C1 + 0.02 Then
+                        ChildSheetView1.Cells(i, 19).BackColor = Color.Green
+                    Else
+                        ChildSheetView1.Cells(i, 19).BackColor = Color.Yellow
+                    End If
+                Next
+
+                For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
+                    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
+                    If Not ChildSheetView2 Is Nothing Then
+                        For i As Integer = 0 To ChildSheetView2.RowCount - 1
+                            If ChildSheetView2.Cells(i, 20).Value < DEFAULT_C1 Then
+                                ChildSheetView2.Cells(i, 20).BackColor = Color.Red
+                            ElseIf ChildSheetView2.Cells(i, 20).Value > DEFAULT_C1 + 0.02 Then
+                                ChildSheetView2.Cells(i, 20).BackColor = Color.Green
+                            Else
+                                ChildSheetView2.Cells(i, 20).BackColor = Color.Yellow
+                            End If
+                        Next
+
+                    End If
+                Next jindex
+
+            End If
+        Next iIndex
+
+    End Sub
+
+    Private Sub RefineMasterRow()
+
+        Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+
+        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            ChildSheetView = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+            If Not ChildSheetView Is Nothing Then
+                For i As Integer = 0 To ChildSheetView.RowCount - 1
+                    If ChildSheetView.Cells(i, 0).Value = "Master" Then
+                        percentType.ReadOnly = True
+                        ChildSheetView.Cells(0, 19).CellType = percentType
+                        ChildSheetView.Cells(0, 22).Locked = False
+                    End If
+                Next i
+            End If
+        Next iIndex
+
+    End Sub
+
+
 End Class
