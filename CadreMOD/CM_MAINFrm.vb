@@ -19,7 +19,9 @@ Partial Friend Class CM_MAIN_frm
 
     Dim dsTemp As DataSet
     Dim isDirty As Boolean = False
+    Dim addingNewRow As Boolean = False
     Dim initializing As Boolean
+    Dim id_to_copy As String = ""
 
 
     Private CurrentBuildingInformationFrameHeight As Integer = 0, CurrentEquipmentFrameHeight As Integer = 0
@@ -100,7 +102,7 @@ Partial Friend Class CM_MAIN_frm
                                                        New DataColumn("Labor_Rate", typeInt), _
                                                        New DataColumn("Comment", typeStr)
                                                         })
-       
+
 
         'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
         'dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
@@ -169,6 +171,7 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("service_office", typeStr), _
                                                           New DataColumn("bid_date", typeStr), _
                                                           New DataColumn("national_account", typeStr), _
+                                                          New DataColumn("tax_rate", typeStr), _
                                                           New DataColumn("tax_code", typeStr), _
                                                           New DataColumn("seismic_zone", typeStr), _
                                                           New DataColumn("local_code", typeStr), _
@@ -188,8 +191,6 @@ Partial Friend Class CM_MAIN_frm
                                                          })
 
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
-
-
 
         Deserialize()
 
@@ -260,7 +261,7 @@ Partial Friend Class CM_MAIN_frm
 
         Load_ListBoxes()
 
-        Text2Fields()
+
 
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
 
@@ -445,31 +446,33 @@ Partial Friend Class CM_MAIN_frm
 
         Next
 
-        ExpandCollapseAll("Expand")
-        ExpandCollapseAll("Collapse")
-        FpSpread1.Visible = True
-        FpSpread1.ActiveSheet.TitleInfo.Value = "Summary"
-        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
-        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If Not ChildSheetView1 Is Nothing Then
-                ChildSheetView1.TitleInfo.Value = "Child" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
-                If ChildSheetView1.RowCount = 0 Then
-                    ChildSheetView1.SetRowExpandable(iIndex, False)
-                End If
-                For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
-                    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
-                    If Not ChildSheetView2 Is Nothing Then
-                        ChildSheetView2.TitleInfo.Value = "Grandchild" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
-                        ChildSheetView2.SetColumnVisible(1, False)
-                    Else
+        SetTitleInfo()        ' below code to the "next" now incorporated in SetTitleInfo
 
-                    End If
-                Next jindex
-                'Else
-                '    ChildSheetView1.ColumnHeaderVisible = False
-            End If
-        Next iIndex
+        'ExpandCollapseAll("Expand")
+        'ExpandCollapseAll("Collapse")
+        'FpSpread1.Visible = True
+        'FpSpread1.ActiveSheet.TitleInfo.Value = "Summary"
+        'Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+        'For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+        '    ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+        '    If Not ChildSheetView1 Is Nothing Then
+        '        ChildSheetView1.TitleInfo.Value = "Child" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
+        '        If ChildSheetView1.RowCount = 0 Then
+        '            ChildSheetView1.SetRowExpandable(iIndex, False)
+        '        End If
+        '        For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
+        '            ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
+        '            If Not ChildSheetView2 Is Nothing Then
+        '                ChildSheetView2.TitleInfo.Value = "Grandchild" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
+        '                ChildSheetView2.SetColumnVisible(1, False)
+        '            Else
+
+        '            End If
+        '        Next jindex
+        '        'Else
+        '        '    ChildSheetView1.ColumnHeaderVisible = False
+        '    End If
+        'Next iIndex
 
 
         'Dim cModel As FarPoint.Win.Spread.Model.IChildModelSupport
@@ -564,6 +567,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
     Private Sub FpSpread1_Change(sender As Object, e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
         If Not initializing Then isDirty = True
+        SetSummaryC1Colors()
         SetBaseAltC1Colors()
     End Sub
 
@@ -1124,14 +1128,13 @@ Partial Friend Class CM_MAIN_frm
     Private Sub AddBankRow()
         ' Add a new summary row to the grid
         ' Add a new base row to the grid
-        Dim _id As String = ""
+        Dim _id As String = GetRandom(10000000, 99999999).ToString
         Dim _bank As String = ""
 
         ' Initialize bank to A if no banks currently exist
         If dtSummaryGroup.Rows.Count = 0 Then
-            _id = GetRandom(10000000, 99999999).ToString
-            _id = "_id" & _id
             _bank = "A"
+
         End If
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
@@ -1190,7 +1193,7 @@ Partial Friend Class CM_MAIN_frm
         cmbocell_bank.MaxDrop = 4
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
 
-      
+
 
         FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
@@ -1203,20 +1206,26 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.Refresh()
     End Sub
 
-    Private Sub FpSpread1_ComboDropDown(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboDropDown
-        Dim thisValue As String
+    Private Sub FpSpread1_ComboCloseUp(sender As Object, e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboCloseUp
+        Select Case e.Column
+            Case 3
+                If FpSpread1.ActiveSheet.Cells(e.Row, e.Column).Value = "" Then
+                    MessageBox.Show("Please select a bank", "Bank ?", MessageBoxButtons.OK, MessageBoxIcon.Hand)
 
-        thisValue = FpSpread1.ActiveSheet.GetValue(e.Row, e.Column)
-
+                Else
+                    If addingNewRow Then
+                        AddCopiedBaseAndAlt()
+                    End If
+                End If
+            Case 4
+                If FpSpread1.ActiveSheet.Cells(e.Row, e.Column).Value = "" Then
+                    MessageBox.Show("Please select a machine(bank_type).", "Missing Data")
+                    'e.Cancel = True
+                Else
+                    FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 5, False)
+                End If
+        End Select
     End Sub
-
-    Private Sub FpSpread1_ComboSelChange(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboSelChange
-
-        Debug.Print(e.Column)
-
-    End Sub
-
-
 
 
     Private Sub FpSpread1_LeaveCell(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
@@ -1226,22 +1235,24 @@ Partial Friend Class CM_MAIN_frm
 
         Select Case e.Column
             Case 3          ' bank
-                '    If Not ValidBank() Then
-                '        e.Cancel = True
-                '    End If
-                '    FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 4, False)
-
-                ' now, a base row is added in 'AddBankRow' so this need to update the base row id's, not add
-                'Dim bank As String = FpSpread1.ActiveSheet.GetValue(e.Row, 3)
-                'Dim thisID As String = bank & "1"
-                'dtBaseGroup.Rows.Add(New Object() {"Base", thisID, bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
+                '  
+                If FpSpread1.ActiveSheet.Cells(e.Row, e.Column).Value = "" Then
+                    MessageBox.Show("Please select a bank", "Bank ?", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+                    e.Cancel = True
+                    'Else
+                    '    If newRow Then
+                    '        AddCopiedBaseAndAlt()
+                    '    End If
+                End If
 
             Case 4
-                If IsNothing(FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Value) Then
-                    MessageBox.Show("Please select a machine.", "Missing Data")
+                If FpSpread1.ActiveSheet.Cells(e.Row, e.Column).Value = "" Then
+                    MessageBox.Show("Please select a machine(bank_type).", "Missing Data")
                     e.Cancel = True
+                Else
+                    FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 5, False)
                 End If
-                FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 5, False)
+
             Case 5
                 If Not validUnits() Then
                     e.Cancel = True
@@ -1347,7 +1358,7 @@ Partial Friend Class CM_MAIN_frm
         ElseIf EstimateLevel = "Base" Then
             MessageBox.Show("You cannot delete a Base Row.  You might want to remove the 'Summary' row to delete the estimate for the entire Bank", "Try Again", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            MessageBox.Show("Please click on the Target Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
+            MessageBox.Show("Please click on the Group Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
         End If
 
     End Sub
@@ -1697,7 +1708,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        file_name = "cadre.json"
+        'file_name = "cadre.json"
 
         Try
             json = JsonConvert.SerializeObject(dsCadre, Formatting.Indented)
@@ -1717,7 +1728,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        file_name = "cadre.json"
+        'file_name = "cadre.json"
 
         If File.Exists(directory & file_name) Then
             Try
@@ -1748,9 +1759,9 @@ Partial Friend Class CM_MAIN_frm
         Dim baseID As String
         Dim target As Integer = 0
         Dim criteria As String
-        Dim row As DataRow
-        Dim datarows() As DataRow
-        Dim mylist As List(Of Object)
+        'Dim row As DataRow
+        'Dim datarows() As DataRow
+        'Dim mylist As List(Of Object)
 
         baseID = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
 
@@ -1759,21 +1770,21 @@ Partial Friend Class CM_MAIN_frm
         baseRow = dtBaseGroup.Select(criteria)
 
         ' Copy existing Bank Row data into a new row
-        Dim newRow As DataRow = dtBaseGroup.NewRow
+        Dim _newRow As DataRow = dtBaseGroup.NewRow
 
         ' Add each column value from base to new row for master
         For i As Integer = 0 To dtBaseGroup.Columns.Count - 1
-            newRow.Item(i) = baseRow(0).Item(i)
+            _newRow.Item(i) = baseRow(0).Item(i)
         Next
 
         ' Update new row as Master.
 
-        newRow("Id") = _id
-        newRow("sort_fld") = "0"
-        newRow("BaseGroup") = "Master"
-        newRow("alt_id") = ""
+        _newRow("id") = _id
+        _newRow("sort_fld") = "0"
+        _newRow("BaseGroup") = "Master"
+        _newRow("alt_id") = ""
 
-        dtBaseGroup.Rows.Add(newRow)
+        dtBaseGroup.Rows.Add(_newRow)
 
         isDirty = True
 
@@ -1826,7 +1837,7 @@ Partial Friend Class CM_MAIN_frm
         ElseIf EstimateLevel = "Master" Then
             MessageBox.Show("You cannot add an alternate row to the Master Row.  Please select the Base Row where you wish to add an alternate.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
-            MessageBox.Show("Please click on the Target Column of the Row.", "Cannot Determine Which Row Selected!")
+            MessageBox.Show("Please click on the 'Group' Column of the Row.", "Cannot Determine Which Group/Row to Add!")
         End If
 
     End Sub
@@ -1835,7 +1846,17 @@ Partial Friend Class CM_MAIN_frm
         Dim row As Data.DataRow
         Try
             If dtBuildingInfo.Rows.Count = 1 Then
-                row = dtBuildingInfo.Rows(0)  ' there should only be one row.  unless new estimate
+                row = dtBuildingInfo.Rows(0)  ' there should only be one row.  unless new estimat
+                txtEstimateNum.Text = Contracts.EstimateNum
+                txtEstimator.Text = Contracts.Estimator
+                txtJobName.Text = Contracts.JobName
+                txtJobAddress.Text = Contracts.JobAddress
+                txtJobAddress2.Text = Contracts.JobAddress2
+                txtJobCity.Text = Contracts.JobCity
+                txtJobState.Text = Contracts.JobState
+                txtJobZip.Text = Contracts.JobZip
+
+                txtOwner.Text = Owner_Info.Name
 
                 cboBuildingType.SelectedItem = row("building_type")
                 cboSalesRep.SelectedItem = row.Item("sales_rep").ToString
@@ -1844,10 +1865,12 @@ Partial Friend Class CM_MAIN_frm
                 cboServiceOffice.SelectedItem = row.Item("service_office").ToString
 
                 'cboStatus.SelectedItem = row.Item("status").ToString
-                'cboProbabilityOfSale.SelectedItem = row.Item("probability_of_sale").ToString
+                cboProbabilityOfSale.SelectedText = Contracts.ProbabilityOfSale
                 txtBidDate.Text = row.Item("bid_date").ToString
+
                 cboNationalAccount.SelectedItem = row.Item("national_account").ToString
 
+                txtTaxRate.Text = row.Item("tax_rate").ToString
                 cboTaxCode.SelectedItem = row.Item("tax_code").ToString
                 cboSeismicZone.SelectedItem = row.Item("seismic_zone").ToString
                 cboLocalCode.SelectedItem = row.Item("local_code").ToString
@@ -1856,11 +1879,35 @@ Partial Friend Class CM_MAIN_frm
                 cboNFPA13CodeYear.SelectedItem = row.Item("nfpa_code").ToString
                 txtSDSlevel.Text = row.Item("sds_level").ToString
 
-                chkMajorProject.CheckState = IIf(row.Item("major_project"), CheckState.Checked, CheckState.Unchecked)
-                chkOSHPD.CheckState = IIf(row.Item("oshpd"), CheckState.Checked, CheckState.Unchecked)
-                chkDSA.CheckState = IIf(row.Item("dsa"), CheckState.Checked, CheckState.Unchecked)
-                chkHeadDetection.CheckState = IIf(row.Item("head_detection"), CheckState.Checked, CheckState.Unchecked)
-                chkEngineeringSurvey.CheckState = IIf(row.Item("engineering_survey"), CheckState.Checked, CheckState.Unchecked)
+                If IsDBNull(row.Item("major_project")) Then
+                    chkMajorProject.CheckState = CheckState.Unchecked
+                Else
+                    chkMajorProject.CheckState = IIf(row.Item("major_project"), CheckState.Checked, CheckState.Unchecked)
+                End If
+
+                If IsDBNull(row.Item("oshpd")) Then
+                    chkOSHPD.CheckState = CheckState.Unchecked
+                Else
+                    chkOSHPD.CheckState = IIf(row.Item("oshpd"), CheckState.Checked, CheckState.Unchecked)
+                End If
+
+                If IsDBNull(row.Item("dsa")) Then
+                    chkDSA.CheckState = CheckState.Unchecked
+                Else
+                    chkDSA.CheckState = IIf(row.Item("dsa"), CheckState.Checked, CheckState.Unchecked)
+                End If
+
+                If IsDBNull(row.Item("head_detection")) Then
+                    chkHeadDetection.CheckState = CheckState.Unchecked
+                Else
+                    chkHeadDetection.CheckState = IIf(row.Item("head_detection"), CheckState.Checked, CheckState.Unchecked)
+                End If
+
+                If IsDBNull(row.Item("engineering_survey")) Then
+                    chkEngineeringSurvey.CheckState = CheckState.Unchecked
+                Else
+                    chkEngineeringSurvey.CheckState = IIf(row.Item("engineering_survey"), CheckState.Checked, CheckState.Unchecked)
+                End If
 
                 cboDurationMonths.SelectedItem = row.Item("nps_duration").ToString
                 cboCallBackHours.SelectedItem = row.Item("nps_call_back").ToString
@@ -1870,56 +1917,51 @@ Partial Friend Class CM_MAIN_frm
                 txtNPSOneTimeCost.Text = row.Item("nps_one_time_cost").ToString
                 txtOCPL.Text = row.Item("ocpl").ToString
             Else
-                row = dtBuildingInfo.NewRow
+                UpdateBldgInfoFromNotes()
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error Loading Building Info, Codes and NPS", "Error Loading From Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(ex.Message, "Error Loading Top of Form From Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
 
     End Sub
 
     Private Sub SaveTopOfForm()
-        Dim _row As DataRow
-        Dim is_new_row As Boolean = False
+       
         Try
-            If dtBuildingInfo.Rows.Count = 0 Then   ' new row should have been created, but just in case
-                _row = dtBuildingInfo.NewRow
-                is_new_row = True
-            Else
-                _row = dtBuildingInfo.Rows(0)
+            If dtBuildingInfo.Rows.Count = 0 Then
+                Dim _newRow As DataRow = dtBuildingInfo.NewRow
+                dtBuildingInfo.Rows.Add(_newRow)
             End If
 
-            _row("building_type") = cboBuildingType.Text
-            _row("major_project") = chkMajorProject.CheckState
-            _row("sales_rep") = cboSalesRep.Text
-            _row("sales_office") = cboSalesOffice.Text
-            _row("installing_office") = cboInstallingOffice.Text
-            _row("service_office") = cboServiceOffice.Text
+            dtBuildingInfo.Rows(0)("building_type") = cboBuildingType.Text
+            dtBuildingInfo.Rows(0)("major_project") = chkMajorProject.CheckState
+            dtBuildingInfo.Rows(0)("sales_rep") = cboSalesRep.Text
+            dtBuildingInfo.Rows(0)("sales_office") = cboSalesOffice.Text
+            dtBuildingInfo.Rows(0)("installing_office") = cboInstallingOffice.Text
+            dtBuildingInfo.Rows(0)("service_office") = cboServiceOffice.Text
             'row("status") = cboStatus.Text
             'row("probability_of_sale") = cboProbabilityOfSale.Text
-            _row("bid_date") = txtBidDate.Text
-            _row("national_account") = cboNationalAccount.Text
-            _row("tax_code") = cboTaxCode.Text
-            _row("seismic_zone") = cboSeismicZone.Text
-            _row("local_code") = cboLocalCode.Text
-            _row("ansi_csa_b44_code") = cboANSICode.Text
-            _row("nfpa_code") = cboNFPA13CodeYear.Text
-            _row("sds_level") = txtSDSlevel.Text
-            _row("oshpd") = chkOSHPD.CheckState
-            _row("dsa") = chkDSA.CheckState
-            _row("head_detection") = chkHeadDetection.CheckState
-            _row("engineering_survey") = chkEngineeringSurvey.CheckState
-            _row("nps_duration") = cboDurationMonths.Text
-            _row("nps_call_back") = cboCallBackHours.Text
-            _row("nps_material_cost") = txtNPSMaterialCost.Text
-            _row("nps_labor_cost") = txtNPSLaborCost.Text
-            _row("nps_one_time_cost") = txtNPSOneTimeCost.Text
-            _row("ocpl") = txtOCPL.Text
-
-            If is_new_row Then dtBuildingInfo.Rows.Add(_row)
-
+            dtBuildingInfo.Rows(0)("bid_date") = txtBidDate.Text
+            dtBuildingInfo.Rows(0)("national_account") = cboNationalAccount.Text
+            dtBuildingInfo.Rows(0)("tax_rate") = txtTaxRate.Text
+            dtBuildingInfo.Rows(0)("tax_code") = cboTaxCode.Text
+            dtBuildingInfo.Rows(0)("seismic_zone") = cboSeismicZone.Text
+            dtBuildingInfo.Rows(0)("local_code") = cboLocalCode.Text
+            dtBuildingInfo.Rows(0)("ansi_csa_b44_code") = cboANSICode.Text
+            dtBuildingInfo.Rows(0)("nfpa_code") = cboNFPA13CodeYear.Text
+            dtBuildingInfo.Rows(0)("sds_level") = txtSDSlevel.Text
+            dtBuildingInfo.Rows(0)("oshpd") = chkOSHPD.CheckState
+            dtBuildingInfo.Rows(0)("dsa") = chkDSA.CheckState
+            dtBuildingInfo.Rows(0)("head_detection") = chkHeadDetection.CheckState
+            dtBuildingInfo.Rows(0)("engineering_survey") = chkEngineeringSurvey.CheckState
+            dtBuildingInfo.Rows(0)("nps_duration") = cboDurationMonths.Text
+            dtBuildingInfo.Rows(0)("nps_call_back") = cboCallBackHours.Text
+            dtBuildingInfo.Rows(0)("nps_material_cost") = txtNPSMaterialCost.Text
+            dtBuildingInfo.Rows(0)("nps_labor_cost") = txtNPSLaborCost.Text
+            dtBuildingInfo.Rows(0)("nps_one_time_cost") = txtNPSOneTimeCost.Text
+            dtBuildingInfo.Rows(0)("ocpl") = txtOCPL.Text
         Catch ex As Exception
             MessageBox.Show("Error saving data at top of Contract Management Screen", "Error Saving to Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -2068,6 +2110,86 @@ Partial Friend Class CM_MAIN_frm
         If Not initializing Then isDirty = True
     End Sub
 
+
+    Private Sub btnCopy_Click(sender As System.Object, e As System.EventArgs) Handles btnCopy.Click
+        ' copy the selected summary, and copy, along with all base, master  and  alt data
+
+        If EstimateLevel <> "Summary" Then
+            MessageBox.Show("Please select the group column of the summary group that you wish to copy, then click on 'Copy'.", "Please Identify The Group to Copy", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+
+        addingNewRow = True
+
+        ExpandCollapseAll("Collapse")
+
+        CopySummaryRow()
+
+        'id = FpSpread1.ActiveSheet.RowCount - 1
+
+        FpSpread1.Refresh()
+        FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
+        FpSpread1.ActiveSheet.ActiveRow.Locked = True
+
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Locked = False
+        'FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
+        'FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
+        'FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).Locked = False
+
+
+        Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
+        currencyType.Separator = ","
+        currencyType.DecimalPlaces = 0
+        currencyType.ShowSeparator = True
+        currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
+        currencyType.NegativeRed = True
+
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+        percentType.ReadOnly = True
+        percentType.DecimalPlaces = 1
+
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 8).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 21).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 22).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 23).CellType = currencyType
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 24).CellType = currencyType
+
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = percentType
+
+        For i As Integer = 13 To 18
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
+        Next
+
+        Dim cbstr As String()
+        cbstr = New String() {"Geared", "Gearless", "Hydro"}
+        Dim cmbocell_machine As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+        cmbocell_machine.Items = cbstr
+        cmbocell_machine.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+        cmbocell_machine.Editable = False
+        cmbocell_machine.MaxDrop = 4
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).CellType = cmbocell_machine
+
+        Dim cbstr1 As String()
+        FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 3, False)
+        cbstr1 = BuildAvailableBanks()
+        Dim cmbocell_bank As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+        cmbocell_bank.Items = cbstr1
+        cmbocell_bank.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+        cmbocell_bank.Editable = False
+        cmbocell_bank.MaxDrop = 4
+        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
+
+
+
+        FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+
+
+        FpSpread1.ActiveSheet.SetRowExpandable(FpSpread1.ActiveSheet.ActiveRowIndex, False)
+        FpSpread1.Refresh()
+    End Sub
+
     Private Sub SaveAll()
         SaveTopOfForm()
         Serialize()
@@ -2075,31 +2197,53 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub UpdateContactGroupFromNotes()
         Dim _row As DataRow = dtContactGroup.NewRow
+        Try
+            _row("contactType") = "owner"
+            _row("companyName") = Owner_Info.Name
+            _row("contactName") = ""
+            _row("address") = Owner_Info.Address
+            _row("address2") = Owner_Info.Address2
+            _row("city") = Owner_Info.City
+            _row("state") = Owner_Info.State
+            _row("zipcode") = Owner_Info.Zip
+            _row("phone") = Owner_Info.Phone
+            _row("ext") = Owner_Info.Ext
+            _row("fax") = Owner_Info.Fax
+            _row("email") = ""
 
+            dtContactGroup.Rows.Add(_row)
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Updating Contact Group From Notes", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
         ' Update new row as Master
-        _row("contactType") = "owner"
-        _row("companyName") = Owner_Info.Name
-        _row("contactName") = ""
-        _row("address") = Owner_Info.Address
-        _row("address2") = Owner_Info.Address2
-        _row("city") = Owner_Info.City
-        _row("state") = Owner_Info.State
-        _row("zipcode") = Owner_Info.Zip
-        _row("phone") = Owner_Info.Phone
-        _row("ext") = Owner_Info.Ext
-        _row("fax") = Owner_Info.Fax
-        _row("email") = ""
 
-        dtContactGroup.Rows.Add(_row)
     End Sub
 
-    Private Sub UpdateBldgInfoFromNotets()
+    Private Sub UpdateBldgInfoFromNotes()
 
-        Dim _row As DataRow = dtBuildingInfo.NewRow
+        AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
+        AssignListIndex_First(cboSalesRep, Contracts.SalesRepName)
+        AssignListIndex_First(cboSalesOffice, Contracts.SalesOffice)
 
-        _row("building_type") = Contracts.BuildingType
-        _row("sales_rep") = Contracts.SalesRepName
-        _row("sales_office") = Contracts.SalesOffice
+        txtTaxRate.Text = GetTaxRate()
+
+        If Contracts.NationalAccount Then
+            cboNationalAccount.SelectedIndex = 1
+        Else
+            cboNationalAccount.SelectedIndex = 0
+        End If
+
+
+        txtEstimateNum.Text = Contracts.EstimateNum
+        txtEstimator.Text = Contracts.Estimator
+        txtJobName.Text = Contracts.JobName
+        txtJobAddress.Text = Contracts.JobAddress
+        txtJobAddress2.Text = Contracts.JobAddress2
+        txtJobCity.Text = Contracts.JobCity
+        txtJobState.Text = Contracts.JobState
+        txtJobZip.Text = Contracts.JobZip
+
+        txtOwner.Text = Owner_Info.Name
 
     End Sub
 
@@ -2199,5 +2343,126 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    Private Sub CopySummaryRow()
+        ' copies the row of data from the summary table of which the cursor is currently positioned
+        ' id_to_copy used later to create base and alt rows
 
+        Dim criteria As String
+
+
+
+        id_to_copy = FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 1).Value
+
+        criteria = "id = '" & id_to_copy & "'"
+        Dim baseRow() As Data.DataRow
+        baseRow = dtSummaryGroup.Select(criteria)
+
+        ' Copy existing  Row into a new row
+        Dim newRow As DataRow = dtSummaryGroup.NewRow
+
+        ' Add each column value from base to new row for master
+        For i As Integer = 0 To dtSummaryGroup.Columns.Count - 1
+            newRow.Item(i) = baseRow(0).Item(i)
+        Next
+
+        newRow("id") = GetRandom(10000000, 99999999).ToString
+        newRow("bank") = ""
+        dtSummaryGroup.Rows.Add(newRow)
+       
+    End Sub
+
+    Private Sub AddCopiedBaseAndAlt()
+        ' copies the rows in base and alt for the selected summary
+        ' also enables bank_type, units, c1 etc.
+
+        '   Stop
+        Dim _currentRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+        FpSpread1.ActiveSheet.Cells(_currentRow, 4).Locked = False
+        FpSpread1.ActiveSheet.Cells(_currentRow, 5).Locked = False
+        FpSpread1.ActiveSheet.Cells(_currentRow, 20).Locked = False
+
+        CopyBaseRows()
+        FpSpread1.ActiveSheet.SetRowExpandable(_currentRow, True)
+        CopyAltRows()
+
+        FpSpread1.Refresh()
+
+        SetTitleInfo()
+    End Sub
+
+    Private Sub CopyBaseRows()
+        Dim _foundRows() As Data.DataRow
+        _foundRows = dtBaseGroup.Select("id = '" & id_to_copy & "'")
+
+        For i As Integer = 0 To _foundRows.Count - 1
+            Dim _newRow As DataRow = dtBaseGroup.NewRow
+            ' Add each column value from base to new row  
+            For j As Integer = 0 To dtBaseGroup.Columns.Count - 1
+                _newRow.Item(j) = _foundRows(i).Item(j)
+            Next
+
+            _newRow("id") = FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 1).Value
+
+            If _newRow("BaseGroup") = "Base" Then
+                _newRow("alt_id") = _newRow("id")
+            Else
+                _newRow("alt_id") = ""
+            End If
+            dtBaseGroup.Rows.Add(_newRow)
+            FpSpread1.Refresh()
+        Next
+
+    End Sub
+
+    Private Sub CopyAltRows()
+        Dim _foundRows() As Data.DataRow
+        _foundRows = dtAltGroup.Select("id = '" & id_to_copy & "'")
+
+        For i As Integer = 0 To _foundRows.Count - 1
+            Dim _newRow As DataRow = dtAltGroup.NewRow
+
+            ' Add each column value from base to new row  
+            For j As Integer = 0 To dtAltGroup.Columns.Count - 1
+                _newRow.Item(j) = _foundRows(i).Item(j)
+            Next
+
+            _newRow.Item("id") = FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 1).Value
+
+            dtAltGroup.Rows.Add(_newRow)
+            FpSpread1.Refresh()
+        Next
+        FpSpread1.Refresh()
+    End Sub
+
+    Private Sub SetTitleInfo()
+
+        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+
+        ExpandCollapseAll("Expand")
+        ExpandCollapseAll("Collapse")
+
+        FpSpread1.Visible = True
+        FpSpread1.ActiveSheet.TitleInfo.Value = "Summary"
+
+        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+            If Not ChildSheetView1 Is Nothing Then
+                ChildSheetView1.TitleInfo.Value = "Child" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
+                If ChildSheetView1.RowCount = 0 Then
+                    ChildSheetView1.SetRowExpandable(iIndex, False)
+                End If
+                For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
+                    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
+                    If Not ChildSheetView2 Is Nothing Then
+                        ChildSheetView2.TitleInfo.Value = "Grandchild" & FpSpread1.ActiveSheet.Cells(iIndex, 3).Text
+                        ChildSheetView2.SetColumnVisible(1, False)
+                    Else
+
+                    End If
+                Next jindex
+                'Else
+                '    ChildSheetView1.ColumnHeaderVisible = False
+            End If
+        Next iIndex
+    End Sub
 End Class

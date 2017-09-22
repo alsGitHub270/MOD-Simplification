@@ -28,7 +28,7 @@ Partial Class CM_MAIN_frm
     Private WithEvents _label_10 As System.Windows.Forms.Label
     Private WithEvents _label_9 As System.Windows.Forms.Label
     Private WithEvents _label_8 As System.Windows.Forms.Label
-    Private WithEvents _Menu_tlb_2 As System.Windows.Forms.Button
+    Private WithEvents btnCopy As System.Windows.Forms.Button
     Public WithEvents txtEstimateNum As System.Windows.Forms.MaskedTextBox
     Public WithEvents txtEstimator As System.Windows.Forms.MaskedTextBox
     Private WithEvents btnExit As System.Windows.Forms.Button
@@ -117,7 +117,7 @@ Partial Class CM_MAIN_frm
         Me.lblLocalCode = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Menu_pic = New System.Windows.Forms.PictureBox()
-        Me._Menu_tlb_2 = New System.Windows.Forms.Button()
+        Me.btnCopy = New System.Windows.Forms.Button()
         Me.txtEstimateNum = New System.Windows.Forms.MaskedTextBox()
         Me.txtEstimator = New System.Windows.Forms.MaskedTextBox()
         Me.btnExit = New System.Windows.Forms.Button()
@@ -985,7 +985,7 @@ Partial Class CM_MAIN_frm
         '
         Me.Menu_pic.BackColor = System.Drawing.SystemColors.Control
         Me.Menu_pic.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Menu_pic.Controls.Add(Me._Menu_tlb_2)
+        Me.Menu_pic.Controls.Add(Me.btnCopy)
         Me.Menu_pic.Controls.Add(Me.txtEstimateNum)
         Me.Menu_pic.Controls.Add(Me.txtEstimator)
         Me.Menu_pic.Controls.Add(Me.btnExit)
@@ -1002,18 +1002,18 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.TabIndex = 37
         Me.Menu_pic.TabStop = False
         '
-        '_Menu_tlb_2
+        'btnCopy
         '
-        Me._Menu_tlb_2.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._Menu_tlb_2.Image = CType(resources.GetObject("_Menu_tlb_2.Image"), System.Drawing.Image)
-        Me._Menu_tlb_2.Location = New System.Drawing.Point(112, 1)
-        Me._Menu_tlb_2.Name = "_Menu_tlb_2"
-        Me._Menu_tlb_2.Size = New System.Drawing.Size(46, 46)
-        Me._Menu_tlb_2.TabIndex = 35
-        Me._Menu_tlb_2.TabStop = False
-        Me._Menu_tlb_2.Tag = "Copy Equipment"
-        Me._Menu_tlb_2.Text = "Copy"
-        Me._Menu_tlb_2.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnCopy.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCopy.Image = CType(resources.GetObject("btnCopy.Image"), System.Drawing.Image)
+        Me.btnCopy.Location = New System.Drawing.Point(112, 1)
+        Me.btnCopy.Name = "btnCopy"
+        Me.btnCopy.Size = New System.Drawing.Size(46, 46)
+        Me.btnCopy.TabIndex = 35
+        Me.btnCopy.TabStop = False
+        Me.btnCopy.Tag = "Copy Equipment"
+        Me.btnCopy.Text = "Copy"
+        Me.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'txtEstimateNum
         '
@@ -2325,7 +2325,7 @@ Partial Class CM_MAIN_frm
     End Sub
     Sub InitializeMenu_tlb()
         ReDim Menu_tlb(4)
-        Me.Menu_tlb(2) = _Menu_tlb_2
+        Me.Menu_tlb(2) = btnCopy
         Me.Menu_tlb(0) = btnExit
         Me.Menu_tlb(1) = btnSave
         Me.Menu_tlb(3) = _Menu_tlb_3
