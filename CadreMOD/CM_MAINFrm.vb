@@ -1482,7 +1482,6 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub Load_ListBoxes()
         Dim myList As New List(Of String)()
-        Dim where As String
 
         cboBuildingType.Items.Clear()
 
@@ -1572,7 +1571,6 @@ Partial Friend Class CM_MAIN_frm
         cboProbabilityOfSale.Items.Add("51-75%")
         cboProbabilityOfSale.Items.Add("76-99%")
         cboProbabilityOfSale.Items.Add("100%")
-        AssignListIndex_First(cboProbabilityOfSale, Contracts.ProbabilityOfSale)
 
         cboDurationMonths.Items.Clear()
         cboDurationMonths.Items.Add("0")
@@ -2224,6 +2222,7 @@ Partial Friend Class CM_MAIN_frm
         AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
         AssignListIndex_First(cboSalesRep, Contracts.SalesRepName)
         AssignListIndex_First(cboSalesOffice, Contracts.SalesOffice)
+        AssignListIndex_First(cboProbabilityOfSale, Contracts.ProbabilityOfSale)
 
         txtTaxRate.Text = GetTaxRate()
 
