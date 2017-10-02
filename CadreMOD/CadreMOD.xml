@@ -1,0 +1,308 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+CadreMOD
+</name>
+</assembly>
+<members>
+<member name="T:CadreMOD.OptionsDataSet1.temp_labor_ratesDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1.temp_labor_ratesRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1.temp_labor_ratesRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1">
+	<summary>
+Represents a strongly typed in-memory cache of data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1TableAdapters.temp_labor_ratesTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.UpdateUpdatedRows(CadreMOD.OptionsDataSet1,System.Collections.Generic.List{System.Data.DataRow},System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Update rows in top-down order.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.UpdateInsertedRows(CadreMOD.OptionsDataSet1,System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Insert rows in top-down order.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.UpdateDeletedRows(CadreMOD.OptionsDataSet1,System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Delete rows in bottom-up order.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.GetRealUpdatedRows(System.Data.DataRow[],System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Remove inserted rows that become updated rows after calling TableAdapter.Update(inserted rows) first
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.UpdateAll(CadreMOD.OptionsDataSet1)">
+	<summary>
+Update all changes to the dataset.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.UpdateOrderOption">
+	<summary>
+Update Order Option
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager.SelfReferenceComparer">
+	<summary>
+Used to sort self-referenced table's rows
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet1TableAdapters.TableAdapterManager">
+	<summary>
+TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
+</summary>
+</member><member name="P:CadreMOD.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:CadreMOD.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:CadreMOD.My.Resources.Resources.save">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="T:CadreMOD.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Building_CodeDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Local_CodeDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.MainGroupDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.MOD_OfficeDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OEMDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OptionsDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OrderBysDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet._Rate__Canada_Tax_DataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet._Rate__US_Tax_DataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.SubGroupDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.temp_labor_ratesDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Type_Cost_HoursDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Building_CodeRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Local_CodeRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.MainGroupRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.MOD_OfficeRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OEMRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OptionsRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OrderBysRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet._Rate__Canada_Tax_Row">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet._Rate__US_Tax_Row">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.SubGroupRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.temp_labor_ratesRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Type_Cost_HoursRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Building_CodeRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Local_CodeRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.MainGroupRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.MOD_OfficeRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OEMRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OptionsRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.OrderBysRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet._Rate__Canada_Tax_RowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet._Rate__US_Tax_RowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.SubGroupRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.temp_labor_ratesRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet.Type_Cost_HoursRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSet">
+	<summary>
+Represents a strongly typed in-memory cache of data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.Building_CodeTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.Local_CodeTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.MainGroupTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.MOD_OfficeTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.OEMTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.OptionsTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.OrderBysTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.Rate__Canada_Tax_TableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.Rate__US_Tax_TableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.SubGroupTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.temp_labor_ratesTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.Type_Cost_HoursTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.UpdateUpdatedRows(CadreMOD.OptionsDataSet,System.Collections.Generic.List{System.Data.DataRow},System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Update rows in top-down order.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.UpdateInsertedRows(CadreMOD.OptionsDataSet,System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Insert rows in top-down order.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.UpdateDeletedRows(CadreMOD.OptionsDataSet,System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Delete rows in bottom-up order.
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.GetRealUpdatedRows(System.Data.DataRow[],System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Remove inserted rows that become updated rows after calling TableAdapter.Update(inserted rows) first
+</summary>
+</member><member name="M:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.UpdateAll(CadreMOD.OptionsDataSet)">
+	<summary>
+Update all changes to the dataset.
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.UpdateOrderOption">
+	<summary>
+Update Order Option
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager.SelfReferenceComparer">
+	<summary>
+Used to sort self-referenced table's rows
+</summary>
+</member><member name="T:CadreMOD.OptionsDataSetTableAdapters.TableAdapterManager">
+	<summary>
+TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
+</summary>
+</member>
+</members>
+</doc>

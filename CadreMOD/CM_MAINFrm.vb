@@ -2464,4 +2464,8 @@ Partial Friend Class CM_MAIN_frm
             End If
         Next iIndex
     End Sub
+
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        My.Forms.frmLaborRates.Show()
+    End Sub
 End Class

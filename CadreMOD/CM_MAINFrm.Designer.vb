@@ -159,6 +159,7 @@ Partial Class CM_MAIN_frm
         Me.lblCallBackHours = New System.Windows.Forms.Label()
         Me.txtOCPL = New System.Windows.Forms.TextBox()
         Me.lblOCPL = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2248,6 +2249,15 @@ Partial Class CM_MAIN_frm
         Me.lblOCPL.Text = "OCPL ($ in Millions) :"
         Me.lblOCPL.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(1222, 247)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 101
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'CM_MAIN_frm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -2257,6 +2267,7 @@ Partial Class CM_MAIN_frm
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(1484, 795)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.txtOCPL)
         Me.Controls.Add(Me.lblOCPL)
         Me.Controls.Add(Me.NewProductService_fra)
@@ -2414,5 +2425,6 @@ Partial Class CM_MAIN_frm
     Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents txtTaxRate As System.Windows.Forms.TextBox
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 #End Region
 End Class

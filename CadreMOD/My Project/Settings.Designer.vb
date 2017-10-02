@@ -53,6 +53,18 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""C:\Users\adolfsal\Documents\Visual"& _ 
+            " Studio 2010\Projects\Mod Simplification\CadreMOD\bin\Debug\Options.accdb"";Persi"& _ 
+            "st Security Info=True")>  _
+        Public ReadOnly Property OptionsConnectionString() As String
+            Get
+                Return CType(Me("OptionsConnectionString"),String)
+            End Get
+        End Property
     End Class
 End Namespace
 
