@@ -418,6 +418,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
+            FpSpread1.ActiveSheet.Columns(21).Visible = False
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 30
 
             ' Column Headers
@@ -440,7 +441,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.Sheets(0).ColumnHeader.Columns(20).Label = "C1"
             FpSpread1.Sheets(0).ColumnHeader.Columns(21).Label = "Bank Net Price"
             FpSpread1.Sheets(0).ColumnHeader.Columns(22).Label = "Sales Com"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Sell Price"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Bank Final Price"
             FpSpread1.Sheets(0).ColumnHeader.Columns(24).Label = "Labor Rate"
             FpSpread1.Sheets(0).ColumnHeader.Columns(25).Label = "Include"
 
@@ -702,13 +703,14 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(20).Locked = True
                 .Columns(20).CellType = currencyType
                 .Columns(20).Width = 70
+                .Columns(20).Visible = False
 
                 .Columns(21).Label = "Sales Com"
                 .Columns(21).Locked = True
                 .Columns(21).CellType = currencyType
                 .Columns(21).Width = 60
 
-                .Columns(22).Label = "Sell Price"
+                .Columns(22).Label = "Bank Final Price"
                 .Columns(22).Locked = True
                 .Columns(22).CellType = currencyType
                 .Columns(22).Width = 70
@@ -837,13 +839,14 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(21).Locked = True
                 .Columns(21).CellType = currencyType
                 .Columns(21).Width = 70
+                .Columns(21).Visible = False
 
                 .Columns(22).Label = "Sales Com"
                 .Columns(22).Locked = True
                 .Columns(22).CellType = currencyType
                 .Columns(22).Width = 60
 
-                .Columns(23).Label = "Sell Price"
+                .Columns(23).Label = "Bank Final Price"
                 .Columns(23).Locked = True
                 .Columns(23).CellType = currencyType
                 .Columns(23).Width = 70
@@ -1706,7 +1709,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        'file_name = "cadre.json"
+        file_name = "cadre.json"
 
         Try
             json = JsonConvert.SerializeObject(dsCadre, Formatting.Indented)
@@ -1726,7 +1729,7 @@ Partial Friend Class CM_MAIN_frm
         Dim file_name As String = Contracts.EstimateNum & ".json"
 
         'HACK for testing
-        'file_name = "cadre.json"
+        file_name = "cadre.json"
 
         If File.Exists(directory & file_name) Then
             Try
@@ -2025,6 +2028,8 @@ Partial Friend Class CM_MAIN_frm
         sprTotals.ActiveSheet.Cells(0, 18).Column.Width = 60       'labor rate
 
         sprTotals.ActiveSheet.Rows(0).Locked = True
+
+        sprTotals.ActiveSheet.Cells(0, 15).Column.Visible = False
 
     End Sub
 
@@ -2466,6 +2471,15 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        My.Forms.frmLaborRates.Show()
+
+        Dim obj As New frmLaborRates
+        Try
+            obj.localOffice = Me.cboSalesOffice.Text
+            obj.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+
     End Sub
 End Class

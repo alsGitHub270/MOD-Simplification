@@ -1777,7 +1777,7 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.ScrollBarTrackPolicy = FarPoint.Win.Spread.ScrollBarTrackPolicy.Both
         Me.sprTotals.ScrollTipPolicy = FarPoint.Win.Spread.ScrollTipPolicy.Both
         Me.sprTotals.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.sprTotals_Sheet1})
-        Me.sprTotals.Size = New System.Drawing.Size(1481, 21)
+        Me.sprTotals.Size = New System.Drawing.Size(1411, 21)
         Me.sprTotals.Skin = FarPoint.Win.Spread.DefaultSpreadSkins.ArcticSea
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")

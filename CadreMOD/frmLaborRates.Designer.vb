@@ -87,6 +87,7 @@ Partial Class frmLaborRates
         Me.TextBox20 = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.TextBox26 = New System.Windows.Forms.TextBox()
+        Me.lblLocalOffice = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -730,11 +731,22 @@ Partial Class frmLaborRates
         Me.TextBox26.Text = "9%"
         Me.TextBox26.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
+        'lblLocalOffice
+        '
+        Me.lblLocalOffice.AutoSize = True
+        Me.lblLocalOffice.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLocalOffice.Location = New System.Drawing.Point(29, 13)
+        Me.lblLocalOffice.Name = "lblLocalOffice"
+        Me.lblLocalOffice.Size = New System.Drawing.Size(87, 15)
+        Me.lblLocalOffice.TabIndex = 74
+        Me.lblLocalOffice.Text = "Local Office:"
+        '
         'frmLaborRates
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(903, 543)
+        Me.Controls.Add(Me.lblLocalOffice)
         Me.Controls.Add(Me.TextBox26)
         Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.TextBox20)
@@ -872,4 +884,5 @@ Partial Class frmLaborRates
     Friend WithEvents TextBox20 As System.Windows.Forms.TextBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents TextBox26 As System.Windows.Forms.TextBox
+    Friend WithEvents lblLocalOffice As System.Windows.Forms.Label
 End Class

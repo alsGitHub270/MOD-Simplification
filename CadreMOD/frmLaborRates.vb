@@ -2,6 +2,9 @@
 
 Public Class frmLaborRates
 
+    Public Property localOffice As String
+
+
 
     Private Sub frmLaborRates_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
        
@@ -35,6 +38,9 @@ Public Class frmLaborRates
             cn.Close()
         End Try
 
+        Me.lblLocalOffice.Text = "Local Office:  " & localOffice
     End Sub
+
+   
 
 End Class
