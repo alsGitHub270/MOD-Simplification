@@ -64,7 +64,8 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>CadreMO.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
@@ -238,7 +239,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CadreMO.ico" />
     <Content Include="images\circlechecked.png" />
     <Content Include="images\openned.png" />
     <None Include="images\save.png" />

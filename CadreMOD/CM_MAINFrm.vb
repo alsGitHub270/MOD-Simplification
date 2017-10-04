@@ -568,6 +568,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
     Private Sub FpSpread1_Change(sender As Object, e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
         If Not initializing Then isDirty = True
+        CalculateFinalBankPrice()
         SetSummaryC1Colors()
         SetBaseAltC1Colors()
     End Sub
@@ -2482,4 +2483,19 @@ Partial Friend Class CM_MAIN_frm
 
 
     End Sub
+
+    Private Sub CalculateFinalBankPrice()
+        CalculateFinalBankPriceSummary()
+        CalculateFinalBankPriceBase()
+
+    End Sub
+
+    Private Sub CalculateFinalBankPriceSummary()
+        Throw New NotImplementedException
+    End Sub
+
+    Private Sub CalculateFinalBankPriceBase()
+        Throw New NotImplementedException
+    End Sub
+
 End Class
