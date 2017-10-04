@@ -65,7 +65,7 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("C1", typeSingle), _
                                                           New DataColumn("bank_net_Price", typeInt), _
                                                           New DataColumn("sales_commission", typeInt), _
-                                                          New DataColumn("sell_price", typeInt), _
+                                                          New DataColumn("bank_final_price", typeInt), _
                                                           New DataColumn("Labor_Rate", typeInt), _
                                                           New DataColumn("Include", typeBool)
                                                          })
@@ -98,7 +98,7 @@ Partial Friend Class CM_MAIN_frm
                                                        New DataColumn("C1", typeSingle), _
                                                        New DataColumn("bank_net_Price", typeInt), _
                                                        New DataColumn("sales_commission", typeInt), _
-                                                       New DataColumn("sell_price", typeInt), _
+                                                       New DataColumn("bank_final_price", typeInt), _
                                                        New DataColumn("Labor_Rate", typeInt), _
                                                        New DataColumn("Comment", typeStr)
                                                         })
@@ -133,7 +133,7 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("C1", typeSingle), _
                                                       New DataColumn("bank_net_price", typeInt), _
                                                       New DataColumn("sales_commission", typeInt), _
-                                                      New DataColumn("sell_price", typeInt), _
+                                                      New DataColumn("bank_final_price", typeInt), _
                                                       New DataColumn("Labor_Rate", typeInt), _
                                                       New DataColumn("Comment", typeStr)
                                                      })
@@ -513,7 +513,7 @@ Partial Friend Class CM_MAIN_frm
         Relocate_Equipment_Frame()
         SizeTotalsGrid()
         LoadTopOfForm()
-        ProcessTotals()
+        ProcessNegSummaryTotals()
         SetSummaryC1Colors()
         ' FpSpread1.ActiveSheet.Cells(0, 20).Locked = True
 
@@ -563,7 +563,7 @@ Partial Friend Class CM_MAIN_frm
         UseCurRow = e.Row
         UseCurCol = e.Column
 
-        ProcessTotals()
+        ProcessNegSummaryTotals()
 
     End Sub
     Private Sub FpSpread1_Change(sender As Object, e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
@@ -1700,7 +1700,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
     Private Sub FpSpread1_SelectionChanging(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
 
-        ProcessTotals()
+        ProcessNegSummaryTotals()
 
     End Sub
 
@@ -1930,7 +1930,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub SaveTopOfForm()
-       
+
         Try
             If dtBuildingInfo.Rows.Count = 0 Then
                 Dim _newRow As DataRow = dtBuildingInfo.NewRow
@@ -1974,7 +1974,7 @@ Partial Friend Class CM_MAIN_frm
         sprTotals.Refresh()
     End Sub
 
-    Private Sub ProcessTotals()
+    Private Sub ProcessNegSummaryTotals()
         Dim dblC1 As Double
         Dim dblValue As Double
         Dim summaryColumn As Integer = 0
@@ -1994,12 +1994,13 @@ Partial Friend Class CM_MAIN_frm
                     Case 9 To 12
                         sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatNumber(dblValue, 0)
                     Case 20
-                        dblC1 = Math.Round((dblValue / dtSummaryGroup.Rows.Count), 3)
-                        sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatPercent(dblC1, 1)
+                        'calculate after loop
                 End Select
 
                 summaryColumn += 1
             Next i
+            dblC1 = (sprTotals.ActiveSheet.Cells(0, 17).Text - sprTotals.ActiveSheet.Cells(0, 16).Text) / (sprTotals.ActiveSheet.Cells(0, 13).Text) - 1.0
+            sprTotals.ActiveSheet.Cells(0, 14).Text = Math.Round(dblC1, 3).ToString("P")
 
             sprTotals.Refresh()
         End If
@@ -2487,15 +2488,53 @@ Partial Friend Class CM_MAIN_frm
     Private Sub CalculateFinalBankPrice()
         CalculateFinalBankPriceSummary()
         CalculateFinalBankPriceBase()
+        CalculateFinalBankPriceAlt()
 
     End Sub
 
     Private Sub CalculateFinalBankPriceSummary()
-        Throw New NotImplementedException
+
+        Dim sales_commission As Double
+
+        For Each row As DataRow In dtSummaryGroup.Rows
+            If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
+                sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
+                row.Item("C1") = (((row.Item("bank_final_price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
+                row.Item("C1") = Math.Round(row.Item("C1"), 3)
+            End If
+        Next row
+
     End Sub
 
     Private Sub CalculateFinalBankPriceBase()
-        Throw New NotImplementedException
+
+        Dim sales_commission As Double
+
+        For Each row As DataRow In dtBaseGroup.Rows
+            If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
+                sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
+                If row.Item(0) <> "Master" Then
+                    row.Item("bank_final_price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
+                Else
+                    row.Item("C1") = (((row.Item("bank_final_price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
+                    row.Item("C1") = Math.Round(row.Item("C1"), 3)
+                End If
+            End If
+
+        Next row
+
     End Sub
 
+    Private Sub CalculateFinalBankPriceAlt()
+
+        Dim sales_commission As Double
+
+        For Each row As DataRow In dtAltGroup.Rows
+            If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
+                sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
+                row.Item("bank_final_price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
+            End If
+        Next row
+
+    End Sub
 End Class
