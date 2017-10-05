@@ -33,10 +33,6 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub CreateDataSet()
 
-        Dim typeStr As System.Type = System.Type.GetType("System.String")
-        Dim typeInt As System.Type = System.Type.GetType("System.Int64")
-        Dim typeBool As System.Type = System.Type.GetType("System.Boolean")
-        Dim typeSingle As System.Type = System.Type.GetType("System.Single")
 
         dsCadre = New DataSet()
         dsCadre.EnforceConstraints = False
@@ -192,7 +188,10 @@ Partial Friend Class CM_MAIN_frm
 
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
 
-        Deserialize()
+
+        Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
+        '  Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
+        FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
         If dtSummaryGroup.Rows.Count = 0 Then
@@ -441,7 +440,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.Sheets(0).ColumnHeader.Columns(20).Label = "C1"
             FpSpread1.Sheets(0).ColumnHeader.Columns(21).Label = "Bank Net Price"
             FpSpread1.Sheets(0).ColumnHeader.Columns(22).Label = "Sales Com"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Bank Final Price"
+            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Sell Price"
             FpSpread1.Sheets(0).ColumnHeader.Columns(24).Label = "Labor Rate"
             FpSpread1.Sheets(0).ColumnHeader.Columns(25).Label = "Include"
 
@@ -711,7 +710,7 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(21).CellType = currencyType
                 .Columns(21).Width = 60
 
-                .Columns(22).Label = "Bank Final Price"
+                .Columns(22).Label = "Sell Price"
                 .Columns(22).Locked = True
                 .Columns(22).CellType = currencyType
                 .Columns(22).Width = 70
@@ -847,7 +846,7 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(22).CellType = currencyType
                 .Columns(22).Width = 60
 
-                .Columns(23).Label = "Bank Final Price"
+                .Columns(23).Label = "Sell Price"
                 .Columns(23).Locked = True
                 .Columns(23).CellType = currencyType
                 .Columns(23).Width = 70
@@ -1676,6 +1675,13 @@ Partial Friend Class CM_MAIN_frm
             For Each CurControl As Control In BuildingInformation_fra.Controls
                 CurControl.Visible = True
             Next CurControl
+            NewProductService_fra.Height = BuildingInformation_fra.Height
+            For Each CurControl As Control In NewProductService_fra.Controls
+                CurControl.Visible = True
+            Next CurControl
+            Me.txtOCPL.Visible = True
+            Me.lblOCPL.Visible = True
+            Me.Button1.Visible = True
         Else
             BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
             ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
@@ -1684,6 +1690,13 @@ Partial Friend Class CM_MAIN_frm
                     CurControl.Visible = False
                 End If
             Next CurControl
+            NewProductService_fra.Height = BuildingInformation_fra.Height
+            For Each CurControl As Control In NewProductService_fra.Controls
+                CurControl.Visible = False
+            Next CurControl
+            Me.txtOCPL.Visible = False
+            Me.lblOCPL.Visible = False
+            Me.Button1.Visible = False
         End If
         Relocate_Equipment_Frame()
 
@@ -1703,53 +1716,6 @@ Partial Friend Class CM_MAIN_frm
         ProcessNegSummaryTotals()
 
     End Sub
-
-    Private Sub Serialize()
-        Dim json As String = ""
-        Dim directory = "C:\Temp\"
-        Dim file_name As String = Contracts.EstimateNum & ".json"
-
-        'HACK for testing
-        file_name = "cadre.json"
-
-        Try
-            json = JsonConvert.SerializeObject(dsCadre, Formatting.Indented)
-
-            Using sw As StreamWriter = New StreamWriter(directory & file_name)
-                sw.Write(json)
-            End Using
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Writing Cadre Json file")
-        End Try
-        isDirty = False
-    End Sub
-
-    Private Sub Deserialize()
-        Dim json As String = ""
-        Dim directory = "C:\Temp\"
-        Dim file_name As String = Contracts.EstimateNum & ".json"
-
-        'HACK for testing
-        file_name = "cadre.json"
-
-        If File.Exists(directory & file_name) Then
-            Try
-                Using sr As StreamReader = New StreamReader(directory & file_name)
-                    json = sr.ReadToEnd
-                End Using
-                dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
-                'JsonSerializerSettings()
-                'NullValueHandling = NullValueHandling.Include
-                dsCadre.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
-                '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
-                FpSpread1.ActiveSheet.SortRows(3, True, False)
-            Catch ex As Exception
-                MessageBox.Show(ex.Message, "Error Reading Input Json File")
-            End Try
-            isDirty = False
-        End If
-    End Sub
-
 
     Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
         SaveAll()
@@ -2197,7 +2163,8 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub SaveAll()
         SaveTopOfForm()
-        Serialize()
+        Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
+        ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty)           '
     End Sub
 
     Private Sub UpdateContactGroupFromNotes()

@@ -161,4 +161,8 @@
     Public Const USER_QM_DIRECTOR As String = "YGC_SALDIR"
     Public Const USER_QM_MANAGER As String = "YGC_SALMAN"
 
+    Public typeStr As System.Type = System.Type.GetType("System.String")
+    Public typeInt As System.Type = System.Type.GetType("System.Int64")
+    Public typeBool As System.Type = System.Type.GetType("System.Boolean")
+    Public typeSingle As System.Type = System.Type.GetType("System.Single")
 End Module

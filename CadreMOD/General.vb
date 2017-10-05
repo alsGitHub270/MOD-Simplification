@@ -1,5 +1,7 @@
 ﻿Imports System.Globalization
 Imports System.Collections.Generic
+Imports System.IO
+Imports Newtonsoft.Json
 Module General
 
     Public Function AssignListIndex(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
@@ -621,4 +623,41 @@ Query_Execute_Error:
         Return Generator.Next(Min, Max)
     End Function
 
-End Module
+
+    Public Function Serialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
+        Dim json As String = ""
+        Dim ReturnVal As Boolean = True
+        Try
+            json = JsonConvert.SerializeObject(UseDataset, Formatting.Indented)
+            Using sw As StreamWriter = New StreamWriter(UseFileName)
+                sw.Write(json)
+            End Using
+            CurDirtyFlag = False
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ErrMsg)
+            ReturnVal = False
+        End Try
+        Return ReturnVal
+    End Function
+    Public Function Deserialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
+        Dim json As String = ""
+        Dim dsTemp As DataSet
+        Dim ReturnVal As Boolean = True
+        Try
+            If File.Exists(UseFileName) Then
+                Using sr As StreamReader = New StreamReader(UseFileName)
+                    json = sr.ReadToEnd
+                End Using
+                dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
+                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
+                CurDirtyFlag = False
+            Else
+                ReturnVal = False
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ErrMsg)
+            ReturnVal = False
+        End Try
+        Return ReturnVal
+    End Function
+   End Module
