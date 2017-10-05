@@ -190,7 +190,7 @@ Partial Friend Class CM_MAIN_frm
 
 
         Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
-        '  Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
+        'Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
