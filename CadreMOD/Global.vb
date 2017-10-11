@@ -178,4 +178,5 @@
         End Function
     End Structure
     Public CurrentGOData_Typ As CurrentGOData_Type = CurrentGOData_Type.CreateInstance()
+    Public UnitsInEstimate() As String = Nothing
 End Module

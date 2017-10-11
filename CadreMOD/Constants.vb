@@ -162,6 +162,23 @@
     Public Const USER_QM_DIRECTOR As String = "YGC_SALDIR"
     Public Const USER_QM_MANAGER As String = "YGC_SALMAN"
 
+    Public Const NUMBEROFTYPES As Integer = 10
+    Public Const REUSE_TYPE As Integer = 0
+    Public Const REPLACE_TYPE As Integer = 1
+    Public Const ADD_TYPE As Integer = 2
+    Public Const REFURBISH_TYPE As Integer = 3
+    Public Const REMOVE_TYPE As Integer = 4
+    Public Const RELOCATE_TYPE As Integer = 5
+    Public Const NEW_TYPE As Integer = 6
+    Public Const NONE_TYPE As Integer = 7
+    Public Const OTHER_TYPE As Integer = 8
+    Public Const QUOTE_TYPE As Integer = 9
+    Public Const PreferredScreenWidth As Integer = 1440     '1920
+    Public Const PreferredScreenHeight As Integer = 900     '1080
+    Public Const GRID_IS_CLEAN As Integer = 0
+    Public Const GRID_IS_DIRTY As Integer = 1
+    Public Const EST_Suffix As String = " [EST]"
+    Public Const ORD_Suffix As String = " [ORD]"
     Public typeStr As System.Type = System.Type.GetType("System.String")
     Public typeInt As System.Type = System.Type.GetType("System.Int64")
     Public typeBool As System.Type = System.Type.GetType("System.Boolean")

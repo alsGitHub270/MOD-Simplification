@@ -243,22 +243,8 @@ Module API
 
     'End Sub
     Public Sub Set_Resolution()
-        Dim a As Boolean
-        Dim SupportsRes As Boolean = False
-        Dim i As Integer = 0
 
-        Do
-            a = EnumDisplaySettings(Nothing, i, DevM)
-            i += 1
-            If DevM.dmPelsWidth >= 1024 And DevM.dmPelsHeight >= 768 Then
-                SupportsRes = True
-            End If
-        Loop Until (Not a)
 
-        If Not SupportsRes Then
-            MessageBox.Show("This Application Requires A Screen Resolution of 1024 x 768." & Environment.NewLine & "Your equipment does not support this.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Environment.Exit(0)
-        End If
 
         Config_frm.Show()
         Config_frm.Close()
@@ -267,7 +253,7 @@ Module API
 
     Public Sub Reset_Resolution()
 
-        If SaveWidth < 1024 And SaveHeight < 768 Then
+        If SaveWidth < PreferredScreenWidth And SaveHeight < PreferredScreenHeight And Config_frm.ChangedResolution Then
             DevM.dmFields = DM_PELSWIDTH Or DM_PELSHEIGHT Or DM_DISPLAYFREQUENCY
             DevM.dmPelsWidth = SaveWidth
             DevM.dmPelsHeight = SaveHeight
