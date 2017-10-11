@@ -45,20 +45,20 @@ Friend Class clsNotesCOM
         End Try
 
     End Function
-    '    Public Sub New()
-    '        MyBase.New()
-    '    End Sub
-    '    Public Sub SetValue(ByRef valname As String, ByRef Val As Object)
-    '        doc.ReplaceItemValue(valname, Val)
-    '        doc.Save(True, True)
-    '    End Sub
-    '    Public Sub SetValue_Readers(ByRef valname As String, ByRef Val As Object)
-    '        Dim ReadersItem As Object = doc.ReplaceItemValue(valname, Val)
+    Public Sub New()
+        MyBase.New()
+    End Sub
+    Public Sub SetValue(ByRef valname As String, ByRef Val As Object)
+        doc.ReplaceItemValue(valname, Val)
+        doc.Save(True, True)
+    End Sub
+    Public Sub SetValue_Readers(ByRef valname As String, ByRef Val As Object)
+        Dim ReadersItem As Object = doc.ReplaceItemValue(valname, Val)
 
-    '        ReadersItem.IsReaders = True
-    '        doc.Save(True, True)
+        ReadersItem.IsReaders = True
+        doc.Save(True, True)
 
-    '    End Sub
+    End Sub
     '    Protected Overrides Sub Finalize()
     '        session = Nothing
     '        DB = Nothing
@@ -132,79 +132,81 @@ Friend Class clsNotesCOM
     '        Return result
 
     '    End Function
-    '    Public Function AttachFile(ByRef FileName As String) As Boolean
-    '        Dim result As Boolean = False
-    '        Dim RTI_Name As String = ""
-    '        Dim TempObj1 As Object
-    '        Dim TempObj2 As Object
-    '        Dim Listed As Boolean
-    '        Dim NameAry As Object
-    '        Dim ReattachOld As Boolean
+    Public Function AttachFile(ByRef FileName As String) As Boolean
+        Dim result As Boolean = False
+        Dim RTI_Name As String = ""
+        Dim TempObj1 As Object
+        Dim TempObj2 As Object
+        Dim Listed As Boolean
+        Dim NameAry As Object
+        Dim ReattachOld As Boolean
 
-    '        Try
-    '            result = True
-    '            Select Case Strings.Right(FileName, 3).ToUpper()
-    '                Case "XLS"
-    '                    If FileName Like HoldUniqueActivity.ToUpper() & "ELE.XLS" Or FileName Like HoldUniqueActivity.ToUpper() & "MEC.XLS" Then
-    '                        RTI_Name = "ESTIMATEFILE"
-    '                    Else
-    '                        Return result
-    '                    End If
-    '                Case "BDP"
-    '                    RTI_Name = "FILEATTACH"
-    '                Case Else
-    '                    RTI_Name = IIf(AttachBookingFile And BookingType > 0, "FILEATTACH", "ESTIMATEFILE")
-    '            End Select
-    '            If RTI_Name = "ESTIMATEFILE" Then
-    '                TempObj1 = doc.GetFirstItem("FILEATTACH")
-    '                If TempObj1 Is Nothing Then
-    '                    ReattachOld = False
-    '                Else
-    '                    ReattachOld = True
-    '                    Do Until TempObj1 Is Nothing
-    '                        TempObj1.Remove()
-    '                        doc.Save(True, True)
-    '                        TempObj1 = doc.GetFirstItem("FILEATTACH")
-    '                    Loop
-    '                End If
-    '                If Not ReattachOld And Strings.Right(FileName, 3).ToUpper() = "XLS" Then
-    '                    Return result
-    '                End If
-    '                NameAry = doc.GetFirstItem("FileAttachments")
-    '                Listed = NameAry.Contains(FileName)
-    '                If Not Listed Then
-    '                    NameAry.AppendToTextList(FileName)
-    '                    If Not DocCreated Then
-    '                        doc.Save(True, True)
-    '                    End If
-    '                End If
-    '            End If
-    '            TempObj1 = doc.GetFirstItem(RTI_Name)
-    '            If TempObj1 Is Nothing Then
-    '                TempObj1 = doc.CreateRichTextItem(RTI_Name)
-    '            End If
-    '            TempObj2 = TempObj1.EmbedObject(Domino.EMBED_TYPE.EMBED_ATTACHMENT, "", FilePath & FileName, "$FILE")
-    '            If Not DocCreated Then
-    '                doc.Save(True, True)
-    '            End If
+        Try
+            result = True
+            Select Case Strings.Right(FileName, 3).ToUpper()
+                Case "XLS"
+                    If FileName Like HoldUniqueActivity.ToUpper() & "ELE.XLS" Or FileName Like HoldUniqueActivity.ToUpper() & "MEC.XLS" Then
+                        RTI_Name = "ESTIMATEFILE"
+                    Else
+                        Return result
+                    End If
+                Case "BDP"
+                    RTI_Name = "FILEATTACH"
+                Case Else
+                    RTI_Name = IIf(AttachBookingFile And BookingType > 0, "FILEATTACH", "ESTIMATEFILE")
+            End Select
+            If RTI_Name = "ESTIMATEFILE" Then
+                TempObj1 = doc.GetFirstItem("FILEATTACH")
+                If TempObj1 Is Nothing Then
+                    ReattachOld = False
+                Else
+                    ReattachOld = True
+                    Do Until TempObj1 Is Nothing
+                        TempObj1.Remove()
+                        doc.Save(True, True)
+                        TempObj1 = doc.GetFirstItem("FILEATTACH")
+                    Loop
+                End If
+                If Not ReattachOld And Strings.Right(FileName, 3).ToUpper() = "XLS" Then
+                    Return result
+                End If
+                NameAry = doc.GetFirstItem("FileAttachments")
+                Listed = NameAry.Contains(FileName)
+                If Not Listed Then
+                    NameAry.AppendToTextList(FileName)
+                    If Not DocCreated Then
+                        doc.Save(True, True)
+                    End If
+                End If
+            End If
+            TempObj1 = doc.GetFirstItem(RTI_Name)
+            If TempObj1 Is Nothing Then
+                TempObj1 = doc.CreateRichTextItem(RTI_Name)
+            End If
+            TempObj2 = TempObj1.EmbedObject(Domino.EMBED_TYPE.EMBED_ATTACHMENT, "", FilePath & FileName, "$FILE")
+            If Not DocCreated Then
+                doc.Save(True, True)
+            End If
 
-    '            Return result
+            Return result
 
-    '        Catch e As System.Exception
-    '            result = False
-    '            If Information.Err().Number = 7225 Then
-    '                Select Case True
-    '                    Case FilePath.Length = 0
-    '                        MessageBox.Show("FilePath property NOT SET!", Application.ProductName)
-    '                    Case Else
-    '                        MessageBox.Show("File NOT found!!  Please check if the file exists!", Application.ProductName)
-    '                End Select
-    '            End If
-    '            Return result
+        Catch e As System.Exception
+            result = False
+            If Information.Err().Number = 7225 Then
+                Select Case True
+                    Case FilePath.Length = 0
+                        MessageBox.Show("FilePath property NOT SET!", Application.ProductName)
+                    Case Else
+                        MessageBox.Show("File NOT found!!  Please check if the file exists!", Application.ProductName)
+                End Select
+            Else
+                MessageBox.Show(e.Message, "Error Attaching File", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+            Return result
 
-    '        End Try
+        End Try
 
-    '    End Function
+    End Function
     '    Public Sub DeleteALLAttachments()
     '        Dim i As Byte
     '        Dim EngFile() As String
@@ -306,20 +308,20 @@ Friend Class clsNotesCOM
         End Get
 
     End Property
-    '    Public ReadOnly Property CADREFilePath(ByVal Path As String) As Boolean
+    Public ReadOnly Property CADREFilePath(ByVal Path As String) As Boolean
 
-    '        Get
-    '            Dim result As Boolean = False
+        Get
+            Dim result As Boolean = False
 
-    '            result = True
-    '            FilePath = Path
-    '            If Not Directory.Exists(FilePath) Then
-    '                result = False
-    '            End If
-    '            Return result
-    '        End Get
+            result = True
+            FilePath = Path
+            If Not Directory.Exists(FilePath) Then
+                result = False
+            End If
+            Return result
+        End Get
 
-    '    End Property
+    End Property
     Public ReadOnly Property CN_Username() As String
         Get
             Return session.UserName
@@ -342,12 +344,13 @@ Friend Class clsNotesCOM
 
     End Function
 
-    '    Public Sub CreateDOC(ByRef FormName As String)
-    '        doc = DB.CreateDocument
-    '        doc.Form = FormName
-    '        DocCreated = True
-    '        doc.Save(True, False)
-    'End Sub
+    Public Sub CreateDOC(ByRef FormName As String)
+        doc = DB.CreateDocument
+        doc.Form = FormName
+        DocCreated = True
+        doc.Save(True, False)
+    End Sub
+
     Public Sub GetArray(ByRef valname As String, ByRef Combo As ComboBox)
 
         ReadersValue = doc.GetItemValue(valname)

@@ -395,8 +395,8 @@ Query_Execute_Error:
         Dim UnitsLine As New System.Text.StringBuilder
         Dim Pos As Integer
         Dim RngeStart, RngeEnd As Byte
-        Dim UnitsInEstimate() As String
         Dim ReturnVal As Integer = 0
+        If Not String.IsNullOrEmpty(Units) Then
         Erase UnitsInEstimate
         Const Comma As String = ","
         Dim LowUnit As Byte = 255
@@ -422,6 +422,7 @@ Query_Execute_Error:
         TempLine = Strings.Mid(TempLine, 2)
         UnitsInEstimate = TempLine.Split(",")
         ReturnVal = UnitsInEstimate.GetUpperBound(0) + 1
+        End If
         Return ReturnVal
     End Function
     Public Sub EndProgram()
@@ -556,13 +557,13 @@ Query_Execute_Error:
             '    Exit Function
             'End If
         End If
-        If Not String.IsNullOrEmpty(sOfficeNumberOld) Then
+        'If Not String.IsNullOrEmpty(sOfficeNumberOld) Then
             'If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, "MOD_OFFICE_SQL", sWhere, 0, sNewOffice) = RECORD_NOT_FOUND Then
             '    TranslateOfficeNumber = sOfficeNumberOld
             'ElseIf sNewOffice <> "" Then
             '    TranslateOfficeNumber = sNewOffice
             'End If
-        End If
+        'End If
 
     End Function
 
@@ -582,8 +583,7 @@ Query_Execute_Error:
     End Function
 
     Public Function Get_FileName(ByRef ThisNegNum As String, ByRef ThisBank As String, ByRef ThisAlt As String, ByRef ThisUnits As String) As String
-        Dim AddExt As String = CStr(Conversion.Val(Strings.Left(ThisUnits, 2)))
-        Return ThisNegNum & ThisBank & ThisAlt & "M" & AddExt
+        Return ThisNegNum & ThisBank & ThisAlt & ThisUnits
     End Function
 
     Public Function GetDataFromOptions(sSQL As String, Optional ByVal multiple_fields As Boolean = False) As List(Of String)
@@ -622,8 +622,88 @@ Query_Execute_Error:
         Dim Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
     End Function
+    Public Function FormatUnits(ByRef UnitsInString As String) As String
+        Dim UnitsLine As String = String.Empty
+        Dim TempLine As String = String.Empty
+        Dim Seqd As Boolean
+        Dim Pos As Integer
+        Dim RngeStart, RngeEnd As Byte
+        Dim UnitNum() As String = Nothing
+        Dim LowUnit As Byte = 255
+        Dim HighUnit As Byte = 0
 
+        Const Comma As String = ","
+        Erase UnitNum
+        UnitNum = UnitsInString.Split(New String() {Comma}, StringSplitOptions.None)
+        For Each UnitNum_item As String In UnitNum
+            UnitsLine = UnitsLine & Comma & UnitNum_item
+            Pos = (UnitNum_item.IndexOf("-") + 1)
+            If Pos = 0 Then
+                TempLine = TempLine & Comma & UnitNum_item
+                If (UnitNum_item) < LowUnit Then
+                    LowUnit = Conversion.Val(UnitNum_item)
+                End If
+                If (UnitNum_item) > HighUnit Then
+                    HighUnit = Conversion.Val(UnitNum_item)
+                End If
+            Else
+                RngeStart = Conversion.Val(Strings.Left(UnitNum_item, 2))
+                RngeEnd = Conversion.Val(Strings.Right(UnitNum_item, 2))
+                For k As Integer = RngeStart To RngeEnd
+                    TempLine = TempLine & Comma & CStr(k)
+                Next k
+                If RngeStart < LowUnit Then
+                    LowUnit = RngeStart
+                End If
+                If RngeEnd > HighUnit Then
+                    HighUnit = RngeEnd
+                End If
+            End If
+        Next UnitNum_item
+        TempLine = Strings.Mid(TempLine, 2)
+        UnitNum = TempLine.Split(","c)
+        Array.Sort(UnitNum)
+        Dim TempNum As Byte = LowUnit
+        Do Until TempNum = HighUnit
+            For Each UnitNum_item_2 As String In UnitNum
+                If Conversion.Val(UnitNum_item_2) = TempNum Then
+                    Seqd = True
+                    Exit For
+                Else
+                    Seqd = False
+                End If
+            Next UnitNum_item_2
+            If Not Seqd Then
+                Exit Do
+            End If
+            TempNum += 1
+        Loop
+        If Seqd Then
+            If LowUnit < 10 Then
+                UnitsLine = "0" & LowUnit
+            Else
+                UnitsLine = CStr(LowUnit)
+            End If
+            If HighUnit < 10 Then
+                UnitsLine &= "-" & "0" & CStr(HighUnit)
+            Else
+                UnitsLine &= "-" & CStr(HighUnit)
+            End If
+        Else
+            UnitsLine = Strings.Mid(UnitsLine, 2)
+        End If
+        Return UnitsLine
 
+    End Function
+    Public Function SplitUnitsForSave(ByVal CurUnits As String) As String
+        Dim ReturnVal As String = String.Empty
+        CalculateNumberOfCarsInEstimate(CurUnits)
+        For iIndex As Integer = UnitsInEstimate.GetLowerBound(0) To UnitsInEstimate.GetUpperBound(0)
+            ReturnVal &= UnitsInEstimate(iIndex) & ","
+        Next iIndex
+        ReturnVal = Strings.Left(ReturnVal, ReturnVal.Length - 1)
+        Return ReturnVal
+    End Function
     Public Function Serialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim ReturnVal As Boolean = True
@@ -639,6 +719,7 @@ Query_Execute_Error:
         End Try
         Return ReturnVal
     End Function
+
     Public Function Deserialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim dsTemp As DataSet
@@ -660,4 +741,42 @@ Query_Execute_Error:
         End Try
         Return ReturnVal
     End Function
+    Public Sub ArchiveFiles()
+        Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
+        Try
+            For Each JSONFile In JSONFileLocation.GetFiles()
+                If JSONFile IsNot Nothing Then
+                    If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
+                        If JSONFile.ToString.ToUpper.Contains(Contracts.EstimateNum.ToUpper) Then
+                            File.Copy(JSONFile.FullName, ArchivePath & JSONFile.ToString, True)
+                        End If
+                    End If
+                End If
+            Next JSONFile
+        Finally
+        End Try
+    End Sub
+
+    Public Function GetSummaryTotals(ByVal columnName As String) As Single
+        Dim sngValue As Double = 0
+
+        For Each row As DataRow In dtSummaryGroup.Rows
+            If Not IsDBNull(row.Item(columnName)) Then
+                sngValue += row.Item(columnName)
+            End If
+        Next row
+        Return sngValue
+    End Function
+
+    Public Function GetSummaryTotals(ByVal column As Integer) As Single
+        Dim sngValue As Double = 0
+
+        For Each row As DataRow In dtSummaryGroup.Rows
+            If Not IsDBNull(row.Item(column)) Then
+                sngValue += row.Item(column)
+            End If
+        Next row
+        Return sngValue
+    End Function
+
    End Module

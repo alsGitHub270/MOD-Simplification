@@ -1,6 +1,7 @@
 ﻿Module Constants
     ' Contract Manager
     Public Const tCM_TITLE As String = "MOD Estimating"
+    Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
     Public DEFAULT_C1 As Single = 0.2
 

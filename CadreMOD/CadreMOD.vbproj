@@ -90,7 +90,11 @@
       <HintPath>..\..\..\..\..\Program Files (x86)\GrapeCity\Spread .NET 6\Windows Forms\v6.0.3505\bin\FarPoint.Win.Spread.dll</HintPath>
     </Reference>
     <Reference Include="Interop.ADOX">
-      <HintPath>bin\Interop.ADOX.dll</HintPath>
+      <HintPath>obj\x86\Debug\Interop.ADOX.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.Domino">
+      <HintPath>obj\x86\Debug\Interop.Domino.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="MTGCCombobox">
@@ -269,6 +273,15 @@
     <COMReference Include="ADOX">
       <Guid>{00000600-0000-0010-8000-00AA006D2EA4}</Guid>
       <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Scripting">
+      <Guid>{420B2830-E718-11CF-893D-00A0C9054228}</Guid>
+      <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>

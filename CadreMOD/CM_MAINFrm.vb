@@ -22,6 +22,7 @@ Partial Friend Class CM_MAIN_frm
     Dim addingNewRow As Boolean = False
     Dim initializing As Boolean
     Dim id_to_copy As String = ""
+    Dim estimate_file As String = ""
 
 
     Private CurrentBuildingInformationFrameHeight As Integer = 0, CurrentEquipmentFrameHeight As Integer = 0
@@ -189,8 +190,9 @@ Partial Friend Class CM_MAIN_frm
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
 
 
-        Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
+        'Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
         'Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
+        Deserialize(estimate_file, dsCadre, "Error Reading Input json estimate file", isDirty)
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
@@ -245,6 +247,8 @@ Partial Friend Class CM_MAIN_frm
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
         initializing = True
 
+        estimate_file = ReportsPath & Contracts.EstimateNum & ".json"
+
         CreateDataSet()
         Dim dt As DataTable
         For Each dt In dsCadre.Tables
@@ -259,8 +263,6 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         Load_ListBoxes()
-
-
 
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
 
@@ -305,7 +307,7 @@ Partial Friend Class CM_MAIN_frm
         End If
 
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType()
-        percentType.DecimalPlaces = 1
+        percentType.DecimalPlaces = 2
 
         Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
         numberType.DecimalPlaces = 0
@@ -585,9 +587,10 @@ Partial Friend Class CM_MAIN_frm
         currencyType.ShowSeparator = True
         currencyType.NegativeFormat = FarPoint.Win.Spread.CellType.CurrencyNegativeFormat.SignSymbolSpaceBefore
         currencyType.NegativeRed = True
+        currencyType.MaximumValue = 50000000
 
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
-        percentType.DecimalPlaces = 1
+        percentType.DecimalPlaces = 2
 
         Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
         numberType.DecimalPlaces = 0
@@ -961,7 +964,7 @@ Partial Friend Class CM_MAIN_frm
 
                         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
                         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
-                        percentType.DecimalPlaces = 1
+                        percentType.DecimalPlaces = 2
                         ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(CurSummaryRow, 0)
                         ChildSheetView1.SortRows(1, True, True)
                         ChildSheetView1.SetRowExpandable(0, False)
@@ -1149,7 +1152,7 @@ Partial Friend Class CM_MAIN_frm
 
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
         percentType.ReadOnly = True
-        percentType.DecimalPlaces = 1
+        percentType.DecimalPlaces = 2
 
 
         dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"GO Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0})
@@ -1681,7 +1684,7 @@ Partial Friend Class CM_MAIN_frm
             Next CurControl
             Me.txtOCPL.Visible = True
             Me.lblOCPL.Visible = True
-            Me.Button1.Visible = True
+            Me.btnLaborRates.Visible = True
         Else
             BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
             ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
@@ -1696,7 +1699,7 @@ Partial Friend Class CM_MAIN_frm
             Next CurControl
             Me.txtOCPL.Visible = False
             Me.lblOCPL.Visible = False
-            Me.Button1.Visible = False
+            Me.btnLaborRates.Visible = False
         End If
         Relocate_Equipment_Frame()
 
@@ -1724,14 +1727,9 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub AddMasterRow(_id As String)
 
-        Dim baseID As String
-        Dim target As Integer = 0
+        Dim altValue As Integer = 0
+        Dim baseValue As Integer = 0
         Dim criteria As String
-        'Dim row As DataRow
-        'Dim datarows() As DataRow
-        'Dim mylist As List(Of Object)
-
-        baseID = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
 
         criteria = "id = '" & _id & "'"
         Dim baseRow() As Data.DataRow
@@ -1745,8 +1743,35 @@ Partial Friend Class CM_MAIN_frm
             _newRow.Item(i) = baseRow(0).Item(i)
         Next
 
-        ' Update new row as Master.
+        ' Next, make adjustments to each column as specified from the 'merge' selected rows in alt group for this base
+        Dim altRow() As Data.DataRow
+        altRow = dtAltGroup.Select(criteria)
 
+        For Each row In altRow
+            If row.Item("Merge") = "True" Then
+                For i As Integer = 6 To dtAltGroup.Columns.Count - 2    ' excludes the comments col
+                    altValue = IIf(IsDBNull(row.Item(i)), 0, row.Item(i))
+
+                    If i <> 20 Then     ' not moving C1 value
+                        If IsDBNull(_newRow.Item(i - 1)) Then
+                            _newRow.Item(i - 1) = altValue
+                        Else
+                            _newRow.Item(i - 1) += altValue
+                        End If
+                    Else
+                        ' Recaculate C1 after all values processed
+                    End If
+                Next
+            End If
+        Next
+
+
+        ' Recalculate the C1 now
+        Dim sales_commission As Integer
+        sales_commission = IIf(IsDBNull(_newRow.Item("sales_commission")), 0, _newRow.Item("sales_commission"))
+        _newRow.Item("C1") = ((_newRow.Item("bank_final_price") - sales_commission) / _newRow.Item("Total_Bank_Cost") - 1.0)
+
+        ' Update new row as Master.
         _newRow("id") = _id
         _newRow("sort_fld") = "0"
         _newRow("BaseGroup") = "Master"
@@ -1895,7 +1920,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub SaveTopOfForm()
+    Private Sub SaveTopOfFormToDataset()
 
         Try
             If dtBuildingInfo.Rows.Count = 0 Then
@@ -1966,7 +1991,7 @@ Partial Friend Class CM_MAIN_frm
                 summaryColumn += 1
             Next i
             dblC1 = (sprTotals.ActiveSheet.Cells(0, 17).Text - sprTotals.ActiveSheet.Cells(0, 16).Text) / (sprTotals.ActiveSheet.Cells(0, 13).Text) - 1.0
-            sprTotals.ActiveSheet.Cells(0, 14).Text = Math.Round(dblC1, 3).ToString("P")
+            sprTotals.ActiveSheet.Cells(0, 14).Text = Math.Round(dblC1, 4).ToString("P")
 
             sprTotals.Refresh()
         End If
@@ -2117,7 +2142,7 @@ Partial Friend Class CM_MAIN_frm
 
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
         percentType.ReadOnly = True
-        percentType.DecimalPlaces = 1
+        percentType.DecimalPlaces = 2
 
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
@@ -2162,9 +2187,11 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub SaveAll()
-        SaveTopOfForm()
-        Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
-        ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty)           '
+        SaveTopOfFormToDataset()
+        SaveData_Contract()
+        'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
+        ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty) 
+        Serialize(estimate_file, dsCadre, "Error Writing Cadre Json file", isDirty)  '
     End Sub
 
     Private Sub UpdateContactGroupFromNotes()
@@ -2341,7 +2368,7 @@ Partial Friend Class CM_MAIN_frm
         newRow("id") = GetRandom(10000000, 99999999).ToString
         newRow("bank") = ""
         dtSummaryGroup.Rows.Add(newRow)
-       
+
     End Sub
 
     Private Sub AddCopiedBaseAndAlt()
@@ -2439,7 +2466,7 @@ Partial Friend Class CM_MAIN_frm
         Next iIndex
     End Sub
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub btnLaborRates_Click(sender As System.Object, e As System.EventArgs) Handles btnLaborRates.Click
 
         Dim obj As New frmLaborRates
         Try
@@ -2467,7 +2494,7 @@ Partial Friend Class CM_MAIN_frm
             If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
                 sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
                 row.Item("C1") = (((row.Item("bank_final_price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
-                row.Item("C1") = Math.Round(row.Item("C1"), 3)
+                row.Item("C1") = Math.Round(row.Item("C1"), 4)
             End If
         Next row
 
@@ -2484,7 +2511,7 @@ Partial Friend Class CM_MAIN_frm
                     row.Item("bank_final_price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
                 Else
                     row.Item("C1") = (((row.Item("bank_final_price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
-                    row.Item("C1") = Math.Round(row.Item("C1"), 3)
+                    row.Item("C1") = Math.Round(row.Item("C1"), 4)
                 End If
             End If
 
@@ -2504,4 +2531,73 @@ Partial Friend Class CM_MAIN_frm
         Next row
 
     End Sub
+
+    Private Function SaveData_Contract() As Integer
+        Dim result As Integer = 0
+        '   Dim TempGO As Integer = GONumbers(CurrentGOSelection).GONumbersID
+
+        Me.Cursor = Cursors.WaitCursor
+        '      Fields2Type()
+        '     result = Me.Validate_Renamed()
+        'If result = MsgBoxStyle.Critical Then
+        '    Me.Cursor = Cursors.Default
+        '    Return result
+        'End If
+        'Load_Office_Dependents()
+        'Write_CM()
+        'If NewJob And GONumbers(0).Bank <> "" And GONumbers(0).Alt <> "" And GONumbers(0).Units <> "" Then
+        '    Set_CurrentAddress()
+        '    NewJob = False
+        'End If
+        'ArchiveFiles()
+        'Set_GO_Dependents(CurrentGOSelection)
+        'gbMDIChildDirty = False
+        'System_DataBaseSetup()
+        Add_FeedBack_Doc()
+        Me.Cursor = Cursors.Default
+        StatusBar1.Items.Item(0).Text = "Contract Manager Data Has Been Saved!"
+        'SortLogic()
+        'CurrentGOSelection = Find_CurrentGoSelection(TempGO)
+        Return System.Windows.Forms.DialogResult.OK
+
+    End Function
+
+    'Public Sub Load_Office_Dependents()
+    '    'Dim OfficeRecordset As New ADODB.Recordset
+    '    'Dim Where As String = String.Empty, IndexName As String = String.Empty
+
+    '    'Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, OPEN_RECORD, MOD_OFFICE_SQL, , , , , , ADOCatalogOptionDataBase)
+    '    'Where = "[Office] = '" & Contracts.InstallingOffice & "'"
+    '    'If Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, FIND_FIRST, MOD_OFFICE_SQL, Where) = 0 Then
+    '    '    Contracts.DistrictCode = OfficeRecordset("District").Value.ToString
+    '    'Else
+    '    '    Where = "[Office] = '" & Contracts.ServiceOffice & "'"
+    '    '    If Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, FIND_FIRST, MOD_OFFICE_SQL, Where) = 0 Then
+    '    '        Contracts.DistrictCode = OfficeRecordset("District").Value.ToString
+    '    '    End If
+    '    'End If
+    '    'Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, CLOSE_RECORD)
+    '    'Select Case Conversion.Val(Contracts.DistrictCode)
+    '    '    Case 11, 16, 23, 25, 28, 29
+    '    '        IsPilotOffice = True
+    '    '    Case Else
+    '    '        IsPilotOffice = False
+    '    'End Select
+    '    'If Contracts.InstallingOffice <> "" Then
+    '    '    Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, ADODB.RecordTypeEnum.adCollectionRecord, OPEN_RECORD, "MOD Office")
+    '    '    Where = Contracts.InstallingOffice
+    '    '    IndexName = "Office"
+    '    '    Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, ADODB.RecordTypeEnum.adCollectionRecord, SEEK_ME, "MOD Office", Where, IndexName)
+    '    '    If Not Contracts.InstallingOffice.StartsWith("X") And Not Contracts.InstallingOffice.StartsWith("T") Then
+    '    '        Contracts.Area = "" & OfficeRecordset("Area").Value
+    '    '    End If
+    '    '    If Not Contracts.InstallingOffice.StartsWith("X") And Not Contracts.InstallingOffice.StartsWith("T") Then
+    '    '        If Not IsDBNull(OfficeRecordset("Pricing Territory").Value) Then
+    '    '            Contracts.PricingTerritory = OfficeRecordset("Pricing Territory").Value
+    '    '        End If
+    '    '    End If
+    '    '    Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, ADODB.RecordTypeEnum.adCollectionRecord, CLOSE_RECORD)
+    '    'End If
+
+    'End Sub
 End Class
