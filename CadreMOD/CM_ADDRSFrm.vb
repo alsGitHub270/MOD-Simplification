@@ -283,13 +283,13 @@ Partial Friend Class CM_ADDRS_frm
         Dim TempIndex As Byte
 
         Me.Cursor = Cursors.WaitCursor
-        For AddressIndex = 1 To Addresses.GetUpperBound(0)
+        For Me.AddressIndex = 1 To Addresses.GetUpperBound(0)
             If Addresses(AddressIndex).Name.ToUpper() = Name_cmb.Text.ToUpper() And Addresses(AddressIndex).Type = Type_cmb.SelectedIndex Then
                 TempIndex = AddressIndex
                 Exit For
             End If
         Next AddressIndex
-        For AddressIndex = TempIndex + 1 To Addresses.GetUpperBound(0)
+        For Me.AddressIndex = TempIndex + 1 To Addresses.GetUpperBound(0)
             Addresses(AddressIndex).Type = Addresses(AddressIndex - 1).Type
             Addresses(AddressIndex).Name = Addresses(AddressIndex - 1).Name
             Addresses(AddressIndex).Address = Addresses(AddressIndex - 1).Address
@@ -551,7 +551,7 @@ Partial Friend Class CM_ADDRS_frm
         End If
         Me.Cursor = Cursors.WaitCursor
         InitializeAddress()
-        For AddressIndex = 1 To Addresses.GetUpperBound(0)
+        For Me.AddressIndex = 1 To Addresses.GetUpperBound(0)
             If Addresses(AddressIndex).Name.ToUpper() = SelectedName.ToUpper() Then
                 Name_cmb.Text = Addresses(AddressIndex).Name
                 Address_txt.Text = Addresses(AddressIndex).Address
@@ -688,7 +688,7 @@ Partial Friend Class CM_ADDRS_frm
                 Name_cmb.Items.Add(Consultants(iIndex))
             Next iIndex
         Else
-            For AddressIndex = 1 To Addresses.GetUpperBound(0)
+            For Me.AddressIndex = 1 To Addresses.GetUpperBound(0)
                 Name_cmb.Items.Add(Addresses(AddressIndex).Name)
             Next AddressIndex
         End If

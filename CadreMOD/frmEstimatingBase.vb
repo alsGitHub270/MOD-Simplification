@@ -1,21 +1,20 @@
+Imports System.Collections.Generic
 Imports System.IO
 Imports Newtonsoft.Json
-Imports System.Collections.Generic
+Imports Microsoft.VisualBasic
 
 Public Class frmEstimatingBase
     Inherits System.Windows.Forms.Form
     Private sv As New FarPoint.Win.Spread.SheetView()
     Private svCollection As New System.Collections.ArrayList(10)
-    Private EstimatingDataset As System.Data.DataSet
+    Public EstimatingDataset As System.Data.DataSet
+    Private OrderingDataset As System.Data.DataSet
     Private MainGroups As DataTable = Nothing
     Private SubGroups As DataTable = Nothing
-    Private GeneralInfo As DataTable
-    Private isInitializingComponent As Boolean
+    Private GeneralInfo As DataTable = Nothing
+    Private OrderingInfo As DataTable = Nothing
+    Private isInitializingComponent As Boolean = True
     Public FormIsDirty As Boolean
-
-    Private dtStr As System.Type = System.Type.GetType("System.String")
-    Private dtInt As System.Type = System.Type.GetType("System.Int32")
-    Private dtSng As System.Type = System.Type.GetType("System.Single")
 
     Public Structure a_SheetHeaders_typ
         Dim HeaderDesc As String
@@ -301,159 +300,246 @@ Public Class frmEstimatingBase
     Public Const MATID_BuildingGCWork As String = "04SUB"
     Public Const MATID_Crane As String = "05SUB"
 
-    Private Const EST_Prefix As String = "EST: "
-    Private Const ORD_Prefix As String = "ORD: "
-
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
     Private SheetCornerColWidth As Integer = 0
+    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODEST.json"
+    Dim OrderingForms_spc As Object
 
     Private Sub CreateDataSet(ByVal CurUnits As String)
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer
         Dim HeaderSetup() As System.Data.DataColumn = Nothing
 
-        EstimatingDataset = Nothing
-        EstimatingDataset = New DataSet()
-        EstimatingDataset.EnforceConstraints = False
+        Try
+            EstimatingDataset = Nothing
+            EstimatingDataset = New DataSet()
+            EstimatingDataset.EnforceConstraints = False
 
-        Erase SheetHeaders
-        ReDim SheetHeaders(MATERIAL_GROUP, TotalMaterialColumns)
+            Erase SheetHeaders
+            ReDim SheetHeaders(MATERIAL_GROUP, TotalMaterialColumns)
 
-        SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_GROUP).HeaderDesc = "Main Group"
-        SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_ID).HeaderDesc = "MainID"
-        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_COST).HeaderDesc = "Total Cost"
-        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_STD_HRS).HeaderDesc = "Total Std Hours"
-        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_SPEC_HRS).HeaderDesc = "Total Spec Hours"
-        SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_GROUP).HeaderType = dtStr
-        SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_ID).HeaderType = dtStr
-        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_COST).HeaderType = dtInt
-        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_STD_HRS).HeaderType = dtInt
-        SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_SPEC_HRS).HeaderType = dtInt
+            SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_GROUP).HeaderDesc = "Main Group"
+            SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_ID).HeaderDesc = "MainID"
+            SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_COST).HeaderDesc = "Total Cost"
+            SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_STD_HRS).HeaderDesc = "Total Std Hours"
+            SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_SPEC_HRS).HeaderDesc = "Total Spec Hours"
+            SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_GROUP).HeaderType = typeStr
+            SheetHeaders(MAIN_GROUP, MAIN_COL_MAIN_ID).HeaderType = typeStr
+            SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_COST).HeaderType = typeInt
+            SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_STD_HRS).HeaderType = typeInt
+            SheetHeaders(MAIN_GROUP, MAIN_COL_TOTAL_SPEC_HRS).HeaderType = typeInt
 
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderDesc = "Material Description"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderDesc = "MainID"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderDesc = "MaterialID"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderDesc = "Units"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderDesc = "Option"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderDesc = "Type"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderDesc = "Order By"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderDesc = "Unit Qty"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderDesc = "Unit Material Cost"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderDesc = "Unit Standard Hours"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderDesc = "Unit Special Hours"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderDesc = "Comments"
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderType = dtStr
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderType = dtInt
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderType = dtSng
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderType = dtSng
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderType = dtSng
-        SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderType = dtStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderDesc = "Material Description"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderDesc = "MainID"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderDesc = "MaterialID"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderDesc = "Units"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderDesc = "Option"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderDesc = "Type"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderDesc = "Order By"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderDesc = "Unit Qty"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderDesc = "Unit Material Cost"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderDesc = "Unit Standard Hours"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderDesc = "Unit Special Hours"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderDesc = "Comments"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderType = typeInt
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderType = typeStr
 
-        Erase a_MainGroup
-        Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "MainGroup")
-        If MaterialItemRecordSet.RecordCount > 0 Then
-            Array.Resize(a_MainGroup, MaterialItemRecordSet.RecordCount)
-            MaterialItemRecordSet.MoveFirst()
-            iIndex = 0
-            Do Until MaterialItemRecordSet.EOF
-                a_MainGroup(iIndex).MainID = MaterialItemRecordSet.Fields("MainID").Value.ToString.Trim
-                a_MainGroup(iIndex).Description = MaterialItemRecordSet.Fields("Main Group").Value.ToString.Trim
-                a_MainGroup(iIndex).Units = CurUnits
-                MaterialItemRecordSet.MoveNext()
-                iIndex += 1
-            Loop
-        End If
-        Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
-        Erase a_MaterialGroup
-        jIndex = 0
-        For iIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
-            Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "SubGroup")
-            MaterialItemRecordSet.Filter = "MainID = '" & a_MainGroup(iIndex).MainID & "'"
+            Erase a_MainGroup
+            Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "MainGroup")
             If MaterialItemRecordSet.RecordCount > 0 Then
+                Array.Resize(a_MainGroup, MaterialItemRecordSet.RecordCount)
                 MaterialItemRecordSet.MoveFirst()
+                iIndex = 0
                 Do Until MaterialItemRecordSet.EOF
-                    ReDim Preserve a_MaterialGroup(jIndex)
-                    a_MaterialGroup(jIndex).MainID = a_MainGroup(iIndex).MainID
-                    a_MaterialGroup(jIndex).MaterialID = MaterialItemRecordSet.Fields("MaterialID").Value.ToString.Trim
-                    a_MaterialGroup(jIndex).Description = MaterialItemRecordSet.Fields("Material Description").Value.ToString.Trim
-                    a_MaterialGroup(jIndex).Units = CurUnits
-                    a_MaterialGroup(jIndex).OptionStr = Nothing
-                    a_MaterialGroup(jIndex).Type = Nothing
-                    a_MaterialGroup(jIndex).OrderBy = Nothing
-                    a_MaterialGroup(jIndex).Qty = CalculateNumberOfCarsInEstimate(CurUnits)
-                    a_MaterialGroup(jIndex).MaterialCost = 0
-                    a_MaterialGroup(jIndex).StandardHours = 0
-                    a_MaterialGroup(jIndex).SpecialHours = 0
+                    a_MainGroup(iIndex).MainID = MaterialItemRecordSet.Fields("MainID").Value.ToString.Trim
+                    a_MainGroup(iIndex).Description = MaterialItemRecordSet.Fields("Main Group").Value.ToString.Trim
+                    a_MainGroup(iIndex).Units = CurUnits
                     MaterialItemRecordSet.MoveNext()
-                    jIndex += 1
+                    iIndex += 1
                 Loop
             End If
             Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
-        Next iIndex
-        For iIndex = SheetHeaders.GetLowerBound(0) To SheetHeaders.GetUpperBound(0)
-            Erase HeaderSetup
-            kIndex = 0
-            For jIndex = SheetHeaders.GetLowerBound(1) To SheetHeaders.GetUpperBound(1)
-                If Not String.IsNullOrEmpty(SheetHeaders(iIndex, jIndex).HeaderDesc) Then
-                    ReDim Preserve HeaderSetup(kIndex)
-                    HeaderSetup(kIndex) = New DataColumn(SheetHeaders(iIndex, jIndex).HeaderDesc, SheetHeaders(iIndex, jIndex).HeaderType)
-                    kIndex += 1
+            Erase a_MaterialGroup
+            jIndex = 0
+            For iIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, OPEN_RECORD, "SubGroup")
+                MaterialItemRecordSet.Filter = "MainID = '" & a_MainGroup(iIndex).MainID & "'"
+                If MaterialItemRecordSet.RecordCount > 0 Then
+                    MaterialItemRecordSet.MoveFirst()
+                    Do Until MaterialItemRecordSet.EOF
+                        ReDim Preserve a_MaterialGroup(jIndex)
+                        a_MaterialGroup(jIndex).MainID = a_MainGroup(iIndex).MainID
+                        a_MaterialGroup(jIndex).MaterialID = MaterialItemRecordSet.Fields("MaterialID").Value.ToString.Trim
+                        a_MaterialGroup(jIndex).Description = MaterialItemRecordSet.Fields("Material Description").Value.ToString.Trim
+                        a_MaterialGroup(jIndex).Units = CurUnits
+                        a_MaterialGroup(jIndex).OptionStr = Nothing
+                        a_MaterialGroup(jIndex).Type = Nothing
+                        a_MaterialGroup(jIndex).OrderBy = Nothing
+                        a_MaterialGroup(jIndex).Qty = CalculateNumberOfCarsInEstimate(CurUnits)
+                        a_MaterialGroup(jIndex).MaterialCost = 0
+                        a_MaterialGroup(jIndex).StandardHours = 0
+                        a_MaterialGroup(jIndex).SpecialHours = 0
+                        MaterialItemRecordSet.MoveNext()
+                        jIndex += 1
+                    Loop
                 End If
-            Next jIndex
-            Select Case iIndex
-                Case MAIN_GROUP
-                    MainGroups = EstimatingDataset.Tables.Add("EstMainGroup")
-                    MainGroups.Columns.AddRange(HeaderSetup)
-                    For jIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
-                        MainGroups.Rows.Add(New Object() {a_MainGroup(jIndex).Description, a_MainGroup(jIndex).MainID})
-                    Next jIndex
-                Case MATERIAL_GROUP
-                    SubGroups = EstimatingDataset.Tables.Add("EstMaterials")
-                    SubGroups.Columns.AddRange(HeaderSetup)
-                    For jIndex = a_MaterialGroup.GetLowerBound(0) To a_MaterialGroup.GetUpperBound(0)
-                        SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description, a_MaterialGroup(jIndex).MainID, a_MaterialGroup(jIndex).MaterialID,
-                                                         a_MaterialGroup(jIndex).Units, a_MaterialGroup(jIndex).OptionStr, a_MaterialGroup(jIndex).Type,
-                                                         a_MaterialGroup(jIndex).OrderBy, a_MaterialGroup(jIndex).Qty, a_MaterialGroup(jIndex).MaterialCost,
-                                                         a_MaterialGroup(jIndex).StandardHours, a_MaterialGroup(jIndex).SpecialHours})
-                    Next jIndex
-                    Exit For
-                Case Else
-            End Select
-        Next iIndex
-        Deserialize()
-        EstimatingDataset.Relations.Add("EstMaterials", MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+                Query_Execute(ADOConnectionOptionDataBase, MaterialItemRecordSet, 1, CLOSE_RECORD)
+            Next iIndex
+            For iIndex = SheetHeaders.GetLowerBound(0) To SheetHeaders.GetUpperBound(0)
+                Erase HeaderSetup
+                kIndex = 0
+                For jIndex = SheetHeaders.GetLowerBound(1) To SheetHeaders.GetUpperBound(1)
+                    If Not String.IsNullOrEmpty(SheetHeaders(iIndex, jIndex).HeaderDesc) Then
+                        ReDim Preserve HeaderSetup(kIndex)
+                        HeaderSetup(kIndex) = New DataColumn(SheetHeaders(iIndex, jIndex).HeaderDesc, SheetHeaders(iIndex, jIndex).HeaderType)
+                        kIndex += 1
+                    End If
+                Next jIndex
+                Select Case iIndex
+                    Case MAIN_GROUP
+                        MainGroups = EstimatingDataset.Tables.Add("EstMainGroup")
+                        MainGroups.Columns.AddRange(HeaderSetup)
+                        For jIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
+                            MainGroups.Rows.Add(New Object() {a_MainGroup(jIndex).Description, a_MainGroup(jIndex).MainID})
+                        Next jIndex
+                    Case MATERIAL_GROUP
+                        SubGroups = EstimatingDataset.Tables.Add("EstMaterials")
+                        SubGroups.Columns.AddRange(HeaderSetup)
+                        For jIndex = a_MaterialGroup.GetLowerBound(0) To a_MaterialGroup.GetUpperBound(0)
+                            SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description, a_MaterialGroup(jIndex).MainID, a_MaterialGroup(jIndex).MaterialID,
+                                                             a_MaterialGroup(jIndex).Units, a_MaterialGroup(jIndex).OptionStr, a_MaterialGroup(jIndex).Type,
+                                                             a_MaterialGroup(jIndex).OrderBy, a_MaterialGroup(jIndex).Qty, a_MaterialGroup(jIndex).MaterialCost,
+                                                             a_MaterialGroup(jIndex).StandardHours, a_MaterialGroup(jIndex).SpecialHours})
+                        Next jIndex
+                        Exit For
+                    Case Else
+                End Select
+            Next iIndex
+
+            GeneralInfo = EstimatingDataset.Tables.Add("GeneralInfo")
+            GeneralInfo.Columns.AddRange(New DataColumn() {New DataColumn("UnitsInTab", typeStr),
+                                         New DataColumn("CapacityNew_cmb", typeStr),
+                                         New DataColumn("SpeedNew_cmb", typeStr),
+                                         New DataColumn("NumberofStopsTotal_cmb", typeStr),
+                                         New DataColumn("NumberofStopsFront_cmb", typeStr),
+                                         New DataColumn("NumberofStopsRear_cmb", typeStr),
+                                         New DataColumn("PowerSupply_cmb", typeStr),
+                                         New DataColumn("Application_cmb", typeStr),
+                                         New DataColumn("LayoutRequirements_cmb", typeStr),
+                                         New DataColumn("DoorOperatorTypeFront_cmb", typeStr),
+                                         New DataColumn("CarDoorOpeningWidthFtFront_txt", typeStr),
+                                         New DataColumn("CarDoorOpeningWidthInFront_txt", typeStr),
+                                         New DataColumn("CarDoorOpeningHeightFtFront_txt", typeStr),
+                                         New DataColumn("CarDoorOpeningHeightInFront_txt", typeStr),
+                                         New DataColumn("DoorOperatorTypeRear_cmb", typeStr),
+                                         New DataColumn("CarDoorOpeningWidthFtRear_txt", typeStr),
+                                         New DataColumn("CarDoorOpeningWidthInRear_txt", typeStr),
+                                         New DataColumn("CarDoorOpeningHeightFtRear_txt", typeStr),
+                                         New DataColumn("CarDoorOpeningHeightInRear_txt", typeStr),
+                                         New DataColumn("MachineType_cmb", typeStr),
+                                         New DataColumn("DriveType_cmb", typeStr),
+                                         New DataColumn("CarWeight_txt", typeStr),
+                                         New DataColumn("HoistMotorHP_txt", typeStr),
+                                         New DataColumn("HoistMotorRpm_txt", typeStr),
+                                         New DataColumn("MachineLocation_Cmb", typeStr),
+                                         New DataColumn("RopingNew_Cmb", typeStr),
+                                         New DataColumn("TopFloorToOverhead_txt", typeStr),
+                                         New DataColumn("Travel_txt", typeStr),
+                                         New DataColumn("PitDepth_txt", typeStr),
+                                         New DataColumn("RiserQtyExistingFront_Cmb", typeStr),
+                                         New DataColumn("RiserQtyExistingRear_Cmb", typeStr),
+                                         New DataColumn("FixtureFinish_cmb", typeStr),
+                                         New DataColumn("DTRequestedShipDate", typeStr),
+                                         New DataColumn("BankCompleteDate_txt", typeStr),
+                                         New DataColumn("ExistingControlVendor_lst", typeStr),
+                                         New DataColumn("ExistingControlModel_lst", typeStr),
+                                         New DataColumn("OriginalGONumberAvailable_cmb", typeStr),
+                                         New DataColumn("OriginalGOnumber_txt", typeStr),
+                                         New DataColumn("PEStampRequired_cmb", typeStr),
+                                         New DataColumn("ShortFloorOperation_chk", typeInt),
+                                         New DataColumn("Permits_txt", typeStr),
+                                         New DataColumn("Bonds_txt", typeStr),
+                                         New DataColumn("Zone_txt", typeStr),
+                                         New DataColumn("Parking_txt", typeStr),
+                                         New DataColumn("OutOfTownExpense_txt", typeStr),
+                                         New DataColumn("TravelTime_txt", typeStr),
+                                         New DataColumn("Miscellaneous_txt", typeStr),
+                                         New DataColumn("TotalExpensesPerDay_txt", typeStr),
+                                         New DataColumn("ExpensesPerDay_txt", typeStr),
+                                         New DataColumn("GatewayReviewRequired_chk", typeInt)})
+
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json"
+            Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & TabControl1.SelectedTab.Text, FormIsDirty)
+            EstimatingDataset.Relations.Add("EstMaterials", MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In Estimating - CreateDataSet")
+
+        End Try
 
     End Sub
     Private Sub PrepareThisForm()
-        Dim TabToRemove As String = String.Empty
+        Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
+        Dim JSONFileList As List(Of FileInfo) = New List(Of FileInfo)
+        Dim UseTabName As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
         isInitializingComponent = True
         DAO2ADO(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, My.Application.Info.DirectoryPath & "\", OPTION_DATABASE_NAME, True)
         Load_ListBoxes()
-        OrderingTabs.Top = CarData_fra.Top
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
-        CarTab.Text = EST_Prefix & CurrentUnits
-        OrderTab.Text = ORD_Prefix & CurrentUnits
-        Select Case EstimateLevel
-            Case "Master"
-                TabToRemove = "+"
-            Case Else
-                TabToRemove = ORD_Prefix
-        End Select
-        If Not String.IsNullOrEmpty(TabToRemove) Then
+        For Each JSONFile In JSONFileLocation.GetFiles()
+            If JSONFile IsNot Nothing Then
+                If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
+                    If JSONFile.ToString.ToUpper.Contains("MODEST") Or JSONFile.ToString.ToUpper.Contains("MODORD") Then
+                        JSONFileList.Add(JSONFile)
+                    End If
+                End If
+            End If
+        Next JSONFile
+        If JSONFileList.Count = 0 Then
+            CarTab.Text = CurrentUnits & EST_Suffix
+            If EstimateLevel = "Master" Then
+                OrderTab.Text = CurrentUnits & ORD_Suffix
+            End If
+        Else
+            UseTabName = FormatTabName(JSONFileList(0).Name)
+            CarTab.Text = UseTabName & EST_Suffix
+            If JSONFileList(1).Name.ToUpper.Contains("MODORD") Then
+                OrderTab.Text = UseTabName & ORD_Suffix
+            End If
+            For iIndex As Integer = 0 To JSONFileList.Count - 1
+                UseTabName = FormatTabName(JSONFileList(iIndex).Name)
+                If JSONFileList(1).Name.ToUpper.Contains("MODEST") Then
+                    TabControl1.TabPages.Add(UseTabName & EST_Suffix)
+                ElseIf JSONFileList(1).Name.ToUpper.Contains("MODORD") Then
+                    TabControl1.TabPages.Add(UseTabName & ORD_Suffix)
+                End If
+            Next iIndex
+        End If
+        If EstimateLevel = "Base" Then
             For iIndex As Integer = TabControl1.TabPages.Count - 1 To 0 Step -1
                 Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                If CurTab.Text.IndexOf(TabToRemove) > -1 Then
+                If CurTab.Text.IndexOf(ORD_Suffix) > -1 Or CurTab.Text.Trim.Length = 0 Then
                     TabControl1.TabPages.Remove(CurTab)
                 End If
             Next iIndex
+            Copy_cmd.Visible = True
+            Merge_cmd.Visible = True
+        Else
+            Copy_cmd.Visible = False
+            Merge_cmd.Visible = False
         End If
         TabControl1.SelectTab(0)
         TabControl1.Left = 3
@@ -461,7 +547,16 @@ Public Class frmEstimatingBase
         CurrentGenInfoFrameHeight = GeneralInformation_fra.Height
         CurrentBillofMaterialsandTaskListFrameHeight = BillofMaterialsandTaskList_fra.Height
         ExpensesPerDayDetails_btn.Left = ExpensesPerDay_txt.Left
+        Dim UseIndex As Integer = 0
+        For Each Cntrl As Control In ExpensesPerDay_frm.Controls
+            If TypeOf [Cntrl] Is TextBox Then
+                ReDim Preserve SubcontractedLaborCost.LaborCost(UseIndex)
+                SubcontractedLaborCost.LaborCost(UseIndex).Description = [Cntrl].Name
+                UseIndex += 1
+            End If
+        Next Cntrl
         DisplayEST_vs_ORD()
+        Set_Fields_Grey()
         isInitializingComponent = False
         Me.Cursor = Cursors.Default
 
@@ -489,7 +584,7 @@ Public Class frmEstimatingBase
 
         If FormIsDirty Then
             If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                Call SaveEstimatingData()
+                SaveAll()
             End If
         End If
         EndProgram()
@@ -616,7 +711,7 @@ Public Class frmEstimatingBase
         Next i
 
         NumberofStopsRear_cmb.Items.Clear()
-        For i As Integer = MIN_BLDG_FLRS To MAX_BLDG_FLRS
+        For i As Integer = 0 To MAX_BLDG_FLRS
             NumberofStopsRear_cmb.Items.Add(i)
         Next i
 
@@ -649,11 +744,11 @@ Public Class frmEstimatingBase
         DoorOperatorTypeRear_cmb.Items.Add(DOORTYPE_2SSS)
         DoorOperatorTypeRear_cmb.Items.Add(DOORTYPE_2SCO)
 
-        LayoutEntranceDrawing_cmb.Items.Clear()
-        LayoutEntranceDrawing_cmb.Items.Add("Record Only")
-        LayoutEntranceDrawing_cmb.Items.Add("Approval")
-        LayoutEntranceDrawing_cmb.Items.Add("Machine Room")
-        LayoutEntranceDrawing_cmb.Items.Add("Full")
+        LayoutRequirements_cmb.Items.Clear()
+        LayoutRequirements_cmb.Items.Add("Record Only")
+        LayoutRequirements_cmb.Items.Add("Approval")
+        LayoutRequirements_cmb.Items.Add("Machine Room")
+        LayoutRequirements_cmb.Items.Add("Full")
 
         MachineType_cmb.Items.Clear()
         MachineType_cmb.Items.Add("Reuse " & GEARED_TYPE)
@@ -803,123 +898,6 @@ Public Class frmEstimatingBase
         OriginalGONumberAvailable_cmb.Items.Clear()
         OriginalGONumberAvailable_cmb.Items.Add("Yes")
         OriginalGONumberAvailable_cmb.Items.Add("No")
-
-        '********************* Ordering **************************
-        CarGovernorNewModel_cmb.Items.Clear()
-        If Conversion.Val(SpeedNew_cmb.Text) > 800 Then
-            CarGovernorNewModel_cmb.Items.Add("GB 32")
-            CarGovernorNewModel_cmb.Items.Add("GB 42")
-        Else
-            CarGovernorNewModel_cmb.Items.Add("HW202")
-            CarGovernorNewModel_cmb.Items.Add("HW207")
-            CarGovernorNewModel_cmb.Items.Add("HW210")
-        End If
-
-        CarGovernorExistingVendor_cmb.Items.Clear()
-        CarGovernorExistingVendor_cmb.Items.Add(WESTINGHOUSE)
-        CarGovernorExistingVendor_cmb.Items.Add(HAUGHTON)
-        CarGovernorExistingVendor_cmb.Items.Add(HOLLISTERWHITNEY)
-        CarGovernorExistingVendor_cmb.Items.Add(VILLARES)
-        CarGovernorExistingVendor_cmb.Items.Add(OTHER)
-
-        CarGovernorExistingModel_cmb.Items.Clear()
-        Select Case CarGovernorExistingVendor_cmb.Text
-            Case WESTINGHOUSE
-                CarGovernorExistingModel_cmb.Items.Add("B5")
-                CarGovernorExistingModel_cmb.Items.Add("B22")
-                CarGovernorExistingModel_cmb.Items.Add("W5")
-            Case HAUGHTON
-                CarGovernorExistingModel_cmb.Items.Add("16 Series")
-                CarGovernorExistingModel_cmb.Items.Add("12I")
-            Case HOLLISTERWHITNEY
-                CarGovernorExistingModel_cmb.Items.Add("HW201")
-                CarGovernorExistingModel_cmb.Items.Add("HW205")
-                CarGovernorExistingModel_cmb.Items.Add("HW206")
-                CarGovernorExistingModel_cmb.Items.Add("HW208")
-                CarGovernorExistingModel_cmb.Items.Add("HW209")
-            Case VILLARES
-                CarGovernorExistingModel_cmb.Items.Add("B5")
-                CarGovernorExistingModel_cmb.Items.Add("B22")
-            Case Else
-        End Select
-        CarGovernorExistingModel_cmb.Items.Add(OTHER)
-
-        CarGovCableSize_cmb.Items.Clear()
-        CarGovCableSize_cmb.Items.Add("3/8")
-        CarGovCableSize_cmb.Items.Add("1/2")
-
-        CarGovernor1Hand_cmb.Items.Clear()
-        CarGovernor1Hand_cmb.Items.Add("Left Hand")
-        CarGovernor1Hand_cmb.Items.Add("Right Hand")
-
-        CarGovernorMounting_cmb.Items.Clear()
-        CarGovernorMounting_cmb.Items.Add("Slab")
-        CarGovernorMounting_cmb.Items.Add("Rail")
-
-        CarGovernorExistingSheaveDiameter_cmb.Items.Clear()
-        If CarGovernorExistingModel_cmb.Text = "B22" Then
-            CarGovernorExistingSheaveDiameter_cmb.Items.Add("22.00")
-        Else
-            CarGovernorExistingSheaveDiameter_cmb.Items.Add("12.00")
-            CarGovernorExistingSheaveDiameter_cmb.Items.Add("16.00")
-            CarGovernorExistingSheaveDiameter_cmb.Items.Add("Other")
-        End If
-
-        CwtGovernorNewModel_cmb.Items.Clear()
-        If Conversion.Val(SpeedNew_cmb.Text) > 800 Then
-            CwtGovernorNewModel_cmb.Items.Add("GB 32")
-            CwtGovernorNewModel_cmb.Items.Add("GB 42")
-        Else
-            CwtGovernorNewModel_cmb.Items.Add("HW202")
-            CwtGovernorNewModel_cmb.Items.Add("HW207")
-            CwtGovernorNewModel_cmb.Items.Add("HW210")
-        End If
-
-        CwtGovernorExistingVendor_cmb.Items.Clear()
-        CwtGovernorExistingVendor_cmb.Items.Add(WESTINGHOUSE)
-        CwtGovernorExistingVendor_cmb.Items.Add(HAUGHTON)
-        CwtGovernorExistingVendor_cmb.Items.Add(HOLLISTERWHITNEY)
-        CwtGovernorExistingVendor_cmb.Items.Add(VILLARES)
-        CwtGovernorExistingVendor_cmb.Items.Add(OTHER)
-
-        CwtGovernorExistingModel_cmb.Items.Clear()
-        Select Case CwtGovernorExistingVendor_cmb.Text
-            Case WESTINGHOUSE
-                CwtGovernorExistingModel_cmb.Items.Add("B5")
-                CwtGovernorExistingModel_cmb.Items.Add("B22")
-                CwtGovernorExistingModel_cmb.Items.Add("W5")
-            Case HAUGHTON
-                CwtGovernorExistingModel_cmb.Items.Add("16 Series")
-                CwtGovernorExistingModel_cmb.Items.Add("12I")
-            Case HOLLISTERWHITNEY
-                CwtGovernorExistingModel_cmb.Items.Add("HW201")
-                CwtGovernorExistingModel_cmb.Items.Add("HW205")
-                CwtGovernorExistingModel_cmb.Items.Add("HW206")
-                CwtGovernorExistingModel_cmb.Items.Add("HW208")
-                CwtGovernorExistingModel_cmb.Items.Add("HW209")
-            Case VILLARES
-                CwtGovernorExistingModel_cmb.Items.Add("B5")
-                CwtGovernorExistingModel_cmb.Items.Add("B22")
-            Case Else
-        End Select
-        CwtGovernorExistingModel_cmb.Items.Add(OTHER)
-
-        CwtGovCableSize_cmb.Items.Clear()
-        CwtGovCableSize_cmb.Items.Add("3/8")
-        CwtGovCableSize_cmb.Items.Add("1/2")
-
-        CwtGovernor1Hand_cmb.Items.Clear()
-        CwtGovernor1Hand_cmb.Items.Add("Left Hand")
-        CwtGovernor1Hand_cmb.Items.Add("Right Hand")
-
-        CwtGovernorMounting_cmb.Items.Clear()
-        CwtGovernorMounting_cmb.Items.Add("Slab")
-        CwtGovernorMounting_cmb.Items.Add("Rail")
-
-        CwtGovernorExistingSheaveDiameter_cmb.Items.Clear()
-        CwtGovernorExistingSheaveDiameter_cmb.Items.Add("12.00")
-        CwtGovernorExistingSheaveDiameter_cmb.Items.Add("16.00")
-        CwtGovernorExistingSheaveDiameter_cmb.Items.Add("Other")
 
         PEStampRequired_cmb.Items.Clear()
         PEStampRequired_cmb.Items.Add("Yes")
@@ -1181,193 +1159,40 @@ Public Class frmEstimatingBase
     Private Sub FpSpread1_ComboCloseUp(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboCloseUp
         RetrieveCostHours(e.Row)
     End Sub
-    Private Sub TabControl1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.Click
-        Dim LastIndex As Integer = TabControl1.TabPages.Count - 1
-        Dim UseUnits As String = String.Empty
-
-        If TabControl1.SelectedTab.Text.IndexOf("+") > -1 Then
-            UseUnits = InputBox("Enter Car Unit(s)", "Split Cars")
-            If Not String.IsNullOrEmpty(UseUnits) Then
-                TabControl1.TabPages.Insert(LastIndex, EST_Prefix & UseUnits)
-                TabControl1.SelectTab(LastIndex)
+    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
+        If Not isInitializingComponent Then
+            If PromptForSave() Then
                 DisplayEST_vs_ORD()
             End If
-        Else
-            DisplayEST_vs_ORD()
         End If
-
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
-        If TabControl1.SelectedTab.Text.IndexOf(EST_Prefix) > -1 Then
+        If TabControl1.SelectedTab.Text.IndexOf(EST_Suffix) > -1 Then
             PopulateEstimating()
             CarData_fra.Visible = True
+            CarData_fra.BringToFront()
             If EstimateLevel = "Master" Then
-                OrderingTabs.Visible = False
+                OrderingForms_fra.Visible = False
+                OrderingForms_fra.SendToBack()
             End If
-        ElseIf TabControl1.SelectedTab.Text.IndexOf(ORD_Prefix) > -1 Then
+        ElseIf TabControl1.SelectedTab.Text.IndexOf(ORD_Suffix) > -1 Then
             PopulateOrdering()
+            OrderingForms_lst.Items.Clear()
+            OrderingForms_lst.Items.Add("Governor")
+            OrderingForms_con.Left = OrderingForms_lst.Left + OrderingForms_lst.Width + 3
+            OrderingForms_con.Width = OrderingForms_fra.Width - OrderingForms_con.Left - 1
             CarData_fra.Visible = False
-            OrderingTabs.Visible = True
-        ElseIf TabControl1.SelectedTab.Text.IndexOf("+") > -1 Then
+            CarData_fra.SendToBack()
+            OrderingForms_fra.Visible = True
+            OrderingForms_fra.BringToFront()
+        Else
             CarData_fra.Visible = False
-            OrderingTabs.Visible = False
+            CarData_fra.SendToBack()
+            OrderingForms_fra.Visible = False
+            OrderingForms_fra.SendToBack()
         End If
 
-    End Sub
-    Private Sub SetGovImage(ByVal FromControl As String)
-
-        Gov_img.SizeMode = PictureBoxSizeMode.AutoSize
-        Select Case FromControl
-            Case "NewGov"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\NewGovernor.png")
-            Case "ExistingGov"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\ExistingGovernor.png")
-            Case "GovMounting"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\GovernorMounting.png")
-            Case "GovMinimumClearances"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\GovernorMachineRoomClearances.png")
-            Case "GovTensionSheave"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\GovernorTensionSheavePit.png")
-            Case Else
-                Gov_img.Image = Nothing
-        End Select
-
-    End Sub
-    Private Sub ResetGovImage()
-        Gov_img.Image = Nothing
-    End Sub
-    Private Sub CarGovernorNewModel_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorNewModel_cmb.GotFocus
-        SetGovImage("NewGov")
-    End Sub
-    Private Sub CarGovernorNewModel_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorNewModel_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernorExistingVendor_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorExistingVendor_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CarGovernorExistingVendor_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorExistingVendor_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernorExistingModel_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorExistingModel_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CarGovernorExistingModel_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorExistingModel_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovCableSize_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovCableSize_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CarGovCableSize_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovCableSize_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernorPullthrough_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorPullthrough_txt.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CarGovernorPullthrough_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorPullthrough_txt.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernor1Hand_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernor1Hand_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CarGovernor1Hand_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernor1Hand_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernorMounting_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorMounting_cmb.GotFocus
-        SetGovImage("GovMounting")
-    End Sub
-    Private Sub CarGovernorMounting_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorMounting_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarMeetsMinimumClearances_chk_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarMeetsMinimumClearances_chk.GotFocus
-        SetGovImage("GovMinimumClearances")
-    End Sub
-    Private Sub CarMeetsMinimumClearances_chk_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarMeetsMinimumClearances_chk.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernor1TensionSheaveA_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernor1TensionSheaveA_txt.GotFocus
-        SetGovImage("GovTensionSheave")
-    End Sub
-    Private Sub CarGovernor1TensionSheaveA_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernor1TensionSheaveA_txt.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernor1TensionSheaveB_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernor1TensionSheaveB_txt.GotFocus
-        SetGovImage("GovTensionSheave")
-    End Sub
-    Private Sub CarGovernor1TensionSheaveB_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernor1TensionSheaveB_txt.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CarGovernorExistingSheaveDiameter_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorExistingSheaveDiameter_cmb.GotFocus
-        SetGovImage("GovTensionSheave")
-    End Sub
-    Private Sub CarGovernorExistingSheaveDiameter_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarGovernorExistingSheaveDiameter_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernorNewModel_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorNewModel_cmb.GotFocus
-        SetGovImage("NewGov")
-    End Sub
-    Private Sub CwtGovernorNewModel_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorNewModel_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernorExistingVendor_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingVendor_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CwtGovernorExistingVendor_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingVendor_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernorExistingModel_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingModel_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CwtGovernorExistingModel_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingModel_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovCableSize_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovCableSize_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CwtGovCableSize_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovCableSize_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernorPullthrough_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorPullthrough_txt.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CwtGovernorPullthrough_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorPullthrough_txt.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernor1Hand_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernor1Hand_cmb.GotFocus
-        SetGovImage("ExistingGov")
-    End Sub
-    Private Sub CwtGovernor1Hand_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernor1Hand_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernorMounting_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorMounting_cmb.GotFocus
-        SetGovImage("GovMounting")
-    End Sub
-    Private Sub CwtGovernorMounting_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorMounting_cmb.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtMeetsMinimumClearances_chk_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtMeetsMinimumClearances_chk.GotFocus
-        SetGovImage("GovMinimumClearances")
-    End Sub
-    Private Sub CwtMeetsMinimumClearances_chk_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtMeetsMinimumClearances_chk.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernor1TensionSheaveA_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernor1TensionSheaveA_txt.GotFocus
-        SetGovImage("GovTensionSheave")
-    End Sub
-    Private Sub CwtGovernor1TensionSheaveA_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernor1TensionSheaveA_txt.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernor1TensionSheaveB_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernor1TensionSheaveB_txt.GotFocus
-        SetGovImage("GovTensionSheave")
-    End Sub
-    Private Sub CwtGovernor1TensionSheaveB_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernor1TensionSheaveB_txt.LostFocus
-        ResetGovImage()
-    End Sub
-    Private Sub CwtGovernorExistingSheaveDiameter_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingSheaveDiameter_cmb.GotFocus
-        SetGovImage("GovTensionSheave")
-    End Sub
-    Private Sub CwtGovernorExistingSheaveDiameter_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CwtGovernorExistingSheaveDiameter_cmb.LostFocus
-        ResetGovImage()
     End Sub
     Private Sub ExpensesPerDayDetails_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDayDetails_btn.Click
         ExpensesPerDay_frm.ShowDialog()
@@ -1397,14 +1222,15 @@ Public Class frmEstimatingBase
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         Dim dt As DataTable
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim UseUnits As String = Strings.Mid(TabControl1.SelectedTab.Text.Trim, 6)
+        Dim UseUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
 
+        FpSpread1.ActiveSheet.RowCount = 0
         CreateDataSet(UseUnits)
         model = FpSpread1.ActiveSheet.Models.Data
         For Each dt In EstimatingDataset.Tables
             dt.DefaultView.AllowNew = False
-        Next
-        model.DataMember = "artists"
+        Next dt
+        model.DataMember = "EstimatingData"
         model.DataSource = EstimatingDataset
         FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
         FpSpread1.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
@@ -1538,37 +1364,29 @@ Public Class frmEstimatingBase
             Else
                 _row = GeneralInfo.Rows(0)
             End If
-
-            '_row("building_type") = cboBuildingType.Text
-            '_row("major_project") = chkMajorProject.CheckState
-            '_row("sales_rep") = cboSalesRep.Text
-            '_row("sales_office") = cboSalesOffice.Text
-            '_row("installing_office") = cboInstallingOffice.Text
-            '_row("service_office") = cboServiceOffice.Text
-            '_row("status") = cboStatus.Text
-            '_row("probability_of_sale") = cboProbabilityOfSale.Text
-            '_row("bid_date") = txtBidDate.Text
-            '_row("national_account") = cboNationalAccount.Text
-            '_row("tax_code") = cboTaxCode.Text
-            '_row("seismic_zone") = cboSeismicZone.Text
-            '_row("local_code") = cboLocalCode.Text
-            '_row("ansi_csa_b44_code") = cboANSICode.Text
-            '_row("nfpa_code") = cboNFPA13CodeYear.Text
-            '_row("sds_level") = txtSDSlevel.Text
-            '_row("oshpd") = chkOSHPD.CheckState
-            '_row("dsa") = chkDSA.CheckState
-            '_row("head_detection") = chkHeadDetection.CheckState
-            '_row("engineering_survey") = chkEngineeringSurvey.CheckState
-            '_row("nps_duration") = cboDurationMonths.Text
-            '_row("nps_call_back") = cboCallBackHours.Text
-            '_row("nps_material_cost") = txtNPSMaterialCost.Text
-            '_row("nps_labor_cost") = txtNPSLaborCost.Text
-            '_row("nps_one_time_cost") = txtNPSOneTimeCost.Text
-            '_row("ocpl") = txtOCPL.Text
+            _row("UnitsInTab") = SplitUnitsForSave(Strings.Left(TabControl1.SelectedTab.Text, TabControl1.SelectedTab.Text.Length - 6))
+            For Each Cntrl As Control In Me.Controls
+                If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+                    _row([Cntrl].Name) = [Cntrl].Text
+                ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+                    Dim UseDTPicker As DateTimePicker = [Cntrl]
+                    _row([Cntrl].Name) = UseDTPicker.Value.ToString("d")
+                ElseIf TypeOf [Cntrl] Is CheckBox Then
+                    Dim UseCheckbox As CheckBox = [Cntrl]
+                    _row([Cntrl].Name) = UseCheckbox.CheckState
+                End If
+            Next Cntrl
+            For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
+                _row(SubcontractedLaborCost.LaborCost(iIndex).Description) = SubcontractedLaborCost.LaborCost(iIndex).Cost
+            Next iIndex
             If is_new_row Then
                 GeneralInfo.Rows.Add(_row)
             End If
-            Serialize()
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json"
+            If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
+                Throw New Exception
+            End If
 
         Catch ex As Exception
             MessageBox.Show("Error saving data", "Error Saving Estimating Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -1577,43 +1395,50 @@ Public Class frmEstimatingBase
 
 
     End Sub
-    Private Sub Serialize()
-        Dim json As String = ""
-        Dim EST_Filename As String = Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units)
+    Private Sub SaveOrderingData()
+        'Dim _row As DataRow
+        'Dim is_new_row As Boolean = False
 
         Try
-            json = JsonConvert.SerializeObject(EstimatingDataset, Formatting.Indented)
-            Using sw As StreamWriter = New StreamWriter(EstimatePath & EST_Filename & "MODEST.json")
-                sw.Write(json)
-            End Using
+            'Currrent Estimating Tab
+            'If GeneralInfo.Rows.Count = 0 Then
+            '    _row = GeneralInfo.NewRow
+            '    is_new_row = True
+            'Else
+            '    _row = GeneralInfo.Rows(0)
+            'End If
+            'For Each Cntrl As Control In Me.Controls
+            '    If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+            '        _row([Cntrl].Name) = [Cntrl].Text
+            '    ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+            '        Dim UseDTPicker As DateTimePicker = [Cntrl]
+            '        _row([Cntrl].Name) = UseDTPicker.Value.ToString("d")
+            '    ElseIf TypeOf [Cntrl] Is CheckBox Then
+            '        Dim UseCheckbox As CheckBox = [Cntrl]
+            '        _row([Cntrl].Name) = UseCheckbox.CheckState.ToString
+            '    End If
+            'Next Cntrl
+            'For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
+            '    _row(SubcontractedLaborCost.LaborCost(iIndex).Description) = SubcontractedLaborCost.LaborCost(iIndex).Cost
+            'Next iIndex
+            'If is_new_row Then
+            '    GeneralInfo.Rows.Add(_row)
+            'End If
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODORD.json"
+            If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
+                Throw New Exception
+            End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Writing Cadre Json file")
+            MessageBox.Show("Error saving data", "Error Saving Ordering Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
-        FormIsDirty = False
 
-    End Sub
-    Private Sub Deserialize()
-        Dim json As String = ""
-        Dim EST_Filename As String = Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units)
-
-        Try
-            Using sr As StreamReader = New StreamReader(EstimatePath & EST_Filename & "MODEST.json")
-                json = sr.ReadToEnd
-            End Using
-            EstimatingDataset = JsonConvert.DeserializeObject(Of DataSet)(json)
-            EstimatingDataset.Merge(EstimatingDataset, True, MissingSchemaAction.Ignore)
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Reading Input File")
-
-        End Try
-        FormIsDirty = False
 
     End Sub
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
-        SaveEstimatingData()
+        SaveAll()
     End Sub
     Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
@@ -1639,6 +1464,7 @@ Public Class frmEstimatingBase
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
+        Set_Fields_Grey()
     End Sub
     Private Sub PowerSupply_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PowerSupply_cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
@@ -1650,7 +1476,7 @@ Public Class frmEstimatingBase
             FormIsDirty = True
         End If
     End Sub
-    Private Sub LayoutEntranceDrawing_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LayoutEntranceDrawing_cmb.SelectedIndexChanged
+    Private Sub LayoutRequirements_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LayoutRequirements_cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
@@ -1795,7 +1621,7 @@ Public Class frmEstimatingBase
             FormIsDirty = True
         End If
     End Sub
-    Private Sub MinimumFloorDistance_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MinimumFloorDistance_chk.CheckedChanged
+    Private Sub ShortFloorOperation_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShortFloorOperation_chk.CheckedChanged
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
@@ -1819,5 +1645,175 @@ Public Class frmEstimatingBase
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
+    End Sub
+    Private Sub Copy_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Copy_cmd.Click
+        ShowCopyMergeDialog(Copy_cmd.Tag)
+    End Sub
+    Private Sub Merge_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Merge_cmd.Click
+        ShowCopyMergeDialog(Merge_cmd.Tag)
+    End Sub
+    Private Sub ShowCopyMergeDialog(ByVal CurButtonLabel As String)
+        Dim CurUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
+        Dim iIndex As Integer = 0, AryIndex As Integer = -1
+
+        If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                                                                 FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json") Then
+            If PromptForSave() Then
+                ArchiveFiles()
+                UnitCopyMerge_frm.Text = CurButtonLabel
+                UnitCopyMerge_frm.CurUnits = CurUnits
+                Erase UnitCopyMerge_frm.UnitOptions
+                If CurButtonLabel.Contains("Copy") Then
+                    CalculateNumberOfCarsInEstimate(CurUnits)
+                    UnitCopyMerge_frm.UnitOptions = UnitsInEstimate
+                ElseIf TabControl1.TabPages.Count > 1 Then
+                    For iIndex = 0 To TabControl1.TabPages.Count
+                        Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
+                        If CurTab.Text.IndexOf(EST_Suffix) > -1 And CurTab.Text <> TabControl1.SelectedTab.Text Then
+                            AryIndex += 1
+                            ReDim Preserve UnitCopyMerge_frm.UnitOptions(AryIndex)
+                            UnitCopyMerge_frm.UnitOptions(AryIndex) = Strings.Left(CurTab.Text.Trim, CurTab.Text.Length - 6)
+                        End If
+                    Next iIndex
+                    If AryIndex = -1 Then
+                        Exit Sub
+                    End If
+                Else
+                    Exit Sub
+                End If
+                UnitCopyMerge_frm.ShowDialog()
+                If UnitCopyMerge_frm.CopyMergeStatus = "Successful" Then
+                    ArchiveFiles()
+                    If CurButtonLabel.Contains("Merge") Then
+                        For iIndex = TabControl1.TabPages.Count - 1 To 0 Step -1
+                            Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
+                            If CurTab.Text = CurUnits & EST_Suffix Then
+                                TabControl1.TabPages.Remove(CurTab)
+                                Exit For
+                            End If
+                        Next iIndex
+                        TabControl1.SelectTab(0)
+                    End If
+                End If
+                DisplayEST_vs_ORD()
+            End If
+        Else
+            MsgBox("Current data for " & TabControl1.SelectedTab.Text & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
+        End If
+
+    End Sub
+    Public Function FormatTabName(ByVal CurFileName As String) As String
+        Dim ReturnVal As String = Strings.Mid(CurFileName, 14, CurFileName.Length - 24)
+        Dim UnitParts() As String = ReturnVal.Split("_")
+
+        If UnitParts.Length > 1 Then
+            ReturnVal = String.Empty
+            For iIndex As Integer = UnitParts.GetLowerBound(0) To UnitParts.GetUpperBound(0)
+                ReturnVal &= UnitParts(iIndex) & ", "
+            Next iIndex
+            ReturnVal = Strings.Left(ReturnVal, ReturnVal.Length - 2)
+        End If
+        Return ReturnVal
+
+    End Function
+    Public Function FormatFileNameFromTab(ByVal CurTab As String) As String
+        Dim ReturnVal As String = Strings.Left(CurTab, CurTab.Length - 6)
+        Dim FileParts() As String = ReturnVal.Split(", ")
+
+        If FileParts.Length > 1 Then
+            ReturnVal = String.Empty
+            For iIndex As Integer = FileParts.GetLowerBound(0) To FileParts.GetUpperBound(0)
+                ReturnVal &= FileParts(iIndex) & "_"
+            Next iIndex
+            ReturnVal = Strings.Left(ReturnVal, ReturnVal.Length - 1)
+        End If
+        Return ReturnVal
+
+    End Function
+    Private Function PromptForSave() As Boolean
+        Dim ReturnVal As Boolean = True
+        Dim SaveResponse As Integer = 0
+
+        If FormIsDirty Then
+            If TabControl1.SelectedTab.Text.ToUpper.Contains(EST_Suffix) Then
+                SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+                If SaveResponse = MsgBoxResult.Yes Then
+                    SaveEstimatingData()
+                    ArchiveFiles()
+                Else
+                    ReturnVal = False
+                End If
+            Else
+                SaveResponse = MsgBox("You must save the current Ordering Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+                If SaveResponse = MsgBoxResult.Yes Then
+                    SaveOrderingData()
+                    ArchiveFiles()
+                Else
+                    ReturnVal = False
+                End If
+            End If
+        End If
+        Return ReturnVal
+
+    End Function
+    Private Sub SaveAll()
+        SaveEstimatingData()
+        If EstimateLevel = "Master" Then
+            SaveOrderingData()
+        End If
+        ArchiveFiles()
+    End Sub
+    Private Sub Set_Fields_Grey()
+
+        If Conversion.Val(NumberofStopsRear_cmb.Text) = 0 Then
+            DoorOperatorTypeRear_lbl.Enabled = False
+            DoorOperatorTypeRear_cmb.SelectedIndex = -1
+            DoorOperatorTypeRear_cmb.Enabled = False
+            CarDoorOpeningWidthRear_lbl.Enabled = False
+            CarDoorOpeningWidthFtRear_txt.Text = String.Empty
+            CarDoorOpeningWidthFtRear_txt.Enabled = False
+            CarDoorOpeningWidthFtRear_lbl.Enabled = False
+            CarDoorOpeningWidthInRear_txt.Text = String.Empty
+            CarDoorOpeningWidthInRear_txt.Enabled = False
+            CarDoorOpeningWidthInRear_lbl.Enabled = False
+            CarDoorOpeningHeightRear_lbl.Enabled = False
+            CarDoorOpeningHeightFtRear_txt.Text = String.Empty
+            CarDoorOpeningHeightFtRear_txt.Enabled = False
+            CarDoorOpeningHeightFtRear_lbl.Enabled = False
+            CarDoorOpeningHeightInRear_txt.Text = String.Empty
+            CarDoorOpeningHeightInRear_txt.Enabled = False
+            CarDoorOpeningHeightInRear_lbl.Enabled = False
+            RiserQtyExistingRear_lbl.Enabled = False
+            RiserQtyExistingRear_Cmb.SelectedIndex = -1
+            RiserQtyExistingRear_Cmb.Enabled = False
+        Else
+            DoorOperatorTypeRear_lbl.Enabled = True
+            DoorOperatorTypeRear_cmb.Enabled = True
+            CarDoorOpeningWidthRear_lbl.Enabled = True
+            CarDoorOpeningWidthFtRear_txt.Enabled = True
+            CarDoorOpeningWidthFtRear_lbl.Enabled = True
+            CarDoorOpeningWidthInRear_txt.Enabled = True
+            CarDoorOpeningWidthInRear_lbl.Enabled = True
+            CarDoorOpeningHeightRear_lbl.Enabled = True
+            CarDoorOpeningHeightFtRear_txt.Enabled = True
+            CarDoorOpeningHeightFtRear_lbl.Enabled = True
+            CarDoorOpeningHeightInRear_txt.Enabled = True
+            CarDoorOpeningHeightInRear_lbl.Enabled = True
+            RiserQtyExistingRear_lbl.Enabled = True
+            RiserQtyExistingRear_Cmb.Enabled = True
+        End If
+
+    End Sub
+    Private Sub OrderingForms_lst_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles OrderingForms_lst.DoubleClick
+        Dim NewGovForm As New ORD_Governor_frm
+
+        OrderingForms_con.Controls.Clear()
+        NewGovForm.TopLevel = False
+        NewGovForm.WindowState = FormWindowState.Maximized
+        NewGovForm.FormBorderStyle = Windows.Forms.FormBorderStyle.None
+        NewGovForm.Visible = True
+        OrderingForms_con.Controls.Clear()
+        OrderingForms_con.Controls.Add(NewGovForm)
+
     End Sub
 End Class
