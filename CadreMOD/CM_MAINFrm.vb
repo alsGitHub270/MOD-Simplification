@@ -190,9 +190,9 @@ Partial Friend Class CM_MAIN_frm
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
 
 
-        'Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
+        Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
         'Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
-        Deserialize(estimate_file, dsCadre, "Error Reading Input json estimate file", isDirty)
+        'Deserialize(estimate_file, dsCadre, "Error Reading Input json estimate file", isDirty)
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
@@ -2188,10 +2188,10 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub SaveAll()
         SaveTopOfFormToDataset()
-        SaveData_Contract()
-        'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
+        Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
         ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty) 
-        Serialize(estimate_file, dsCadre, "Error Writing Cadre Json file", isDirty)  '
+        'Serialize(estimate_file, dsCadre, "Error Writing Cadre Json file", isDirty)  '
+        SaveData_Contract()
     End Sub
 
     Private Sub UpdateContactGroupFromNotes()
@@ -2549,7 +2549,7 @@ Partial Friend Class CM_MAIN_frm
         '    Set_CurrentAddress()
         '    NewJob = False
         'End If
-        'ArchiveFiles()
+        ArchiveFiles()
         'Set_GO_Dependents(CurrentGOSelection)
         'gbMDIChildDirty = False
         'System_DataBaseSetup()
