@@ -26,6 +26,7 @@
     Public dtAltGroup As DataTable
     Public dtContactGroup As DataTable
     Public dtBuildingInfo As DataTable
+    Public dtLaborRates As DataTable
 
     Public BookingType As Integer
     Public DefaultTaxCode As String = ""

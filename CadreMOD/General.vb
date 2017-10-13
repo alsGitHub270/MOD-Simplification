@@ -704,6 +704,7 @@ Query_Execute_Error:
         ReturnVal = Strings.Left(ReturnVal, ReturnVal.Length - 1)
         Return ReturnVal
     End Function
+
     Public Function Serialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim ReturnVal As Boolean = True
@@ -730,7 +731,7 @@ Query_Execute_Error:
                     json = sr.ReadToEnd
                 End Using
                 dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
-                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
+                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)
                 CurDirtyFlag = False
             Else
                 ReturnVal = False
@@ -741,6 +742,7 @@ Query_Execute_Error:
         End Try
         Return ReturnVal
     End Function
+
     Public Sub ArchiveFiles()
         Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
         Try

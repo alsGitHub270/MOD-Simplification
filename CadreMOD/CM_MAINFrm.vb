@@ -10,6 +10,7 @@ Imports System.IO
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
 
 
 Partial Friend Class CM_MAIN_frm
@@ -204,12 +205,93 @@ Partial Friend Class CM_MAIN_frm
             UpdateContactGroupFromNotes()
         End If
 
+        CreateLaborRateDataset()
+
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("id"), dsCadre.Tables("BaseGroup").Columns("id"))
         dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("alt_id"), dsCadre.Tables("AltGroup").Columns("id"))
 
     End Sub
 
+    Private Sub CreateLaborRateDataset()
+        Dim bank As String
+
+        dtLaborRates = dsCadre.Tables.Add("LaborRates")
+
+        dtLaborRates.Columns.Add("rate_year")
+        dtLaborRates.Columns.Add("st_rate")
+        dtLaborRates.Columns.Add("ot_rate")
+
+        For i = 0 To dtSummaryGroup.Rows.Count - 1
+            dtLaborRates.Columns.Add("labor_ratio_" & dtSummaryGroup.Rows(i).Item("Bank"))
+        Next
+
+        ReadInLaborRates()
+
+    End Sub
+
+    Private Sub ReadInLaborRates()
+        ' Reads through json file to load Labor Rates
+        ' If no labor rates, initialize grid to defaults
+
+        Dim json As String
+
+        If File.Exists("C:\Temp\cadre.json") Then
+            Using sr As StreamReader = New StreamReader("C:\Temp\cadre.json")  ' to be changed to estimate_file
+                json = sr.ReadToEnd
+            End Using
+        End If
+
+        Dim ser As JObject = JObject.Parse(json)
+        Dim data As List(Of JToken) = ser.Children().ToList
+        Dim labor_rates_not_found As Boolean = True
+
+        For Each item As JProperty In data
+            item.CreateReader()
+            Select Case item.Name
+                Case "LaborRates"
+                    labor_rates_not_found = False
+                    For Each lr As JObject In item.Values
+                        Dim workRow As DataRow = dtLaborRates.NewRow
+                        For i As Integer = 0 To dtLaborRates.Columns.Count - 1
+                            workRow.Item(i) = lr.Item(dtLaborRates.Columns(i).ColumnName)   ' Column names and key from json must be the same.  lr uses name, no ordinal designation
+                        Next
+                        dtLaborRates.Rows.Add(workRow)
+                    Next
+            End Select
+        Next
+
+        If labor_rates_not_found Then
+            InitializeLaborRates()
+        End If
+
+    End Sub
+
+    Private Sub InitializeLaborRates()
+
+        Dim rate_year As Integer = 2018
+        Dim adjustment As Decimal = 1.035
+        Dim st_rate As Decimal = 100.0
+        Dim ot_rate As Decimal = 100.0
+
+        For i As Integer = 0 To 9
+            Dim workRow As DataRow = dtLaborRates.NewRow
+            workRow("rate_year") = rate_year
+            workRow("st_rate") = Math.Round(st_rate, 2)
+            workRow("ot_rate") = Math.Round(ot_rate, 2)
+            For j As Integer = 3 To dtLaborRates.Columns.Count - 1
+                workRow(j) = 0
+            Next
+
+            dtLaborRates.Rows.Add(workRow)
+
+            rate_year += 1
+            st_rate *= adjustment
+            ot_rate *= adjustment
+        Next
+
+
+    End Sub
 
     Private Sub btnEstimate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEstimate.Click
         Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
