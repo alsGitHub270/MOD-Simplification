@@ -191,9 +191,9 @@ Partial Friend Class CM_MAIN_frm
         ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
 
 
-        Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
+        'Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
         'Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
-        'Deserialize(estimate_file, dsCadre, "Error Reading Input json estimate file", isDirty)
+        Deserialize(estimate_file, dsCadre, "Error Reading Input json estimate file", isDirty)
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
@@ -235,61 +235,160 @@ Partial Friend Class CM_MAIN_frm
         ' If no labor rates, initialize grid to defaults
 
         Dim json As String
-
-        If File.Exists("C:\Temp\cadre.json") Then
-            Using sr As StreamReader = New StreamReader("C:\Temp\cadre.json")  ' to be changed to estimate_file
-                json = sr.ReadToEnd
-            End Using
-        End If
-
-        Dim ser As JObject = JObject.Parse(json)
-        Dim data As List(Of JToken) = ser.Children().ToList
+        Dim rate_year As Integer = Year(Now)
         Dim labor_rates_not_found As Boolean = True
 
-        For Each item As JProperty In data
-            item.CreateReader()
-            Select Case item.Name
-                Case "LaborRates"
-                    labor_rates_not_found = False
-                    For Each lr As JObject In item.Values
-                        Dim workRow As DataRow = dtLaborRates.NewRow
-                        For i As Integer = 0 To dtLaborRates.Columns.Count - 1
-                            workRow.Item(i) = lr.Item(dtLaborRates.Columns(i).ColumnName)   ' Column names and key from json must be the same.  lr uses name, no ordinal designation
+        If File.Exists(estimate_file) Then
+            Using sr As StreamReader = New StreamReader(estimate_file)  ' to be changed to estimate_file
+                json = sr.ReadToEnd
+            End Using
+
+            Dim ser As JObject = JObject.Parse(json)
+            Dim data As List(Of JToken) = ser.Children().ToList
+
+            For Each item As JProperty In data
+                item.CreateReader()
+                Select Case item.Name
+                    Case "LaborRates"
+                        labor_rates_not_found = False
+                        For Each lr As JObject In item.Values
+                            Dim workRow As DataRow = dtLaborRates.NewRow
+                            For i As Integer = 0 To dtLaborRates.Columns.Count - 1
+                                workRow.Item(i) = lr.Item(dtLaborRates.Columns(i).ColumnName)   ' Column names and key from json must be the same.  lr uses name, no ordinal designation
+                            Next
+                            dtLaborRates.Rows.Add(workRow)
                         Next
-                        dtLaborRates.Rows.Add(workRow)
-                    Next
-            End Select
-        Next
+                End Select
+            Next
+        End If
 
         If labor_rates_not_found Then
             InitializeLaborRates()
+        Else
+            RecalculateLaborRates()
         End If
 
     End Sub
 
-    Private Sub InitializeLaborRates()
-
-        Dim rate_year As Integer = 2018
+    Private Sub RecalculateLaborRates()
+        Dim rate_year As Integer = Year(Now)
         Dim adjustment As Decimal = 1.035
-        Dim st_rate As Decimal = 100.0
-        Dim ot_rate As Decimal = 100.0
+        Dim st_rate As Decimal
+        Dim ot_rate As Decimal
+        Dim myList As New List(Of String)()
+        Dim installation_office As String
 
-        For i As Integer = 0 To 9
-            Dim workRow As DataRow = dtLaborRates.NewRow
-            workRow("rate_year") = rate_year
-            workRow("st_rate") = Math.Round(st_rate, 2)
-            workRow("ot_rate") = Math.Round(ot_rate, 2)
-            For j As Integer = 3 To dtLaborRates.Columns.Count - 1
-                workRow(j) = 0
+        Dim x As Integer
+
+        If dtLaborRates.Rows.Count = 0 Then
+            ReadInLaborRates()
+        End If
+
+        Me.btnLaborRates.Enabled = True
+
+        If initializing Then
+            installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
+        Else
+            installation_office = Me.cboInstallingOffice.Text
+        End If
+
+        Try
+            x = CInt(dtLaborRates(0).Item("rate_year")) - rate_year
+
+            Dim sSQL As String = "SELECT STRate, OTRate " & _
+                    "FROM [Rate (MOD Labor)] " & _
+                    "WHERE Office = '" & installation_office & "';"
+
+            myList = GetDataFromOptions(sSQL, True)
+
+            For i As Integer = 0 To dtLaborRates.Rows.Count - 1
+                'If x < 0 Then
+                '    j = x
+                '    st_rate = myList(0)
+                '    ot_rate = myList(1) / adjustment ^ x
+                '    'Do While j < 0
+                '    '    st_rate *= negative_adjustment
+                '    '    ot_rate *= negative_adjustment
+                '    '    j += 1
+                '    'Loop
+                '    x += 1
+                'ElseIf x = 0 Then
+                '    st_rate = myList(0)
+                '    ot_rate = myList(1)
+                '    x += 1
+                'Else
+                '    st_rate *= adjustment
+                '    ot_rate *= adjustment
+                'End If
+
+                st_rate = myList(0) * adjustment ^ x
+                ot_rate = myList(1) * adjustment ^ x
+
+                'For Each row As DataRow In dtLaborRates.Rows
+
+                dtLaborRates.Rows(i).Item("st_rate") = Math.Round(st_rate, 2)
+                dtLaborRates.Rows(i).Item("ot_rate") = Math.Round(ot_rate, 2)
+
+                x += 1
+
             Next
 
-            dtLaborRates.Rows.Add(workRow)
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Processing Labor Rates", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
-            rate_year += 1
-            st_rate *= adjustment
-            ot_rate *= adjustment
-        Next
 
+    Private Sub InitializeLaborRates()
+
+        Dim rate_year As Integer
+        Dim adjustment As Decimal = 1.035
+        Dim st_rate As Decimal
+        Dim ot_rate As Decimal
+        Dim myList As New List(Of String)()
+        Dim installation_office As String
+
+        rate_year = Year(Now)
+
+        If initializing Then
+            If dtBuildingInfo.Rows.Count = 0 OrElse dtBuildingInfo.Rows(0).Item("installing_office") = "" Then
+                Me.btnLaborRates.Enabled = False
+                Exit Sub
+            Else
+                installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
+            End If
+        Else
+            installation_office = Me.cboInstallingOffice.Text
+        End If
+
+        Try
+            Dim sSQL As String = "SELECT STRate, OTRate " & _
+                    "FROM [Rate (MOD Labor)] " & _
+                    "WHERE Office = '" & installation_office & "';"
+
+            myList = GetDataFromOptions(sSQL, True)
+            st_rate = myList(0)
+            ot_rate = myList(1)
+            '  initial_adjustment = dtLaborRates(0)
+            For i As Integer = 0 To 9
+                Dim workRow As DataRow = dtLaborRates.NewRow
+                workRow("rate_year") = rate_year
+                workRow("st_rate") = Math.Round(st_rate, 2)
+                workRow("ot_rate") = Math.Round(ot_rate, 2)
+                For j As Integer = 3 To dtLaborRates.Columns.Count - 1
+                    workRow(j) = 0
+                Next
+
+                dtLaborRates.Rows.Add(workRow)
+
+                rate_year += 1
+                st_rate *= adjustment
+                ot_rate *= adjustment
+            Next
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error in InitializeLaborRates", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
 
     End Sub
 
@@ -383,9 +482,7 @@ Partial Friend Class CM_MAIN_frm
                 MessageBox.Show("Error in CM_Mainfrm.Load: & Environment.NewLine & CStr(Information.Err().Number) " & _
                                 Conversion.ErrorToString(Information.Err().Number) & Environment.NewLine & _
                                 Information.Err().Number.ToString() & Conversion.ErrorToString(), Application.ProductName)
-
             End Try
-
         End If
 
         Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType()
@@ -394,7 +491,6 @@ Partial Friend Class CM_MAIN_frm
         Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
         numberType.DecimalPlaces = 0
         numberType.ShowSeparator = True
-
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
@@ -617,7 +713,6 @@ Partial Friend Class CM_MAIN_frm
 
         Dim usex As FarPoint.Win.Spread.SheetView = e.View.GetSheetView
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-
 
         EstimateLevel = String.Empty
         CurrentGOData_Typ.Alt = "A"
@@ -2140,7 +2235,12 @@ Partial Friend Class CM_MAIN_frm
         If Not initializing Then isDirty = True
     End Sub
     Private Sub cboInstallingOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
-        If Not initializing Then isDirty = True
+        If Not initializing Then
+            isDirty = True
+            If dtBuildingInfo.Rows.Count = 0 OrElse cboInstallingOffice.Text <> dtBuildingInfo.Rows(0).Item("installing_office") Then
+                RecalculateLaborRates()
+            End If
+        End If
     End Sub
     Private Sub cboServiceOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboServiceOffice.SelectedIndexChanged
         If Not initializing Then isDirty = True
@@ -2259,10 +2359,7 @@ Partial Friend Class CM_MAIN_frm
         cmbocell_bank.MaxDrop = 4
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
 
-
-
         FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
-
 
         FpSpread1.ActiveSheet.SetRowExpandable(FpSpread1.ActiveSheet.ActiveRowIndex, False)
         FpSpread1.Refresh()
@@ -2270,9 +2367,9 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub SaveAll()
         SaveTopOfFormToDataset()
-        Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
+        'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
         ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty) 
-        'Serialize(estimate_file, dsCadre, "Error Writing Cadre Json file", isDirty)  '
+        Serialize(estimate_file, dsCadre, "Error Writing Cadre Json file", isDirty)  '
         SaveData_Contract()
     End Sub
 
@@ -2329,6 +2426,56 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    'Private Sub PopulateServiceOffice()
+    '    Dim TempDistrict, QueryName, ThisField As String
+    '    Dim TempRecordSet As New ADODB.Recordset
+    '    Dim sCANADA As String
+    '    Dim sNewOfficeStructure As String = "="
+
+    '    If Contracts.SalesOffice = "X" Then
+    '        cboServiceOffice.SelectedIndex = -1
+    '        cboServiceOffice.Enabled = False
+    '        ServiceOffice_lbl.Enabled = False
+    '        Exit Sub
+    '    Else
+    '        cboServiceOffice.Enabled = True
+    '        ServiceOffice_lbl.Enabled = True
+    '    End If
+
+    '    Dim TempStr As String = cboServiceOffice.Text
+    '    Dim ThisDistrict As String = ""
+    '    If Contracts.SalesOffice <> "" Then
+    '        ThisField = "Service"
+    '        QueryName = "Office=" & FixSQLString(Contracts.SalesOffice)
+    '        If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, MOD_OFFICE_SQL, QueryName, 0, ThisField) <> RECORD_NOT_FOUND Then
+    '            TempDistrict = ThisField
+    '        Else
+    '            TempDistrict = "N"
+    '        End If
+    '        sCANADA = ""
+    '        If ProjectData.SalesOffice.Substring(0, 1) = "T" Or ProjectData.SalesOffice.Substring(0, 2) = "98" Then
+    '            sCANADA = "Country='CANADA' AND "
+    '        Else
+    '            sCANADA = "Country<>'CANADA' AND "
+    '        End If
+    '        If Contracts.SalesOffice.Substring(0, 1) <> "9" Then
+    '            sNewOfficeStructure = "<>"
+    '        End If
+    '        QueryName = "SELECT DISTINCT Office FROM [MOD Office] WHERE " & sCANADA & "'' & [New Office]" & sNewOfficeStructure &
+    '                    "'' AND Service=TRUE ORDER BY Office"
+
+    '        cboServiceOffice.Items.Clear()
+
+    '        db2List(ADOConnectionOptionDataBase, QueryName, cboServiceOffice, "Office")
+
+    '        If TempDistrict = "N" Then
+    '            AssignListIndex(cboServiceOffice, TempStr)
+    '        Else
+    '            CheckforNullTypeCombo(cboServiceOffice, TempStr, Contracts.SalesOffice)
+    '        End If
+    '    End If
+
+    'End Sub
 
     Private Function GetTaxRate() As Object
         Dim sql_string As String
@@ -2552,7 +2699,7 @@ Partial Friend Class CM_MAIN_frm
 
         Dim obj As New frmLaborRates
         Try
-            obj.localOffice = Me.cboSalesOffice.Text
+            obj.localOffice = Me.cboInstallingOffice.Text
             obj.ShowDialog()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -2682,4 +2829,6 @@ Partial Friend Class CM_MAIN_frm
     '    'End If
 
     'End Sub
+
+
 End Class

@@ -2251,6 +2251,7 @@ Partial Class CM_MAIN_frm
         '
         'btnLaborRates
         '
+        Me.btnLaborRates.Enabled = False
         Me.btnLaborRates.Location = New System.Drawing.Point(1222, 247)
         Me.btnLaborRates.Name = "btnLaborRates"
         Me.btnLaborRates.Size = New System.Drawing.Size(75, 23)

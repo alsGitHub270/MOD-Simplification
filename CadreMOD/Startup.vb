@@ -89,8 +89,11 @@ Module Startup
                     Environment.Exit(0)
                 End If
             End If
+
             QueryFeedback(True)
-            DAO2ADO(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, EstimatePath, OPTION_DATABASE_NAME, True)
+
+            'DAO2ADO(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, EstimatePath, OPTION_DATABASE_NAME, True)
+
             '     CM_MAIN_IO.InitializeStructCRMData()
             'If gbShape Then
             '    Get_CRMProjectData()
