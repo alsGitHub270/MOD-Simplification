@@ -11,36 +11,32 @@ Partial Friend Class ExpensesPerDay_frm
     Const ACTION_TYPE_UNLOADME As Integer = 1
     Dim i As Integer
 
-    Private Sub InitializeCost()
-        Dim i As Integer
-
-        For i = 1 To 5
-            Cost_txt(i).Text = ""
-        Next i
-        Total_txt.Text = ""
-
-    End Sub
     Public Sub Fields2Type()
         Dim CurCost As String = String.Empty
         Dim NumParts() As String = Nothing
+        Dim UseIndex As Integer = 0
 
-        For i As Integer = 1 To 5
-            SubcontractedLaborCost.LaborCost(i - 1).Description = Description_txt(i).Text
-            CurCost = Cost_txt(i).Text.Trim
-            If Not String.IsNullOrEmpty(CurCost) Then
-                NumParts = CurCost.Split(",")
-                If NumParts.Length > 1 Then
-                    CurCost = String.Empty
-                    For iIndex As Integer = 0 To NumParts.GetUpperBound(0)
-                        CurCost &= NumParts(iIndex)
-                    Next iIndex
+        For Each Cntrl As Control In Me.Controls
+            If TypeOf [Cntrl] Is TextBox Then
+                ReDim Preserve SubcontractedLaborCost.LaborCost(UseIndex)
+                CurCost = [Cntrl].Text.Trim
+                If Not String.IsNullOrEmpty(CurCost) Then
+                    NumParts = CurCost.Split(",")
+                    If NumParts.Length > 1 Then
+                        CurCost = String.Empty
+                        For iIndex As Integer = 0 To NumParts.GetUpperBound(0)
+                            CurCost &= NumParts(iIndex)
+                        Next iIndex
+                    End If
                 End If
+                SubcontractedLaborCost.LaborCost(UseIndex).Description = [Cntrl].Name
+                SubcontractedLaborCost.LaborCost(UseIndex).Cost = Conversion.Val(CurCost)
+                UseIndex += 1
             End If
-            SubcontractedLaborCost.LaborCost(i - 1).Cost = Conversion.Val(CurCost)
-        Next i
-        NumParts = Total_txt.Text.Split(",")
+        Next Cntrl
+        NumParts = ExpensesPerDayTotal_txt.Text.Split(",")
         If NumParts.Length = 1 Then
-            CurCost = Total_txt.Text
+            CurCost = ExpensesPerDayTotal_txt.Text
         Else
             CurCost = String.Empty
             For iIndex As Integer = 0 To NumParts.GetUpperBound(0)
@@ -54,28 +50,34 @@ Partial Friend Class ExpensesPerDay_frm
 
         Select Case ThisAction
             Case ACTION_TYPE_UNLOADME
-                If Conversion.Val(CStr(SubcontractedLaborCost.TotalCost)) <> Conversion.Val(Total_txt.Text) Then
+                If Conversion.Val(CStr(SubcontractedLaborCost.TotalCost)) <> Conversion.Val(ExpensesPerDayTotal_txt.Text) Then
                     If MessageBox.Show("Data has been changed. Do you want to save it before closing.", Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = System.Windows.Forms.DialogResult.Yes Then
                         Fields2Type()
                     End If
                 End If
                 Me.Dispose()
             Case ACTION_TYPE_CLEAR_FORM
-                InitializeCost()
+                For Each Cntrl As Control In Me.Controls
+                    If TypeOf [Cntrl] Is TextBox Then
+                        [Cntrl].Text = String.Empty
+                    End If
+                Next Cntrl
             Case Else
         End Select
 
     End Sub
     Private Sub Type2Fields()
+        Dim UseIndex As Integer = 0
 
-        For i As Integer = 1 To 5
-            If SubcontractedLaborCost.LaborCost(i - 1).Cost = 0 Then
-                Cost_txt(i).Text = ""
-            Else
-                Cost_txt(i).Text = FormatNumber(SubcontractedLaborCost.LaborCost(i - 1).Cost, 2)
-            End If
-        Next i
-        Total_txt.Text = FormatNumber(SubcontractedLaborCost.TotalCost, 2)
+        For UseIndex = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
+            For Each Cntrl As Control In Me.Controls
+                If [Cntrl].Name = SubcontractedLaborCost.LaborCost(UseIndex).Description Then
+                    [Cntrl].Text = FormatNumber(SubcontractedLaborCost.LaborCost(UseIndex).Cost, 2)
+                    Exit For
+                End If
+            Next Cntrl
+        Next UseIndex
+        ExpensesPerDayTotal_txt.Text = FormatNumber(SubcontractedLaborCost.TotalCost, 2)
 
     End Sub
     Private Sub PrepareThisForm()
@@ -90,49 +92,29 @@ Partial Friend Class ExpensesPerDay_frm
         ActionLogic(Index)
     End Sub
     Private isInitializingComponent As Boolean
-    Private Sub Cost_txt_TextChanged(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles _Cost_txt_4.TextChanged, _Cost_txt_3.TextChanged, _Cost_txt_2.TextChanged, _Cost_txt_1.TextChanged, _Cost_txt_5.TextChanged
+    Private Sub Cost_txt_TextChanged(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles ExpensesPerDayTravelTime_txt.TextChanged, ExpensesPerDayOutOfTownExpenses_txt.TextChanged, ExpensesPerDayParking_txt.TextChanged, ExpensesPerDayZone_txt.TextChanged, ExpensesPerDayMiscellaneous_txt.TextChanged
         If isInitializingComponent Then
             Exit Sub
         End If
         frmEstimatingBase.FormIsDirty = True
     End Sub
-    Private Sub Cost_txt_KeyPress(ByVal eventSender As Object, ByVal eventArgs As KeyPressEventArgs) Handles _Cost_txt_4.KeyPress, _Cost_txt_3.KeyPress, _Cost_txt_2.KeyPress, _Cost_txt_1.KeyPress, _Cost_txt_5.KeyPress
+    Private Sub Cost_txt_KeyPress(ByVal eventSender As Object, ByVal eventArgs As KeyPressEventArgs) Handles ExpensesPerDayTravelTime_txt.KeyPress, ExpensesPerDayOutOfTownExpenses_txt.KeyPress, ExpensesPerDayParking_txt.KeyPress, ExpensesPerDayZone_txt.KeyPress, ExpensesPerDayMiscellaneous_txt.KeyPress
         Dim KeyAscii As Integer = Strings.Asc(eventArgs.KeyChar)
-        Dim Index As Integer = Array.IndexOf(Cost_txt, eventSender)
 
-        If Description_txt(Index).Text.Trim() = "" Then
-            SystemSounds.Beep.Play()
-            KeyAscii = 0
-        Else
-            Select Case KeyAscii
-                Case Keys.Back, Keys.Left, Keys.Right, Keys.Delete, Keys.Return, Keys.Decimal, Keys.D0 To Keys.D9
-                Case Else
-                    SystemSounds.Beep.Play()
-                    KeyAscii = 0
-            End Select
-        End If
+        Select Case KeyAscii
+            Case Keys.Back, Keys.Left, Keys.Right, Keys.Delete, Keys.Return, Keys.Decimal, Keys.D0 To Keys.D9
+            Case Else
+                SystemSounds.Beep.Play()
+                KeyAscii = 0
+        End Select
         If KeyAscii = 0 Then
             eventArgs.Handled = True
         End If
         eventArgs.KeyChar = Convert.ToChar(KeyAscii)
 
     End Sub
-    Private Sub Cost_txt_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles _Cost_txt_4.Leave, _Cost_txt_3.Leave, _Cost_txt_2.Leave, _Cost_txt_1.Leave, _Cost_txt_5.Leave
+    Private Sub Cost_txt_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles ExpensesPerDayTravelTime_txt.Leave, ExpensesPerDayOutOfTownExpenses_txt.Leave, ExpensesPerDayParking_txt.Leave, ExpensesPerDayMiscellaneous_txt.Leave, ExpensesPerDayZone_txt.Leave
         RecalculateTotal()
-    End Sub
-    Private Sub Description_txt_TextChanged(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles _Description_txt_5.TextChanged, _Description_txt_3.TextChanged, _Description_txt_4.TextChanged, _Description_txt_2.TextChanged, _Description_txt_1.TextChanged
-
-        If isInitializingComponent Then
-            Exit Sub
-        End If
-        Dim Index As Integer = Array.IndexOf(Description_txt, eventSender)
-        frmEstimatingBase.FormIsDirty = True
-        If Description_txt(Index).Text.Trim() = "" Then
-            SystemSounds.Beep.Play()
-            Cost_txt(Index).Text = ""
-            RecalculateTotal()
-        End If
-
     End Sub
     Private Sub ExpensesPerDay_frm_Load(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles MyBase.Load
         PrepareThisForm()
@@ -143,12 +125,12 @@ Partial Friend Class ExpensesPerDay_frm
     Private Sub RecalculateTotal()
         Dim dTotal As Double = 0
 
-        For i As Integer = 1 To 5
-            If IsNumeric(Cost_txt(i).Text) Then
-                dTotal += CDbl(Cost_txt(i).Text)
-            End If
-        Next i
-        Total_txt.Text = FormatNumber(dTotal, 2)
+        dTotal += Conversion.Val(ExpensesPerDayZone_txt.Text)
+        dTotal += Conversion.Val(ExpensesPerDayParking_txt.Text)
+        dTotal += Conversion.Val(ExpensesPerDayOutOfTownExpenses_txt.Text)
+        dTotal += Conversion.Val(ExpensesPerDayTravelTime_txt.Text)
+        dTotal += Conversion.Val(ExpensesPerDayMiscellaneous_txt.Text)
+        ExpensesPerDayTotal_txt.Text = FormatNumber(dTotal, 2)
 
     End Sub
 End Class

@@ -154,7 +154,7 @@ Partial Class UnitCopyMerge_frm
         Me.Controls.Add(Me.CopyMerge_cmd)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "UnitCopyMerge_frm"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds
         Me.Text = "Copy"
         Me.ResumeLayout(False)
 

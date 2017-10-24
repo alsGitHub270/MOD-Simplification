@@ -3,8 +3,10 @@
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
-    Public DEFAULT_C1 As Single = 0.2
+    ' Public DEFAULT_C1 As Single = 0.2
 
+    'New Machines
+    Public Const MACHINE_FMM200 As String = "FMM 200"
 
     Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification\CadreMOD"
     Public Const MOVE_FIRST As Integer = 0
@@ -30,7 +32,7 @@
     Public Const UPDATE_PITDRAW As Integer = 20
     Public Const NON_CRITICAL_ERROR As Integer = 21
     Public Const CRITICAL_ERROR As Integer = 22
-    Public Const OPTION_DATABASE_NAME As String = "OPTIONS.accdb"
+    Public Const MODDATA_DATABASE_NAME As String = "MODData.accdb"
     Public Const BUILDING_CODE_TABLE_QUERY_NAME As String = "BUILDING_CODE_TABLE_SQL"
     Public Const BUILDING_CODE_ONLY_QUERY_NAME As String = "BUILDING_CODE_ONLY_SQL"
     Public Const ENTRY_VALID As Integer = 0
@@ -41,13 +43,14 @@
     Public Const ENTRY_NOT_IN_THE_NUMBER_RANGE As Integer = 5
     Public Const ENTRY_NOT_BLANK As Integer = 6
     Public Const ENTRY_HAS_TOO_MANY_DECIMALS As Integer = 7
-    Public Const GROUP_SETUP_QRY As String = "GROUP_SETUP_QRY"
+
     Public Const HYDRO_TYPE As String = "Hydro"
     Public Const GEARED_TYPE As String = "Geared"
     Public Const GEARLESS_TYPE As String = "Gearless"
-    Public Const AC_TYPE As String = "AC"
+    Public Const AC_TYPE As String = "AC Non-Regen"
     Public Const AC_REGEN_TYPE As String = "AC Regen"
-    Public Const DC_TYPE As String = "DC"
+    Public Const DC_TYPE As String = "SCR/DC"
+    Public Const QUATTRO_TYPE As String = "Quattro"
     Public Const SEC As String = "Schindler"
     Public Const EPCO As String = "EPCO"
     Public Const Gettysburg As String = "Gettysburg"
@@ -179,8 +182,10 @@
     Public Const GRID_IS_DIRTY As Integer = 1
     Public Const EST_Suffix As String = " [EST]"
     Public Const ORD_Suffix As String = " [ORD]"
+
     Public typeStr As System.Type = System.Type.GetType("System.String")
     Public typeInt As System.Type = System.Type.GetType("System.Int64")
     Public typeBool As System.Type = System.Type.GetType("System.Boolean")
     Public typeSingle As System.Type = System.Type.GetType("System.Single")
+    Public Const FREIGHT_RATE As Single = 1.03
 End Module

@@ -31,10 +31,10 @@ Public Class UnitCopyMerge_frm
     End Sub
     Private Sub CopyMerge_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyMerge_cmd.Click
         Dim EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                    frmEstimatingBase.FormatFileNameFromTab(CurUnits & EST_Suffix)) & "MODEST.json"
+                                                                 FormatFileNameFromTab(CurUnits & EST_Suffix)) & "MODEST.json"
         Dim EST_NewFilename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                       frmEstimatingBase.FormatFileNameFromTab(UnitsTo_cmb.Text & EST_Suffix)) & "MODEST.json"
-        Dim TempDataset As System.Data.DataSet = frmEstimatingBase.EstimatingDataset
+                                                                    FormatFileNameFromTab(UnitsTo_cmb.Text & EST_Suffix)) & "MODEST.json"
+        Dim TempDataset As System.Data.DataSet = EstimatingDataset
         Dim iIndex As Integer = 0, jIndex As Integer = 0, AryIndex As Integer = 0
         Dim TempUnits As String = String.Empty
         Dim UseGeneralInfo As DataTable = Nothing
@@ -55,7 +55,7 @@ Public Class UnitCopyMerge_frm
                     If Not Deserialize(EST_NewFilename, TempDataset, "Error Creating Copy - Updating new data", False) Then
                         Throw New Exception()
                     End If
-                    UseGeneralInfo = TempDataset.Tables("GeneralInfo")
+                    UseGeneralInfo = TempDataset.Tables(TABLENAME_GENERALINFO)
                     CurDataRow = UseGeneralInfo.Rows(0)
                     CurDataRow("UnitsInTab") = UnitsTo_cmb.Text
                     If Not Serialize(EST_NewFilename, TempDataset, "Error Creating Copy - Saving new data", False) Then
@@ -82,14 +82,14 @@ Public Class UnitCopyMerge_frm
                     Next iIndex
                     TempUnits = Strings.Left(TempUnits, TempUnits.Length - 1)
                     EST_NewFilename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                                 frmEstimatingBase.FormatFileNameFromTab(FormatUnits(TempUnits) & EST_Suffix)) & "MODEST.json"
-                    TempDataset = frmEstimatingBase.EstimatingDataset
+                                                                  FormatFileNameFromTab(FormatUnits(TempUnits) & EST_Suffix)) & "MODEST.json"
+                    TempDataset = EstimatingDataset
                     File.Copy(EST_Filename, EST_NewFilename)
                     AddToFilesList("Created", EST_NewFilename)
                     If Not Deserialize(EST_NewFilename, TempDataset, "Error Creating Copy - Updating current data", False) Then
                         Throw New Exception()
                     End If
-                    UseGeneralInfo = TempDataset.Tables("GeneralInfo")
+                    UseGeneralInfo = TempDataset.Tables(TABLENAME_GENERALINFO)
                     CurDataRow = UseGeneralInfo.Rows(0)
                     CurDataRow("UnitsInTab") = TempUnits
                     If Not Serialize(EST_NewFilename, TempDataset, "Error Creating Copy - Saving current data", False) Then
@@ -115,19 +115,19 @@ Public Class UnitCopyMerge_frm
                 TempUnits = Strings.Left(TempUnits, TempUnits.Length - 1)
                 AddToFilesList("Deleted", EST_Filename)
                 EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                           frmEstimatingBase.FormatFileNameFromTab(UnitsTo_cmb.Text & EST_Suffix)) & "MODEST.json"
+                                                           FormatFileNameFromTab(UnitsTo_cmb.Text & EST_Suffix)) & "MODEST.json"
                 EST_NewFilename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                             frmEstimatingBase.FormatFileNameFromTab(FormatUnits(TempUnits) & EST_Suffix)) & "MODEST.json"
+                                                              FormatFileNameFromTab(FormatUnits(TempUnits) & EST_Suffix)) & "MODEST.json"
                 If EST_Filename <> EST_NewFilename Then
                     File.Copy(EST_Filename, EST_NewFilename)
                     AddToFilesList("Created", EST_NewFilename)
                     AddToFilesList("Deleted", EST_Filename)
                 End If
-                TempDataset = frmEstimatingBase.EstimatingDataset
+                TempDataset = EstimatingDataset
                 If Not Deserialize(EST_NewFilename, TempDataset, "Error Creating Copy - Updating current data", False) Then
                     Throw New Exception
                 End If
-                UseGeneralInfo = TempDataset.Tables("GeneralInfo")
+                UseGeneralInfo = TempDataset.Tables(TABLENAME_GENERALINFO)
                 CurDataRow = UseGeneralInfo.Rows(0)
                 CurDataRow("UnitsInTab") = TempUnits
                 If Not Serialize(EST_NewFilename, TempDataset, "Error Creating Copy - Saving current data", False) Then

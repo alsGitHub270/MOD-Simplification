@@ -25,9 +25,7 @@ Partial Friend Class CM_MAIN_frm
     Dim id_to_copy As String = ""
     Dim estimate_file As String = ""
 
-
     Private CurrentBuildingInformationFrameHeight As Integer = 0, CurrentEquipmentFrameHeight As Integer = 0
-
 
     Const _BANK_COLUMN As Integer = 3
 
@@ -53,19 +51,21 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("Special_Hours", typeInt), _
                                                           New DataColumn("Labor_Hours", typeInt), _
                                                           New DataColumn("OT_Hours_Included", typeInt), _
-                                                          New DataColumn("Labor_cost", typeInt), _
+                                                          New DataColumn("Labor_Cost", typeInt), _
                                                           New DataColumn("SubContract_Work", typeInt), _
-                                                          New DataColumn("misc_costs", typeInt), _
-                                                          New DataColumn("expenses", typeInt), _
-                                                          New DataColumn("freight", typeInt), _
+                                                          New DataColumn("Misc_Costs", typeInt), _
+                                                          New DataColumn("Expenses", typeInt), _
+                                                          New DataColumn("Freight", typeInt), _
                                                           New DataColumn("NPS_Cost", typeInt), _
                                                           New DataColumn("Total_Bank_Cost", typeInt), _
                                                           New DataColumn("C1", typeSingle), _
-                                                          New DataColumn("bank_net_Price", typeInt), _
-                                                          New DataColumn("sales_commission", typeInt), _
-                                                          New DataColumn("bank_final_price", typeInt), _
+                                                          New DataColumn("Bank_Net_Price", typeInt), _
+                                                          New DataColumn("Sales_Commission", typeInt), _
+                                                          New DataColumn("Bank_Final_Price", typeInt), _
                                                           New DataColumn("Labor_Rate", typeInt), _
-                                                          New DataColumn("Include", typeBool)
+                                                          New DataColumn("Include", typeBool),
+                                                          New DataColumn("speed", typeInt),
+                                                          New DataColumn("machine_model", typeStr)
                                                          })
 
         'dtSummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
@@ -86,19 +86,21 @@ Partial Friend Class CM_MAIN_frm
                                                        New DataColumn("Special_Hours", typeInt), _
                                                        New DataColumn("Labor_Hours", typeInt), _
                                                        New DataColumn("OT_Hours_Included", typeInt), _
-                                                       New DataColumn("Labor_cost", typeInt), _
+                                                       New DataColumn("Labor_Cost", typeInt), _
                                                        New DataColumn("SubContract_Work", typeInt), _
                                                        New DataColumn("Misc_Costs", typeInt), _
-                                                       New DataColumn("expenses", typeInt), _
+                                                       New DataColumn("Expenses", typeInt), _
                                                        New DataColumn("Freight", typeInt), _
                                                        New DataColumn("NPS_Cost", typeInt), _
                                                        New DataColumn("Total_Bank_Cost", typeInt), _
                                                        New DataColumn("C1", typeSingle), _
-                                                       New DataColumn("bank_net_Price", typeInt), _
-                                                       New DataColumn("sales_commission", typeInt), _
-                                                       New DataColumn("bank_final_price", typeInt), _
+                                                       New DataColumn("Bank_Net_Price", typeInt), _
+                                                       New DataColumn("Sales_Commission", typeInt), _
+                                                       New DataColumn("Bank_Final_Price", typeInt), _
                                                        New DataColumn("Labor_Rate", typeInt), _
-                                                       New DataColumn("Comment", typeStr)
+                                                       New DataColumn("Comment", typeStr),
+                                                       New DataColumn("speed", typeInt),
+                                                       New DataColumn("machine_model", typeStr)
                                                         })
 
 
@@ -121,19 +123,21 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("Special_Hours", typeInt), _
                                                       New DataColumn("Labor_Hours", typeInt), _
                                                       New DataColumn("OT_Hours_Included", typeInt), _
-                                                      New DataColumn("Labor_cost", typeInt), _
+                                                      New DataColumn("Labor_Cost", typeInt), _
                                                       New DataColumn("SubContract_Work", typeInt), _
                                                       New DataColumn("Misc_Costs", typeInt), _
-                                                      New DataColumn("expenses", typeInt), _
-                                                      New DataColumn("freight", typeInt), _
+                                                      New DataColumn("Expenses", typeInt), _
+                                                      New DataColumn("Freight", typeInt), _
                                                       New DataColumn("NPS_Cost", typeInt), _
                                                       New DataColumn("Total_Bank_Cost", typeInt), _
                                                       New DataColumn("C1", typeSingle), _
-                                                      New DataColumn("bank_net_price", typeInt), _
-                                                      New DataColumn("sales_commission", typeInt), _
-                                                      New DataColumn("bank_final_price", typeInt), _
+                                                      New DataColumn("Bank_Net_Price", typeInt), _
+                                                      New DataColumn("Sales_Commission", typeInt), _
+                                                      New DataColumn("Bank_Final_Price", typeInt), _
                                                       New DataColumn("Labor_Rate", typeInt), _
-                                                      New DataColumn("Comment", typeStr)
+                                                      New DataColumn("Comment", typeStr),
+                                                      New DataColumn("speed", typeInt),
+                                                      New DataColumn("machine_model", typeStr)
                                                      })
 
 
@@ -197,9 +201,7 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
         ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
-        If dtSummaryGroup.Rows.Count = 0 Then
-            AddBankRow()
-        End If
+       
 
         If dtContactGroup.Rows.Count = 0 And Owner_Info.Name.Length > 0 Then
             UpdateContactGroupFromNotes()
@@ -396,9 +398,9 @@ Partial Friend Class CM_MAIN_frm
         Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
         CurrentGOData_Typ.Units = FpSpread1.ActiveSheet.Cells(CurRow, 2).Text
         CurrentGOData_Typ.Bank = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
-        MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
-        CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
-        Select Case EstimateLevel
+        CurrentGOData_Typ.MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
+        CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
+        Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
             Case "Master", "Base"
                 frmEstimatingBase.Show()
@@ -410,7 +412,7 @@ Partial Friend Class CM_MAIN_frm
         End Select
     End Sub
 
-    Private Sub CM_MAIN_frm_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub CM_MAIN_frm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         If isDirty Then
             Dim response As DialogResult = MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
             If response = DialogResult.Yes Then
@@ -431,6 +433,7 @@ Partial Friend Class CM_MAIN_frm
         estimate_file = ReportsPath & Contracts.EstimateNum & ".json"
 
         CreateDataSet()
+
         Dim dt As DataTable
         For Each dt In dsCadre.Tables
             dt.DefaultView.AllowNew = False
@@ -440,10 +443,15 @@ Partial Friend Class CM_MAIN_frm
 
         model = FpSpread1.ActiveSheet.Models.Data
         model.DataSource = dsCadre
+
         FpSpread1.ActiveSheet.GetDataView(False).AllowNew = False
         FpSpread1.ActiveSheet.SortRows(3, True, False)
 
+        If dtSummaryGroup.Rows.Count = 0 Then
+            AddBankRow()
+        End If
         Load_ListBoxes()
+        LoadTopOfForm()
 
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
 
@@ -597,7 +605,10 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Cells(i, 25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
-            FpSpread1.ActiveSheet.Columns(21).Visible = False
+            FpSpread1.ActiveSheet.Columns(21).Visible = False       ' bank net price
+            FpSpread1.ActiveSheet.Columns(26).Visible = False       ' speed
+            FpSpread1.ActiveSheet.Columns(27).Visible = False       ' machine_model
+
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 30
 
             ' Column Headers
@@ -691,7 +702,7 @@ Partial Friend Class CM_MAIN_frm
 
         Relocate_Equipment_Frame()
         SizeTotalsGrid()
-        LoadTopOfForm()
+
         ProcessNegSummaryTotals()
         SetSummaryC1Colors()
         ' FpSpread1.ActiveSheet.Cells(0, 20).Locked = True
@@ -714,10 +725,10 @@ Partial Friend Class CM_MAIN_frm
         Dim usex As FarPoint.Win.Spread.SheetView = e.View.GetSheetView
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
-        EstimateLevel = String.Empty
+        CurrentGOData_Typ.EstimateLevel = String.Empty
         CurrentGOData_Typ.Alt = "A"
         If usex.TitleInfo.Text.ToUpper.IndexOf("SUMMARY") > -1 Then
-            EstimateLevel = "Summary"
+            CurrentGOData_Typ.EstimateLevel = "Summary"
         Else
             CurSummaryRow = 0
             For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
@@ -728,12 +739,12 @@ Partial Friend Class CM_MAIN_frm
             Next iIndex
             If usex.TitleInfo.Text.ToUpper.IndexOf("GRANDCHILD") > -1 Then
                 CurrentGOData_Typ.Alt = usex.ActiveRowIndex + 1
-                EstimateLevel = "Alt"
+                CurrentGOData_Typ.EstimateLevel = "Alt"
             Else
                 ChildSheetView1 = FpSpread1.ActiveSheet.GetChildView(CurSummaryRow, 0)
                 If Not IsNothing(ChildSheetView1) Then
                     If ChildSheetView1.RowCount > 0 Then
-                        EstimateLevel = ChildSheetView1.Cells(e.Row, 0).Text
+                        CurrentGOData_Typ.EstimateLevel = ChildSheetView1.Cells(e.Row, 0).Text
                     End If
                 End If
             End If
@@ -744,7 +755,7 @@ Partial Friend Class CM_MAIN_frm
         ProcessNegSummaryTotals()
 
     End Sub
-    Private Sub FpSpread1_Change(sender As Object, e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
+    Private Sub FpSpread1_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
         If Not initializing Then isDirty = True
         CalculateFinalBankPrice()
         SetSummaryC1Colors()
@@ -902,7 +913,18 @@ Partial Friend Class CM_MAIN_frm
 
                 .Columns(24).Label = "Comments"
                 .Columns(24).Locked = False
-                .Columns(24).Width = 100
+                .Columns(24).Width = 175
+
+                .Columns(25).Label = "Speed"
+                .Columns(25).Locked = True
+                .Columns(25).Width = 50
+                .Columns(25).Visible = False
+
+                .Columns(26).Label = "machine_model"
+                .Columns(26).Locked = False
+                .Columns(26).Width = 200
+                .Columns(26).Width = 50
+                .Columns(26).Visible = False
 
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
@@ -1038,8 +1060,18 @@ Partial Friend Class CM_MAIN_frm
 
                 .Columns(25).Label = "Comments"
                 .Columns(25).Locked = False
-                .Columns(25).Width = 100
+                .Columns(25).Width = 175
 
+                .Columns(26).Label = "Speed"
+                .Columns(26).Locked = True
+                .Columns(26).Width = 50
+                .Columns(26).Visible = False
+
+                .Columns(27).Label = "machine_model"
+                .Columns(27).Locked = False
+                .Columns(27).Width = 200
+                .Columns(27).Width = 50
+                .Columns(27).Visible = False
 
                 'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
                 '.Columns(1).CellType = dateType
@@ -1114,9 +1146,9 @@ Partial Friend Class CM_MAIN_frm
         Dim update_message As String
         Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
 
-        MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
-        CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
-        Select Case EstimateLevel
+        CurrentGOData_Typ.MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
+        CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
+        Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
             Case "Master"
             Case "Base", "Alt"
@@ -1275,6 +1307,8 @@ Partial Friend Class CM_MAIN_frm
 
         Dim activeRows As Array
         Dim activeRow As Integer
+        Dim default_c1 As Decimal
+
         activeRows = FindActiveRows()
         activeRow = activeRows(0)
 
@@ -1298,7 +1332,9 @@ Partial Friend Class CM_MAIN_frm
         'units = ChildSheetView.Cells(baseRowIndex, 3).Value
         'machine = ChildSheetView.Cells(baseRowIndex, 4).Value
 
-        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisRowDescription, baseID, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0, ""})
+        default_c1 = CalculateDefaultC1()
+
+        dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisRowDescription, baseID, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0, ""})
 
         SetBaseAltC1Colors()
 
@@ -1331,65 +1367,72 @@ Partial Friend Class CM_MAIN_frm
         percentType.ReadOnly = True
         percentType.DecimalPlaces = 2
 
+        Try
+            Dim default_c1 As Decimal
+            default_c1 = CalculateDefaultC1()
 
-        dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"GO Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0})
+            dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"GO Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0})
 
-        FpSpread1.Refresh()
-        FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
-        FpSpread1.ActiveSheet.ActiveRow.Locked = True
+            FpSpread1.Refresh()
+            FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
+            FpSpread1.ActiveSheet.ActiveRow.Locked = True
 
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Locked = False
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).Locked = False
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).Locked = False
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).Locked = False
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 5).Locked = False
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).Locked = False
 
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 8).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 21).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 22).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 23).CellType = currencyType
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 24).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 6).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 7).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 8).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 21).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 22).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 23).CellType = currencyType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 24).CellType = currencyType
 
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = percentType
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 20).CellType = percentType
 
-        For i As Integer = 13 To 18
-            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
-        Next
+            For i As Integer = 13 To 18
+                FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, i).CellType = currencyType
+            Next
 
-        Dim cbstr As String()
-        cbstr = New String() {"Geared", "Gearless", "Hydro"}
-        Dim cmbocell_machine As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
-        cmbocell_machine.Items = cbstr
-        cmbocell_machine.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
-        cmbocell_machine.Editable = False
-        cmbocell_machine.MaxDrop = 4
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).CellType = cmbocell_machine
+            Dim cbstr As String()
+            cbstr = New String() {"Geared", "Gearless", "Hydro"}
+            Dim cmbocell_machine As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+            cmbocell_machine.Items = cbstr
+            cmbocell_machine.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+            cmbocell_machine.Editable = False
+            cmbocell_machine.MaxDrop = 4
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 4).CellType = cmbocell_machine
 
-        Dim cbstr1 As String()
-        FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 3, False)
-        cbstr1 = BuildAvailableBanks()
-        Dim cmbocell_bank As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
-        cmbocell_bank.Items = cbstr1
-        cmbocell_bank.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
-        cmbocell_bank.Editable = False
-        cmbocell_bank.MaxDrop = 4
-        FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
+            Dim cbstr1 As String()
+            FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 3, False)
+            cbstr1 = BuildAvailableBanks()
+            Dim cmbocell_bank As New FarPoint.Win.Spread.CellType.ComboBoxCellType()
+            cmbocell_bank.Items = cbstr1
+            cmbocell_bank.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
+            cmbocell_bank.Editable = False
+            cmbocell_bank.MaxDrop = 4
+            FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
+
+            FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+
+            dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", _id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0, ""})
+            isDirty = True
+
+            SetSummaryC1Colors()
+            SetBaseAltC1Colors()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Adding Bank Row", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            FpSpread1.Refresh()
+        End Try
 
 
 
-        FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
-
-        dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", _id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, DEFAULT_C1, 0, 0, 0, 0, ""})
-        isDirty = True
-
-        SetSummaryC1Colors()
-        SetBaseAltC1Colors()
-
-        FpSpread1.Refresh()
     End Sub
 
-    Private Sub FpSpread1_ComboCloseUp(sender As Object, e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboCloseUp
+    Private Sub FpSpread1_ComboCloseUp(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboCloseUp
         Select Case e.Column
             Case 3
                 If FpSpread1.ActiveSheet.Cells(e.Row, e.Column).Value = "" Then
@@ -1516,29 +1559,29 @@ Partial Friend Class CM_MAIN_frm
         '       "Base Row: " & activeRows(1) & vbCrLf & _
         '       "Alt row:  " & activeRows(2))
         Dim summary_row As String
-        If activeRows(0) = -1 And EstimateLevel = "Summary" Then
+        If activeRows(0) = -1 And CurrentGOData_Typ.EstimateLevel = "Summary" Then
             summary_row = FpSpread1.Sheets(0).ActiveRowIndex
         Else
             summary_row = activeRows(0)
         End If
 
-        If EstimateLevel = "Alt" Then
+        If CurrentGOData_Typ.EstimateLevel = "Alt" Then
             If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(summary_row, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 'If MessageBox.Show("Delete Alt '" & CInt(activeRows(2)) + 1 & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 DeleteAltRow(activeRows)
             End If
-        ElseIf EstimateLevel = "Master" Then
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Master" Then
             Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
             If MessageBox.Show("Delete Master for Bank '" & selected_bank & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 ' DeleteAltRow(activeRows)
                 DeleteMaster(activeRows)
             End If
-        ElseIf EstimateLevel = "Summary" Then
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Summary" Then
             Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
             If MessageBox.Show("You are about to delete all data for Bank '" & selected_bank & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 DeleteBank(summary_row)
             End If
-        ElseIf EstimateLevel = "Base" Then
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Base" Then
             MessageBox.Show("You cannot delete a Base Row.  You might want to remove the 'Summary' row to delete the estimate for the entire Bank", "Try Again", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
             MessageBox.Show("Please click on the Group Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
@@ -1731,7 +1774,7 @@ Partial Friend Class CM_MAIN_frm
         cboNFPA13CodeYear.Items.Add("2010")
         cboNFPA13CodeYear.Items.Add("2013")
 
-        sSQL = "SELECT Office FROM [MOD OFFICE] WHERE Installing = True ORDER BY Office"
+        sSQL = "SELECT Office FROM [MOD OFFICE]  ORDER BY Office"
         myList = GetDataFromOptions(sSQL)
         For Each office In myList
             cboSalesOffice.Items.Add(office)
@@ -1742,7 +1785,7 @@ Partial Friend Class CM_MAIN_frm
             cboInstallingOffice.Items.Add(office)
         Next
 
-        sSQL = "SELECT Office FROM [MOD OFFICE] WHERE Service = True ORDER BY Office"
+        sSQL = "SELECT Office FROM [MOD OFFICE] ORDER BY Office"
         myList = GetDataFromOptions(sSQL)
         For Each office In myList
             cboServiceOffice.Items.Add(office)
@@ -1902,7 +1945,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub AddMasterRow(_id As String)
+    Private Sub AddMasterRow(ByVal _id As String)
 
         Dim altValue As Integer = 0
         Dim baseValue As Integer = 0
@@ -1945,8 +1988,8 @@ Partial Friend Class CM_MAIN_frm
 
         ' Recalculate the C1 now
         Dim sales_commission As Integer
-        sales_commission = IIf(IsDBNull(_newRow.Item("sales_commission")), 0, _newRow.Item("sales_commission"))
-        _newRow.Item("C1") = ((_newRow.Item("bank_final_price") - sales_commission) / _newRow.Item("Total_Bank_Cost") - 1.0)
+        sales_commission = IIf(IsDBNull(_newRow.Item("Sales_Commission")), 0, _newRow.Item("Sales_Commission"))
+        _newRow.Item("C1") = ((_newRow.Item("Bank_Final_Price") - sales_commission) / _newRow.Item("Total_Bank_Cost") - 1.0)
 
         ' Update new row as Master.
         _newRow("id") = _id
@@ -1960,7 +2003,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub DeleteMaster(activeRows() As String)
+    Private Sub DeleteMaster(ByVal activeRows() As String)
 
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
@@ -1979,7 +2022,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub DeleteBank(summaryRow As String)
+    Private Sub DeleteBank(ByVal summaryRow As String)
 
         Try
             FpSpread1.ActiveSheet.RemoveRows(summaryRow, 1)
@@ -1989,22 +2032,22 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub btnAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnAdd.Click
+    Private Sub btnAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAdd.Click
         Dim activeRows As Array
         activeRows = FindActiveRows()
 
         Dim summary_row As String
-        If activeRows(0) = -1 And EstimateLevel = "Summary" Then
+        If activeRows(0) = -1 And CurrentGOData_Typ.EstimateLevel = "Summary" Then
             summary_row = FpSpread1.Sheets(0).ActiveRowIndex
         Else
             summary_row = activeRows(0)
         End If
 
-        If EstimateLevel = "Alt" Or EstimateLevel = "Base" Then
+        If CurrentGOData_Typ.EstimateLevel = "Alt" Or CurrentGOData_Typ.EstimateLevel = "Base" Then
             AddAlternateRow()
-        ElseIf EstimateLevel = "Summary" Then
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Summary" Then
             AddBankRow()
-        ElseIf EstimateLevel = "Master" Then
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Master" Then
             MessageBox.Show("You cannot add an alternate row to the Master Row.  Please select the Base Row where you wish to add an alternate.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
             MessageBox.Show("Please click on the 'Group' Column of the Row.", "Cannot Determine Which Group/Row to Add!")
@@ -2138,7 +2181,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub CM_MAIN_frm_Activated(sender As System.Object, e As System.EventArgs) Handles MyBase.Activated
+    Private Sub CM_MAIN_frm_Activated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Activated
         sprTotals.Refresh()
     End Sub
 
@@ -2204,7 +2247,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
+    Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
         If isDirty Then
             Dim response As DialogResult = MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
             If response = DialogResult.Yes Then
@@ -2215,26 +2258,26 @@ Partial Friend Class CM_MAIN_frm
         End If
         EndProgram()
     End Sub
-    Private Sub cboSalesOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSalesOffice.SelectedIndexChanged
+    Private Sub cboSalesOffice_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboSalesOffice.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub updateDtBuildingInfo(column_name As String, value As String)
+    Private Sub updateDtBuildingInfo(ByVal column_name As String, ByVal value As String)
         Dim row As DataRow
         row = dtBuildingInfo.Rows(0)
         row(column_name) = value
     End Sub
 
 
-    Private Sub FpSpread1_SubEditorOpening(sender As Object, e As FarPoint.Win.Spread.SubEditorOpeningEventArgs) Handles FpSpread1.SubEditorOpening
+    Private Sub FpSpread1_SubEditorOpening(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.SubEditorOpeningEventArgs) Handles FpSpread1.SubEditorOpening
         e.Cancel = True     ' to prevent calculator from automatically opening on number cell double click
     End Sub
-    Private Sub cboBuildingType_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboBuildingType.SelectedIndexChanged
+    Private Sub cboBuildingType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboBuildingType.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboSalesRep_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSalesRep.SelectedIndexChanged
+    Private Sub cboSalesRep_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboSalesRep.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboInstallingOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
+    Private Sub cboInstallingOffice_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
         If Not initializing Then
             isDirty = True
             If dtBuildingInfo.Rows.Count = 0 OrElse cboInstallingOffice.Text <> dtBuildingInfo.Rows(0).Item("installing_office") Then
@@ -2242,57 +2285,57 @@ Partial Friend Class CM_MAIN_frm
             End If
         End If
     End Sub
-    Private Sub cboServiceOffice_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboServiceOffice.SelectedIndexChanged
+    Private Sub cboServiceOffice_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboServiceOffice.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboStatus_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboStatus.SelectedIndexChanged
+    Private Sub cboStatus_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboStatus.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboProbabilityOfSale_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboProbabilityOfSale.SelectedIndexChanged
+    Private Sub cboProbabilityOfSale_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboProbabilityOfSale.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub txtBidDate_ValueChanged(sender As System.Object, e As System.EventArgs) Handles txtBidDate.ValueChanged
+    Private Sub txtBidDate_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtBidDate.ValueChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboNationalAccount_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboNationalAccount.SelectedIndexChanged
+    Private Sub cboNationalAccount_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboNationalAccount.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub txtTaxRate_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtTaxRate.TextChanged
+    Private Sub txtTaxRate_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTaxRate.TextChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboTaxCode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboTaxCode.SelectedIndexChanged
+    Private Sub cboTaxCode_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboTaxCode.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboLocalCode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboLocalCode.SelectedIndexChanged
+    Private Sub cboLocalCode_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboLocalCode.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboANSICode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboANSICode.SelectedIndexChanged
+    Private Sub cboANSICode_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboANSICode.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboNFPA13CodeYear_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboNFPA13CodeYear.SelectedIndexChanged
+    Private Sub cboNFPA13CodeYear_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboNFPA13CodeYear.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub txtSDSlevel_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtSDSlevel.TextChanged
+    Private Sub txtSDSlevel_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSDSlevel.TextChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub chkOSHPD_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkOSHPD.CheckedChanged
+    Private Sub chkOSHPD_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOSHPD.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub chkDSA_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkDSA.CheckedChanged
+    Private Sub chkDSA_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDSA.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub chkHeadDetection_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkHeadDetection.CheckedChanged
+    Private Sub chkHeadDetection_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkHeadDetection.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub chkEngineeringSurvey_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
+    Private Sub chkEngineeringSurvey_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
 
 
-    Private Sub btnCopy_Click(sender As System.Object, e As System.EventArgs) Handles btnCopy.Click
+    Private Sub btnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopy.Click
         ' copy the selected summary, and copy, along with all base, master  and  alt data
 
-        If EstimateLevel <> "Summary" Then
+        If CurrentGOData_Typ.EstimateLevel <> "Summary" Then
             MessageBox.Show("Please select the group column of the summary group that you wish to copy, then click on 'Copy'.", "Please Identify The Group to Copy", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
         End If
@@ -2502,11 +2545,23 @@ Partial Friend Class CM_MAIN_frm
     Private Sub SetSummaryC1Colors()
 
         Dim i As Integer
+        Dim budget_c1 As Decimal
+        Dim speed As Integer
+        Dim machine_model As String
+        Dim bank_type As String
+        Dim spread_c1 As Decimal
 
-        For i = 0 To dtSummaryGroup.Rows.Count - 1
-            If dtSummaryGroup.Rows(i).Item("C1") < DEFAULT_C1 Then
+        For i = 0 To FpSpread1.ActiveSheet.RowCount - 1
+            speed = FpSpread1.ActiveSheet.Cells(i, 26).Value
+            machine_model = FpSpread1.ActiveSheet.Cells(i, 27).Value
+            bank_type = FpSpread1.ActiveSheet.Cells(i, 4).Value
+            spread_c1 = FpSpread1.ActiveSheet.Cells(i, 20).Value
+
+            budget_c1 = GetBudgetC1(speed, machine_model, bank_type)
+
+            If spread_c1 < budget_c1 Then
                 FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Red
-            ElseIf dtSummaryGroup.Rows(i).Item("C1") >= DEFAULT_C1 + 0.02 Then
+            ElseIf spread_c1 >= budget_c1 + 0.04 Then
                 FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Green
             Else
                 FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Yellow
@@ -2518,13 +2573,30 @@ Partial Friend Class CM_MAIN_frm
     Private Sub SetBaseAltC1Colors()
 
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim budget_c1 As Decimal
+        Dim criteria As String
+        Dim base_speed As Integer
+        Dim base_model As String
+        Dim alt_speed As Integer
+        Dim alt_model As String
+
+
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
             If Not ChildSheetView1 Is Nothing Then
                 For i As Integer = 0 To ChildSheetView1.RowCount - 1
-                    If ChildSheetView1.Cells(i, 19).Value < DEFAULT_C1 Then
+
+                    criteria = "id = '" & ChildSheetView1.Cells(i, 1).Value & "'"
+                    Dim baseRow() As Data.DataRow
+                    baseRow = dtSummaryGroup.Select(criteria)
+
+                    base_speed = ChildSheetView1.Cells(i, 25).Value
+                    base_model = ChildSheetView1.Cells(i, 26).Value
+                    budget_c1 = GetBudgetC1(base_speed, base_model, baseRow(0).Item("Bank_Type"))
+
+                    If ChildSheetView1.Cells(i, 19).Value < budget_c1 Then
                         ChildSheetView1.Cells(i, 19).BackColor = Color.Red
-                    ElseIf ChildSheetView1.Cells(i, 19).Value > DEFAULT_C1 + 0.02 Then
+                    ElseIf ChildSheetView1.Cells(i, 19).Value > budget_c1 + 0.04 Then
                         ChildSheetView1.Cells(i, 19).BackColor = Color.Green
                     Else
                         ChildSheetView1.Cells(i, 19).BackColor = Color.Yellow
@@ -2535,9 +2607,18 @@ Partial Friend Class CM_MAIN_frm
                     ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
                     If Not ChildSheetView2 Is Nothing Then
                         For i As Integer = 0 To ChildSheetView2.RowCount - 1
-                            If ChildSheetView2.Cells(i, 20).Value < DEFAULT_C1 Then
+                            criteria = "id = '" & ChildSheetView2.Cells(i, 1).Value & "'"
+                            Dim baseRow() As Data.DataRow
+                            baseRow = dtSummaryGroup.Select(criteria)
+
+                            alt_speed = ChildSheetView2.Cells(i, 26).Value
+                            alt_model = ChildSheetView2.Cells(i, 27).Value
+
+                            budget_c1 = GetBudgetC1(alt_speed, alt_model, baseRow(0).Item("Bank_Type"))
+
+                            If ChildSheetView2.Cells(i, 20).Value < budget_c1 Then
                                 ChildSheetView2.Cells(i, 20).BackColor = Color.Red
-                            ElseIf ChildSheetView2.Cells(i, 20).Value > DEFAULT_C1 + 0.02 Then
+                            ElseIf ChildSheetView2.Cells(i, 20).Value > budget_c1 + 0.04 Then
                                 ChildSheetView2.Cells(i, 20).BackColor = Color.Green
                             Else
                                 ChildSheetView2.Cells(i, 20).BackColor = Color.Yellow
@@ -2695,7 +2776,7 @@ Partial Friend Class CM_MAIN_frm
         Next iIndex
     End Sub
 
-    Private Sub btnLaborRates_Click(sender As System.Object, e As System.EventArgs) Handles btnLaborRates.Click
+    Private Sub btnLaborRates_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLaborRates.Click
 
         Dim obj As New frmLaborRates
         Try
@@ -2708,7 +2789,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub CalculateFinalBankPrice()
+    Public Sub CalculateFinalBankPrice()
         CalculateFinalBankPriceSummary()
         CalculateFinalBankPriceBase()
         CalculateFinalBankPriceAlt()
@@ -2721,8 +2802,8 @@ Partial Friend Class CM_MAIN_frm
 
         For Each row As DataRow In dtSummaryGroup.Rows
             If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
-                sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
-                row.Item("C1") = (((row.Item("bank_final_price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
+                sales_commission = IIf(IsDBNull(row.Item("Sales_Commission")), 0, row.Item("Sales_Commission"))
+                row.Item("C1") = (((row.Item("Bank_Final_Price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
                 row.Item("C1") = Math.Round(row.Item("C1"), 4)
             End If
         Next row
@@ -2735,11 +2816,11 @@ Partial Friend Class CM_MAIN_frm
 
         For Each row As DataRow In dtBaseGroup.Rows
             If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
-                sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
+                sales_commission = IIf(IsDBNull(row.Item("Sales_Commission")), 0, row.Item("Sales_Commission"))
                 If row.Item(0) <> "Master" Then
-                    row.Item("bank_final_price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
+                    row.Item("Bank_Final_Price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
                 Else
-                    row.Item("C1") = (((row.Item("bank_final_price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
+                    row.Item("C1") = (((row.Item("Bank_Final_Price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
                     row.Item("C1") = Math.Round(row.Item("C1"), 4)
                 End If
             End If
@@ -2754,8 +2835,8 @@ Partial Friend Class CM_MAIN_frm
 
         For Each row As DataRow In dtAltGroup.Rows
             If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
-                sales_commission = IIf(IsDBNull(row.Item("sales_commission")), 0, row.Item("sales_commission"))
-                row.Item("bank_final_price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
+                sales_commission = IIf(IsDBNull(row.Item("Sales_Commission")), 0, row.Item("Sales_Commission"))
+                row.Item("Bank_Final_Price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
             End If
         Next row
 
@@ -2829,6 +2910,44 @@ Partial Friend Class CM_MAIN_frm
     '    'End If
 
     'End Sub
+
+    Private Function GetBudgetC1(speed As Integer, machine_model As String, bank_type As String) As Decimal
+
+        Dim sSQL As String = "SELECT C1_High_Rise, C1_Mid_Rise, C1_Low_Rise, C1_Destination FROM [MOD Office] "
+        Dim myList As New List(Of String)()
+        Dim budget_c1 As Decimal
+
+        sSQL += "WHERE Office = '" & Me.cboSalesOffice.Text & "'"
+
+        myList = GetDataFromOptions(sSQL, True)
+
+        If myList.Count > 0 Then
+            If bank_type = HYDRO_TYPE Then
+                budget_c1 = myList(2)
+            ElseIf speed >= 500 And machine_model <> MACHINE_FMM200 Then
+                budget_c1 = myList(0)
+            ElseIf speed < 500 Or machine_model = MACHINE_FMM200 Then
+                budget_c1 = myList(1)
+            Else    'C1 Destination
+                budget_c1 = myList(3)
+            End If
+        End If
+
+        Return budget_c1
+
+    End Function
+
+    Private Function CalculateDefaultC1() As Decimal
+        Dim c1 As Decimal
+        Dim myList As New List(Of String)()
+        Dim sSQL As String = "SELECT C1_High_Rise FROM [MOD Office] WHERE Office = '" & Contracts.SalesRepOffice & "'"
+
+        myList = GetDataFromOptions(sSQL)
+        c1 = myList(0)
+        c1 += 0.06
+        Return c1
+
+    End Function
 
 
 End Class

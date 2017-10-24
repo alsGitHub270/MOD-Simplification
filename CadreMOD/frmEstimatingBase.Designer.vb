@@ -29,6 +29,8 @@ Partial Class frmEstimatingBase
         Me.CarTab = New System.Windows.Forms.TabPage()
         Me.CarData_fra = New System.Windows.Forms.GroupBox()
         Me.GeneralInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.Destination_cmb = New System.Windows.Forms.ComboBox()
+        Me.Destination_lbl = New System.Windows.Forms.Label()
         Me.GatewayReviewRequired_chk = New System.Windows.Forms.CheckBox()
         Me.ExpensesPerDayDetails_btn = New System.Windows.Forms.Button()
         Me.ExpensesPerDay_txt = New System.Windows.Forms.TextBox()
@@ -122,11 +124,12 @@ Partial Class frmEstimatingBase
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
         Me.BillofMaterialsandTaskList_fra = New System.Windows.Forms.GroupBox()
         Me.ExpandAll_cmd = New System.Windows.Forms.Button()
-        Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
-        Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
+        Me.BillOfMaterials_spr = New FarPoint.Win.Spread.FpSpread()
+        Me.BillOfMaterials_spr_Sheet1 = New FarPoint.Win.Spread.SheetView()
         Me.CollapseAll_cmd = New System.Windows.Forms.Button()
         Me.OrderTab = New System.Windows.Forms.TabPage()
         Me.OrderingForms_fra = New System.Windows.Forms.GroupBox()
+        Me.OrderingForms_lst = New System.Windows.Forms.ListBox()
         Me.OrderingForms_con = New System.Windows.Forms.Panel()
         Me.MDI_pic = New System.Windows.Forms.PictureBox()
         Me.fraHdrJobInfo = New System.Windows.Forms.GroupBox()
@@ -153,15 +156,14 @@ Partial Class frmEstimatingBase
         Me.Forms_cmd = New System.Windows.Forms.Button()
         Me.Book_cmd = New System.Windows.Forms.Button()
         Me.Config_cmd = New System.Windows.Forms.Button()
-        Me.OrderingForms_lst = New System.Windows.Forms.ListBox()
         Me.GroupBox1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.CarTab.SuspendLayout()
         Me.CarData_fra.SuspendLayout()
         Me.GeneralInformation_fra.SuspendLayout()
         Me.BillofMaterialsandTaskList_fra.SuspendLayout()
-        CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BillOfMaterials_spr, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BillOfMaterials_spr_Sheet1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.OrderingForms_fra.SuspendLayout()
         CType(Me.MDI_pic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MDI_pic.SuspendLayout()
@@ -224,6 +226,9 @@ Partial Class frmEstimatingBase
         '
         Me.GeneralInformation_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GeneralInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.GeneralInformation_fra.Controls.Add(Me.Destination_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.Destination_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.GatewayReviewRequired_chk)
         Me.GeneralInformation_fra.Controls.Add(Me.ExpensesPerDayDetails_btn)
         Me.GeneralInformation_fra.Controls.Add(Me.ExpensesPerDay_txt)
@@ -323,6 +328,33 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.TabStop = False
         Me.GeneralInformation_fra.Text = "   General Information"
         '
+        'Destination_cmb
+        '
+        Me.Destination_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.Destination_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Destination_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.Destination_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Destination_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Destination_cmb.Location = New System.Drawing.Point(1201, 190)
+        Me.Destination_cmb.Name = "Destination_cmb"
+        Me.Destination_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Destination_cmb.Size = New System.Drawing.Size(119, 21)
+        Me.Destination_cmb.TabIndex = 181
+        '
+        'Destination_lbl
+        '
+        Me.Destination_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.Destination_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Destination_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Destination_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Destination_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Destination_lbl.Location = New System.Drawing.Point(1065, 192)
+        Me.Destination_lbl.Name = "Destination_lbl"
+        Me.Destination_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Destination_lbl.Size = New System.Drawing.Size(134, 16)
+        Me.Destination_lbl.TabIndex = 182
+        Me.Destination_lbl.Text = "Destination"
+        '
         'GatewayReviewRequired_chk
         '
         Me.GatewayReviewRequired_chk.BackColor = System.Drawing.SystemColors.Window
@@ -343,7 +375,7 @@ Partial Class frmEstimatingBase
         '
         Me.ExpensesPerDayDetails_btn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.ExpensesPerDayDetails_btn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ExpensesPerDayDetails_btn.Location = New System.Drawing.Point(1279, 141)
+        Me.ExpensesPerDayDetails_btn.Location = New System.Drawing.Point(1201, 141)
         Me.ExpensesPerDayDetails_btn.Name = "ExpensesPerDayDetails_btn"
         Me.ExpensesPerDayDetails_btn.Size = New System.Drawing.Size(92, 23)
         Me.ExpensesPerDayDetails_btn.TabIndex = 179
@@ -1036,7 +1068,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightFtRear_lbl
         '
-        Me.CarDoorOpeningHeightFtRear_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningHeightFtRear_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningHeightFtRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightFtRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightFtRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1050,7 +1082,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightInRear_lbl
         '
-        Me.CarDoorOpeningHeightInRear_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningHeightInRear_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningHeightInRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightInRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightInRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1092,7 +1124,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthFtRear_lbl
         '
-        Me.CarDoorOpeningWidthFtRear_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningWidthFtRear_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningWidthFtRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthFtRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthFtRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1106,7 +1138,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthInRear_lbl
         '
-        Me.CarDoorOpeningWidthInRear_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningWidthInRear_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningWidthInRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthInRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthInRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1184,7 +1216,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthInFront_lbl
         '
-        Me.CarDoorOpeningWidthInFront_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningWidthInFront_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningWidthInFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthInFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthInFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1198,7 +1230,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthFtFront_lbl
         '
-        Me.CarDoorOpeningWidthFtFront_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningWidthFtFront_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningWidthFtFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthFtFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthFtFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1240,7 +1272,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightInFront_lbl
         '
-        Me.CarDoorOpeningHeightInFront_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningHeightInFront_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningHeightInFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightInFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightInFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1254,7 +1286,7 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightFtFront_lbl
         '
-        Me.CarDoorOpeningHeightFtFront_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarDoorOpeningHeightFtFront_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarDoorOpeningHeightFtFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightFtFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightFtFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1603,7 +1635,7 @@ Partial Class frmEstimatingBase
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.ExpandAll_cmd)
-        Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.FpSpread1)
+        Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.BillOfMaterials_spr)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.CollapseAll_cmd)
         Me.BillofMaterialsandTaskList_fra.Location = New System.Drawing.Point(4, 231)
         Me.BillofMaterialsandTaskList_fra.Name = "BillofMaterialsandTaskList_fra"
@@ -1622,25 +1654,25 @@ Partial Class frmEstimatingBase
         Me.ExpandAll_cmd.Text = "Expand All"
         Me.ExpandAll_cmd.UseVisualStyleBackColor = True
         '
-        'FpSpread1
+        'BillOfMaterials_spr
         '
-        Me.FpSpread1.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
-        Me.FpSpread1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.BillOfMaterials_spr.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
+        Me.BillOfMaterials_spr.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
-        Me.FpSpread1.Location = New System.Drawing.Point(6, 43)
-        Me.FpSpread1.Name = "FpSpread1"
-        Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
-        Me.FpSpread1.Size = New System.Drawing.Size(1563, 337)
-        Me.FpSpread1.TabIndex = 80
-        Me.FpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
+        Me.BillOfMaterials_spr.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BillOfMaterials_spr.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
+        Me.BillOfMaterials_spr.Location = New System.Drawing.Point(6, 43)
+        Me.BillOfMaterials_spr.Name = "BillOfMaterials_spr"
+        Me.BillOfMaterials_spr.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.BillOfMaterials_spr_Sheet1})
+        Me.BillOfMaterials_spr.Size = New System.Drawing.Size(1563, 337)
+        Me.BillOfMaterials_spr.TabIndex = 80
+        Me.BillOfMaterials_spr.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         '
-        'SheetView1
+        'BillOfMaterials_spr_Sheet1
         '
-        Me.SheetView1.Reset()
-        Me.SheetView1.SheetName = "Sheet1"
+        Me.BillOfMaterials_spr_Sheet1.Reset()
+        Me.BillOfMaterials_spr_Sheet1.SheetName = "Sheet1"
         '
         'CollapseAll_cmd
         '
@@ -1675,9 +1707,23 @@ Partial Class frmEstimatingBase
         Me.OrderingForms_fra.TabStop = False
         Me.OrderingForms_fra.Visible = False
         '
+        'OrderingForms_lst
+        '
+        Me.OrderingForms_lst.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.OrderingForms_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OrderingForms_lst.FormattingEnabled = True
+        Me.OrderingForms_lst.Location = New System.Drawing.Point(2, 12)
+        Me.OrderingForms_lst.Name = "OrderingForms_lst"
+        Me.OrderingForms_lst.Size = New System.Drawing.Size(116, 602)
+        Me.OrderingForms_lst.TabIndex = 0
+        '
         'OrderingForms_con
         '
-        Me.OrderingForms_con.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.OrderingForms_con.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OrderingForms_con.AutoScroll = True
+        Me.OrderingForms_con.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.OrderingForms_con.Location = New System.Drawing.Point(120, 12)
         Me.OrderingForms_con.Name = "OrderingForms_con"
         Me.OrderingForms_con.Size = New System.Drawing.Size(1483, 606)
@@ -2068,22 +2114,11 @@ Partial Class frmEstimatingBase
         Me.Config_cmd.Text = "Config"
         Me.Config_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        'OrderingForms_lst
-        '
-        Me.OrderingForms_lst.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.OrderingForms_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.OrderingForms_lst.FormattingEnabled = True
-        Me.OrderingForms_lst.Location = New System.Drawing.Point(2, 12)
-        Me.OrderingForms_lst.Name = "OrderingForms_lst"
-        Me.OrderingForms_lst.Size = New System.Drawing.Size(116, 602)
-        Me.OrderingForms_lst.TabIndex = 0
-        '
         'frmEstimatingBase
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
-        Me.BackColor = System.Drawing.Color.White
+        Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(1602, 795)
         Me.Controls.Add(Me.MDI_pic)
         Me.Controls.Add(Me.GroupBox1)
@@ -2099,8 +2134,8 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.ResumeLayout(False)
         Me.GeneralInformation_fra.PerformLayout()
         Me.BillofMaterialsandTaskList_fra.ResumeLayout(False)
-        CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BillOfMaterials_spr, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BillOfMaterials_spr_Sheet1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.OrderingForms_fra.ResumeLayout(False)
         CType(Me.MDI_pic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MDI_pic.ResumeLayout(False)
@@ -2139,8 +2174,8 @@ Partial Class frmEstimatingBase
     Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
     Friend WithEvents BillofMaterialsandTaskList_fra As System.Windows.Forms.GroupBox
     Friend WithEvents ExpandAll_cmd As System.Windows.Forms.Button
-    Friend WithEvents FpSpread1 As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents SheetView1 As FarPoint.Win.Spread.SheetView
+    Friend WithEvents BillOfMaterials_spr As FarPoint.Win.Spread.FpSpread
+    Friend WithEvents BillOfMaterials_spr_Sheet1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents CollapseAll_cmd As System.Windows.Forms.Button
     Public WithEvents NumberofStopsTotal_cmb As System.Windows.Forms.ComboBox
     Public WithEvents NumberofStopsTotal_lbl As System.Windows.Forms.Label
@@ -2240,6 +2275,8 @@ Partial Class frmEstimatingBase
     Friend WithEvents OrderingForms_fra As System.Windows.Forms.GroupBox
     Friend WithEvents OrderingForms_con As System.Windows.Forms.Panel
     Friend WithEvents OrderingForms_lst As System.Windows.Forms.ListBox
+    Public WithEvents Destination_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents Destination_lbl As System.Windows.Forms.Label
 
 #End Region
 End Class

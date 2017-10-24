@@ -481,59 +481,58 @@ MISSINGMESSAGE:
         Else
             Contracts.ProbabilityOfSale = Map_ProbabilityofSale(clsNotes.GetValue("prob_sale_range"))
         End If
-        Contracts.ProposalNum = clsNotes.GetValue("Proposal_num")
-        If clsNotes.GetValue("HqRLMod") = "RL" Then
-            RegionLocalMOD_OLD = CheckState.Checked
-        Else
-            RegionLocalMOD_OLD = CheckState.Unchecked
-        End If
-        If clsNotes.GetValue("travelIncreaseYN").ToUpper() = "YES" Then
-            ChangingTravel_OLD = CheckState.Checked
-        Else
-            ChangingTravel_OLD = CheckState.Unchecked
-        End If
-        If clsNotes.GetValue("changecapacity").ToUpper() = "YES" Then
-            ChangingCapacity_OLD = CheckState.Checked
-        Else
-            ChangingCapacity_OLD = CheckState.Unchecked
-        End If
-        If clsNotes.GetValue("changespeed").ToUpper() = "YES" Then
-            ChangingSpeed_OLD = CheckState.Checked
-        Else
-            ChangingSpeed_OLD = CheckState.Unchecked
-        End If
+        'Contracts.ProposalNum = clsNotes.GetValue("Proposal_num")
+        'If clsNotes.GetValue("HqRLMod") = "RL" Then
+        '    RegionLocalMOD_OLD = CheckState.Checked
+        'Else
+        '    RegionLocalMOD_OLD = CheckState.Unchecked
+        'End If
+        'If clsNotes.GetValue("travelIncreaseYN").ToUpper() = "YES" Then
+        '    ChangingTravel_OLD = CheckState.Checked
+        'Else
+        '    ChangingTravel_OLD = CheckState.Unchecked
+        'End If
+        'If clsNotes.GetValue("changecapacity").ToUpper() = "YES" Then
+        '    ChangingCapacity_OLD = CheckState.Checked
+        'Else
+        '    ChangingCapacity_OLD = CheckState.Unchecked
+        'End If
+        'If clsNotes.GetValue("changespeed").ToUpper() = "YES" Then
+        '    ChangingSpeed_OLD = CheckState.Checked
+        'Else
+        '    ChangingSpeed_OLD = CheckState.Unchecked
+        'End If
         Contracts.EstimateDate = CDate(clsNotes.GetValue("date")).ToString("d")
         Contracts.ContractNumber = clsNotes.GetValue("custnumber")
-        If PreBidMODActive Then
-            If clsNotes.GetValue("bidtype") = "Budget Price" Then
-                MessageBox.Show("Cadre MOD estimates cannot be created for a 'Budget Price'!" & Environment.NewLine & _
-                      "Please modify PreBid to a 'Firm Price' in order to run Cadre MOD.", "Closing Cadre MOD", MessageBoxButtons.OK)
-                EndProgram()
-            End If
-        Else
-            If Contracts.ContractNumber.Length > 0 And Contracts.ContractNumber <> "" Then
-                Contracts.CurrentMaintenance = "Yes"
-            Else
-                Contracts.CurrentMaintenance = "No"
-            End If
-            If clsNotes.GetValue("pricingType") = "Firm" Then
-                Contracts.Pricing_Type = "FIRM"
-            Else
-                Contracts.Pricing_Type = "BUDGET"
-            End If
-        End If
-        Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
-        If clsNotes.GetValue("specification") = "Yes" Then
-            Contracts.SpecificationExists = CheckState.Checked
-        Else
-            Contracts.SpecificationExists = CheckState.Unchecked
-        End If
-        Contracts.RegionCode = clsNotes.GetValue("area")
-        Contracts.MaxPercentSpecialStatus = ""
-        Contracts.SystemStatus = clsNotes.GetValue("systemStatus")
-        Contracts.OpportunityToOfferDate = clsNotes.GetValue("oppToOfferDate").ToString
-        Contracts.ProposedDate = clsNotes.GetValue("proposedDate").ToString
-        Contracts.OpportunityClosedDate = clsNotes.GetValue("oppOfferClosedDate").ToString
+        'If PreBidMODActive Then
+        '    If clsNotes.GetValue("bidtype") = "Budget Price" Then
+        '        MessageBox.Show("Cadre MOD estimates cannot be created for a 'Budget Price'!" & Environment.NewLine & _
+        '              "Please modify PreBid to a 'Firm Price' in order to run Cadre MOD.", "Closing Cadre MOD", MessageBoxButtons.OK)
+        '        EndProgram()
+        '    End If
+        'Else
+        '    If Contracts.ContractNumber.Length > 0 And Contracts.ContractNumber <> "" Then
+        '        Contracts.CurrentMaintenance = "Yes"
+        '    Else
+        '        Contracts.CurrentMaintenance = "No"
+        '    End If
+        '    If clsNotes.GetValue("pricingType") = "Firm" Then
+        '        Contracts.Pricing_Type = "FIRM"
+        '    Else
+        '        Contracts.Pricing_Type = "BUDGET"
+        '    End If
+        'End If
+        'If clsNotes.GetValue("specification") = "Yes" Then
+        '    Contracts.SpecificationExists = CheckState.Checked
+        'Else
+        '    Contracts.SpecificationExists = CheckState.Unchecked
+        'End If
+        'Contracts.RegionCode = clsNotes.GetValue("area")
+        'Contracts.MaxPercentSpecialStatus = ""
+        'Contracts.SystemStatus = clsNotes.GetValue("systemStatus")
+        'Contracts.OpportunityToOfferDate = clsNotes.GetValue("oppToOfferDate").ToString
+        'Contracts.ProposedDate = clsNotes.GetValue("proposedDate").ToString
+        'Contracts.OpportunityClosedDate = clsNotes.GetValue("oppOfferClosedDate").ToString
         Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
         Select Case clsNotes.GetValue("Status").ToUpper()
             Case "PRE-BID"
@@ -553,10 +552,10 @@ MISSINGMESSAGE:
             Case Else
                 Contracts.Status = clsNotes.GetValue("Status")
         End Select
-        SHELL_ACCESS = Not (Contracts.SystemStatus = "Approved" And Contracts.Status <> Status_OfferLost And Contracts.Status <> Status_OfferOnHold)
-        Contracts.OfficeRating = clsNotes.GetValue("officeRating")
-        Contracts.PreBidPrice = Convert.ToSingle(clsNotes.GetValue("proposal_price_prebid"))
-        Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(clsNotes.GetValue("approvedMaxAdder")) / 100), 4)
+        'SHELL_ACCESS = Not (Contracts.SystemStatus = "Approved" And Contracts.Status <> Status_OfferLost And Contracts.Status <> Status_OfferOnHold)
+        'Contracts.OfficeRating = clsNotes.GetValue("officeRating")
+        'Contracts.PreBidPrice = Convert.ToSingle(clsNotes.GetValue("proposal_price_prebid"))
+        'Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(clsNotes.GetValue("approvedMaxAdder")) / 100), 4)
         'If Contracts.MaxPercentSpecial = 0 Then
         '    Contracts.MaxPercentSpecial = 0.1
         '    If clsNotes.NotesDBName(ComServer, HoldNotesFeedbackPath) Then
@@ -588,7 +587,8 @@ MISSINGMESSAGE:
         Contracts.JobCity = TrimFields(clsNotes.GetValue("City"))
         Contracts.JobState = clsNotes.GetValue("State")
         Contracts.JobZip = clsNotes.GetValue("Zip")
-        '        OfficeFromSmart = TranslateOfficeNumber(clsNotes.GetValue("Office"))
+        'OfficeFromSmart = TranslateOfficeNumber(clsNotes.GetValue("Office"))
+
         If Contracts.SalesRepOffice = "" Then
             Contracts.SalesRepOffice = TranslateOfficeNumber(clsNotes.GetValue("Office"))
         End If

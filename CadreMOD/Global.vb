@@ -12,12 +12,12 @@
 
     Public ADOConnection As New ADODB.Connection
     Public ADOConnectionRPTDataDB As New ADODB.Connection
-    Public ADOConnectionOptionDataBase As New ADODB.Connection
+    Public ADOConnectionMODDataDataBase As New ADODB.Connection
     Public ADOConnectionMessageDataBase As New ADODB.Connection
     Public ADOConnectionHapDatabase As New ADODB.Connection
     Public ADOCatalogRPTdata As ADOX.Catalog = Nothing
     Public ADOCatalogHapDatabase As ADOX.Catalog = Nothing
-    Public _ADOCatalogOptionDataBase As ADOX.Catalog = Nothing
+    Public _ADOCatalogMODDataDataBase As ADOX.Catalog = Nothing
     Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
 
     Public dsCadre As DataSet
@@ -51,6 +51,8 @@
     Public gsCommand As String = ""
     Public OpportunityID As String = String.Empty
     Public UserRole As String
+
+
     ' Cadre MOD Access Level
     Public FULL_ACCESS As Boolean
     Public SHELL_ACCESS As Boolean
@@ -67,21 +69,18 @@
     Public All_LocalCodeDep As New All_LocalCodeDepTYP()
 
 
-    Public MachineType As String = String.Empty
-    Public CurrentUnits As String = String.Empty
-    Public EstimateLevel As String = String.Empty
     Public TaxRate As Single = -999.99
 
 
-    Public Property ADOCatalogOptionDataBase() As ADOX.Catalog
+    Public Property ADOCatalogMODDataDataBase() As ADOX.Catalog
         Get
-            If _ADOCatalogOptionDataBase Is Nothing Then
-                _ADOCatalogOptionDataBase = New ADOX.Catalog()
+            If _ADOCatalogMODDataDataBase Is Nothing Then
+                _ADOCatalogMODDataDataBase = New ADOX.Catalog()
             End If
-            Return _ADOCatalogOptionDataBase
+            Return _ADOCatalogMODDataDataBase
         End Get
         Set(ByVal Value As ADOX.Catalog)
-            _ADOCatalogOptionDataBase = Value
+            _ADOCatalogMODDataDataBase = Value
         End Set
     End Property
 
@@ -147,6 +146,7 @@
         Dim State As String
         Dim Country As String
         Dim PostalCode As String
+        Dim TaxType As String
         Public Shared Function CreateInstance() As CRM_typ
             Dim result As New CRM_typ()
             result.SalesRepName = String.Empty
@@ -158,6 +158,7 @@
             result.State = String.Empty
             result.Country = String.Empty
             result.PostalCode = String.Empty
+            result.TaxType = String.Empty
             Return result
         End Function
     End Structure
@@ -168,13 +169,18 @@
         Dim Bank As String
         Dim Alt As String
         Dim Units As String
-        Dim GONumbersID As Integer
+        Dim MachineType As String
+        Dim CurrentUnits As String
+        Dim EstimateLevel As String
         Public Shared Function CreateInstance() As CurrentGOData_Type
             Dim result As New CurrentGOData_Type()
             result.Type = String.Empty
             result.Bank = String.Empty
             result.Alt = String.Empty
             result.Units = String.Empty
+            result.MachineType = String.Empty
+            result.CurrentUnits = String.Empty
+            result.EstimateLevel = String.Empty
             Return result
         End Function
     End Structure

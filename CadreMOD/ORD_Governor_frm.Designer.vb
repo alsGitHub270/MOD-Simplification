@@ -135,7 +135,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernor1TensionSheaveBIn_lbl
         '
-        Me.CwtGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernor1TensionSheaveBIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernor1TensionSheaveBIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernor1TensionSheaveBIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -149,7 +149,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernor1TensionSheaveB_lbl
         '
-        Me.CwtGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernor1TensionSheaveB_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernor1TensionSheaveB_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernor1TensionSheaveB_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -164,7 +164,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtMeetsMinimumClearances_chk
         '
-        Me.CwtMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Control
         Me.CwtMeetsMinimumClearances_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.CwtMeetsMinimumClearances_chk.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtMeetsMinimumClearances_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -196,7 +196,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernor1TensionSheaveAIn_lbl
         '
-        Me.CwtGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernor1TensionSheaveAIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernor1TensionSheaveAIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernor1TensionSheaveAIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -210,7 +210,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernor1TensionSheaveA_lbl
         '
-        Me.CwtGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernor1TensionSheaveA_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernor1TensionSheaveA_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernor1TensionSheaveA_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -238,7 +238,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernorMounting_lbl
         '
-        Me.CwtGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernorMounting_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernorMounting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernorMounting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -266,7 +266,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernor1Hand_lbl
         '
-        Me.CwtGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernor1Hand_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernor1Hand_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernor1Hand_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -297,7 +297,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernorPullthrough_lbl
         '
-        Me.CwtGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernorPullthrough_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernorPullthrough_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernorPullthrough_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -325,7 +325,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernorNewModel_lbl
         '
-        Me.CwtGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernorNewModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernorNewModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernorNewModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -352,7 +352,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernorExistingModel_lbl
         '
-        Me.CwtGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernorExistingModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernorExistingModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernorExistingModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -379,7 +379,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernorExistingVendor_lbl
         '
-        Me.CwtGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernorExistingVendor_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernorExistingVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernorExistingVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -419,7 +419,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovernorExistingSheaveDiameter_lbl
         '
-        Me.CwtGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovernorExistingSheaveDiameter_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovernorExistingSheaveDiameter_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovernorExistingSheaveDiameter_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -433,7 +433,7 @@ Partial Class ORD_Governor_frm
         '
         'CwtGovCableSize_lbl
         '
-        Me.CwtGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CwtGovCableSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CwtGovCableSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CwtGovCableSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -499,7 +499,7 @@ Partial Class ORD_Governor_frm
         '
         'CarMeetsMinimumClearances_chk
         '
-        Me.CarMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.CarMeetsMinimumClearances_chk.BackColor = System.Drawing.SystemColors.Control
         Me.CarMeetsMinimumClearances_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.CarMeetsMinimumClearances_chk.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarMeetsMinimumClearances_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -531,7 +531,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernor1TensionSheaveBIn_lbl
         '
-        Me.CarGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveBIn_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernor1TensionSheaveBIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernor1TensionSheaveBIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernor1TensionSheaveBIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -558,7 +558,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernor1TensionSheaveA_lbl
         '
-        Me.CarGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveA_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernor1TensionSheaveA_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernor1TensionSheaveA_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernor1TensionSheaveA_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -573,7 +573,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernorMounting_lbl
         '
-        Me.CarGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorMounting_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernorMounting_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernorMounting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernorMounting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -587,7 +587,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernor1TensionSheaveB_lbl
         '
-        Me.CarGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveB_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernor1TensionSheaveB_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernor1TensionSheaveB_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernor1TensionSheaveB_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -616,7 +616,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernor1TensionSheaveAIn_lbl
         '
-        Me.CarGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1TensionSheaveAIn_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernor1TensionSheaveAIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernor1TensionSheaveAIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernor1TensionSheaveAIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -630,7 +630,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernor1Hand_lbl
         '
-        Me.CarGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernor1Hand_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernor1Hand_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernor1Hand_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernor1Hand_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -658,7 +658,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernorNewModel_lbl
         '
-        Me.CarGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorNewModel_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernorNewModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernorNewModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernorNewModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -688,7 +688,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernorPullthrough_lbl
         '
-        Me.CarGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorPullthrough_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernorPullthrough_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernorPullthrough_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernorPullthrough_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -716,7 +716,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernorExistingModel_lbl
         '
-        Me.CarGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingModel_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernorExistingModel_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernorExistingModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernorExistingModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -743,7 +743,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernorExistingVendor_lbl
         '
-        Me.CarGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingVendor_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernorExistingVendor_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernorExistingVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernorExistingVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -783,7 +783,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovernorExistingSheaveDiameter_lbl
         '
-        Me.CarGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovernorExistingSheaveDiameter_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovernorExistingSheaveDiameter_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovernorExistingSheaveDiameter_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovernorExistingSheaveDiameter_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -797,7 +797,7 @@ Partial Class ORD_Governor_frm
         '
         'CarGovCableSize_lbl
         '
-        Me.CarGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarGovCableSize_lbl.BackColor = System.Drawing.SystemColors.Control
         Me.CarGovCableSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarGovCableSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarGovCableSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

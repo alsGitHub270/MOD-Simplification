@@ -60,7 +60,6 @@ Module Startup
             Cursor.Current = Cursors.WaitCursor
             GetPath("Paths", "Data", tPathName)
             HoldDataPath = VerifyPath(HoldDirectory)
-            EstimatePath = HoldDataPath
             HAPDatabasePath = HoldDataPath
             DebugPath = VerifyPath(HoldDataPath & "Debug\")
             SuptPath = VerifyPath(HoldDataPath & "Supt\")
@@ -69,6 +68,7 @@ Module Startup
             SystemDatabaseName = Strings.Left(SystemDatabaseName, SystemDatabaseName.Length - 1)
             GetPath("Paths", "Reports", tPathName)
             ReportsPath = VerifyPath(HoldDirectory)
+            EstimatePath = ReportsPath
             GetPath("Paths", "SAP", tPathName)
             SAPPath = VerifyPath(HoldDirectory)
             GetPath("Paths", "FlatFiles", tPathName)
@@ -92,7 +92,7 @@ Module Startup
 
             QueryFeedback(True)
 
-            'DAO2ADO(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, EstimatePath, OPTION_DATABASE_NAME, True)
+            DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath, MODDATA_DATABASE_NAME, True)
 
             '     CM_MAIN_IO.InitializeStructCRMData()
             'If gbShape Then
@@ -202,7 +202,7 @@ Module Startup
             Else
                 sql_string = "SELECT [Tax Type], [Tax Rate], ExemptionAllowed FROM [Rate (US Tax)] WHERE State = '" & Contracts.JobState & "'"
                 my_list = GetDataFromOptions(sql_string, True)
-
+                ProjectData.TaxType = my_list(0)
                 If my_list(0) = "S" Or my_list(0) = "S*" Then
                     DefaultTaxCode = "Taxable"
                 ElseIf my_list(1) = 0 Then
