@@ -112,7 +112,7 @@ Public Class frmContacts
         contactUpdated = False
     End Sub
 
-    Private Sub frmAddresses_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub frmContacts_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
         If contactUpdated Then
             ' add each class to a list
@@ -192,7 +192,7 @@ Public Class frmContacts
 
     'End Sub
 
-    Private Sub frmAddresses_Load(sender As Object, e As System.EventArgs) Handles Me.Load
+    Private Sub frmContacts_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         ' Load the classes  from the dataset
 
