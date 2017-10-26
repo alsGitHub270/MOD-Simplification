@@ -34,7 +34,7 @@ Partial Class CM_MAIN_frm
     Private WithEvents btnExit As System.Windows.Forms.Button
     Private WithEvents btnSave As System.Windows.Forms.Button
     Private WithEvents _Menu_tlb_3 As System.Windows.Forms.Button
-    Private WithEvents _Menu_tlb_4 As System.Windows.Forms.Button
+    Private WithEvents btn_Help As System.Windows.Forms.Button
     Private WithEvents _label_0 As System.Windows.Forms.Label
     Private WithEvents _label_4 As System.Windows.Forms.Label
     Public WithEvents Menu_pic As System.Windows.Forms.PictureBox
@@ -55,8 +55,8 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
-        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer3 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer4 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -123,7 +123,7 @@ Partial Class CM_MAIN_frm
         Me.btnExit = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me._Menu_tlb_3 = New System.Windows.Forms.Button()
-        Me._Menu_tlb_4 = New System.Windows.Forms.Button()
+        Me.btn_Help = New System.Windows.Forms.Button()
         Me._label_0 = New System.Windows.Forms.Label()
         Me._label_4 = New System.Windows.Forms.Label()
         Me.StatusBar1 = New System.Windows.Forms.StatusStrip()
@@ -992,7 +992,7 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.Controls.Add(Me.btnExit)
         Me.Menu_pic.Controls.Add(Me.btnSave)
         Me.Menu_pic.Controls.Add(Me._Menu_tlb_3)
-        Me.Menu_pic.Controls.Add(Me._Menu_tlb_4)
+        Me.Menu_pic.Controls.Add(Me.btn_Help)
         Me.Menu_pic.Controls.Add(Me._label_0)
         Me.Menu_pic.Controls.Add(Me._label_4)
         Me.Menu_pic.Dock = System.Windows.Forms.DockStyle.Top
@@ -1079,16 +1079,16 @@ Partial Class CM_MAIN_frm
         '
         '_Menu_tlb_4
         '
-        Me._Menu_tlb_4.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._Menu_tlb_4.Image = CType(resources.GetObject("_Menu_tlb_4.Image"), System.Drawing.Image)
-        Me._Menu_tlb_4.Location = New System.Drawing.Point(300, 1)
-        Me._Menu_tlb_4.Name = "_Menu_tlb_4"
-        Me._Menu_tlb_4.Size = New System.Drawing.Size(46, 46)
-        Me._Menu_tlb_4.TabIndex = 37
-        Me._Menu_tlb_4.TabStop = False
-        Me._Menu_tlb_4.Tag = "Help"
-        Me._Menu_tlb_4.Text = "Help"
-        Me._Menu_tlb_4.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btn_Help.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_Help.Image = CType(resources.GetObject("btn_Help.Image"), System.Drawing.Image)
+        Me.btn_Help.Location = New System.Drawing.Point(300, 1)
+        Me.btn_Help.Name = "btn_Help"
+        Me.btn_Help.Size = New System.Drawing.Size(46, 46)
+        Me.btn_Help.TabIndex = 37
+        Me.btn_Help.TabStop = False
+        Me.btn_Help.Tag = "Help"
+        Me.btn_Help.Text = "Help"
+        Me.btn_Help.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         '_label_0
         '
@@ -1758,18 +1758,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
         Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.HorizontalScrollBar.Name = ""
-        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
+        EnhancedScrollBarRenderer3.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer3.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer3
         Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
@@ -1782,18 +1782,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.VerticalScrollBar.Name = ""
-        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
+        EnhancedScrollBarRenderer4.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer4.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer4
         Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
@@ -1965,7 +1965,7 @@ Partial Class CM_MAIN_frm
         Me.btnPrint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
         Me.btnPrint.Location = New System.Drawing.Point(842, 21)
         Me.btnPrint.Name = "btnPrint"
-        Me.btnPrint.Size = New System.Drawing.Size(77, 22)
+        Me.btnPrint.Size = New System.Drawing.Size(88, 22)
         Me.btnPrint.TabIndex = 79
         Me.btnPrint.Text = "Print to PDF"
         Me.btnPrint.UseVisualStyleBackColor = True
@@ -2341,7 +2341,7 @@ Partial Class CM_MAIN_frm
         Me.Menu_tlb(0) = btnExit
         Me.Menu_tlb(1) = btnSave
         Me.Menu_tlb(3) = _Menu_tlb_3
-        Me.Menu_tlb(4) = _Menu_tlb_4
+        Me.Menu_tlb(4) = btn_Help
     End Sub
 
     Sub InitializeForms_btn()

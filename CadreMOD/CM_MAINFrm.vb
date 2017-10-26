@@ -216,7 +216,6 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub CreateLaborRateDataset()
-        Dim bank As String
 
         dtLaborRates = dsCadre.Tables.Add("LaborRates")
 
@@ -406,7 +405,7 @@ Partial Friend Class CM_MAIN_frm
                 frmEstimatingBase.Show()
                 Me.Hide()
             Case "Alt"
-                frmEstimatingBase.Show()
+                frmEstimatingAlt.Show()
                 Me.Hide()
             Case Else
         End Select
@@ -1249,53 +1248,29 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrint.Click
 
-        'Dim printset = New FarPoint.Win.Spread.PrintInfo()
-
-        'printset.PrintToPdf = True
-
-        'printset.PdfFileName = "c:\temp\test.pdf"
-
-        'printset.PdfWriteMode = FarPoint.Win.Spread.PdfWriteMode.Append
-
-        'For Each sheet As FarPoint.Win.Spread.SheetView In FpSpread1.Sheets
-
-        '    sheet.PrintInfo = printset
-        'Next
-
-        'FpSpread1.PrintSheet(-1)
-
-
         Dim printset As New FarPoint.Win.Spread.PrintInfo()
         printset.PrintToPdf = True
         printset.PdfFileName = "c:\temp\results.pdf"
         printset.Orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
-        printset.ZoomFactor = 0.65
+        printset.ZoomFactor = 0.9
         printset.BestFitCols = True
 
-        printset.PdfWriteMode = FarPoint.Win.Spread.PdfWriteMode.Append
+        Dim combinedSheet As New FarPoint.Win.Spread.SheetView
+        combinedSheet = CreateCombinedSheet1()
 
-        ' assign the printer settings and print
-        'FpSpread1.Sheets().Printinfo = printset
+        SetCombinedSheetHeaders(combinedSheet)
 
+        Dim header As String
+        header = "Contract Management" & vbCrLf & vbCrLf & "Estimate:  " & Contracts.EstimateNum & vbCrLf & "Job Name:  " & Contracts.JobName & vbCrLf
 
-        ' child view
-        Dim ss As FarPoint.Win.Spread.SheetView
-        ss = FpSpread1.Sheets(0).GetChildView(0, 0)
-        FpSpread1.Sheets(0).PrintInfo = printset
+        printset.Header = header
 
+        combinedSheet.PrintInfo = printset
 
-        For Each sheet As FarPoint.Win.Spread.SheetView In FpSpread1.Sheets
-            sheet.PrintInfo = printset
-
-        Next
-
-        'FpSpread1.PrintSheet(-1)
-        FpSpread1.SafePrint(FpSpread1, -1)
-
-
-        MsgBox("print to pdf completed!")
-
-
+        If Not IsNothing(combinedSheet) Then
+            FpSpread1.PrintSheet(combinedSheet)
+            MessageBox.Show("PDF generated")
+        End If
     End Sub
 
     Private Sub AddAlternateRow()
@@ -1940,7 +1915,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub btnSave_Click(sender As System.Object, e As System.EventArgs) Handles btnSave.Click
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
         SaveAll()
     End Sub
 
@@ -2550,24 +2525,28 @@ Partial Friend Class CM_MAIN_frm
         Dim machine_model As String
         Dim bank_type As String
         Dim spread_c1 As Decimal
+        Try
 
-        For i = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            speed = FpSpread1.ActiveSheet.Cells(i, 26).Value
-            machine_model = FpSpread1.ActiveSheet.Cells(i, 27).Value
-            bank_type = FpSpread1.ActiveSheet.Cells(i, 4).Value
-            spread_c1 = FpSpread1.ActiveSheet.Cells(i, 20).Value
 
-            budget_c1 = GetBudgetC1(speed, machine_model, bank_type)
+            For i = 0 To FpSpread1.ActiveSheet.RowCount - 1
+                speed = FpSpread1.ActiveSheet.Cells(i, 26).Value
+                machine_model = FpSpread1.ActiveSheet.Cells(i, 27).Value
+                bank_type = FpSpread1.ActiveSheet.Cells(i, 4).Value
+                spread_c1 = FpSpread1.ActiveSheet.Cells(i, 20).Value
 
-            If spread_c1 < budget_c1 Then
-                FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Red
-            ElseIf spread_c1 >= budget_c1 + 0.04 Then
-                FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Green
-            Else
-                FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Yellow
-            End If
-        Next
+                budget_c1 = GetBudgetC1(speed, machine_model, bank_type)
 
+                If spread_c1 < budget_c1 Then
+                    FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Red
+                ElseIf spread_c1 >= budget_c1 + 0.04 Then
+                    FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Green
+                Else
+                    FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Yellow
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Setting Summary C1 Colors", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub SetBaseAltC1Colors()
@@ -2801,7 +2780,7 @@ Partial Friend Class CM_MAIN_frm
         Dim sales_commission As Double
 
         For Each row As DataRow In dtSummaryGroup.Rows
-            If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
+            If Not IsDBNull(row.Item("Total_Bank_Cost")) AndAlso row.Item("Total_Bank_Cost") <> 0 Then
                 sales_commission = IIf(IsDBNull(row.Item("Sales_Commission")), 0, row.Item("Sales_Commission"))
                 row.Item("C1") = (((row.Item("Bank_Final_Price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
                 row.Item("C1") = Math.Round(row.Item("C1"), 4)
@@ -2911,7 +2890,7 @@ Partial Friend Class CM_MAIN_frm
 
     'End Sub
 
-    Private Function GetBudgetC1(speed As Integer, machine_model As String, bank_type As String) As Decimal
+    Private Function GetBudgetC1(ByVal speed As Integer, ByVal machine_model As String, ByVal bank_type As String) As Decimal
 
         Dim sSQL As String = "SELECT C1_High_Rise, C1_Mid_Rise, C1_Low_Rise, C1_Destination FROM [MOD Office] "
         Dim myList As New List(Of String)()
@@ -2948,6 +2927,112 @@ Partial Friend Class CM_MAIN_frm
         Return c1
 
     End Function
+    Private Sub btn_Help_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_Help.Click
+        MessageBox.Show(VERSION_STAMP, Application.ProductName)
+    End Sub
+    Private Sub CreateCombineSheet()
+        Dim CombineSheet As New FarPoint.Win.Spread.SheetView
+        Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer = 0
+        Dim RowCount As Integer = 1, ColumnCount As Integer = 0
+        Dim BaseView As FarPoint.Win.Spread.SheetView = Nothing, AltView As FarPoint.Win.Spread.SheetView = Nothing
 
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+        percentType.DecimalPlaces = 2
+
+        Try
+            For jIndex = 0 To FpSpread1.ActiveSheet.ColumnCount - 1
+                If FpSpread1.ActiveSheet.Columns(jIndex).Visible = True Then
+                    ColumnCount += 1
+                End If
+            Next jIndex
+            CombinedSheet.ColumnCount = ColumnCount
+            For iIndex = 0 To FpSpread1.ActiveSheet.RowCount - 1
+                CombinedSheet.RowCount = RowCount
+                ColumnCount = 0
+                For jIndex = 0 To FpSpread1.ActiveSheet.ColumnCount - 1
+                    If FpSpread1.ActiveSheet.Columns(jIndex).Visible = True Then
+                        CombinedSheet.Cells(RowCount - 1, ColumnCount).Text = FpSpread1.ActiveSheet.Cells(iIndex, jIndex).Value
+                        ColumnCount += 1
+                    End If
+                Next jIndex
+                RowCount += 1
+
+                'Base 
+                BaseView = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+                If Not IsNothing(BaseView) Then
+                    For baseRowIndex = 0 To BaseView.RowCount - 1
+                        CombinedSheet.RowCount = RowCount
+                        ColumnCount = 1
+                        For jIndex = 0 To BaseView.ColumnCount - 1
+                            If BaseView.Columns(jIndex).Visible = True And BaseView.Columns(jIndex).Label <> "Comments" Then
+                                CombinedSheet.Cells(RowCount - 1, ColumnCount).Text = BaseView.Cells(baseRowIndex, jIndex).Value
+                                If BaseView.Columns(jIndex).Label = "C1" Then
+                                    CombinedSheet.Columns(jIndex).CellType = percentType
+                                End If
+                                If ColumnCount = 1 Then
+                                    ColumnCount += 4
+                                Else
+                                    ColumnCount += 1
+                                End If
+
+                            End If
+                        Next jIndex
+                        RowCount += 1
+
+                        ' Alt
+                        AltView = BaseView.FindChildView(baseRowIndex, 0)
+                        If Not IsNothing(AltView) Then
+                            For altRowIndex As Integer = 0 To AltView.RowCount - 1
+                                CombinedSheet.RowCount = RowCount
+                                ColumnCount = 2
+                                For altColumnIndex As Integer = 0 To AltView.ColumnCount - 1
+                                    If AltView.Columns(altColumnIndex).Visible = True And AltView.Columns(altColumnIndex).Label <> "Comments" Then
+                                        CombinedSheet.Cells(RowCount - 1, ColumnCount).Text = AltView.Cells(altRowIndex, altColumnIndex).Value
+                                        ColumnCount += 1
+                                    End If
+                                Next altColumnIndex
+                                RowCount += 1
+                            Next altRowIndex
+                        End If
+                    Next baseRowIndex
+                End If
+            Next iIndex
+
+            Return CombinedSheet
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error in CreateCombinedSheet", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Throw New Exception
+        End Try
+    End Function
+
+    Private Sub SetCombinedSheetHeaders(ByRef combinedSheet As FarPoint.Win.Spread.SheetView)
+
+        combinedSheet.Columns(0).Label = "Group"
+        combinedSheet.Columns(1).Label = " "
+        combinedSheet.Columns(2).Label = " "
+        combinedSheet.Columns(3).Label = " "
+        combinedSheet.Columns(4).Label = " "
+        combinedSheet.Columns(5).Label = "HQ $"
+        combinedSheet.Columns(6).Label = "RL $"
+        combinedSheet.Columns(7).Label = "Tax $"
+        combinedSheet.Columns(8).Label = "BDP Hrs"
+        combinedSheet.Columns(9).Label = "Specl Hrs"
+        combinedSheet.Columns(10).Label = "Labor Hrs"
+        combinedSheet.Columns(11).Label = "OT Hrs"
+        combinedSheet.Columns(12).Label = "Labor $"
+        combinedSheet.Columns(13).Label = "SbCnrt $"
+        combinedSheet.Columns(14).Label = "Exp $"
+        combinedSheet.Columns(15).Label = "P/O/B"
+        combinedSheet.Columns(16).Label = "Freight $"
+        combinedSheet.Columns(17).Label = "NPS $"
+        combinedSheet.Columns(18).Label = "Bank Cost"
+        combinedSheet.Columns(19).Label = "C1 %"
+        combinedSheet.Columns(20).Label = "Sales Comm"
+        combinedSheet.Columns(21).Label = "Sell Price"
+        combinedSheet.Columns(22).Label = "Labor Rate"
+       
+        combinedSheet.ColumnHeader.Rows(0).Height = 30
+    End Sub
 
 End Class
