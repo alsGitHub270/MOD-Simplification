@@ -2,6 +2,17 @@
 Option Explicit On
 
 Module frmEstimatingBaseMOD
+    Public FormIsDirty As Boolean
+    Public Structure a_SheetHeaders_typ
+        Dim HeaderDesc As String
+        Dim HeaderType As System.Type
+        Public Shared Function CreateInstance() As a_SheetHeaders_typ
+            Dim result As New a_SheetHeaders_typ
+            result.HeaderDesc = String.Empty
+            Return result
+        End Function
+    End Structure
+
     Public EstimatingDataset As System.Data.DataSet
     Public OrderingDataset As System.Data.DataSet
     Public MainGroups As DataTable = Nothing
@@ -344,7 +355,7 @@ Module frmEstimatingBaseMOD
     Public Const MAT_ID_MachineRoomSpecialAccess As String = "035MIS"
     Public Const MAT_ID_TestingandComissioningforPORT As String = "040MIS"
     Public Const MAT_ID_Miscelleneous As String = "045MIS"
-    Public MAT_ID_IncrementalBlankLineMIS As String = "900MIS"
+    Public Const MAT_ID_IncrementalBlankLineMIS As String = "900MIS"
     Public Const MAT_ID_FrontRecladding As String = "005SUB"
     Public Const MAT_ID_NitroCleaning As String = "010SUB"
     Public Const MAT_ID_FireAlarmSystem As String = "015SUB"
@@ -353,7 +364,7 @@ Module frmEstimatingBaseMOD
     Public Const MAT_ID_BuildingGCWork As String = "030SUB"
     Public Const MAT_ID_Crane As String = "035SUB"
     Public Const MAT_ID_ThirdPartySecurityCompanyFee As String = "040SUB"
-    Public MAT_ID_IncrementalBlankLineSUB As String = "900SUB"
+    Public Const MAT_ID_IncrementalBlankLineSUB As String = "900SUB"
 
     Public Sub GetCostHours(ByVal MaterialID As String, ByVal CurOption As String, ByVal CurType As String, ByVal CurOrderBy As String,
                             ByVal CostOrHours As String, ByRef CurField As Single, ByVal CurQty As Integer)
@@ -397,34 +408,40 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                If Not IsPOHController Then
-                                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                    If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                        UseMaterialItemRecordSet.MoveFirst()
-                                        Do Until UseMaterialItemRecordSet.EOF
-                                            Select Case UseMaterialItemRecordSet.Fields("Usage").Value
-                                                Case "FMM200"
-                                                    If GetValue(TABLENAME_GENERALINFO, "MachineType_cmb") = "FMM200" Then
-                                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                    End If
-                                                Case "Haughton or Otis"
-                                                    If Not String.IsNullOrEmpty(GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst")) Then
-                                                        Select Case GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst").ToUpper
-                                                            Case "HAUGHTON", "OTIS"
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If Not IsPOHController Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                Do Until UseMaterialItemRecordSet.EOF
+                                                    Select Case UseMaterialItemRecordSet.Fields("Usage").Value
+                                                        Case MACHINE_FMM200
+                                                            If GetValue(TABLENAME_GENERALINFO, "MachineType_cmb") = MACHINE_FMM200 Then
                                                                 CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                            Case Else
-                                                        End Select
-                                                    End If
-                                                Case "spare parts kit"
-                                                    CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                Case Else
-                                            End Select
-                                            UseMaterialItemRecordSet.MoveNext()
-                                        Loop
-                                    End If
-                                End If
+                                                            End If
+                                                        Case "Haughton or Otis"
+                                                            If Not String.IsNullOrEmpty(GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst")) Then
+                                                                Select Case GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst").ToUpper
+                                                                    Case "HAUGHTON", "OTIS"
+                                                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                                    Case Else
+                                                                End Select
+                                                            End If
+                                                        Case "spare parts kit"
+                                                            CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                        Case Else
+                                                    End Select
+                                                    UseMaterialItemRecordSet.MoveNext()
+                                                Loop
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -464,8 +481,14 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -476,9 +499,15 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                CurField *= 77 + (1.25 * TotalTravel)
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        CurField *= 77 + (1.25 * TotalTravel)
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -489,9 +518,15 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                CurField *= (11.75 * TotalOpenings) + (11.25 * 2) + (11.75 * (TotalOpenings / 6))
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        CurField *= (11.75 * TotalOpenings) + (11.25 * 2) + (11.75 * (TotalOpenings / 6))
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                                 If Conversion.Val(GetValue(TABLENAME_GENERALINFO, "SpeedNew_cmb")) < 200 Then
                                     UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
                                     If UseMaterialItemRecordSet.RecordCount > 0 Then
@@ -531,8 +566,14 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -543,27 +584,33 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                UseField = String.Empty
-                                Select Case Contracts.JobState
-                                    Case "WA"
-                                        If Contracts.JobCity = "Seattle" Then
-                                            UseField = "Light Test Switch Assembly"
-                                        Else
-                                            UseField = "CMTS Work Light"
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        UseField = String.Empty
+                                        Select Case Contracts.JobState
+                                            Case "WA"
+                                                If Contracts.JobCity = "Seattle" Then
+                                                    UseField = "Light Test Switch Assembly"
+                                                Else
+                                                    UseField = "CMTS Work Light"
+                                                End If
+                                            Case "MI", "OR"
+                                                UseField = "CMTS Work Light"
+                                            Case Else
+                                        End Select
+                                        If Not String.IsNullOrEmpty(UseField) Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder' AND Types = '" & UseField & "'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            End If
                                         End If
-                                    Case "MI", "OR"
-                                        UseField = "CMTS Work Light"
+                                    Case "Reuse"
+                                        CurField = 0
                                     Case Else
                                 End Select
-                                If Not String.IsNullOrEmpty(UseField) Then
-                                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder' AND Types = '" & UseField & "'"
-                                    If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                        UseMaterialItemRecordSet.MoveFirst()
-                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                    End If
-                                End If
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -574,16 +621,22 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                    UseMaterialItemRecordSet.MoveFirst()
-                                    Do Until UseMaterialItemRecordSet.EOF
-                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                        UseMaterialItemRecordSet.MoveNext()
-                                    Loop
-                                End If
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                            UseMaterialItemRecordSet.MoveFirst()
+                                            Do Until UseMaterialItemRecordSet.EOF
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                UseMaterialItemRecordSet.MoveNext()
+                                            Loop
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -594,15 +647,21 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                If CurType.IndexOf("Minimax") > -1 And RearOpenings > 0 Then
-                                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                    If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                        UseMaterialItemRecordSet.MoveFirst()
-                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                    End If
-                                End If
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If CurType.IndexOf("Minimax") > -1 And RearOpenings > 0 Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -613,11 +672,17 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                If CurType.IndexOf("Travelling Cable + Hoistway Wiring") > -1 Then
-                                    CurField += 1000 + (12 * TotalTravel)
-                                End If
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If CurType.IndexOf("Travelling Cable + Hoistway Wiring") > -1 Then
+                                            CurField += 1000 + (12 * TotalTravel)
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -628,15 +693,21 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                If Contracts.JobState = "NY" And Contracts.JobCity = "New York" Then
-                                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                    If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                        UseMaterialItemRecordSet.MoveFirst()
-                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                    End If
-                                End If
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If Contracts.JobState = "NY" And Contracts.JobCity = "New York" Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -657,8 +728,14 @@ Module frmEstimatingBaseMOD
                         If AddValue Then
                             If UseMaterialItemRecordSet.RecordCount > 0 Then
                                 UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" And CurOption = "New" Then
-                                    CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                If CostOrHours = "Cost" Then
+                                    Select Case CurOption
+                                        Case "New"
+                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        Case "Reuse"
+                                            CurField = 0
+                                        Case Else
+                                    End Select
                                 ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                     If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                         CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -670,38 +747,44 @@ Module frmEstimatingBaseMOD
                         UseMaterialItemRecordSet.Filter = UseWhere
                         If UseMaterialItemRecordSet.RecordCount > 0 Then
                             UseMaterialItemRecordSet.MoveFirst()
-                            If CostOrHours = "Cost" And CurOption = "New" Then
-                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                    If CurType.IndexOf("WF10") > -1 Then
-                                        UseField = "WF10"
-                                    ElseIf CurType.IndexOf("WF15") > -1 Then
-                                        UseField = "WF10"
-                                    ElseIf CurType.IndexOf("WF20") > -1 Then
-                                        UseField = "WF10"
-                                    ElseIf CurType.IndexOf("WF25") > -1 Then
-                                        UseField = "WF10"
-                                    ElseIf CurType.IndexOf("WF30") > -1 Then
-                                        UseField = "WF10"
-                                    ElseIf CurType.IndexOf("WF35") > -1 Then
-                                        UseField = "WF10"
-                                    ElseIf CurType.IndexOf("WF40") > -1 Then
-                                        UseField = "WF10"
-                                    Else
-                                        UseField = String.Empty
-                                    End If
-                                    If Not String.IsNullOrEmpty(UseField) Then
-                                        UseMaterialItemRecordSet.MoveFirst()
-                                        Do Until UseMaterialItemRecordSet.EOF
-                                            If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(UseField) > -1 Then
-                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                Exit Do
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                            If CurType.IndexOf("WF10") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF15") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF20") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF25") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF30") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF35") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF40") > -1 Then
+                                                UseField = "WF10"
+                                            Else
+                                                UseField = String.Empty
                                             End If
-                                            UseMaterialItemRecordSet.MoveNext()
-                                        Loop
-                                    End If
-                                End If
+                                            If Not String.IsNullOrEmpty(UseField) Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                Do Until UseMaterialItemRecordSet.EOF
+                                                    If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(UseField) > -1 Then
+                                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                        Exit Do
+                                                    End If
+                                                    UseMaterialItemRecordSet.MoveNext()
+                                                Loop
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
                             ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
                                 If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
                                     CurField = UseMaterialItemRecordSet.Fields(UseField).Value
@@ -745,6 +828,10 @@ Module frmEstimatingBaseMOD
         Dim OEMVendor As String = GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst")
         Dim OEMModel As String = GetValue(TABLENAME_GENERALINFO, "ExistingControlModel_lst")
 
+        If Math.Round(Conversion.Val(CurMATID)) > 900 Then
+            CurMATID = "900" & Strings.Right(CurMATID, 3)
+            UseWhere = "[Sub ID] = '" & CurMATID & "'"
+        End If
         UseMaterialItemRecordSet = New ADODB.Recordset
         UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         If UseMaterialItemRecordSet.RecordCount > 0 Then
@@ -1061,14 +1148,20 @@ Module frmEstimatingBaseMOD
         Return ReturnCmb
 
     End Function
-    Public Function SetSPRText(ByVal TextType As String, ByVal CurrentSheet As FarPoint.Win.Spread.SheetView, ByVal RowNum As Integer) As Integer
-        Dim UseWhere As String = "[Sub ID] = '" & CurrentSheet.Cells(RowNum, MAT_COL_MATERIAL_ID).Text & "'"
+    Public Function SetSPRText(ByVal TextType As String, ByVal CurrentSheet As FarPoint.Win.Spread.SheetView, ByVal RowNum As Integer) As String
+        Dim CurMATID As String = CurrentSheet.Cells(RowNum, MAT_COL_MATERIAL_ID).Text
+        Dim UseWhere As String = "[Sub ID] = '" & CurMATID & "'"
         Dim UseMaterialItemRecordSet As New ADODB.Recordset
-        Dim ReturnVal As Integer = -999
+        Dim ReturnIntVal As Integer = -999
+        Dim ReturnVal As String = String.Empty
         Dim CurTravel As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Travel_txt"))
         Dim CurPitDepth As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "PitDepth_txt"))
         Dim TotalTravel As Single = CurTravel + Conversion.Val(GetValue(TABLENAME_GENERALINFO, "TopFloorToOverhead_txt")) + CurPitDepth
 
+        If Math.Round(Conversion.Val(CurMATID)) > 900.0 Then
+            CurMATID = "900" & Strings.Right(CurMATID, 3)
+            UseWhere = "[Sub ID] = '" & CurMATID & "'"
+        End If
         UseMaterialItemRecordSet = New ADODB.Recordset
         UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         If UseMaterialItemRecordSet.RecordCount > 0 Then
@@ -1078,30 +1171,41 @@ Module frmEstimatingBaseMOD
                 Select Case TextType
                     Case "UnitQty"
                         If IsDBNull(UseMaterialItemRecordSet.Fields("Cost Qty").Value) Then
-                            ReturnVal = 1
+                            ReturnIntVal = 1
                         ElseIf String.IsNullOrEmpty(UseMaterialItemRecordSet.Fields("Cost Qty").Value.ToString.Trim) Then
-                            ReturnVal = 1
+                            ReturnIntVal = 1
                         Else
-                            ReturnVal = UseMaterialItemRecordSet.Fields("Cost Qty").Value
+                            ReturnIntVal = UseMaterialItemRecordSet.Fields("Cost Qty").Value
                         End If
                         If Not IsDBNull(UseMaterialItemRecordSet.Fields("Cost Qty Logic").Value) Then
                             Select Case UseMaterialItemRecordSet.Fields("Cost Qty Logic").Value.ToString.ToUpper
                                 Case "TRAVEL+OVERHEAR+PIT DEPTH"
-                                    ReturnVal *= TotalTravel
+                                    ReturnIntVal *= TotalTravel
                                 Case "TRAVEL+2*PIT DEPTH+10FT"
-                                    ReturnVal *= (CurTravel + (2 * CurPitDepth) + 10)
+                                    ReturnIntVal *= (CurTravel + (2 * CurPitDepth) + 10)
                                 Case Else
                             End Select
+                        End If
+                    Case "Description"
+                        If Not IsDBNull(UseMaterialItemRecordSet.Fields("Sub").Value) Then
+                            ReturnVal = UseMaterialItemRecordSet.Fields("Sub").Value.ToString
                         End If
                     Case Else
                 End Select
             End If
         End If
         UseMaterialItemRecordSet.Close()
-        If ReturnVal = -999 Then
-            ReturnVal = 1
-        End If
-        Return Math.Round(ReturnVal)
+        Select Case TextType
+            Case "UnitQty"
+                If ReturnIntVal = -999 Then
+                    ReturnIntVal = 1
+                Else
+                    ReturnIntVal = Math.Round(ReturnIntVal)
+                End If
+                ReturnVal = ReturnIntVal.ToString
+            Case Else
+        End Select
+        Return ReturnVal
 
     End Function
     Public Function FormatTabName(ByVal CurFileName As String) As String
@@ -1164,7 +1268,7 @@ Module frmEstimatingBaseMOD
         End If
 
     End Sub
-    Public Sub UpdateAllTotals()
+    Public Sub UpdateAllTotals(ByVal CurUnits As String)
         Dim iIndex As Integer = 0, AltIndex As Integer = 1
         Dim CurDataRow As DataRow = Nothing
         Dim UseId As String = String.Empty, UseAltId As String = String.Empty
@@ -1176,8 +1280,7 @@ Module frmEstimatingBaseMOD
         Dim Sales_Commission As Single = 0, NPS_Surcharge As Single = 0, Taxes As Single = 0
         Dim UseMaterialItemRecordSet As New ADODB.Recordset
         Dim UseWhere As String = String.Empty, PerUnit As String = String.Empty
-        Dim PerCarQty As Single = CalculateNumberOfCarsInEstimate(Strings.Left(frmEstimatingBase.TabControl1.SelectedTab.Text.Trim,
-                                                                              frmEstimatingBase.TabControl1.SelectedTab.Text.Length - 6))
+        Dim PerCarQty As Single = CalculateNumberOfCarsInEstimate(CurUnits)
         Dim MaterialQty As Single = 0, LaborQty As Single = 0
         Dim TotalTravel As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Travel_txt")) +
                                     Conversion.Val(GetValue(TABLENAME_GENERALINFO, "TopFloorToOverhead_txt")) +
@@ -1369,6 +1472,8 @@ Module frmEstimatingBaseMOD
 
             CurDataRow("Total_Bank_Cost") = Math.Round(Total_Bank_Cost, 2)
             CurDataRow("Bank_Net_Price") = Math.Round(Bank_Net_Price, 2)
+            CurDataRow("speed") = Math.Round(Conversion.Val(GetValue(TABLENAME_GENERALINFO, "SpeedNew_cmb")))
+            CurDataRow("machine_model") = GetValue(TABLENAME_GENERALINFO, "MachineType_cmb")
         End If
         CM_MAIN_frm.CalculateFinalBankPrice()
 

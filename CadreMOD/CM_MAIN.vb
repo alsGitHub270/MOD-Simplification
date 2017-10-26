@@ -89,6 +89,10 @@
         Dim OpportunityToOfferDate As String
         Dim ProposedDate As String
         Dim OpportunityClosedDate As String
+        Dim LCName As String
+        Dim District As String
+        Dim Region As String
+        Dim Territory As String
         Public Shared Function CreateInstance() As Contracts_TypeDec
             Dim result As New Contracts_TypeDec()
             result.EstimateNum = ""
@@ -151,6 +155,10 @@
             result.OpportunityToOfferDate = String.Empty
             result.ProposedDate = String.Empty
             result.OpportunityClosedDate = String.Empty
+            result.LCName = String.Empty
+            result.District = String.Empty
+            result.Region = String.Empty
+            result.Territory = String.Empty
             Return result
         End Function
     End Structure

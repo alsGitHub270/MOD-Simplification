@@ -167,6 +167,12 @@
     <Compile Include="frmContacts.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmEstimatingAlt.Designer.vb">
+      <DependentUpon>frmEstimatingAlt.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmEstimatingAlt.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmEstimatingBase.Designer.vb">
       <DependentUpon>frmEstimatingBase.vb</DependentUpon>
     </Compile>
@@ -227,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmContacts.resx">
       <DependentUpon>frmContacts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEstimatingAlt.resx">
+      <DependentUpon>frmEstimatingAlt.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmEstimatingBase.resx">
       <DependentUpon>frmEstimatingBase.vb</DependentUpon>

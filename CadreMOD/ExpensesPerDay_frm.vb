@@ -96,7 +96,7 @@ Partial Friend Class ExpensesPerDay_frm
         If isInitializingComponent Then
             Exit Sub
         End If
-        frmEstimatingBase.FormIsDirty = True
+        FormIsDirty = True
     End Sub
     Private Sub Cost_txt_KeyPress(ByVal eventSender As Object, ByVal eventArgs As KeyPressEventArgs) Handles ExpensesPerDayTravelTime_txt.KeyPress, ExpensesPerDayOutOfTownExpenses_txt.KeyPress, ExpensesPerDayParking_txt.KeyPress, ExpensesPerDayZone_txt.KeyPress, ExpensesPerDayMiscellaneous_txt.KeyPress
         Dim KeyAscii As Integer = Strings.Asc(eventArgs.KeyChar)

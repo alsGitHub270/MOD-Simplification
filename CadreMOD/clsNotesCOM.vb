@@ -1,6 +1,5 @@
 Option Strict Off
 Option Explicit On
-'Imports UpgradeHelpers.VB6.Gui
 Imports Microsoft.VisualBasic
 Imports System
 Imports System.IO
@@ -350,7 +349,14 @@ Friend Class clsNotesCOM
         DocCreated = True
         doc.Save(True, False)
     End Sub
+    Public Sub CreateDOCandCompute(ByRef Formname As String)
 
+        doc = DB.CreateDocument
+        doc.Form = Formname
+        doc.ComputeWithForm(True, False)
+        doc.Save(True, False)
+
+    End Sub
     Public Sub GetArray(ByRef valname As String, ByRef Combo As ComboBox)
 
         ReadersValue = doc.GetItemValue(valname)

@@ -1,4 +1,4 @@
-Partial Class frmEstimatingBase
+Partial Class frmEstimatingAlt
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -23,7 +23,7 @@ Partial Class frmEstimatingBase
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEstimatingBase))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEstimatingAlt))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.CarTab = New System.Windows.Forms.TabPage()
@@ -2094,7 +2094,7 @@ Partial Class frmEstimatingBase
         Me.Config_cmd.Text = "Config"
         Me.Config_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        'frmEstimatingBase
+        'frmEstimatingAlt
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
@@ -2103,7 +2103,7 @@ Partial Class frmEstimatingBase
         Me.Controls.Add(Me.MDI_pic)
         Me.Controls.Add(Me.GroupBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "frmEstimatingBase"
+        Me.Name = "frmEstimatingAlt"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MOD Estimating"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized

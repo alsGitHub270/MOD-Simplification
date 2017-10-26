@@ -3,7 +3,7 @@ Imports System.IO
 Imports Newtonsoft.Json
 Imports Microsoft.VisualBasic
 
-Public Class frmEstimatingBase
+Public Class frmEstimatingAlt
     Inherits System.Windows.Forms.Form
     Private sv As New FarPoint.Win.Spread.SheetView()
     Private svCollection As New System.Collections.ArrayList(10)
@@ -298,7 +298,7 @@ Public Class frmEstimatingBase
         Me.Cursor = Cursors.Default
 
     End Sub
-    Private Sub frmEstimatingBase_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub frmEstimatingAlt_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PrepareThisForm()
     End Sub
     Private Sub BillOfMaterials_spr_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles BillOfMaterials_spr.ChildViewCreated

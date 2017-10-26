@@ -1,12 +1,13 @@
 ﻿Module Constants
     ' Contract Manager
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 10/24/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
     ' Public DEFAULT_C1 As Single = 0.2
 
     'New Machines
-    Public Const MACHINE_FMM200 As String = "FMM 200"
+    Public Const MACHINE_FMM200 As String = "FMM200"
 
     Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification\CadreMOD"
     Public Const MOVE_FIRST As Integer = 0
@@ -176,8 +177,8 @@
     Public Const NONE_TYPE As Integer = 7
     Public Const OTHER_TYPE As Integer = 8
     Public Const QUOTE_TYPE As Integer = 9
-    Public Const PreferredScreenWidth As Integer = 1440     '1920
-    Public Const PreferredScreenHeight As Integer = 900     '1080
+    Public Const PreferredScreenWidth As Integer = 1920     '1400
+    Public Const PreferredScreenHeight As Integer = 1080    '900
     Public Const GRID_IS_CLEAN As Integer = 0
     Public Const GRID_IS_DIRTY As Integer = 1
     Public Const EST_Suffix As String = " [EST]"
@@ -187,5 +188,5 @@
     Public typeInt As System.Type = System.Type.GetType("System.Int64")
     Public typeBool As System.Type = System.Type.GetType("System.Boolean")
     Public typeSingle As System.Type = System.Type.GetType("System.Single")
-    Public Const FREIGHT_RATE As Single = 1.03
+    Public Const FREIGHT_RATE As Single = 1.032
 End Module

@@ -1256,7 +1256,7 @@ Partial Friend Class CM_MAIN_frm
         printset.BestFitCols = True
 
         Dim combinedSheet As New FarPoint.Win.Spread.SheetView
-        combinedSheet = CreateCombinedSheet1()
+        combinedSheet = CreateCombinedSheet()
 
         SetCombinedSheetHeaders(combinedSheet)
 
@@ -2930,8 +2930,8 @@ Partial Friend Class CM_MAIN_frm
     Private Sub btn_Help_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_Help.Click
         MessageBox.Show(VERSION_STAMP, Application.ProductName)
     End Sub
-    Private Sub CreateCombineSheet()
-        Dim CombineSheet As New FarPoint.Win.Spread.SheetView
+    Private Function CreateCombinedSheet() As FarPoint.Win.Spread.SheetView
+        Dim CombinedSheet As New FarPoint.Win.Spread.SheetView
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer = 0
         Dim RowCount As Integer = 1, ColumnCount As Integer = 0
         Dim BaseView As FarPoint.Win.Spread.SheetView = Nothing, AltView As FarPoint.Win.Spread.SheetView = Nothing
