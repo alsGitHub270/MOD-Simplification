@@ -24,7 +24,7 @@ Partial Friend Class Config_frm
         If Not SupportsRes Then
             MessageBox.Show("For maximum visibility, this Application is best viewed with a screen resolution of " & PreferredScreenWidth & " x " &
                             PreferredScreenHeight & "." & Environment.NewLine & "Your equipment does not support this." & Environment.NewLine &
-                            "You may have to scroll", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            "You may have to scroll", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
         'save the current resolution/screen setting
         Dim hDCSrc As Integer = GetWindowDC(hWndSrc) ' Get device context for entire window
