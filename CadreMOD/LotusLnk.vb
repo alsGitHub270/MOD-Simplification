@@ -538,7 +538,7 @@ MISSINGMESSAGE:
         'Contracts.OpportunityToOfferDate = clsNotes.GetValue("oppToOfferDate").ToString
         'Contracts.ProposedDate = clsNotes.GetValue("proposedDate").ToString
         'Contracts.OpportunityClosedDate = clsNotes.GetValue("oppOfferClosedDate").ToString
-        Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
+        'Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
         Select Case clsNotes.GetValue("Status").ToUpper()
             Case "PRE-BID"
                 Contracts.Status = Status_OpportunityInProgress
@@ -1299,7 +1299,18 @@ GETNOTESDATADIR_ERROR:
     End Function
 
     Public Sub GetSalesRepData()
+        Dim UseSalesRep As String = Contracts.SalesRepName.Trim
 
+        If String.IsNullOrEmpty(UseSalesRep) OrElse UseSalesRep.ToUpper = "ZZZ OTHER" Then
+            Attach_To_SmartCenter_Customer()
+            iPos = (clsNotes.GetValue("SalesRep").IndexOf("/"c) + 1)
+            If iPos = 0 Then
+                Contracts.SalesRepName = clsNotes.GetValue("SalesRep")
+            Else
+                Contracts.SalesRepName = Strings.Mid(clsNotes.GetValue("SalesRep"), 4, iPos - 4)
+            End If
+            Attach_To_Feedback()
+        End If
         Contracts.SalesRepPhone = String.Empty
         Contracts.SalesRepAddress1 = String.Empty
         Contracts.SalesRepAddress2 = String.Empty

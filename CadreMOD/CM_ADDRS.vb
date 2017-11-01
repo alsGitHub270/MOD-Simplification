@@ -184,14 +184,14 @@ Module CM_ADDRS_IO
                 Addresses(i).Fax = Owner_Info.Fax
             End If
         End If
-        If Contracts.Consultant = CheckState.Checked Then
-            If String.IsNullOrEmpty(Address.Name.Trim) Or Address.Type <> ADDRESS_TYPE_CONSULTANT Then
-                ReadData(ADDRESS_TYPE_CONSULTANT)
-            End If
-        Else
-            AddAddress4Owner()
-            ReadData(ADDRESS_TYPE_OWNER)
-        End If
+        'If Contracts.Consultant = CheckState.Checked Then
+        '    If String.IsNullOrEmpty(Address.Name.Trim) Or Address.Type <> ADDRESS_TYPE_CONSULTANT Then
+        '        ReadData(ADDRESS_TYPE_CONSULTANT)
+        '    End If
+        'Else
+        '    AddAddress4Owner()
+        '    ReadData(ADDRESS_TYPE_OWNER)
+        'End If
 
     End Sub
     Public Sub AddAddress4Owner()

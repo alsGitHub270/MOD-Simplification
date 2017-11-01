@@ -365,7 +365,7 @@ Partial Class frmContacts
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TabControl1)
         Me.Name = "frmContacts"
-        Me.Text = "frmContacts"
+        Me.Text = "Contacts"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.TabControl1.ResumeLayout(False)

@@ -65,13 +65,9 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("Labor_Rate", typeInt), _
                                                           New DataColumn("Include", typeBool),
                                                           New DataColumn("speed", typeInt),
-                                                          New DataColumn("machine_model", typeStr)
+                                                          New DataColumn("machine_model", typeStr),
+                                                          New DataColumn("gateway_review_required", typeBool)
                                                          })
-
-        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "A1", "", "A", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "B1", "", "B", "Geared", "01-04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-        'dtSummaryGroup.Rows.Add(New Object() {"Summary", "F1", "", "F", "Gearless", "01,03,04", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-
 
         dtBaseGroup = dsCadre.Tables.Add("BaseGroup")
         dtBaseGroup.Columns.AddRange(New DataColumn() {New DataColumn("BaseGroup", typeStr), _
@@ -166,7 +162,6 @@ Partial Friend Class CM_MAIN_frm
 
         dtBuildingInfo = dsCadre.Tables.Add("BldgInfo")
         dtBuildingInfo.Columns.AddRange(New DataColumn() {New DataColumn("building_type", typeStr), _
-                                                          New DataColumn("major_project", typeBool), _
                                                           New DataColumn("sales_rep", typeStr), _
                                                           New DataColumn("sales_office", typeStr), _
                                                           New DataColumn("installing_office", typeStr), _
@@ -251,8 +246,8 @@ Partial Friend Class CM_MAIN_frm
                 item.CreateReader()
                 Select Case item.Name
                     Case "LaborRates"
-                        labor_rates_not_found = False
                         For Each lr As JObject In item.Values
+                            labor_rates_not_found = False
                             Dim workRow As DataRow = dtLaborRates.NewRow
                             For i As Integer = 0 To dtLaborRates.Columns.Count - 1
                                 workRow.Item(i) = lr.Item(dtLaborRates.Columns(i).ColumnName)   ' Column names and key from json must be the same.  lr uses name, no ordinal designation
@@ -285,7 +280,7 @@ Partial Friend Class CM_MAIN_frm
             ReadInLaborRates()
         End If
 
-        Me.btnLaborRates.Enabled = True
+        'Me.btnLaborRates.Enabled = True
 
         If initializing Then
             installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
@@ -353,7 +348,7 @@ Partial Friend Class CM_MAIN_frm
 
         If initializing Then
             If dtBuildingInfo.Rows.Count = 0 OrElse dtBuildingInfo.Rows(0).Item("installing_office") = "" Then
-                Me.btnLaborRates.Enabled = False
+                ' Me.btnLaborRates.Enabled = False
                 Exit Sub
             Else
                 installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
@@ -450,6 +445,7 @@ Partial Friend Class CM_MAIN_frm
             AddBankRow()
         End If
         Load_ListBoxes()
+        Text2Fields()
         LoadTopOfForm()
 
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
@@ -607,6 +603,7 @@ Partial Friend Class CM_MAIN_frm
             FpSpread1.ActiveSheet.Columns(21).Visible = False       ' bank net price
             FpSpread1.ActiveSheet.Columns(26).Visible = False       ' speed
             FpSpread1.ActiveSheet.Columns(27).Visible = False       ' machine_model
+            FpSpread1.ActiveSheet.Columns(28).Visible = False       ' gateway_review_required
 
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 30
 
@@ -1261,7 +1258,7 @@ Partial Friend Class CM_MAIN_frm
         SetCombinedSheetHeaders(combinedSheet)
 
         Dim header As String
-        header = "Contract Management" & vbCrLf & vbCrLf & "Estimate:  " & Contracts.EstimateNum & vbCrLf & "Job Name:  " & Contracts.JobName & vbCrLf
+        header = "Contract Management" & vbCrLf & vbCrLf & "Estimate:  " & Contracts.EstimateNum & vbCrLf & "Job Name:  " & Contracts.JobName & vbCrLf & vbCrLf
 
         printset.Header = header
 
@@ -1346,7 +1343,7 @@ Partial Friend Class CM_MAIN_frm
             Dim default_c1 As Decimal
             default_c1 = CalculateDefaultC1()
 
-            dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"GO Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0})
+            dsCadre.Tables("SummaryGroup").Rows.Add(New Object() {"GO Summary", _id, "", _bank, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0, False, 0, "", False})
 
             FpSpread1.Refresh()
             FpSpread1.ActiveSheet.ActiveRowIndex = FpSpread1.ActiveSheet.RowCount - 1
@@ -1813,10 +1810,8 @@ Partial Friend Class CM_MAIN_frm
                         cboStatus.Items.Add(Status_OfferCancelled)
                 End Select
         End Select
-        AssignListIndex_First(cboStatus, Contracts.Status)
 
         Populate_SalesRep(Me.cboSalesRep)
-        AssignListIndex(cboSalesRep, Contracts.SalesRepName)
 
     End Sub
 
@@ -1831,7 +1826,7 @@ Partial Friend Class CM_MAIN_frm
         txtJobState.Text = Contracts.JobState
         txtJobZip.Text = Contracts.JobZip
 
-        txtOwner.Text = Owner_Info.Name
+
 
         If Contracts.NationalAccount Then
             cboNationalAccount.SelectedItem = "Yes"
@@ -1843,6 +1838,10 @@ Partial Friend Class CM_MAIN_frm
 
         AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
         AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
+        AssignListIndex_First(cboStatus, Contracts.Status)
+        AssignListIndex(cboSalesRep, Contracts.SalesRepName)
+        AssignListIndex(cboSalesOffice, Contracts.SalesRepOffice)
+
     End Sub
 
     Private Sub txtBidDate_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
@@ -2044,7 +2043,8 @@ Partial Friend Class CM_MAIN_frm
                 txtJobState.Text = Contracts.JobState
                 txtJobZip.Text = Contracts.JobZip
 
-                txtOwner.Text = Owner_Info.Name
+                txtConsultant.Text = GetConsultantsName()
+                txtContractNumber.Text = Contracts.ContractNumber
 
                 cboBuildingType.SelectedItem = row("building_type")
                 cboSalesRep.SelectedItem = row.Item("sales_rep").ToString
@@ -2066,12 +2066,6 @@ Partial Friend Class CM_MAIN_frm
 
                 cboNFPA13CodeYear.SelectedItem = row.Item("nfpa_code").ToString
                 txtSDSlevel.Text = row.Item("sds_level").ToString
-
-                If IsDBNull(row.Item("major_project")) Then
-                    chkMajorProject.CheckState = CheckState.Unchecked
-                Else
-                    chkMajorProject.CheckState = IIf(row.Item("major_project"), CheckState.Checked, CheckState.Unchecked)
-                End If
 
                 If IsDBNull(row.Item("oshpd")) Then
                     chkOSHPD.CheckState = CheckState.Unchecked
@@ -2124,7 +2118,7 @@ Partial Friend Class CM_MAIN_frm
             End If
 
             dtBuildingInfo.Rows(0)("building_type") = cboBuildingType.Text
-            dtBuildingInfo.Rows(0)("major_project") = chkMajorProject.CheckState
+
             dtBuildingInfo.Rows(0)("sales_rep") = cboSalesRep.Text
             dtBuildingInfo.Rows(0)("sales_office") = cboSalesOffice.Text
             dtBuildingInfo.Rows(0)("installing_office") = cboInstallingOffice.Text
@@ -2167,11 +2161,13 @@ Partial Friend Class CM_MAIN_frm
 
         If Not IsNothing(dtSummaryGroup) AndAlso dtSummaryGroup.Rows.Count > 0 Then
 
-            For i As Integer = 6 To (dtSummaryGroup.Columns.Count - 2)  '# don't want the 'include' column
+            For i As Integer = 6 To dtSummaryGroup.Columns.Count - 1
                 dblValue = 0
                 For Each row As DataRow In dtSummaryGroup.Rows
                     If Not IsDBNull(row.Item(i)) Then
-                        dblValue += row.Item(i)
+                        If IsNumeric(row.Item(i)) Then
+                            dblValue += row.Item(i)
+                        End If
                     End If
                 Next row
                 Select Case i
@@ -2419,7 +2415,7 @@ Partial Friend Class CM_MAIN_frm
 
         AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
         AssignListIndex_First(cboSalesRep, Contracts.SalesRepName)
-        AssignListIndex_First(cboSalesOffice, Contracts.SalesOffice)
+        AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
         AssignListIndex_First(cboProbabilityOfSale, Contracts.ProbabilityOfSale)
 
         txtTaxRate.Text = GetTaxRate()
@@ -2440,7 +2436,6 @@ Partial Friend Class CM_MAIN_frm
         txtJobState.Text = Contracts.JobState
         txtJobZip.Text = Contracts.JobZip
 
-        txtOwner.Text = Owner_Info.Name
 
     End Sub
 
@@ -2758,6 +2753,10 @@ Partial Friend Class CM_MAIN_frm
     Private Sub btnLaborRates_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLaborRates.Click
 
         Dim obj As New frmLaborRates
+        If Me.cboInstallingOffice.Text = "" Then
+            MessageBox.Show("Please select an Installing Office to calculate Labor Rates", "Missing Installing Office", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            Exit Sub
+        End If
         Try
             obj.localOffice = Me.cboInstallingOffice.Text
             obj.ShowDialog()
@@ -2922,8 +2921,11 @@ Partial Friend Class CM_MAIN_frm
         Dim sSQL As String = "SELECT C1_High_Rise FROM [MOD Office] WHERE Office = '" & Contracts.SalesRepOffice & "'"
 
         myList = GetDataFromOptions(sSQL)
-        c1 = myList(0)
-        c1 += 0.06
+        If myList.Count > 0 Then
+            c1 = myList(0)
+            c1 += 0.06
+        End If
+
         Return c1
 
     End Function
@@ -3034,5 +3036,305 @@ Partial Friend Class CM_MAIN_frm
        
         combinedSheet.ColumnHeader.Rows(0).Height = 30
     End Sub
+
+
+    Private Sub btnGatewayReview_Click(sender As System.Object, e As System.EventArgs) Handles btnGatewayReview.Click
+        Dim sMsg As String
+
+        If Me.txtGatewayStatus.Text = "Under Review" Then
+            MessageBox.Show("Engineering is already reviewing this estimate.  It must be Approved or Rejected before an additional review can be requested.", Application.ProductName)
+            Exit Sub
+        ElseIf Me.txtGatewayStatus.Text = "Approved" Then
+            sMsg = "The following estimate has already been approved by Engineering.  Another review is not required unless you have added additional information "
+            sMsg += "in the Notes to Engineering screen.  "
+
+            If MessageBox.Show(sMsg, "Do you want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
+                Exit Sub
+            End If
+        End If
+
+        '
+        '   So, for the Gateway Review.... first thing to check is if any of the Summary lines are flagged as included in the Gateway Review..
+        '    then, based on the Summary line, look for an associate MODEST.JSON file.  If it exists, then the Gateway Review can proceed. 
+        '    If any are missing (AND the summary line has the Gateway flag), then error.. do not proceed
+        '
+        If AllDocumentsExists() Then
+        Else
+            sMsg = "You have a bank marked for Gateway Review, but no document exists."
+            MessageBox.Show(sMsg, "Missing Gateway Review Document", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
+        sMsg = "This will create an entry in the MDC Custom Quotes database.  Please verify that you have documented your questions or concerns on specification section(s) on the Notes to Engineer screen. "
+        sMsg += Environment.NewLine & Environment.NewLine & "After the database entry is created, the Gateway group will be notified to review your request; they will evaluate your request and the bid proposal to provide engineered solutions to maximize value to Schindler and the customer.  Completion of the review can take up to 5 business days, and may be longer for very large projects."
+        sMsg += Environment.NewLine & Environment.NewLine & "Please attach specifications, drawings or any other supporting documents to the database entry once it is created."
+        sMsg += Environment.NewLine & Environment.NewLine & "If you have questions or concerns prior to a Gateway engineer being assigned please contact the FQE Operations Manager."
+        sMsg += Environment.NewLine & Environment.NewLine & "Do you wish to continue?"
+
+        If MessageBox.Show(sMsg, "MDC Custom Quote", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
+            Exit Sub
+        End If
+
+        If isDirty Then
+            If MessageBox.Show("Contract information has changed.  To proceed with MDC Review you must save, are you ready to save?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.No Then
+                Exit Sub
+            End If
+        End If
+
+        MDC_Add_Doc()
+
+        Me.txtGatewayStatus.Text = "Under Review"
+
+        SaveAll()
+
+    End Sub
+
+    Public Sub MDC_Add_Doc()
+
+        'Dim Filesystem As New Scripting.FileSystemObject()
+        'Try
+        '    Dim sRequestorNameKey As String = ""
+        '    Dim sRequestorName As String = ""
+        '    Dim sPhone As String = ""
+        '    Dim sPhone_mobile As String = ""
+        '    Dim sFax_requestor As String = ""
+        '    Dim bNewDocument As Boolean = False
+        '    Dim sOffice As String = ""
+        '    Dim sDistrict As String = ""
+        '    Dim sTerritory As String = ""
+        '    Dim sArea As String = ""
+        '    Dim skg As String = ""
+        '    Dim sDueDate As String = ""
+        '    Dim sDescriptionField As String = "description"
+
+        '    If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
+        '        If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
+        '            sRequestorNameKey = Left$(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
+        '            sRequestorName = clsNotes.CN_Username
+        '            If clsNotes.NotesDocKey(sRequestorNameKey) Then
+        '                sPhone = clsNotes.GetValue("Phone")
+        '                sFax_requestor = clsNotes.GetValue("Phone_1")           ' fax
+        '                sPhone_mobile = clsNotes.GetValue("Phone_2")            ' cell
+        '                sOffice = clsNotes.GetValue("officeNum")                ' Office
+        '                sDistrict = clsNotes.GetValue("districtNum")            ' District
+        '                sTerritory = clsNotes.GetValue("territory")             ' Territory
+        '                sArea = clsNotes.GetValue("area")                       ' Area
+        '                skg = clsNotes.GetValue("kg")                           ' kg
+        '            End If
+        '        End If
+        '    End If
+
+        '    SetupMDCLink()
+
+        '    If Not FindMDCDocument() Then
+        '        clsNotes.CreateDOC("Quote Request")
+        '        bNewDocument = True
+        '    End If
+
+        '    If bNewDocument Then
+        '        clsNotes.SetValue("status", "New")
+        '        clsNotes.SetValue("engineeringReviewStatus", "New")
+        '        Select Case Format(Now, "dddd")
+        '            Case "Saturday"
+        '                clsNotes.SetValue("duedate", DateAdd("d", 6, Now))
+        '            Case "Sunday"
+        '                clsNotes.SetValue("duedate", DateAdd("d", 5, Now))
+        '            Case Else
+        '                clsNotes.SetValue("duedate", DateAdd("d", 7, Now))
+        '        End Select
+
+        '        clsNotes.SetValue("createdDate", CDate(Now))
+        '        clsNotes.SetValue("quoteType", "Final Bid")
+        '        clsNotes.SetValue("approvalDrawingsRequired", "")
+        '        clsNotes.SetValue_Readers("creator", gsSalesRep)
+        '    Else
+        '        clsNotes.SetValue("flag_revised", "Yes")
+        '        sDescriptionField = "description_revised"
+        '    End If
+        '    clsNotes.SetValue_Readers("requestor", sRequestorName)
+
+        '    clsNotes.SetValue("phone_requestor", sPhone)
+        '    clsNotes.SetValue("fax_requestor", sFax_requestor)
+        '    clsNotes.SetValue("phone_mobile_requestor", sPhone_mobile)
+
+        '    clsNotes.SetValue("office", sOffice)
+        '    clsNotes.SetValue("district", sDistrict)
+        '    clsNotes.SetValue("territory", sTerritory)
+        '    clsNotes.SetValue("area", sArea)
+        '    clsNotes.SetValue("kg", skg)
+
+        '    clsNotes.SetValue("businessline", "NI")
+        '    clsNotes.SetValue("unique", OpportunityID)
+        '    clsNotes.SetValue("proposal_num", OpportunityID)
+        '    If CurrentGOData_Typ. <> "0" Then
+        '        clsNotes.SetValue("goNum", CurrentGOData_Typ.GONum)
+        '    End If
+        '    If Contracts.NegNum <> 0 Then
+        '        clsNotes.SetValue("negNum", CStr(Contracts.NegNum))
+        '    End If
+        '    clsNotes.SetValue("jobName", Contracts.JobName)
+        '    Select Case CurrentGOData_Typ.Type
+        '        Case HYD_NI_PRODUCT_TYPE
+        '            clsNotes.SetValue("productType", "330A")
+        '        Case TRA_NI_PRODUCT_TYPE
+        '            clsNotes.SetValue("productType", ProductApplication)
+        '        Case ESC_NI_PRODUCT_TYPE
+        '            ' kab not listed in file
+        '            clsNotes.SetValue("productType", "9300")
+        '        Case HYD_POH_PRODUCT_TYPE
+        '            clsNotes.SetValue("productType", "POH")
+        '        Case Else
+        '    End Select
+
+        '    clsNotes.SetValue("hydroCars", CInt(0))
+        '    clsNotes.SetValue("gearedCars", CInt(0))
+        '    clsNotes.SetValue("gearlessCars", CInt(0))
+
+        '    Select Case GoNumbers(CurrentGOSelection).Type
+        '        Case "070", "071", "072", "073", "076", "079", "370", "371"  'Traction
+        '            clsNotes.SetValue("gearedCars", CInt(NumberOfCarsinEstimate))
+        '        Case "510", "515", "535", "593", "597", "598"                       'Escalator
+        '        Case ESC_NI_PRODUCT_TYPE
+        '        Case HYD_NI_PRODUCT_TYPE, HYD_POH_PRODUCT_TYPE
+        '            clsNotes.SetValue("hydroCars", CInt(NumberOfCarsinEstimate))      'Hydro-s
+        '        Case TRA_NI_PRODUCT_TYPE
+        '            clsNotes.SetValue("gearedCars", CInt(NumberOfCarsinEstimate))   'Geared-s
+        '        Case Else
+        '    End Select
+        '    clsNotes.SetValue_Readers("salesRep", gsSalesRep)
+
+        '    Dim Reader(0 To 8) As String
+
+        '    Reader(0) = "[Admin]"
+        '    Reader(1) = "[Approver]"
+        '    Reader(2) = "[Engineer]"
+        '    Reader(3) = "[Full Access]"
+        '    Reader(4) = "T_SEC_" & sOffice
+        '    Reader(5) = "T_SEC_SMART_" & sOffice
+        '    Reader(6) = "T_SEC_SMART_" & sDistrict
+        '    Reader(7) = "T_SEC_SMART_" & sTerritory
+        '    Reader(8) = "T_SEC_SMART_" & sArea
+
+        '    clsNotes.SetValue_Readers("Reader", Reader)
+
+        '    clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
+
+        '    If EngReviewMsg <> "" Then
+        '        clsNotes.SetValue(sDescriptionField, EngReviewMsg & Environment.NewLine & NotesToEngineer)
+        '    Else
+        '        clsNotes.SetValue(sDescriptionField, NotesToEngineer)
+        '    End If
+        '    clsNotes.DocSave()
+        'Finally
+        '    MemoryHelper.ReleaseAndCleanObject(Filesystem)
+        'End Try
+
+    End Sub
+
+
+    Public Function SetupMDCLink() As Boolean
+        'Dim DataBaseError As String = ""
+        'Dim MDC As String = ""
+        'Dim ComServerMDC As String = ""
+
+        'Try
+
+        '    If TestSystem Then
+        '        ComServerMDC = "USSECNE1"
+        '        MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
+        '    Else
+        '        ComServerMDC = "USSECNN4"
+        '        MDC = "sec\engpro\MDCCustomQuotes.nsf"
+        '    End If
+
+        '    If NotclsNotes.NotesDBName(ComServerMDC, MDC) Then
+        '        DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
+        '        Throw New Exception()
+        '    End If
+        '    If NotclsNotes.NotesDBView("(LU unique)") Then
+        '        MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
+        '        EndProgram()
+        '    End If
+
+        '    ReturnclsNotes.CRM_NotesDocKey(OpportunityID)
+
+        'Catch
+
+        '    MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
+        '    EndProgram()
+        'End Try
+    End Function
+
+    Function FindMDCDocument() As Boolean
+        'Dim result As Boolean = False
+        'Try
+        '    Dim Bank, Alt, CarNo
+        '    Dim b As Boolean
+
+        '    IfclsNotes.NotesDocKeyCollection(OpportunityID) Then
+        '    b = True
+        '    Do While b
+        '        If OpportunityID = clsNotes.GetValue("proposal_num") Then
+        '                IfclsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
+        '                    IfclsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
+        '                        IfclsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
+        '                            IfclsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
+        '            Return True
+        '        End If
+        '                        End If
+        '                    End If
+        '                End If
+        '            End If
+        '        b = clsNotes.GetNextDocumentFromCollection()
+        '        Loop
+        '    End If
+
+        '    Return result
+
+        'Catch
+        '    MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
+        '    Return result
+        'End Try
+    End Function
+
+
+    Private Function AllDocumentsExists() As Boolean
+
+        Dim filename As String
+
+        For Each row In dtSummaryGroup.Rows
+            If Not IsDBNull(row.item("gateway_review_required")) AndAlso row.item("gateway_review_required") Then
+                filename = EstimatePath & Contracts.EstimateNum & CurrentGOData_Typ.Bank & "MODEST.json"
+                If File.Exists(filename) = False Then
+                    Return False
+                End If
+            Else
+                If IsDBNull(row.item("gateway_review_required")) Then   'TODO:  put into deserialize once that proc revised for each datatable  AA
+                    row.item("gateway_review_required") = False
+                End If
+            End If
+        Next
+        Return True
+
+    End Function
+
+    Private Sub CreateNewDocument()
+        Throw New NotImplementedException
+    End Sub
+
+    Private Function GetConsultantsName() As String
+        Dim consultants_name As String = ""
+        Dim _foundRows() As DataRow
+
+        _foundRows = dtContactGroup.Select("contactType = 'consultant'")
+        ' should only be 1 row, if any
+        If _foundRows.Length > 0 Then
+            consultants_name = _foundRows(0).Item("companyName")
+        End If
+
+        Return consultants_name
+
+    End Function
 
 End Class

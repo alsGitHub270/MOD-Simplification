@@ -99,9 +99,6 @@
       <HintPath>obj\x86\Debug\Interop.Domino.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="MTGCCombobox">
-      <HintPath>..\..\..\..\Controls\MTGCCombobox.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -132,6 +129,7 @@
     <Compile Include="Api.vb" />
     <Compile Include="BuildingInfo.vb" />
     <Compile Include="clsNotesCOM.vb" />
+    <Compile Include="CM_ADDRS.vb" />
     <Compile Include="Config_frm.Designer.vb">
       <DependentUpon>Config_frm.vb</DependentUpon>
     </Compile>
@@ -139,13 +137,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Contact.vb" />
-    <Compile Include="CM_ADDRS.vb" />
-    <Compile Include="CM_ADDRSFrm.Designer.vb">
-      <DependentUpon>CM_ADDRSFrm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="CM_ADDRSFrm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="CM_MAIN.vb" />
     <Compile Include="CM_MAINFrm.Designer.vb">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
@@ -219,9 +210,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CM_ADDRSFrm.resX">
-      <DependentUpon>CM_ADDRSFrm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CM_MAINFrm.resX">
       <DependentUpon>CM_MAINFrm.vb</DependentUpon>
     </EmbeddedResource>

@@ -98,7 +98,9 @@ Module Startup
             'If gbShape Then
             '    Get_CRMProjectData()
             'End If
+
             GetSalesRepData()
+
             DetermineTaxability()
 
             EstimateModified = False

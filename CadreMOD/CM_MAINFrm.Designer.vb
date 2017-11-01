@@ -55,10 +55,12 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
-        Dim EnhancedScrollBarRenderer3 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim EnhancedScrollBarRenderer4 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.txtContractNumber = New System.Windows.Forms.TextBox()
+        Me.lblContractNumber = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtTaxRate = New System.Windows.Forms.TextBox()
         Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
@@ -68,8 +70,6 @@ Partial Class CM_MAIN_frm
         Me.cboNationalAccount = New System.Windows.Forms.ComboBox()
         Me.txtConsultant = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.txtOwner = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.txtBidDate = New System.Windows.Forms.DateTimePicker()
         Me.cboBuildingType = New System.Windows.Forms.ComboBox()
         Me.lblBuildingType = New System.Windows.Forms.Label()
@@ -77,7 +77,6 @@ Partial Class CM_MAIN_frm
         Me.Proposal_cmd = New System.Windows.Forms.Button()
         Me.cboStatus = New System.Windows.Forms.ComboBox()
         Me._label_7 = New System.Windows.Forms.Label()
-        Me.chkMajorProject = New System.Windows.Forms.CheckBox()
         Me.Status_lbl = New System.Windows.Forms.Label()
         Me.cboSalesRep = New System.Windows.Forms.ComboBox()
         Me.cboInstallingOffice = New System.Windows.Forms.ComboBox()
@@ -160,6 +159,10 @@ Partial Class CM_MAIN_frm
         Me.txtOCPL = New System.Windows.Forms.TextBox()
         Me.lblOCPL = New System.Windows.Forms.Label()
         Me.btnLaborRates = New System.Windows.Forms.Button()
+        Me.btnGatewayReview = New System.Windows.Forms.Button()
+        Me.lblGatewayStatus = New System.Windows.Forms.Label()
+        Me.txtGatewayStatus = New System.Windows.Forms.TextBox()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -171,11 +174,14 @@ Partial Class CM_MAIN_frm
         CType(Me.sprTotals, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.sprTotals_Sheet1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.NewProductService_fra.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingInformation_fra.Controls.Add(Me.txtContractNumber)
+        Me.BuildingInformation_fra.Controls.Add(Me.lblContractNumber)
         Me.BuildingInformation_fra.Controls.Add(Me.Label7)
         Me.BuildingInformation_fra.Controls.Add(Me.txtTaxRate)
         Me.BuildingInformation_fra.Controls.Add(Me.ExpandCollapseFrame_btn)
@@ -185,8 +191,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.cboNationalAccount)
         Me.BuildingInformation_fra.Controls.Add(Me.txtConsultant)
         Me.BuildingInformation_fra.Controls.Add(Me.Label3)
-        Me.BuildingInformation_fra.Controls.Add(Me.txtOwner)
-        Me.BuildingInformation_fra.Controls.Add(Me.Label2)
         Me.BuildingInformation_fra.Controls.Add(Me.txtBidDate)
         Me.BuildingInformation_fra.Controls.Add(Me.cboBuildingType)
         Me.BuildingInformation_fra.Controls.Add(Me.lblBuildingType)
@@ -194,7 +198,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.Proposal_cmd)
         Me.BuildingInformation_fra.Controls.Add(Me.cboStatus)
         Me.BuildingInformation_fra.Controls.Add(Me._label_7)
-        Me.BuildingInformation_fra.Controls.Add(Me.chkMajorProject)
         Me.BuildingInformation_fra.Controls.Add(Me.Status_lbl)
         Me.BuildingInformation_fra.Controls.Add(Me.cboSalesRep)
         Me.BuildingInformation_fra.Controls.Add(Me.cboInstallingOffice)
@@ -226,6 +229,35 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
+        '
+        'txtContractNumber
+        '
+        Me.txtContractNumber.AcceptsReturn = True
+        Me.txtContractNumber.BackColor = System.Drawing.SystemColors.Window
+        Me.txtContractNumber.Enabled = False
+        Me.txtContractNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtContractNumber.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtContractNumber.Location = New System.Drawing.Point(357, 158)
+        Me.txtContractNumber.MaxLength = 42
+        Me.txtContractNumber.Name = "txtContractNumber"
+        Me.txtContractNumber.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtContractNumber.Size = New System.Drawing.Size(101, 20)
+        Me.txtContractNumber.TabIndex = 102
+        '
+        'lblContractNumber
+        '
+        Me.lblContractNumber.BackColor = System.Drawing.SystemColors.Window
+        Me.lblContractNumber.Enabled = False
+        Me.lblContractNumber.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblContractNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblContractNumber.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblContractNumber.Location = New System.Drawing.Point(286, 161)
+        Me.lblContractNumber.Name = "lblContractNumber"
+        Me.lblContractNumber.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblContractNumber.Size = New System.Drawing.Size(65, 13)
+        Me.lblContractNumber.TabIndex = 103
+        Me.lblContractNumber.Text = "Contract #:"
+        Me.lblContractNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label7
         '
@@ -297,43 +329,25 @@ Partial Class CM_MAIN_frm
         '
         'txtConsultant
         '
+        Me.txtConsultant.BackColor = System.Drawing.SystemColors.Window
         Me.txtConsultant.Enabled = False
         Me.txtConsultant.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtConsultant.Location = New System.Drawing.Point(124, 136)
+        Me.txtConsultant.Location = New System.Drawing.Point(121, 121)
         Me.txtConsultant.Name = "txtConsultant"
         Me.txtConsultant.Size = New System.Drawing.Size(336, 20)
         Me.txtConsultant.TabIndex = 94
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
+        Me.Label3.BackColor = System.Drawing.SystemColors.Window
         Me.Label3.Enabled = False
+        Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(51, 141)
+        Me.Label3.Location = New System.Drawing.Point(51, 124)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(71, 13)
         Me.Label3.TabIndex = 93
         Me.Label3.Text = "Consultant:"
-        '
-        'txtOwner
-        '
-        Me.txtOwner.Enabled = False
-        Me.txtOwner.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtOwner.Location = New System.Drawing.Point(122, 110)
-        Me.txtOwner.Name = "txtOwner"
-        Me.txtOwner.Size = New System.Drawing.Size(336, 20)
-        Me.txtOwner.TabIndex = 92
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Enabled = False
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(75, 113)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(47, 13)
-        Me.Label2.TabIndex = 91
-        Me.Label2.Text = "Owner:"
         '
         'txtBidDate
         '
@@ -353,7 +367,7 @@ Partial Class CM_MAIN_frm
         Me.cboBuildingType.DropDownWidth = 222
         Me.cboBuildingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboBuildingType.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboBuildingType.Location = New System.Drawing.Point(124, 193)
+        Me.cboBuildingType.Location = New System.Drawing.Point(121, 193)
         Me.cboBuildingType.Name = "cboBuildingType"
         Me.cboBuildingType.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboBuildingType.Size = New System.Drawing.Size(336, 21)
@@ -419,22 +433,6 @@ Partial Class CM_MAIN_frm
         Me._label_7.TabIndex = 81
         Me._label_7.Text = "Sales Rep:"
         Me._label_7.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'chkMajorProject
-        '
-        Me.chkMajorProject.BackColor = System.Drawing.SystemColors.Window
-        Me.chkMajorProject.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkMajorProject.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkMajorProject.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.chkMajorProject.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkMajorProject.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkMajorProject.Location = New System.Drawing.Point(361, 168)
-        Me.chkMajorProject.Name = "chkMajorProject"
-        Me.chkMajorProject.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkMajorProject.Size = New System.Drawing.Size(99, 15)
-        Me.chkMajorProject.TabIndex = 75
-        Me.chkMajorProject.Text = "Major Project:"
-        Me.chkMajorProject.UseVisualStyleBackColor = False
         '
         'Status_lbl
         '
@@ -572,10 +570,10 @@ Partial Class CM_MAIN_frm
         Me.btnContacts.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnContacts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnContacts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnContacts.Location = New System.Drawing.Point(124, 162)
+        Me.btnContacts.Location = New System.Drawing.Point(121, 155)
         Me.btnContacts.Name = "btnContacts"
         Me.btnContacts.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnContacts.Size = New System.Drawing.Size(162, 25)
+        Me.btnContacts.Size = New System.Drawing.Size(142, 25)
         Me.btnContacts.TabIndex = 6
         Me.btnContacts.Text = "Contacts"
         Me.btnContacts.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
@@ -640,6 +638,7 @@ Partial Class CM_MAIN_frm
         'txtJobState
         '
         Me.txtJobState.AllowPromptAsInput = False
+        Me.txtJobState.BackColor = System.Drawing.SystemColors.Window
         Me.txtJobState.Enabled = False
         Me.txtJobState.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtJobState.Location = New System.Drawing.Point(314, 86)
@@ -652,6 +651,7 @@ Partial Class CM_MAIN_frm
         'txtJobZip
         '
         Me.txtJobZip.AllowPromptAsInput = False
+        Me.txtJobZip.BackColor = System.Drawing.SystemColors.Window
         Me.txtJobZip.Enabled = False
         Me.txtJobZip.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtJobZip.Location = New System.Drawing.Point(382, 86)
@@ -758,7 +758,7 @@ Partial Class CM_MAIN_frm
         Me.fraCode.ForeColor = System.Drawing.SystemColors.ControlText
         Me.fraCode.Location = New System.Drawing.Point(865, 57)
         Me.fraCode.Name = "fraCode"
-        Me.fraCode.Size = New System.Drawing.Size(317, 227)
+        Me.fraCode.Size = New System.Drawing.Size(317, 183)
         Me.fraCode.TabIndex = 97
         Me.fraCode.TabStop = False
         Me.fraCode.Text = "Codes"
@@ -771,7 +771,7 @@ Partial Class CM_MAIN_frm
         Me.chkEngineeringSurvey.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.chkEngineeringSurvey.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkEngineeringSurvey.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkEngineeringSurvey.Location = New System.Drawing.Point(50, 200)
+        Me.chkEngineeringSurvey.Location = New System.Drawing.Point(50, 158)
         Me.chkEngineeringSurvey.Name = "chkEngineeringSurvey"
         Me.chkEngineeringSurvey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkEngineeringSurvey.Size = New System.Drawing.Size(137, 15)
@@ -802,7 +802,7 @@ Partial Class CM_MAIN_frm
         Me.chkHeadDetection.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.chkHeadDetection.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkHeadDetection.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkHeadDetection.Location = New System.Drawing.Point(75, 179)
+        Me.chkHeadDetection.Location = New System.Drawing.Point(75, 139)
         Me.chkHeadDetection.Name = "chkHeadDetection"
         Me.chkHeadDetection.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkHeadDetection.Size = New System.Drawing.Size(112, 15)
@@ -860,7 +860,7 @@ Partial Class CM_MAIN_frm
         Me.chkDSA.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.chkDSA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkDSA.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkDSA.Location = New System.Drawing.Point(135, 158)
+        Me.chkDSA.Location = New System.Drawing.Point(253, 158)
         Me.chkDSA.Name = "chkDSA"
         Me.chkDSA.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkDSA.Size = New System.Drawing.Size(52, 15)
@@ -876,7 +876,7 @@ Partial Class CM_MAIN_frm
         Me.chkOSHPD.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.chkOSHPD.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkOSHPD.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkOSHPD.Location = New System.Drawing.Point(118, 139)
+        Me.chkOSHPD.Location = New System.Drawing.Point(236, 139)
         Me.chkOSHPD.Name = "chkOSHPD"
         Me.chkOSHPD.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkOSHPD.Size = New System.Drawing.Size(69, 15)
@@ -1080,7 +1080,6 @@ Partial Class CM_MAIN_frm
         'btn_Help
         '
         Me.btn_Help.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_Help.Image = CType(resources.GetObject("btn_Help.Image"), System.Drawing.Image)
         Me.btn_Help.Location = New System.Drawing.Point(300, 1)
         Me.btn_Help.Name = "btn_Help"
         Me.btn_Help.Size = New System.Drawing.Size(46, 46)
@@ -1136,8 +1135,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel1.AutoSize = False
         Me._StatusBar1_Panel1.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel1.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel1.DoubleClickEnabled = True
         Me._StatusBar1_Panel1.Margin = New System.Windows.Forms.Padding(0)
@@ -1150,8 +1149,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel2.AutoSize = False
         Me._StatusBar1_Panel2.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel2.DoubleClickEnabled = True
         Me._StatusBar1_Panel2.Margin = New System.Windows.Forms.Padding(0)
@@ -1163,8 +1162,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel3.AutoSize = False
         Me._StatusBar1_Panel3.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel3.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel3.DoubleClickEnabled = True
         Me._StatusBar1_Panel3.Margin = New System.Windows.Forms.Padding(0)
@@ -1176,8 +1175,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel4.AutoSize = False
         Me._StatusBar1_Panel4.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel4.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel4.DoubleClickEnabled = True
         Me._StatusBar1_Panel4.Margin = New System.Windows.Forms.Padding(0)
@@ -1715,8 +1714,8 @@ Partial Class CM_MAIN_frm
         '
         Me.FpSpread1.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
         Me.FpSpread1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         Me.FpSpread1.Location = New System.Drawing.Point(6, 67)
@@ -1729,8 +1728,8 @@ Partial Class CM_MAIN_frm
         'Equipment_fra
         '
         Me.Equipment_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
         Me.Equipment_fra.Controls.Add(Me.sprTotals)
         Me.Equipment_fra.Controls.Add(Me.btnAdd)
@@ -1758,18 +1757,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
         Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.HorizontalScrollBar.Name = ""
-        EnhancedScrollBarRenderer3.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer3.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer3.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer3.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer3.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer3.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer3.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer3.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer3.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer3.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer3.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer3
+        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
         Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
@@ -1782,18 +1781,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.VerticalScrollBar.Name = ""
-        EnhancedScrollBarRenderer4.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer4.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer4.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer4.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer4.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer4.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer4.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer4.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer4.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer4.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer4.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer4
+        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
         Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
@@ -2227,7 +2226,7 @@ Partial Class CM_MAIN_frm
         Me.txtOCPL.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtOCPL.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtOCPL.Location = New System.Drawing.Point(1349, 206)
+        Me.txtOCPL.Location = New System.Drawing.Point(1349, 215)
         Me.txtOCPL.MaxLength = 0
         Me.txtOCPL.Name = "txtOCPL"
         Me.txtOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2241,7 +2240,7 @@ Partial Class CM_MAIN_frm
         Me.lblOCPL.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOCPL.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblOCPL.Location = New System.Drawing.Point(1200, 209)
+        Me.lblOCPL.Location = New System.Drawing.Point(1200, 218)
         Me.lblOCPL.Name = "lblOCPL"
         Me.lblOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblOCPL.Size = New System.Drawing.Size(138, 18)
@@ -2251,13 +2250,54 @@ Partial Class CM_MAIN_frm
         '
         'btnLaborRates
         '
-        Me.btnLaborRates.Enabled = False
-        Me.btnLaborRates.Location = New System.Drawing.Point(1222, 247)
+        Me.btnLaborRates.Location = New System.Drawing.Point(1230, 262)
         Me.btnLaborRates.Name = "btnLaborRates"
         Me.btnLaborRates.Size = New System.Drawing.Size(75, 23)
         Me.btnLaborRates.TabIndex = 101
         Me.btnLaborRates.Text = "Labor Rates"
         Me.btnLaborRates.UseVisualStyleBackColor = True
+        '
+        'btnGatewayReview
+        '
+        Me.btnGatewayReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGatewayReview.Location = New System.Drawing.Point(361, 3)
+        Me.btnGatewayReview.Name = "btnGatewayReview"
+        Me.btnGatewayReview.Size = New System.Drawing.Size(51, 46)
+        Me.btnGatewayReview.TabIndex = 102
+        Me.btnGatewayReview.TabStop = False
+        Me.btnGatewayReview.Tag = ""
+        Me.btnGatewayReview.Text = "Gateway"
+        Me.btnGatewayReview.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
+        'lblGatewayStatus
+        '
+        Me.lblGatewayStatus.AutoSize = True
+        Me.lblGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblGatewayStatus.Location = New System.Drawing.Point(117, 17)
+        Me.lblGatewayStatus.Name = "lblGatewayStatus"
+        Me.lblGatewayStatus.Size = New System.Drawing.Size(47, 13)
+        Me.lblGatewayStatus.TabIndex = 104
+        Me.lblGatewayStatus.Text = "Status:"
+        '
+        'txtGatewayStatus
+        '
+        Me.txtGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtGatewayStatus.Location = New System.Drawing.Point(170, 12)
+        Me.txtGatewayStatus.Name = "txtGatewayStatus"
+        Me.txtGatewayStatus.Size = New System.Drawing.Size(134, 20)
+        Me.txtGatewayStatus.TabIndex = 103
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.lblGatewayStatus)
+        Me.GroupBox1.Controls.Add(Me.txtGatewayStatus)
+        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox1.Location = New System.Drawing.Point(866, 245)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(315, 38)
+        Me.GroupBox1.TabIndex = 105
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Gateway Review"
         '
         'CM_MAIN_frm
         '
@@ -2268,6 +2308,8 @@ Partial Class CM_MAIN_frm
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(1484, 795)
+        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.btnGatewayReview)
         Me.Controls.Add(Me.btnLaborRates)
         Me.Controls.Add(Me.txtOCPL)
         Me.Controls.Add(Me.lblOCPL)
@@ -2303,6 +2345,8 @@ Partial Class CM_MAIN_frm
         CType(Me.sprTotals_Sheet1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.NewProductService_fra.ResumeLayout(False)
         Me.NewProductService_fra.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2357,7 +2401,6 @@ Partial Class CM_MAIN_frm
     Friend WithEvents Proposal_cmd As System.Windows.Forms.Button
     Public WithEvents cboStatus As System.Windows.Forms.ComboBox
     Private WithEvents _label_7 As System.Windows.Forms.Label
-    Public WithEvents chkMajorProject As System.Windows.Forms.CheckBox
     Public WithEvents Status_lbl As System.Windows.Forms.Label
     Public WithEvents cboSalesRep As System.Windows.Forms.ComboBox
     Public WithEvents cboInstallingOffice As System.Windows.Forms.ComboBox
@@ -2385,8 +2428,6 @@ Partial Class CM_MAIN_frm
     Public WithEvents txtBidDate As System.Windows.Forms.DateTimePicker
     Friend WithEvents txtConsultant As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents txtOwner As System.Windows.Forms.TextBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents lblNationalAccount As System.Windows.Forms.Label
     Friend WithEvents cboNationalAccount As System.Windows.Forms.ComboBox
     Public WithEvents fraCode As System.Windows.Forms.GroupBox
@@ -2427,5 +2468,11 @@ Partial Class CM_MAIN_frm
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents txtTaxRate As System.Windows.Forms.TextBox
     Friend WithEvents btnLaborRates As System.Windows.Forms.Button
+    Private WithEvents btnGatewayReview As System.Windows.Forms.Button
+    Friend WithEvents lblGatewayStatus As System.Windows.Forms.Label
+    Friend WithEvents txtGatewayStatus As System.Windows.Forms.TextBox
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Public WithEvents txtContractNumber As System.Windows.Forms.TextBox
+    Private WithEvents lblContractNumber As System.Windows.Forms.Label
 #End Region
 End Class
