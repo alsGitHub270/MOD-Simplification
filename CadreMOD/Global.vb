@@ -45,6 +45,7 @@
     Public EPCOPath As String = ""
     Public SpecAndDataPath As String = ""
     Public SuptPath As String = ""
+    Public ImageFileLocation As String = My.Application.Info.DirectoryPath & "\images\"
 
     Public EstimateModified As Boolean
 

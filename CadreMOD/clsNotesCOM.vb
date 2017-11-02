@@ -64,60 +64,60 @@ Friend Class clsNotesCOM
     '        View = Nothing
     '        doc = Nothing
     '    End Sub
-    '    Public Function DetachFiles() As Boolean
-    '        Dim result As Boolean = False
-    '        Dim TempObj1 As Object
-    '        Dim j As Integer
-    '        Dim EmbeddedFiles() As String
-    '        Dim thisFile As String = ""
+    Public Function DetachFiles() As Boolean
+        Dim result As Boolean = False
+        Dim TempObj1 As Object
+        Dim j As Integer
+        Dim EmbeddedFiles() As String
+        Dim thisFile As String = ""
 
-    '        On Error GoTo DetachFilesError
+        On Error GoTo DetachFilesError
 
-    '        result = True
-    '        TempObj1 = doc.GetFirstItem("FILEATTACH")
-    '        If TempObj1 Is Nothing Then
-    '            ReadersValue = doc.GetItemValue("FileAttachments")
-    '            For Each ReadersValue_item As String In ReadersValue
-    '                If ReadersValue_item <> "" Then
-    '                    TempObj1 = doc.GetAttachment(ReadersValue_item)
-    '                    TempObj1.ExtractFile(FilePath & ReadersValue_item)
-    '                End If
-    '            Next ReadersValue_item
-    '        ElseIf (TempObj1.Type = Domino.IT_TYPE.RICHTEXT) Then
-    '            ReadersValue = doc.GetItemValue("fileAttach")
-    '            EmbeddedFiles = ReadersValue(0).Split("-")
-    '            For Each EmbeddedFiles_item As String In EmbeddedFiles
-    '                thisFile = EmbeddedFiles_item.Trim()
-    '                If thisFile <> "" Then
-    '                    j = (thisFile.IndexOf(".") + 1)
-    '                    thisFile = Strings.Left(thisFile, j + 3)
-    '                    If FileSystem.Dir(FilePath & thisFile, FileAttribute.Normal) <> "" Then
-    '                        File.Delete(FilePath & thisFile)
-    '                    End If
-    '                    TempObj1 = doc.GetAttachment(thisFile)
-    '                    TempObj1.ExtractFile(FilePath & thisFile)
-    '                End If
-    '            Next EmbeddedFiles_item
-    '        End If
+        result = True
+        TempObj1 = doc.GetFirstItem("FILEATTACH")
+        If TempObj1 Is Nothing Then
+            ReadersValue = doc.GetItemValue("FileAttachments")
+            For Each ReadersValue_item As String In ReadersValue
+                If ReadersValue_item <> "" Then
+                    TempObj1 = doc.GetAttachment(ReadersValue_item)
+                    TempObj1.ExtractFile(FilePath & ReadersValue_item)
+                End If
+            Next ReadersValue_item
+        ElseIf (TempObj1.Type = Domino.IT_TYPE.RICHTEXT) Then
+            ReadersValue = doc.GetItemValue("fileAttach")
+            EmbeddedFiles = ReadersValue(0).Split("-")
+            For Each EmbeddedFiles_item As String In EmbeddedFiles
+                thisFile = EmbeddedFiles_item.Trim()
+                If thisFile <> "" Then
+                    j = (thisFile.IndexOf(".") + 1)
+                    thisFile = Strings.Left(thisFile, j + 3)
+                    If FileSystem.Dir(FilePath & thisFile, FileAttribute.Normal) <> "" Then
+                        File.Delete(FilePath & thisFile)
+                    End If
+                    TempObj1 = doc.GetAttachment(thisFile)
+                    TempObj1.ExtractFile(FilePath & thisFile)
+                End If
+            Next EmbeddedFiles_item
+        End If
 
-    '        Return result
+        Return result
 
-    'DetachFilesError:
-    '        If Information.Err.Number = 53 Then
-    '            If FilePath.Length = 0 Then
-    '                MessageBox.Show("File path property NOT SET!", Application.ProductName)
-    '            Else
-    '                MessageBox.Show("File NOT found!!  Please check if the file exists!", Application.ProductName)
-    '            End If
-    '        ElseIf Information.Err.Number = 91 Then
-    '            Resume Next
-    '        Else
-    '            MessageBox.Show(CStr(Information.Err().Number) & ": " & Information.Err.Description, Application.ProductName)
-    '        End If
+DetachFilesError:
+        If Information.Err.Number = 53 Then
+            If FilePath.Length = 0 Then
+                MessageBox.Show("File path property NOT SET!", Application.ProductName)
+            Else
+                MessageBox.Show("File NOT found!!  Please check if the file exists!", Application.ProductName)
+            End If
+        ElseIf Information.Err.Number = 91 Then
+            Resume Next
+        Else
+            MessageBox.Show(CStr(Information.Err().Number) & ": " & Information.Err.Description, Application.ProductName)
+        End If
 
-    '        Return False
+        Return False
 
-    '    End Function
+    End Function
     '    Public Function AttachSUPTFile(ByRef sFileName As String) As Boolean
     '        Dim result As Boolean = True
     '        Dim oAttachedFile As Object

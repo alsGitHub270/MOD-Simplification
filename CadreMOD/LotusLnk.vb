@@ -394,29 +394,29 @@ MISSINGMESSAGE:
                         "information in the Corporate Phone Directory.", "Warning - Corporate Phone Directory")
 
     End Sub
-    '    Public Sub DetachFeedback()
+    Public Sub DetachFeedback()
     '        Dim Filesystem As New Scripting.FileSystemObject()
     '        Dim Name As String = ""
     '        Dim bAttach_To_Feedback As Boolean = False
 
     '        Try
     '            bAttach_To_Feedback = Attach_To_Feedback()
-
-    '            If gbShape And Not bAttach_To_Feedback Then
+        Try
+            Attach_To_Feedback()
     '                Exit Sub
     '            End If
-    '            Hold_Customer_ID = clsNotes.GetValue("Unique")
-    '            Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
-    '            If Not clsNotes.CheckAttachments() Then
-    '                MessageBox.Show("There are no file attachments for this estimate!", Application.ProductName)
-    '                Exit Sub
-    '            End If
-    '            CompareFiles()
-    '            ArchiveFiles()
-    '            DeleteFiles()
-    '            VerifyPath(ReportsPath)
+            Hold_Customer_ID = clsNotes.GetValue("Unique")
+            Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
+            If Not clsNotes.CheckAttachments() Then
+                MessageBox.Show("There are no file attachments for this estimate!", Application.ProductName)
+                Exit Sub
+            End If
+            CompareFiles()
+            ArchiveFiles()
+            DeleteFiles()
+            VerifyPath(ReportsPath)
 
-    '            clsNotes.DetachFiles()
+            clsNotes.DetachFiles()
     '            Dim thisFolder As Scripting.Folder = Filesystem.GetFolder(ReportsPath)
     '            Dim theseFiles As Scripting.Files = thisFolder.Files
     '            PreBidMODActive = False
@@ -447,14 +447,14 @@ MISSINGMESSAGE:
     '                    gsPreBidBanks = ReadDataFromA2BFile(ReportsPath & Name)
     '                End If
     '            Next thisFile
-    '            CompareFiles()
+            CompareFiles()
 
-    '        Finally
-    '            MemoryHelper.ReleaseAndCleanObject(Filesystem)
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In DetachFeedback")
 
-    '        End Try
+        End Try
 
-    '    End Sub
+    End Sub
 
     Public Function QueryFeedback(ByRef SetValues As Boolean) As Boolean
 
@@ -538,7 +538,7 @@ MISSINGMESSAGE:
         'Contracts.OpportunityToOfferDate = clsNotes.GetValue("oppToOfferDate").ToString
         'Contracts.ProposedDate = clsNotes.GetValue("proposedDate").ToString
         'Contracts.OpportunityClosedDate = clsNotes.GetValue("oppOfferClosedDate").ToString
-        'Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
+        Contracts.NationalAccount = clsNotes.GetValue("CustomerLevel") = "NA"
         Select Case clsNotes.GetValue("Status").ToUpper()
             Case "PRE-BID"
                 Contracts.Status = Status_OpportunityInProgress

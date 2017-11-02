@@ -1080,6 +1080,7 @@ Partial Class CM_MAIN_frm
         'btn_Help
         '
         Me.btn_Help.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_Help.Image = CType(resources.GetObject("btn_Help.Image"), System.Drawing.Image)
         Me.btn_Help.Location = New System.Drawing.Point(300, 1)
         Me.btn_Help.Name = "btn_Help"
         Me.btn_Help.Size = New System.Drawing.Size(46, 46)

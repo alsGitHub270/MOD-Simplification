@@ -18,7 +18,7 @@ Public Class frmEstimatingBase
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
     Private SheetCornerColWidth As Integer = 0
-    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODEST.json"
+    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODEST.JSON"
     Private OrderingForms_spc As Object
 
     Private Sub CreateDataSet(ByVal CurUnits As String)
@@ -54,29 +54,29 @@ Public Class frmEstimatingBase
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderDesc = TABLECOL_MAINID
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderDesc = TABLECOL_MATERIALID
             SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderDesc = TABLECOL_UNITS
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderDesc = TABLECOL_OPTION
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderDesc = TABLECOL_TYPE
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderDesc = TABLECOL_ORDERBY
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderDesc = TABLECOL_UNITQTY
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderDesc = TABLECOL_UNITCOST
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderDesc = TABLECOL_STDHOURS
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderDesc = TABLECOL_SPECHOURS
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderDesc = "Comments"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION_EST).HeaderDesc = TABLECOL_OPTION_EST
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE_EST).HeaderDesc = TABLECOL_TYPE_EST
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY_EST).HeaderDesc = TABLECOL_ORDERBY_EST
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY_EST).HeaderDesc = TABLECOL_UNITQTY_EST
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST_EST).HeaderDesc = TABLECOL_UNITCOST
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS_EST).HeaderDesc = TABLECOL_STDHOURS
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_EST).HeaderDesc = TABLECOL_SPECHOURS
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_EST).HeaderDesc = TABLECOL_COMMENTS
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderType = typeStr
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderType = typeStr
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderType = typeStr
             SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderType = typeInt
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderType = typeSingle
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderType = typeSingle
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderType = typeSingle
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION_EST).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE_EST).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY_EST).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY_EST).HeaderType = typeInt
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST_EST).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS_EST).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_EST).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_EST).HeaderType = typeStr
 
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                           FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json"
+                                           FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON"
             If Not File.Exists(EST_Filename) Then
                 MaterialItemRecordSet = New ADODB.Recordset
                 MaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
@@ -228,6 +228,7 @@ Public Class frmEstimatingBase
         Dim UseTabName As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
+        SetAssociatedFieldNames()
         txtHdrBldgName.Text = Contracts.JobName
         txtHdrGONegNum.Text = HoldUniqueActivity
         txtHdrBnkLetter.Text = CurrentGOData_Typ.Bank
@@ -235,7 +236,7 @@ Public Class frmEstimatingBase
         isInitializingComponent = True
         DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath & "\", MODDATA_DATABASE_NAME, True)
         Load_ListBoxes()
-        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
         For Each JSONFile In JSONFileLocation.GetFiles()
             If JSONFile IsNot Nothing Then
                 If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
@@ -317,7 +318,7 @@ Public Class frmEstimatingBase
         svCollection.Add(e.SheetView)
 
     End Sub
-    Private Sub Exit_cmd_0_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Exit_cmd.Click
+    Private Sub Exit_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Exit_cmd.Click
 
         If FormIsDirty Then
             If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
@@ -389,13 +390,13 @@ Public Class frmEstimatingBase
 
         If GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
             GeneralInformation_fra.Height = CurrentGenInfoFrameHeight
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
             For Each CurControl As Control In GeneralInformation_fra.Controls
                 CurControl.Visible = True
             Next CurControl
         Else
             GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
             For Each CurControl As Control In GeneralInformation_fra.Controls
                 If CurControl.Name <> "ExpandCollapseFrame_btn" Then
                     CurControl.Visible = False
@@ -702,10 +703,10 @@ Public Class frmEstimatingBase
                         NewDesc = SetSPRText("Description", ChildSheetView, CurRow)
                         SubGroups.Rows.Add(New Object() {NewDesc, CurMAIN_ID, NewMAT_ID, CurUnits, "", "", "", 0, 0, 0, 0, ""})
                         CurRow = ChildSheetView.RowCount - 1
-                        ChildSheetView.Cells(CurRow, MAT_COL_OPTION).CellType = SetSPRCombo("Options", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_TYPE).CellType = SetSPRCombo("Types", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_ORDER_BY).CellType = SetSPRCombo("OrderBys", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_QTY).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView, CurRow))
+                        ChildSheetView.Cells(CurRow, MAT_COL_OPTION_EST).CellType = SetSPRCombo("Options", ChildSheetView, CurRow)
+                        ChildSheetView.Cells(CurRow, MAT_COL_TYPE_EST).CellType = SetSPRCombo("Types", ChildSheetView, CurRow)
+                        ChildSheetView.Cells(CurRow, MAT_COL_ORDER_BY_EST).CellType = SetSPRCombo("OrderBys", ChildSheetView, CurRow)
+                        ChildSheetView.Cells(CurRow, MAT_COL_QTY_EST).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView, CurRow))
                         Set_Fields_Grey_EST()
                     End If
                 End If
@@ -781,16 +782,16 @@ Public Class frmEstimatingBase
 
         ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(CurRow, 0)
         If Not ChildSheetView Is Nothing Then
-            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION).Text,
-                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY).Text, "Cost",
-                         ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_COST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY).Value)
-            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION).Text,
-                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY).Text, "Hours",
-                         ChildSheetView.Cells(UseRow, MAT_COL_STANDARD_HOURS).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY).Value)
+            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION_EST).Text,
+                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE_EST).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY_EST).Text, "Cost",
+                         ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_COST_EST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY_EST).Value)
+            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION_EST).Text,
+                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE_EST).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY_EST).Text, "Hours",
+                         ChildSheetView.Cells(UseRow, MAT_COL_STANDARD_HOURS_EST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY_EST).Value)
             For iIndex As Integer = 0 To ChildSheetView.RowCount - 1
-                TotalCost += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_MATERIAL_COST).Value)
-                TotalStdHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_STANDARD_HOURS).Value)
-                TotalSpecHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_SPECIAL_HOURS).Value)
+                TotalCost += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_MATERIAL_COST_EST).Value)
+                TotalStdHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_STANDARD_HOURS_EST).Value)
+                TotalSpecHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_SPECIAL_HOURS_EST).Value)
             Next iIndex
         End If
         BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_COST, TotalCost)
@@ -889,31 +890,31 @@ Public Class frmEstimatingBase
                     ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
                     ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
 
-                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_EST, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_EST, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_EST, 100)
 
                     For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
-                        If ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value = -999 Then
-                            ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
+                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
+                        ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
+                        ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
+                        If ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value = -999 Then
+                            ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
                         End If
                         If Not isInitializingComponent Then
-                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).Text,
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text, "Cost",
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value)
-                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).Text,
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text, "Hours",
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value)
+                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text,
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text, "Cost",
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_EST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
+                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text,
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text, "Hours",
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_EST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
                         End If
                     Next jIndex
 
-                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS, 120)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS, 200)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_EST, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_EST, 120)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_EST, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_EST, 200)
                     If SheetCornerColWidth = 0 Then
                         SheetCornerColWidth = ChildSheetView1.SheetCorner.Columns(0, 0).Width
                     Else
@@ -970,7 +971,7 @@ Public Class frmEstimatingBase
     Private Sub PopulateOrdering()
 
     End Sub
-    Private Sub SaveEstimatingData()
+    Public Sub SaveEstimatingData()
         Dim _row As DataRow
         Dim is_new_row As Boolean = False
 
@@ -1000,7 +1001,7 @@ Public Class frmEstimatingBase
                 GeneralInfo.Rows.Add(_row)
             End If
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json"
+                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON"
             If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
                 Throw New Exception
             End If
@@ -1012,7 +1013,7 @@ Public Class frmEstimatingBase
 
 
     End Sub
-    Private Sub SaveOrderingData()
+    Public Sub SaveOrderingData()
         'Dim _row As DataRow
         'Dim is_new_row As Boolean = False
 
@@ -1042,7 +1043,7 @@ Public Class frmEstimatingBase
             '    GeneralInfo.Rows.Add(_row)
             'End If
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODORD.json"
+                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODORD.JSON"
             If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
                 Throw New Exception
             End If
@@ -1303,7 +1304,7 @@ Public Class frmEstimatingBase
         Dim iIndex As Integer = 0, AryIndex As Integer = -1
 
         If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                                 FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json") Then
+                                                                 FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON") Then
             If PromptForSave() Then
                 ArchiveFiles()
                 UnitCopyMerge_frm.Text = CurButtonLabel
@@ -1374,13 +1375,6 @@ Public Class frmEstimatingBase
         Return ReturnVal
 
     End Function
-    Private Sub SaveAll()
-        SaveEstimatingData()
-        If CurrentGOData_Typ.EstimateLevel = "Master" Then
-            SaveOrderingData()
-        End If
-        ArchiveFiles()
-    End Sub
     Private Sub Set_Fields_Grey_EST()
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
@@ -1437,14 +1431,14 @@ Public Class frmEstimatingBase
                                 Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = True
                                 End If
-                            Case MAT_COL_STANDARD_HOURS
+                            Case MAT_COL_STANDARD_HOURS_EST
                                 ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                            Case MAT_COL_OPTION, MAT_COL_TYPE, MAT_COL_ORDER_BY
+                            Case MAT_COL_OPTION_EST, MAT_COL_TYPE_EST, MAT_COL_ORDER_BY_EST
                                 LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
-                            Case MAT_COL_MATERIAL_COST
-                                If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text = "RL" Or
-                                   String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text) Or
-                                   ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).Text = "Refurbish" Then
+                            Case MAT_COL_MATERIAL_COST_EST
+                                If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text = "RL" Or
+                                   String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text) Or
+                                   ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text = "Refurbish" Then
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = False
                                 Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = True

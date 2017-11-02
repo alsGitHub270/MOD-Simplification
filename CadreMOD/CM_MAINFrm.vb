@@ -421,6 +421,7 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        DetachFeedback()
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
         initializing = True
 
@@ -692,7 +693,7 @@ Partial Friend Class CM_MAIN_frm
 
 
 
-        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
         CurrentBuildingInformationFrameHeight = BuildingInformation_fra.Height
         CurrentEquipmentFrameHeight = Equipment_fra.Height
 
@@ -1184,7 +1185,7 @@ Partial Friend Class CM_MAIN_frm
                         'ChildSheetView1.Cells(0, 7).Locked = False
                         ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
 
-                        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
+                        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
                         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
                         t.BackgroundImage = p
                         ' Apply the text cell.
@@ -1625,7 +1626,7 @@ Partial Friend Class CM_MAIN_frm
                 ChildSheetView1.RemoveRows(0, 1)
             End If
 
-            Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+            Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "openned.png"), FarPoint.Win.RenderStyle.Normal)
             Dim t As New FarPoint.Win.Spread.CellType.TextCellType
             t.BackgroundImage = p
             ' Apply the text cell.
@@ -1868,7 +1869,7 @@ Partial Friend Class CM_MAIN_frm
     Private Sub ExpandCollapseFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseFrame_btn.Click
         If BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
             BuildingInformation_fra.Height = CurrentBuildingInformationFrameHeight
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
             For Each CurControl As Control In BuildingInformation_fra.Controls
                 CurControl.Visible = True
             Next CurControl
@@ -1881,7 +1882,7 @@ Partial Friend Class CM_MAIN_frm
             Me.btnLaborRates.Visible = True
         Else
             BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
             For Each CurControl As Control In BuildingInformation_fra.Controls
                 If CurControl.Name <> "ExpandCollapseFrame_btn" Then
                     CurControl.Visible = False
@@ -1987,7 +1988,7 @@ Partial Friend Class CM_MAIN_frm
             isDirty = True
         End If
 
-        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "\images\openned.png"), FarPoint.Win.RenderStyle.Normal)
+        Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "openned.png"), FarPoint.Win.RenderStyle.Normal)
         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
         t.BackgroundImage = p
         ' Apply the text cell.
@@ -2379,7 +2380,7 @@ Partial Friend Class CM_MAIN_frm
         FpSpread1.Refresh()
     End Sub
 
-    Private Sub SaveAll()
+    Public Sub SaveAll()
         SaveTopOfFormToDataset()
         'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
         ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty) 
@@ -3231,72 +3232,72 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
+    '
+    '  Public Function SetupMDCLink() As Boolean
+    'Dim DataBaseError As String = ""
+    'Dim MDC As String = ""
+    'Dim ComServerMDC As String = ""
 
-    Public Function SetupMDCLink() As Boolean
-        'Dim DataBaseError As String = ""
-        'Dim MDC As String = ""
-        'Dim ComServerMDC As String = ""
+    'Try
 
-        'Try
+    '    If TestSystem Then
+    '        ComServerMDC = "USSECNE1"
+    '        MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
+    '    Else
+    '        ComServerMDC = "USSECNN4"
+    '        MDC = "sec\engpro\MDCCustomQuotes.nsf"
+    '    End If
 
-        '    If TestSystem Then
-        '        ComServerMDC = "USSECNE1"
-        '        MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
-        '    Else
-        '        ComServerMDC = "USSECNN4"
-        '        MDC = "sec\engpro\MDCCustomQuotes.nsf"
-        '    End If
+    '    If NotclsNotes.NotesDBName(ComServerMDC, MDC) Then
+    '        DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
+    '        Throw New Exception()
+    '    End If
+    '    If NotclsNotes.NotesDBView("(LU unique)") Then
+    '        MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
+    '        EndProgram()
+    '    End If
 
-        '    If NotclsNotes.NotesDBName(ComServerMDC, MDC) Then
-        '        DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
-        '        Throw New Exception()
-        '    End If
-        '    If NotclsNotes.NotesDBView("(LU unique)") Then
-        '        MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
-        '        EndProgram()
-        '    End If
+    '    ReturnclsNotes.CRM_NotesDocKey(OpportunityID)
 
-        '    ReturnclsNotes.CRM_NotesDocKey(OpportunityID)
+    'Catch
 
-        'Catch
+    '    MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
+    '    EndProgram()
+    'End Try
+    ' End Function
 
-        '    MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
-        '    EndProgram()
-        'End Try
-    End Function
+    ' Function FindMDCDocument() As Boolean
+    'Dim result As Boolean = False
+    'Try
+    '    Dim Bank, Alt, CarNo
+    '    Dim b As Boolean
 
-    Function FindMDCDocument() As Boolean
-        'Dim result As Boolean = False
-        'Try
-        '    Dim Bank, Alt, CarNo
-        '    Dim b As Boolean
+    '    IfclsNotes.NotesDocKeyCollection(OpportunityID) Then
+    '    b = True
+    '    Do While b
+    '        If OpportunityID = clsNotes.GetValue("proposal_num") Then
+    '                IfclsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
+    '                    IfclsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
+    '                        IfclsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
+    '                            IfclsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
+    '            Return True
+    '        End If
+    '                        End If
+    '                    End If
+    '                End If
+    '            End If
+    '        b = clsNotes.GetNextDocumentFromCollection()
+    '        Loop
+    '    End If
 
-        '    IfclsNotes.NotesDocKeyCollection(OpportunityID) Then
-        '    b = True
-        '    Do While b
-        '        If OpportunityID = clsNotes.GetValue("proposal_num") Then
-        '                IfclsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
-        '                    IfclsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
-        '                        IfclsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
-        '                            IfclsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
-        '            Return True
-        '        End If
-        '                        End If
-        '                    End If
-        '                End If
-        '            End If
-        '        b = clsNotes.GetNextDocumentFromCollection()
-        '        Loop
-        '    End If
+    '    Return result
 
-        '    Return result
+    'Catch
+    '    MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
 
-        'Catch
-        '    MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-
-        '    Return result
-        'End Try
-    End Function
+    '    Return result
+    'End Try
+    '  End Function
 
 
     Private Function AllDocumentsExists() As Boolean

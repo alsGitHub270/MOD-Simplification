@@ -10,7 +10,7 @@ Public Class frmEstimatingAlt
     Private isInitializingComponent As Boolean = True
 
     Private SheetHeaders(,) As a_SheetHeaders_typ
-    Private Const TotalMaterialColumns As Integer = 11
+    Private Const TotalMaterialColumns As Integer = 15
 
     Private CurrentGenInfoFrameHeight As Integer = 0, CurrentBillofMaterialsandTaskListFrameHeight As Integer = 0
     Private MaterialItemRecordSet As New ADODB.Recordset
@@ -18,8 +18,7 @@ Public Class frmEstimatingAlt
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
     Private SheetCornerColWidth As Integer = 0
-    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODEST.json"
-    Private OrderingForms_spc As Object
+    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODALT.JSON"
 
     Private Sub CreateDataSet(ByVal CurUnits As String)
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer
@@ -54,29 +53,37 @@ Public Class frmEstimatingAlt
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderDesc = TABLECOL_MAINID
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderDesc = TABLECOL_MATERIALID
             SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderDesc = TABLECOL_UNITS
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderDesc = TABLECOL_OPTION
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderDesc = TABLECOL_TYPE
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderDesc = TABLECOL_ORDERBY
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderDesc = TABLECOL_UNITQTY
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderDesc = TABLECOL_UNITCOST
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderDesc = TABLECOL_STDHOURS
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderDesc = TABLECOL_SPECHOURS
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderDesc = "Comments"
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION_BASE).HeaderDesc = TABLECOL_OPTION_BASE
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION_ALT).HeaderDesc = TABLECOL_OPTION_ALT
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE_BASE).HeaderDesc = TABLECOL_TYPE_BASE
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE_ALT).HeaderDesc = TABLECOL_TYPE_ALT
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY_BASE).HeaderDesc = TABLECOL_ORDERBY_BASE
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY_ALT).HeaderDesc = TABLECOL_ORDERBY_ALT
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY_BASE).HeaderDesc = TABLECOL_UNITQTY_BASE
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY_ALT).HeaderDesc = TABLECOL_UNITQTY_ALT
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST_ALT).HeaderDesc = TABLECOL_UNITCOST
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS_ALT).HeaderDesc = TABLECOL_STDHOURS
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_ALT).HeaderDesc = TABLECOL_SPECHOURS
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_ALT).HeaderDesc = TABLECOL_COMMENTS
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_DESC).HeaderType = typeStr
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MAIN_ID).HeaderType = typeStr
             SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_ID).HeaderType = typeStr
             SheetHeaders(MATERIAL_GROUP, MAT_COL_UNITS).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY).HeaderType = typeStr
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY).HeaderType = typeInt
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST).HeaderType = typeSingle
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS).HeaderType = typeSingle
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS).HeaderType = typeSingle
-            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION_BASE).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_OPTION_ALT).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE_BASE).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_TYPE_ALT).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY_BASE).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_ORDER_BY_ALT).HeaderType = typeStr
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY_BASE).HeaderType = typeInt
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_QTY_ALT).HeaderType = typeInt
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_MATERIAL_COST_ALT).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_STANDARD_HOURS_ALT).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_ALT).HeaderType = typeSingle
+            SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_ALT).HeaderType = typeStr
 
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                           FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json"
+                                           FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODALT.JSON"
             If Not File.Exists(EST_Filename) Then
                 MaterialItemRecordSet = New ADODB.Recordset
                 MaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
@@ -228,6 +235,7 @@ Public Class frmEstimatingAlt
         Dim UseTabName As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
+        SetAssociatedFieldNames()
         txtHdrBldgName.Text = Contracts.JobName
         txtHdrGONegNum.Text = HoldUniqueActivity
         txtHdrBnkLetter.Text = CurrentGOData_Typ.Bank
@@ -235,11 +243,11 @@ Public Class frmEstimatingAlt
         isInitializingComponent = True
         DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath & "\", MODDATA_DATABASE_NAME, True)
         Load_ListBoxes()
-        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
         For Each JSONFile In JSONFileLocation.GetFiles()
             If JSONFile IsNot Nothing Then
                 If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
-                    If JSONFile.ToString.ToUpper.Contains("MODEST") Or JSONFile.ToString.ToUpper.Contains("MODORD") Then
+                    If JSONFile.ToString.ToUpper.Contains("MODALT") Then
                         JSONFileList.Add(JSONFile)
                     End If
                 End If
@@ -247,38 +255,17 @@ Public Class frmEstimatingAlt
         Next JSONFile
         If JSONFileList.Count = 0 Then
             CarTab.Text = CurrentGOData_Typ.CurrentUnits & EST_Suffix
-            If CurrentGOData_Typ.EstimateLevel = "Master" Then
-                OrderTab.Text = CurrentGOData_Typ.CurrentUnits & ORD_Suffix
-            End If
         Else
             UseTabName = FormatTabName(JSONFileList(0).Name)
             CarTab.Text = UseTabName & EST_Suffix
-            If JSONFileList(0).Name.ToUpper.Contains("MODORD") Then
-                OrderTab.Text = UseTabName & ORD_Suffix
-            End If
             If JSONFileList.Count >= 2 Then
                 For iIndex As Integer = 1 To JSONFileList.Count - 1
                     UseTabName = FormatTabName(JSONFileList(iIndex).Name)
-                    If JSONFileList(iIndex).Name.ToUpper.Contains("MODEST") Then
+                    If JSONFileList(iIndex).Name.ToUpper.Contains("MODALT") Then
                         TabControl1.TabPages.Add(UseTabName & EST_Suffix)
-                    ElseIf JSONFileList(iIndex).Name.ToUpper.Contains("MODORD") Then
-                        TabControl1.TabPages.Add(UseTabName & ORD_Suffix)
                     End If
                 Next iIndex
             End If
-        End If
-        If CurrentGOData_Typ.EstimateLevel = "Base" Then
-            For iIndex As Integer = TabControl1.TabPages.Count - 1 To 0 Step -1
-                Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                If CurTab.Text.IndexOf(ORD_Suffix) > -1 Or CurTab.Text.Trim.Length = 0 Then
-                    TabControl1.TabPages.Remove(CurTab)
-                End If
-            Next iIndex
-            Copy_cmd.Visible = True
-            Merge_cmd.Visible = True
-        Else
-            Copy_cmd.Visible = False
-            Merge_cmd.Visible = False
         End If
         TabControl1.SelectTab(0)
         TabControl1.Left = 3
@@ -317,7 +304,7 @@ Public Class frmEstimatingAlt
         svCollection.Add(e.SheetView)
 
     End Sub
-    Private Sub Exit_cmd_0_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Exit_cmd.Click
+    Private Sub Exit_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Exit_cmd.Click
 
         If FormIsDirty Then
             If MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
@@ -389,13 +376,13 @@ Public Class frmEstimatingAlt
 
         If GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
             GeneralInformation_fra.Height = CurrentGenInfoFrameHeight
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\delete.png")
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
             For Each CurControl As Control In GeneralInformation_fra.Controls
                 CurControl.Visible = True
             Next CurControl
         Else
             GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "\images\add.png")
+            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
             For Each CurControl As Control In GeneralInformation_fra.Controls
                 If CurControl.Name <> "ExpandCollapseFrame_btn" Then
                     CurControl.Visible = False
@@ -670,18 +657,6 @@ Public Class frmEstimatingAlt
         Destination_cmb.Items.Add("DI")
 
     End Sub
-    Private Sub MachineType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub DriveType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
     Private Sub BillOfMaterials_spr_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles BillOfMaterials_spr.Change
         Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
         Dim CurRow As Integer = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
@@ -702,10 +677,10 @@ Public Class frmEstimatingAlt
                         NewDesc = SetSPRText("Description", ChildSheetView, CurRow)
                         SubGroups.Rows.Add(New Object() {NewDesc, CurMAIN_ID, NewMAT_ID, CurUnits, "", "", "", 0, 0, 0, 0, ""})
                         CurRow = ChildSheetView.RowCount - 1
-                        ChildSheetView.Cells(CurRow, MAT_COL_OPTION).CellType = SetSPRCombo("Options", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_TYPE).CellType = SetSPRCombo("Types", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_ORDER_BY).CellType = SetSPRCombo("OrderBys", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_QTY).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView, CurRow))
+                        ChildSheetView.Cells(CurRow, MAT_COL_OPTION_ALT).CellType = SetSPRCombo("Options", ChildSheetView, CurRow)
+                        ChildSheetView.Cells(CurRow, MAT_COL_TYPE_ALT).CellType = SetSPRCombo("Types", ChildSheetView, CurRow)
+                        ChildSheetView.Cells(CurRow, MAT_COL_ORDER_BY_ALT).CellType = SetSPRCombo("OrderBys", ChildSheetView, CurRow)
+                        ChildSheetView.Cells(CurRow, MAT_COL_QTY_ALT).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView, CurRow))
                         Set_Fields_Grey_EST()
                     End If
                 End If
@@ -734,36 +709,10 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
-        If TabControl1.SelectedTab.Text.IndexOf(EST_Suffix) > -1 Then
-            PopulateEstimating()
-            Set_Fields_Grey_EST()
-            CarData_fra.Visible = True
-            CarData_fra.BringToFront()
-            If CurrentGOData_Typ.EstimateLevel = "Master" Then
-                OrderingForms_fra.Visible = False
-                OrderingForms_fra.SendToBack()
-            End If
-        ElseIf TabControl1.SelectedTab.Text.IndexOf(ORD_Suffix) > -1 Then
-            PopulateOrdering()
-            OrderingForms_lst.Items.Clear()
-            OrderingForms_lst.Items.Add("Governor")
-            OrderingForms_lst.Left = 3
-            OrderingForms_lst.Top = 12
-            OrderingForms_lst.Height = OrderingForms_fra.Height - 6
-            OrderingForms_con.Left = OrderingForms_lst.Left + OrderingForms_lst.Width + 6
-            OrderingForms_con.Width = OrderingForms_fra.Width - OrderingForms_lst.Width - 18
-            OrderingForms_con.Height = OrderingForms_fra.Height - 18
-            OrderingForms_con.Top = OrderingForms_lst.Top
-            CarData_fra.Visible = False
-            CarData_fra.SendToBack()
-            OrderingForms_fra.Visible = True
-            OrderingForms_fra.BringToFront()
-        Else
-            CarData_fra.Visible = False
-            CarData_fra.SendToBack()
-            OrderingForms_fra.Visible = False
-            OrderingForms_fra.SendToBack()
-        End If
+        PopulateAltData()
+        Set_Fields_Grey_EST()
+        CarData_fra.Visible = True
+        CarData_fra.BringToFront()
 
     End Sub
     Private Sub ExpensesPerDayDetails_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDayDetails_btn.Click
@@ -781,16 +730,16 @@ Public Class frmEstimatingAlt
 
         ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(CurRow, 0)
         If Not ChildSheetView Is Nothing Then
-            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION).Text,
-                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY).Text, "Cost",
-                         ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_COST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY).Value)
-            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION).Text,
-                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY).Text, "Hours",
-                         ChildSheetView.Cells(UseRow, MAT_COL_STANDARD_HOURS).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY).Value)
+            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION_ALT).Text,
+                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE_ALT).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY_ALT).Text, "Cost",
+                         ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_COST_ALT).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY_ALT).Value)
+            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION_ALT).Text,
+                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE_ALT).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY_ALT).Text, "Hours",
+                         ChildSheetView.Cells(UseRow, MAT_COL_STANDARD_HOURS_ALT).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY_ALT).Value)
             For iIndex As Integer = 0 To ChildSheetView.RowCount - 1
-                TotalCost += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_MATERIAL_COST).Value)
-                TotalStdHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_STANDARD_HOURS).Value)
-                TotalSpecHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_SPECIAL_HOURS).Value)
+                TotalCost += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_MATERIAL_COST_ALT).Value)
+                TotalStdHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_STANDARD_HOURS_ALT).Value)
+                TotalSpecHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_SPECIAL_HOURS_ALT).Value)
             Next iIndex
         End If
         BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_COST, TotalCost)
@@ -798,7 +747,7 @@ Public Class frmEstimatingAlt
         BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_SPEC_HRS, TotalSpecHours)
 
     End Sub
-    Private Sub PopulateEstimating()
+    Private Sub PopulateAltData()
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         Dim dt As DataTable, dr As DataRow
@@ -889,31 +838,34 @@ Public Class frmEstimatingAlt
                     ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
                     ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
 
-                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_BASE, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_ALT, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_BASE, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_ALT, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_BASE, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_ALT, 100)
 
                     For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
-                        If ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value = -999 Then
-                            ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
+                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
+                        ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
+                        ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
+                        If ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value = -999 Then
+                            ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
                         End If
                         If Not isInitializingComponent Then
-                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).Text,
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text, "Cost",
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value)
-                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).Text,
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text, "Hours",
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY).Value)
+                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text,
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text, "Cost",
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_ALT).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value)
+                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text,
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text, "Hours",
+                                         ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_ALT).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value)
                         End If
                     Next jIndex
 
-                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS, 120)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS, 200)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_ALT, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_ALT, 120)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_ALT, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_ALT, 200)
                     If SheetCornerColWidth = 0 Then
                         SheetCornerColWidth = ChildSheetView1.SheetCorner.Columns(0, 0).Width
                     Else
@@ -967,10 +919,7 @@ Public Class frmEstimatingAlt
         End Try
 
     End Sub
-    Private Sub PopulateOrdering()
-
-    End Sub
-    Private Sub SaveEstimatingData()
+    Public Sub SaveAltData()
         Dim _row As DataRow
         Dim is_new_row As Boolean = False
 
@@ -1000,7 +949,7 @@ Public Class frmEstimatingAlt
                 GeneralInfo.Rows.Add(_row)
             End If
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json"
+                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODALT.JSON"
             If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
                 Throw New Exception
             End If
@@ -1012,415 +961,29 @@ Public Class frmEstimatingAlt
 
 
     End Sub
-    Private Sub SaveOrderingData()
-        'Dim _row As DataRow
-        'Dim is_new_row As Boolean = False
-
-        Try
-            'Currrent Estimating Tab
-            'If GeneralInfo.Rows.Count = 0 Then
-            '    _row = GeneralInfo.NewRow
-            '    is_new_row = True
-            'Else
-            '    _row = GeneralInfo.Rows(0)
-            'End If
-            'For Each Cntrl As Control In Me.Controls
-            '    If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
-            '        _row([Cntrl].Name) = [Cntrl].Text
-            '    ElseIf TypeOf [Cntrl] Is DateTimePicker Then
-            '        Dim UseDTPicker As DateTimePicker = [Cntrl]
-            '        _row([Cntrl].Name) = UseDTPicker.Value.ToString("d")
-            '    ElseIf TypeOf [Cntrl] Is CheckBox Then
-            '        Dim UseCheckbox As CheckBox = [Cntrl]
-            '        _row([Cntrl].Name) = UseCheckbox.CheckState.ToString
-            '    End If
-            'Next Cntrl
-            'For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
-            '    _row(SubcontractedLaborCost.LaborCost(iIndex).Description) = SubcontractedLaborCost.LaborCost(iIndex).Cost
-            'Next iIndex
-            'If is_new_row Then
-            '    GeneralInfo.Rows.Add(_row)
-            'End If
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODORD.json"
-            If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
-                Throw New Exception
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Error saving data", "Error Saving Ordering Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
-        End Try
-
-
-    End Sub
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
         SaveAll()
-    End Sub
-    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub SpeedNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub NumberofStopsTotal_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub NumberofStopsFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub NumberofStopsRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-        Set_Fields_Grey_EST()
-    End Sub
-    Private Sub PowerSupply_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PowerSupply_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub Application_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Application_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub LayoutRequirements_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LayoutRequirements_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub DoorOperatorTypeFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeFront_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningWidthFtFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningWidthInFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningHeightFtFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningHeightInFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub DoorOperatorTypeRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeRear_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningWidthFtRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningWidthInRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningHeightFtRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarDoorOpeningHeightInRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub CarWeight_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarWeight_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub HoistMotorHP_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorHP_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub HoistMotorRpm_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorRpm_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub MachineLocation_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineLocation_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub RopingNew_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub TopFloorToOverhead_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub Travel_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Travel_txt.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub PitDepth_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PitDepth_txt.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub RiserQtyExistingFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyExistingFront_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub RiserQtyExistingRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyExistingRear_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub FixtureFinish_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FixtureFinish_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub DTRequestedShipDate_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DTRequestedShipDate.ValueChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub BankCompleteDate_txt_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BankCompleteDate_txt.ValueChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub ExistingControlVendor_lst_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub ExistingControlVendor_lst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub ExistingControlModel_lst_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub ExistingControlModel_lst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub OriginalGONumberAvailable_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGONumberAvailable_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub OriginalGOnumber_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGOnumber_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub PEStampRequired_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PEStampRequired_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub ShortFloorOperation_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShortFloorOperation_chk.CheckedChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub Permits_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Permits_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub Bonds_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Bonds_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub ExpensesPerDay_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDay_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub GatewayReviewRequired_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GatewayReviewRequired_chk.CheckedChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub Destination_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-    End Sub
-    Private Sub Copy_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Copy_cmd.Click
-        ShowCopyMergeDialog(Copy_cmd.Tag)
-    End Sub
-    Private Sub Merge_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Merge_cmd.Click
-        ShowCopyMergeDialog(Merge_cmd.Tag)
-    End Sub
-    Private Sub ShowCopyMergeDialog(ByVal CurButtonLabel As String)
-        Dim CurUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
-        Dim iIndex As Integer = 0, AryIndex As Integer = -1
-
-        If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                                                 FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.json") Then
-            If PromptForSave() Then
-                ArchiveFiles()
-                UnitCopyMerge_frm.Text = CurButtonLabel
-                UnitCopyMerge_frm.CurUnits = CurUnits
-                Erase UnitCopyMerge_frm.UnitOptions
-                If CurButtonLabel.Contains("Copy") Then
-                    CalculateNumberOfCarsInEstimate(CurUnits)
-                    UnitCopyMerge_frm.UnitOptions = UnitsInEstimate
-                ElseIf TabControl1.TabPages.Count > 1 Then
-                    For iIndex = 0 To TabControl1.TabPages.Count
-                        Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                        If CurTab.Text.IndexOf(EST_Suffix) > -1 And CurTab.Text <> TabControl1.SelectedTab.Text Then
-                            AryIndex += 1
-                            ReDim Preserve UnitCopyMerge_frm.UnitOptions(AryIndex)
-                            UnitCopyMerge_frm.UnitOptions(AryIndex) = Strings.Left(CurTab.Text.Trim, CurTab.Text.Length - 6)
-                        End If
-                    Next iIndex
-                    If AryIndex = -1 Then
-                        Exit Sub
-                    End If
-                Else
-                    Exit Sub
-                End If
-                UnitCopyMerge_frm.ShowDialog()
-                If UnitCopyMerge_frm.CopyMergeStatus = "Successful" Then
-                    ArchiveFiles()
-                    If CurButtonLabel.Contains("Merge") Then
-                        For iIndex = TabControl1.TabPages.Count - 1 To 0 Step -1
-                            Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                            If CurTab.Text = CurUnits & EST_Suffix Then
-                                TabControl1.TabPages.Remove(CurTab)
-                                Exit For
-                            End If
-                        Next iIndex
-                        TabControl1.SelectTab(0)
-                    End If
-                End If
-                DisplayEST_vs_ORD()
-            End If
-        Else
-            MsgBox("Current data for " & TabControl1.SelectedTab.Text & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
-        End If
-
     End Sub
     Private Function PromptForSave() As Boolean
         Dim ReturnVal As Boolean = True
         Dim SaveResponse As Integer = 0
 
         If FormIsDirty Then
-            If TabControl1.SelectedTab.Text.ToUpper.Contains(EST_Suffix) Then
-                SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
-                If SaveResponse = MsgBoxResult.Yes Then
-                    SaveEstimatingData()
-                    ArchiveFiles()
-                Else
-                    ReturnVal = False
-                End If
+            SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+            If SaveResponse = MsgBoxResult.Yes Then
+                SaveAltData()
+                ArchiveFiles()
             Else
-                SaveResponse = MsgBox("You must save the current Ordering Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
-                If SaveResponse = MsgBoxResult.Yes Then
-                    SaveOrderingData()
-                    ArchiveFiles()
-                Else
-                    ReturnVal = False
-                End If
+                ReturnVal = False
             End If
         End If
         Return ReturnVal
 
     End Function
-    Private Sub SaveAll()
-        SaveEstimatingData()
-        If CurrentGOData_Typ.EstimateLevel = "Master" Then
-            SaveOrderingData()
-        End If
-        ArchiveFiles()
-    End Sub
     Private Sub Set_Fields_Grey_EST()
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
-        If Conversion.Val(NumberofStopsRear_cmb.Text) = 0 Then
-            DoorOperatorTypeRear_lbl.Enabled = False
-            DoorOperatorTypeRear_cmb.SelectedIndex = -1
-            DoorOperatorTypeRear_cmb.Enabled = False
-            CarDoorOpeningWidthRear_lbl.Enabled = False
-            CarDoorOpeningWidthFtRear_txt.Text = String.Empty
-            CarDoorOpeningWidthFtRear_txt.Enabled = False
-            CarDoorOpeningWidthFtRear_lbl.Enabled = False
-            CarDoorOpeningWidthInRear_txt.Text = String.Empty
-            CarDoorOpeningWidthInRear_txt.Enabled = False
-            CarDoorOpeningWidthInRear_lbl.Enabled = False
-            CarDoorOpeningHeightRear_lbl.Enabled = False
-            CarDoorOpeningHeightFtRear_txt.Text = String.Empty
-            CarDoorOpeningHeightFtRear_txt.Enabled = False
-            CarDoorOpeningHeightFtRear_lbl.Enabled = False
-            CarDoorOpeningHeightInRear_txt.Text = String.Empty
-            CarDoorOpeningHeightInRear_txt.Enabled = False
-            CarDoorOpeningHeightInRear_lbl.Enabled = False
-            RiserQtyExistingRear_lbl.Enabled = False
-            RiserQtyExistingRear_Cmb.SelectedIndex = -1
-            RiserQtyExistingRear_Cmb.Enabled = False
-        Else
-            DoorOperatorTypeRear_lbl.Enabled = True
-            DoorOperatorTypeRear_cmb.Enabled = True
-            CarDoorOpeningWidthRear_lbl.Enabled = True
-            CarDoorOpeningWidthFtRear_txt.Enabled = True
-            CarDoorOpeningWidthFtRear_lbl.Enabled = True
-            CarDoorOpeningWidthInRear_txt.Enabled = True
-            CarDoorOpeningWidthInRear_lbl.Enabled = True
-            CarDoorOpeningHeightRear_lbl.Enabled = True
-            CarDoorOpeningHeightFtRear_txt.Enabled = True
-            CarDoorOpeningHeightFtRear_lbl.Enabled = True
-            CarDoorOpeningHeightInRear_txt.Enabled = True
-            CarDoorOpeningHeightInRear_lbl.Enabled = True
-            RiserQtyExistingRear_lbl.Enabled = True
-            RiserQtyExistingRear_Cmb.Enabled = True
-        End If
+        GeneralInformation_fra.Enabled = False
         For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
             BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
             ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
@@ -1437,14 +1000,14 @@ Public Class frmEstimatingAlt
                                 Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = True
                                 End If
-                            Case MAT_COL_STANDARD_HOURS
+                            Case MAT_COL_STANDARD_HOURS_ALT
                                 ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                            Case MAT_COL_OPTION, MAT_COL_TYPE, MAT_COL_ORDER_BY
+                            Case MAT_COL_OPTION_ALT, MAT_COL_TYPE_ALT, MAT_COL_ORDER_BY_ALT
                                 LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
-                            Case MAT_COL_MATERIAL_COST
-                                If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text = "RL" Or
-                                   String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY).Text) Or
-                                   ChildSheetView1.Cells(jIndex, MAT_COL_OPTION).Text = "Refurbish" Then
+                            Case MAT_COL_MATERIAL_COST_ALT
+                                If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "RL" Or
+                                   String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text) Or
+                                   ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text = "Refurbish" Then
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = False
                                 Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = True
@@ -1471,20 +1034,6 @@ Public Class frmEstimatingAlt
         Else
             CurCell.Locked = False
         End If
-
-    End Sub
-    Private Sub OrderingForms_lst_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles OrderingForms_lst.DoubleClick
-        Dim NewGovForm As New ORD_Governor_frm
-
-        OrderingForms_con.Controls.Clear()
-        NewGovForm.TopLevel = False
-        NewGovForm.Left = 0
-        NewGovForm.Width = OrderingForms_con.Width
-        'NewGovForm.WindowState = FormWindowState.Maximized
-        NewGovForm.FormBorderStyle = Windows.Forms.FormBorderStyle.None
-        NewGovForm.Visible = True
-        OrderingForms_con.Controls.Clear()
-        OrderingForms_con.Controls.Add(NewGovForm)
 
     End Sub
 End Class

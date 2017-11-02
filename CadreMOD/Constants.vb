@@ -1,6 +1,6 @@
 ﻿Module Constants
     ' Contract Manager
-    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 10/24/2017"
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 10/31/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
@@ -9,7 +9,7 @@
     'New Machines
     Public Const MACHINE_FMM200 As String = "FMM200"
 
-    Public Const ImageFileLocation As String = "C:\Users\adolfsal\Documents\Visual Studio 2010\Projects\Mod Simplification\CadreMOD"
+    ' dB Operations
     Public Const MOVE_FIRST As Integer = 0
     Public Const MOVE_NEXT As Integer = 1
     Public Const MOVE_PREVIOUS As Integer = 2

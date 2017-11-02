@@ -578,5 +578,43 @@ Module General
         Next row
         Return sngValue
     End Function
+    Public Sub SaveAll()
 
+        CM_MAIN_frm.SaveAll()
+        Select CurrentGOData_Typ.EstimateLevel
+            Case "Master"
+                frmEstimatingBase.SaveEstimatingData()
+                frmEstimatingBase.SaveOrderingData()
+            Case "Base"
+                frmEstimatingBase.SaveEstimatingData()
+            Case "Alt"
+                frmEstimatingAlt.SaveAltData()
+            Case Else
+        End Select
+        ArchiveFiles()
+    End Sub
+    Public Sub CompareFiles()
+        Dim Filesystem As New Scripting.FileSystemObject()
+        Dim Name As String
+        Name = Dir(ReportsPath, FileAttribute.Directory)
+        Do While Name <> ""
+            If Name <> "." And Name <> ".." Then
+                If Filesystem.FileExists(ArchivePath & Name) = True Then
+                    If FileDateTime(ReportsPath & Name) <> FileDateTime(ArchivePath & Name) Then
+                        If FileDateTime(ArchivePath & Name) > FileDateTime(ReportsPath & Name) Then
+                            Filesystem.CopyFile(ArchivePath & Name, ReportsPath, True)
+                        Else
+                            Filesystem.CopyFile(ReportsPath & Name, ArchivePath, True)
+                        End If
+                    End If
+                End If
+            End If
+            Name = Dir()
+        Loop
+    End Sub
+    Public Sub DeleteFiles()
+        For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
+            File.Delete(FoundFile)
+        Next
+    End Sub
    End Module

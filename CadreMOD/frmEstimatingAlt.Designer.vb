@@ -127,10 +127,6 @@ Partial Class frmEstimatingAlt
         Me.BillOfMaterials_spr = New FarPoint.Win.Spread.FpSpread()
         Me.BillOfMaterials_spr_Sheet1 = New FarPoint.Win.Spread.SheetView()
         Me.CollapseAll_cmd = New System.Windows.Forms.Button()
-        Me.OrderTab = New System.Windows.Forms.TabPage()
-        Me.OrderingForms_fra = New System.Windows.Forms.GroupBox()
-        Me.OrderingForms_lst = New System.Windows.Forms.ListBox()
-        Me.OrderingForms_con = New System.Windows.Forms.Panel()
         Me.MDI_pic = New System.Windows.Forms.PictureBox()
         Me.fraHdrJobInfo = New System.Windows.Forms.GroupBox()
         Me.txtHdrBnkLetter = New System.Windows.Forms.TextBox()
@@ -144,8 +140,6 @@ Partial Class frmEstimatingAlt
         Me.HdrGONum_lbl = New System.Windows.Forms.Label()
         Me.lblHdrBldgNme = New System.Windows.Forms.Label()
         Me.fraHdrIcons = New System.Windows.Forms.GroupBox()
-        Me.Merge_cmd = New System.Windows.Forms.Button()
-        Me.Copy_cmd = New System.Windows.Forms.Button()
         Me.Supt_cmd = New System.Windows.Forms.Button()
         Me.FreezeSave_btn = New System.Windows.Forms.Button()
         Me.Exit_cmd = New System.Windows.Forms.Button()
@@ -163,7 +157,6 @@ Partial Class frmEstimatingAlt
         Me.BillofMaterialsandTaskList_fra.SuspendLayout()
         CType(Me.BillOfMaterials_spr, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BillOfMaterials_spr_Sheet1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.OrderingForms_fra.SuspendLayout()
         CType(Me.MDI_pic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MDI_pic.SuspendLayout()
         Me.fraHdrJobInfo.SuspendLayout()
@@ -177,7 +170,6 @@ Partial Class frmEstimatingAlt
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.Color.White
         Me.GroupBox1.Controls.Add(Me.TabControl1)
-        Me.GroupBox1.Controls.Add(Me.OrderingForms_fra)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.Location = New System.Drawing.Point(0, 105)
         Me.GroupBox1.Name = "GroupBox1"
@@ -191,7 +183,6 @@ Partial Class frmEstimatingAlt
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.CarTab)
-        Me.TabControl1.Controls.Add(Me.OrderTab)
         Me.TabControl1.Location = New System.Drawing.Point(6, 21)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -1683,51 +1674,6 @@ Partial Class frmEstimatingAlt
         Me.CollapseAll_cmd.Text = "Collapse All"
         Me.CollapseAll_cmd.UseVisualStyleBackColor = True
         '
-        'OrderTab
-        '
-        Me.OrderTab.Location = New System.Drawing.Point(4, 25)
-        Me.OrderTab.Name = "OrderTab"
-        Me.OrderTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.OrderTab.Size = New System.Drawing.Size(1582, 634)
-        Me.OrderTab.TabIndex = 1
-        Me.OrderTab.UseVisualStyleBackColor = True
-        '
-        'OrderingForms_fra
-        '
-        Me.OrderingForms_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OrderingForms_fra.Controls.Add(Me.OrderingForms_lst)
-        Me.OrderingForms_fra.Controls.Add(Me.OrderingForms_con)
-        Me.OrderingForms_fra.Location = New System.Drawing.Point(11, 48)
-        Me.OrderingForms_fra.Name = "OrderingForms_fra"
-        Me.OrderingForms_fra.Size = New System.Drawing.Size(1575, 624)
-        Me.OrderingForms_fra.TabIndex = 55
-        Me.OrderingForms_fra.TabStop = False
-        Me.OrderingForms_fra.Visible = False
-        '
-        'OrderingForms_lst
-        '
-        Me.OrderingForms_lst.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.OrderingForms_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.OrderingForms_lst.FormattingEnabled = True
-        Me.OrderingForms_lst.Location = New System.Drawing.Point(2, 12)
-        Me.OrderingForms_lst.Name = "OrderingForms_lst"
-        Me.OrderingForms_lst.Size = New System.Drawing.Size(116, 602)
-        Me.OrderingForms_lst.TabIndex = 0
-        '
-        'OrderingForms_con
-        '
-        Me.OrderingForms_con.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OrderingForms_con.AutoScroll = True
-        Me.OrderingForms_con.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.OrderingForms_con.Location = New System.Drawing.Point(120, 12)
-        Me.OrderingForms_con.Name = "OrderingForms_con"
-        Me.OrderingForms_con.Size = New System.Drawing.Size(1483, 606)
-        Me.OrderingForms_con.TabIndex = 53
-        '
         'MDI_pic
         '
         Me.MDI_pic.BackColor = System.Drawing.SystemColors.Control
@@ -1931,8 +1877,6 @@ Partial Class frmEstimatingAlt
         'fraHdrIcons
         '
         Me.fraHdrIcons.BackColor = System.Drawing.SystemColors.Control
-        Me.fraHdrIcons.Controls.Add(Me.Merge_cmd)
-        Me.fraHdrIcons.Controls.Add(Me.Copy_cmd)
         Me.fraHdrIcons.Controls.Add(Me.Supt_cmd)
         Me.fraHdrIcons.Controls.Add(Me.FreezeSave_btn)
         Me.fraHdrIcons.Controls.Add(Me.Exit_cmd)
@@ -1951,33 +1895,6 @@ Partial Class frmEstimatingAlt
         Me.fraHdrIcons.Size = New System.Drawing.Size(1598, 60)
         Me.fraHdrIcons.TabIndex = 24
         Me.fraHdrIcons.TabStop = False
-        '
-        'Merge_cmd
-        '
-        Me.Merge_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Merge_cmd.Image = CType(resources.GetObject("Merge_cmd.Image"), System.Drawing.Image)
-        Me.Merge_cmd.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.Merge_cmd.Location = New System.Drawing.Point(309, 8)
-        Me.Merge_cmd.Name = "Merge_cmd"
-        Me.Merge_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Merge_cmd.TabIndex = 42
-        Me.Merge_cmd.TabStop = False
-        Me.Merge_cmd.Tag = "Merge Cars"
-        Me.Merge_cmd.Text = "Merge"
-        Me.Merge_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        'Copy_cmd
-        '
-        Me.Copy_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Copy_cmd.Image = CType(resources.GetObject("Copy_cmd.Image"), System.Drawing.Image)
-        Me.Copy_cmd.Location = New System.Drawing.Point(259, 8)
-        Me.Copy_cmd.Name = "Copy_cmd"
-        Me.Copy_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Copy_cmd.TabIndex = 41
-        Me.Copy_cmd.TabStop = False
-        Me.Copy_cmd.Tag = "Copy Cars"
-        Me.Copy_cmd.Text = "Copy"
-        Me.Copy_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'Supt_cmd
         '
@@ -2116,7 +2033,6 @@ Partial Class frmEstimatingAlt
         Me.BillofMaterialsandTaskList_fra.ResumeLayout(False)
         CType(Me.BillOfMaterials_spr, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.BillOfMaterials_spr_Sheet1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.OrderingForms_fra.ResumeLayout(False)
         CType(Me.MDI_pic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MDI_pic.ResumeLayout(False)
         Me.fraHdrJobInfo.ResumeLayout(False)
@@ -2247,13 +2163,7 @@ Partial Class frmEstimatingAlt
     Public WithEvents ShortFloorOperation_chk As System.Windows.Forms.CheckBox
     Friend WithEvents ExpensesPerDayDetails_btn As System.Windows.Forms.Button
     Public WithEvents GatewayReviewRequired_chk As System.Windows.Forms.CheckBox
-    Private WithEvents Merge_cmd As System.Windows.Forms.Button
-    Private WithEvents Copy_cmd As System.Windows.Forms.Button
     Friend WithEvents CarTab As System.Windows.Forms.TabPage
-    Friend WithEvents OrderTab As System.Windows.Forms.TabPage
-    Friend WithEvents OrderingForms_fra As System.Windows.Forms.GroupBox
-    Friend WithEvents OrderingForms_con As System.Windows.Forms.Panel
-    Friend WithEvents OrderingForms_lst As System.Windows.Forms.ListBox
     Public WithEvents Destination_cmb As System.Windows.Forms.ComboBox
     Public WithEvents Destination_lbl As System.Windows.Forms.Label
 
