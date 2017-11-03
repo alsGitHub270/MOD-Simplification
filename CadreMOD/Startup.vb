@@ -107,6 +107,7 @@ Module Startup
 
 
             '  Splash.Close()
+            CM_file = ReportsPath & Contracts.EstimateNum & ".JSON"
             Application.Run(New CM_MAIN_frm)
 
         Catch

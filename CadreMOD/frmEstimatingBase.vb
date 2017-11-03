@@ -536,19 +536,19 @@ Public Class frmEstimatingBase
         RopingNew_Cmb.Items.Add("2:1 Dual Wrap")
         RopingNew_Cmb.Items.Add("2:1 Underslung")
 
-        RiserQtyExistingFront_Cmb.Items.Clear()
-        RiserQtyExistingFront_Cmb.Items.Add("0")
-        RiserQtyExistingFront_Cmb.Items.Add("1")
-        RiserQtyExistingFront_Cmb.Items.Add("2")
-        RiserQtyExistingFront_Cmb.Items.Add("3")
-        RiserQtyExistingFront_Cmb.Items.Add("4")
+        RiserQtyFront_Cmb.Items.Clear()
+        RiserQtyFront_Cmb.Items.Add("0")
+        RiserQtyFront_Cmb.Items.Add("1")
+        RiserQtyFront_Cmb.Items.Add("2")
+        RiserQtyFront_Cmb.Items.Add("3")
+        RiserQtyFront_Cmb.Items.Add("4")
 
-        RiserQtyExistingRear_Cmb.Items.Clear()
-        RiserQtyExistingRear_Cmb.Items.Add("0")
-        RiserQtyExistingRear_Cmb.Items.Add("1")
-        RiserQtyExistingRear_Cmb.Items.Add("2")
-        RiserQtyExistingRear_Cmb.Items.Add("3")
-        RiserQtyExistingRear_Cmb.Items.Add("4")
+        RiserQtyRear_Cmb.Items.Clear()
+        RiserQtyRear_Cmb.Items.Add("0")
+        RiserQtyRear_Cmb.Items.Add("1")
+        RiserQtyRear_Cmb.Items.Add("2")
+        RiserQtyRear_Cmb.Items.Add("3")
+        RiserQtyRear_Cmb.Items.Add("4")
 
         FixtureFinish_cmb.Items.Clear()
         FixtureFinish_cmb.Items.Add(FINISH_4SS)
@@ -1198,12 +1198,12 @@ Public Class frmEstimatingBase
             FormIsDirty = True
         End If
     End Sub
-    Private Sub RiserQtyExistingFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyExistingFront_Cmb.SelectedIndexChanged
+    Private Sub RiserQtyExistingFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyFront_Cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
     End Sub
-    Private Sub RiserQtyExistingRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyExistingRear_Cmb.SelectedIndexChanged
+    Private Sub RiserQtyExistingRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyRear_Cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
@@ -1396,9 +1396,9 @@ Public Class frmEstimatingBase
             CarDoorOpeningHeightInRear_txt.Text = String.Empty
             CarDoorOpeningHeightInRear_txt.Enabled = False
             CarDoorOpeningHeightInRear_lbl.Enabled = False
-            RiserQtyExistingRear_lbl.Enabled = False
-            RiserQtyExistingRear_Cmb.SelectedIndex = -1
-            RiserQtyExistingRear_Cmb.Enabled = False
+            RiserQtyRear_lbl.Enabled = False
+            RiserQtyRear_Cmb.SelectedIndex = -1
+            RiserQtyRear_Cmb.Enabled = False
         Else
             DoorOperatorTypeRear_lbl.Enabled = True
             DoorOperatorTypeRear_cmb.Enabled = True
@@ -1412,8 +1412,8 @@ Public Class frmEstimatingBase
             CarDoorOpeningHeightFtRear_lbl.Enabled = True
             CarDoorOpeningHeightInRear_txt.Enabled = True
             CarDoorOpeningHeightInRear_lbl.Enabled = True
-            RiserQtyExistingRear_lbl.Enabled = True
-            RiserQtyExistingRear_Cmb.Enabled = True
+            RiserQtyRear_lbl.Enabled = True
+            RiserQtyRear_Cmb.Enabled = True
         End If
         For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
             BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True

@@ -56,11 +56,11 @@ Partial Class frmEstimatingBase
         Me.lblRequestedShipDate = New System.Windows.Forms.Label()
         Me.FixtureFinish_cmb = New System.Windows.Forms.ComboBox()
         Me.FixtureFinish_lbl = New System.Windows.Forms.Label()
-        Me.RiserQtyExistingFront_Cmb = New System.Windows.Forms.ComboBox()
-        Me.RiserQtyExistingRear_Cmb = New System.Windows.Forms.ComboBox()
-        Me.ExistingRisers_lbl = New System.Windows.Forms.Label()
-        Me.RiserQtyExistingFront_lbl = New System.Windows.Forms.Label()
-        Me.RiserQtyExistingRear_lbl = New System.Windows.Forms.Label()
+        Me.RiserQtyFront_Cmb = New System.Windows.Forms.ComboBox()
+        Me.RiserQtyRear_Cmb = New System.Windows.Forms.ComboBox()
+        Me.FinalRisers_lbl = New System.Windows.Forms.Label()
+        Me.RiserQtyFront_lbl = New System.Windows.Forms.Label()
+        Me.RiserQtyRear_lbl = New System.Windows.Forms.Label()
         Me.PitDepth_txt = New System.Windows.Forms.TextBox()
         Me.PitDepth_lbl = New System.Windows.Forms.Label()
         Me.Travel_txt = New System.Windows.Forms.TextBox()
@@ -253,11 +253,11 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.Controls.Add(Me.lblRequestedShipDate)
         Me.GeneralInformation_fra.Controls.Add(Me.FixtureFinish_cmb)
         Me.GeneralInformation_fra.Controls.Add(Me.FixtureFinish_lbl)
-        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyExistingFront_Cmb)
-        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyExistingRear_Cmb)
-        Me.GeneralInformation_fra.Controls.Add(Me.ExistingRisers_lbl)
-        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyExistingFront_lbl)
-        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyExistingRear_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyFront_Cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyRear_Cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.FinalRisers_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyFront_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyRear_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.PitDepth_txt)
         Me.GeneralInformation_fra.Controls.Add(Me.PitDepth_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.Travel_txt)
@@ -703,73 +703,73 @@ Partial Class frmEstimatingBase
         Me.FixtureFinish_lbl.TabIndex = 157
         Me.FixtureFinish_lbl.Text = "Fixture Finish"
         '
-        'RiserQtyExistingFront_Cmb
+        'RiserQtyFront_Cmb
         '
-        Me.RiserQtyExistingFront_Cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.RiserQtyExistingFront_Cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.RiserQtyExistingFront_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.RiserQtyExistingFront_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RiserQtyExistingFront_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.RiserQtyExistingFront_Cmb.Location = New System.Drawing.Point(942, 14)
-        Me.RiserQtyExistingFront_Cmb.Name = "RiserQtyExistingFront_Cmb"
-        Me.RiserQtyExistingFront_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.RiserQtyExistingFront_Cmb.Size = New System.Drawing.Size(45, 21)
-        Me.RiserQtyExistingFront_Cmb.TabIndex = 151
+        Me.RiserQtyFront_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.RiserQtyFront_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.RiserQtyFront_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.RiserQtyFront_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RiserQtyFront_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.RiserQtyFront_Cmb.Location = New System.Drawing.Point(942, 14)
+        Me.RiserQtyFront_Cmb.Name = "RiserQtyFront_Cmb"
+        Me.RiserQtyFront_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.RiserQtyFront_Cmb.Size = New System.Drawing.Size(45, 21)
+        Me.RiserQtyFront_Cmb.TabIndex = 151
         '
-        'RiserQtyExistingRear_Cmb
+        'RiserQtyRear_Cmb
         '
-        Me.RiserQtyExistingRear_Cmb.BackColor = System.Drawing.SystemColors.Window
-        Me.RiserQtyExistingRear_Cmb.Cursor = System.Windows.Forms.Cursors.Default
-        Me.RiserQtyExistingRear_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.RiserQtyExistingRear_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RiserQtyExistingRear_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.RiserQtyExistingRear_Cmb.Location = New System.Drawing.Point(1006, 14)
-        Me.RiserQtyExistingRear_Cmb.Name = "RiserQtyExistingRear_Cmb"
-        Me.RiserQtyExistingRear_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.RiserQtyExistingRear_Cmb.Size = New System.Drawing.Size(45, 21)
-        Me.RiserQtyExistingRear_Cmb.TabIndex = 152
+        Me.RiserQtyRear_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.RiserQtyRear_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.RiserQtyRear_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.RiserQtyRear_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RiserQtyRear_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.RiserQtyRear_Cmb.Location = New System.Drawing.Point(1006, 14)
+        Me.RiserQtyRear_Cmb.Name = "RiserQtyRear_Cmb"
+        Me.RiserQtyRear_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.RiserQtyRear_Cmb.Size = New System.Drawing.Size(45, 21)
+        Me.RiserQtyRear_Cmb.TabIndex = 152
         '
-        'ExistingRisers_lbl
+        'FinalRisers_lbl
         '
-        Me.ExistingRisers_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.ExistingRisers_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.ExistingRisers_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExistingRisers_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ExistingRisers_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ExistingRisers_lbl.Location = New System.Drawing.Point(796, 17)
-        Me.ExistingRisers_lbl.Name = "ExistingRisers_lbl"
-        Me.ExistingRisers_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.ExistingRisers_lbl.Size = New System.Drawing.Size(134, 15)
-        Me.ExistingRisers_lbl.TabIndex = 155
-        Me.ExistingRisers_lbl.Text = "Existing Riser Quantity"
+        Me.FinalRisers_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.FinalRisers_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.FinalRisers_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.FinalRisers_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FinalRisers_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.FinalRisers_lbl.Location = New System.Drawing.Point(796, 17)
+        Me.FinalRisers_lbl.Name = "FinalRisers_lbl"
+        Me.FinalRisers_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.FinalRisers_lbl.Size = New System.Drawing.Size(134, 15)
+        Me.FinalRisers_lbl.TabIndex = 155
+        Me.FinalRisers_lbl.Text = "Final Riser Quantity"
         '
-        'RiserQtyExistingFront_lbl
+        'RiserQtyFront_lbl
         '
-        Me.RiserQtyExistingFront_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.RiserQtyExistingFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.RiserQtyExistingFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.RiserQtyExistingFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RiserQtyExistingFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.RiserQtyExistingFront_lbl.Location = New System.Drawing.Point(932, 17)
-        Me.RiserQtyExistingFront_lbl.Name = "RiserQtyExistingFront_lbl"
-        Me.RiserQtyExistingFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.RiserQtyExistingFront_lbl.Size = New System.Drawing.Size(9, 15)
-        Me.RiserQtyExistingFront_lbl.TabIndex = 154
-        Me.RiserQtyExistingFront_lbl.Text = "F"
+        Me.RiserQtyFront_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.RiserQtyFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.RiserQtyFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RiserQtyFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RiserQtyFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.RiserQtyFront_lbl.Location = New System.Drawing.Point(932, 17)
+        Me.RiserQtyFront_lbl.Name = "RiserQtyFront_lbl"
+        Me.RiserQtyFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.RiserQtyFront_lbl.Size = New System.Drawing.Size(9, 15)
+        Me.RiserQtyFront_lbl.TabIndex = 154
+        Me.RiserQtyFront_lbl.Text = "F"
         '
-        'RiserQtyExistingRear_lbl
+        'RiserQtyRear_lbl
         '
-        Me.RiserQtyExistingRear_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.RiserQtyExistingRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.RiserQtyExistingRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.RiserQtyExistingRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RiserQtyExistingRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.RiserQtyExistingRear_lbl.Location = New System.Drawing.Point(993, 17)
-        Me.RiserQtyExistingRear_lbl.Name = "RiserQtyExistingRear_lbl"
-        Me.RiserQtyExistingRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.RiserQtyExistingRear_lbl.Size = New System.Drawing.Size(9, 15)
-        Me.RiserQtyExistingRear_lbl.TabIndex = 153
-        Me.RiserQtyExistingRear_lbl.Text = "R"
+        Me.RiserQtyRear_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.RiserQtyRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.RiserQtyRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RiserQtyRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RiserQtyRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.RiserQtyRear_lbl.Location = New System.Drawing.Point(993, 17)
+        Me.RiserQtyRear_lbl.Name = "RiserQtyRear_lbl"
+        Me.RiserQtyRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.RiserQtyRear_lbl.Size = New System.Drawing.Size(9, 15)
+        Me.RiserQtyRear_lbl.TabIndex = 153
+        Me.RiserQtyRear_lbl.Text = "R"
         '
         'PitDepth_txt
         '
@@ -2216,11 +2216,11 @@ Partial Class frmEstimatingBase
     Public WithEvents Travel_lbl As System.Windows.Forms.Label
     Public WithEvents TopFloorToOverhead_txt As System.Windows.Forms.TextBox
     Public WithEvents TopFloorToOverhead_lbl As System.Windows.Forms.Label
-    Public WithEvents RiserQtyExistingFront_Cmb As System.Windows.Forms.ComboBox
-    Public WithEvents RiserQtyExistingRear_Cmb As System.Windows.Forms.ComboBox
-    Public WithEvents ExistingRisers_lbl As System.Windows.Forms.Label
-    Public WithEvents RiserQtyExistingFront_lbl As System.Windows.Forms.Label
-    Public WithEvents RiserQtyExistingRear_lbl As System.Windows.Forms.Label
+    Public WithEvents RiserQtyFront_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents RiserQtyRear_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents FinalRisers_lbl As System.Windows.Forms.Label
+    Public WithEvents RiserQtyFront_lbl As System.Windows.Forms.Label
+    Public WithEvents RiserQtyRear_lbl As System.Windows.Forms.Label
     Public WithEvents FixtureFinish_cmb As System.Windows.Forms.ComboBox
     Public WithEvents FixtureFinish_lbl As System.Windows.Forms.Label
     Public WithEvents BankCompleteDate_txt As System.Windows.Forms.DateTimePicker

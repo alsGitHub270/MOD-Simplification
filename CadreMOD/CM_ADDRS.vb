@@ -59,7 +59,6 @@ Module CM_ADDRS_IO
         End Function
     End Structure
 
-
     Public Sub ReadData(Optional ByVal TypeIndex As Byte = ADDRESS_TYPE_OWNER, Optional ByVal CurrentName As String = "")
 
         InitializeStruct_Address(TypeIndex)

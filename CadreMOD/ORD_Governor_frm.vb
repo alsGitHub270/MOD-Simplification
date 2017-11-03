@@ -5,15 +5,15 @@
         Gov_img.SizeMode = PictureBoxSizeMode.AutoSize
         Select Case FromControl
             Case "NewGov"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\NewGovernor.png")
+                Gov_img.Image = Image.FromFile(ImageFileLocation & "NewGovernor.png")
             Case "ExistingGov"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\ExistingGovernor.png")
+                Gov_img.Image = Image.FromFile(ImageFileLocation & "ExistingGovernor.png")
             Case "GovMounting"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\GovernorMounting.png")
+                Gov_img.Image = Image.FromFile(ImageFileLocation & "GovernorMounting.png")
             Case "GovMinimumClearances"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\GovernorMachineRoomClearances.png")
+                Gov_img.Image = Image.FromFile(ImageFileLocation & "GovernorMachineRoomClearances.png")
             Case "GovTensionSheave"
-                Gov_img.Image = Image.FromFile(ImageFileLocation & "\images\GovernorTensionSheavePit.png")
+                Gov_img.Image = Image.FromFile(ImageFileLocation & "GovernorTensionSheavePit.png")
             Case Else
                 Gov_img.Image = Nothing
         End Select

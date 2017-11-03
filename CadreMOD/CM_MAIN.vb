@@ -162,4 +162,6 @@
             Return result
         End Function
     End Structure
+    Public CM_file As String = ""
+
 End Module

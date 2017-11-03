@@ -229,9 +229,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
-        '
-        'txtContractNumber
-        '
         Me.txtContractNumber.AcceptsReturn = True
         Me.txtContractNumber.BackColor = System.Drawing.SystemColors.Window
         Me.txtContractNumber.Enabled = False
@@ -243,9 +240,6 @@ Partial Class CM_MAIN_frm
         Me.txtContractNumber.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtContractNumber.Size = New System.Drawing.Size(101, 20)
         Me.txtContractNumber.TabIndex = 102
-        '
-        'lblContractNumber
-        '
         Me.lblContractNumber.BackColor = System.Drawing.SystemColors.Window
         Me.lblContractNumber.Enabled = False
         Me.lblContractNumber.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -349,6 +343,12 @@ Partial Class CM_MAIN_frm
         Me.Label3.TabIndex = 93
         Me.Label3.Text = "Consultant:"
         '
+        'txtOwner
+        '
+        '
+        'Label2
+        '
+        '
         'txtBidDate
         '
         Me.txtBidDate.Checked = False
@@ -433,6 +433,9 @@ Partial Class CM_MAIN_frm
         Me._label_7.TabIndex = 81
         Me._label_7.Text = "Sales Rep:"
         Me._label_7.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'chkMajorProject
+        '
         '
         'Status_lbl
         '
@@ -1136,8 +1139,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel1.AutoSize = False
         Me._StatusBar1_Panel1.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel1.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel1.DoubleClickEnabled = True
         Me._StatusBar1_Panel1.Margin = New System.Windows.Forms.Padding(0)
@@ -1150,8 +1153,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel2.AutoSize = False
         Me._StatusBar1_Panel2.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel2.DoubleClickEnabled = True
         Me._StatusBar1_Panel2.Margin = New System.Windows.Forms.Padding(0)
@@ -1163,8 +1166,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel3.AutoSize = False
         Me._StatusBar1_Panel3.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel3.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel3.DoubleClickEnabled = True
         Me._StatusBar1_Panel3.Margin = New System.Windows.Forms.Padding(0)
@@ -1176,8 +1179,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel4.AutoSize = False
         Me._StatusBar1_Panel4.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel4.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel4.DoubleClickEnabled = True
         Me._StatusBar1_Panel4.Margin = New System.Windows.Forms.Padding(0)
@@ -1715,8 +1718,8 @@ Partial Class CM_MAIN_frm
         '
         Me.FpSpread1.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
         Me.FpSpread1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         Me.FpSpread1.Location = New System.Drawing.Point(6, 67)
@@ -1729,8 +1732,8 @@ Partial Class CM_MAIN_frm
         'Equipment_fra
         '
         Me.Equipment_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
         Me.Equipment_fra.Controls.Add(Me.sprTotals)
         Me.Equipment_fra.Controls.Add(Me.btnAdd)
@@ -1770,14 +1773,14 @@ Partial Class CM_MAIN_frm
         EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
         EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
         Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
-        Me.sprTotals.HorizontalScrollBar.TabIndex = 0
+        Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
         Me.sprTotals.Name = "sprTotals"
         Me.sprTotals.ScrollBarTrackPolicy = FarPoint.Win.Spread.ScrollBarTrackPolicy.Both
         Me.sprTotals.ScrollTipPolicy = FarPoint.Win.Spread.ScrollTipPolicy.Both
         Me.sprTotals.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.sprTotals_Sheet1})
-        Me.sprTotals.Size = New System.Drawing.Size(1472, 21)
+        Me.sprTotals.Size = New System.Drawing.Size(1411, 21)
         Me.sprTotals.Skin = FarPoint.Win.Spread.DefaultSpreadSkins.ArcticSea
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
@@ -1794,7 +1797,7 @@ Partial Class CM_MAIN_frm
         EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
         EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
         Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
-        Me.sprTotals.VerticalScrollBar.TabIndex = 1
+        Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
         'sprTotals_Sheet1
@@ -1922,8 +1925,6 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.Columns.Get(14).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(15).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(16).Width = 38.0!
-        Me.sprTotals_Sheet1.Columns.Get(17).Width = 38.0!
-        Me.sprTotals_Sheet1.Columns.Get(18).Width = 38.0!
         Me.sprTotals_Sheet1.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
@@ -2259,9 +2260,6 @@ Partial Class CM_MAIN_frm
         Me.btnLaborRates.TabIndex = 101
         Me.btnLaborRates.Text = "Labor Rates"
         Me.btnLaborRates.UseVisualStyleBackColor = True
-        '
-        'btnGatewayReview
-        '
         Me.btnGatewayReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnGatewayReview.Location = New System.Drawing.Point(361, 3)
         Me.btnGatewayReview.Name = "btnGatewayReview"
@@ -2271,9 +2269,6 @@ Partial Class CM_MAIN_frm
         Me.btnGatewayReview.Tag = ""
         Me.btnGatewayReview.Text = "Gateway"
         Me.btnGatewayReview.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        'lblGatewayStatus
-        '
         Me.lblGatewayStatus.AutoSize = True
         Me.lblGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblGatewayStatus.Location = New System.Drawing.Point(117, 17)
@@ -2281,17 +2276,11 @@ Partial Class CM_MAIN_frm
         Me.lblGatewayStatus.Size = New System.Drawing.Size(47, 13)
         Me.lblGatewayStatus.TabIndex = 104
         Me.lblGatewayStatus.Text = "Status:"
-        '
-        'txtGatewayStatus
-        '
         Me.txtGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtGatewayStatus.Location = New System.Drawing.Point(170, 12)
         Me.txtGatewayStatus.Name = "txtGatewayStatus"
         Me.txtGatewayStatus.Size = New System.Drawing.Size(134, 20)
         Me.txtGatewayStatus.TabIndex = 103
-        '
-        'GroupBox1
-        '
         Me.GroupBox1.Controls.Add(Me.lblGatewayStatus)
         Me.GroupBox1.Controls.Add(Me.txtGatewayStatus)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -2466,6 +2455,8 @@ Partial Class CM_MAIN_frm
     Public WithEvents lblCallBackHours As System.Windows.Forms.Label
     Public WithEvents txtOCPL As System.Windows.Forms.TextBox
     Public WithEvents lblOCPL As System.Windows.Forms.Label
+    Friend WithEvents sprTotals As FarPoint.Win.Spread.FpSpread
+    Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents txtTaxRate As System.Windows.Forms.TextBox
     Friend WithEvents btnLaborRates As System.Windows.Forms.Button
@@ -2475,7 +2466,5 @@ Partial Class CM_MAIN_frm
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Public WithEvents txtContractNumber As System.Windows.Forms.TextBox
     Private WithEvents lblContractNumber As System.Windows.Forms.Label
-    Friend WithEvents sprTotals As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
 #End Region
 End Class
