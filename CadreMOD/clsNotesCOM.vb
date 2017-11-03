@@ -377,10 +377,10 @@ DetachFilesError:
     '        doc.Save(True, True)
 
     '    End Sub
-    '    Public Sub DocSave()
-    '        doc.Save(True, True)
-    '        DocCreated = False
-    '    End Sub
+    Public Sub DocSave()
+        doc.Save(True, True)
+        DocCreated = False
+    End Sub
     '    Public ReadOnly Property GetBookingUploadStatus(ByVal ComServer As String, ByVal DBName As String, ByVal NegNum As String, ByVal Bank As String, ByVal Alt As String, ByVal CurrentStatus As String) As String
 
     '        Get
@@ -496,37 +496,37 @@ DetachFilesError:
     '        End Try
 
     '    End Function
-    '    Private Function GetNextDocumentFromCollection() As Boolean
-    '        Dim result As Boolean = False
+    Public Function GetNextDocumentFromCollection() As Boolean
+        Dim result As Boolean = False
 
-    '        result = True
-    '        doc = NotesDocumentCollection.GetNextDocument(doc)
-    '        If doc Is Nothing Then
-    '            result = False
-    '        End If
-    '        Return result
+        result = True
+        doc = NotesDocumentCollection.GetNextDocument(doc)
+        If doc Is Nothing Then
+            result = False
+        End If
+        Return result
 
-    '    End Function
-    '    Public ReadOnly Property NotesDocKeyCollection(ByVal KeyName As String) As Boolean
-    '        Get
-    '            Dim result As Boolean = False
+    End Function
+    Public ReadOnly Property NotesDocKeyCollection(ByVal KeyName As String) As Boolean
+        Get
+            Dim result As Boolean = False
 
-    '            View.Refresh()
-    '            NotesDocumentCollection = View.GetAllDocumentsByKey(KeyName, True)
-    '            If (NotesDocumentCollection Is Nothing) Then
-    '                Return result
-    '            End If
-    '            If NotesDocumentCollection.Count = 0 Then
-    '                Return result
-    '            End If
-    '            doc = NotesDocumentCollection.GetFirstDocument
-    '            If (doc Is Nothing) Then
-    '                Return result
-    '            End If
-    '            Return True
+            View.Refresh()
+            NotesDocumentCollection = View.GetAllDocumentsByKey(KeyName, True)
+            If (NotesDocumentCollection Is Nothing) Then
+                Return result
+            End If
+            If NotesDocumentCollection.Count = 0 Then
+                Return result
+            End If
+            doc = NotesDocumentCollection.GetFirstDocument
+            If (doc Is Nothing) Then
+                Return result
+            End If
+            Return True
 
-    '        End Get
-    '    End Property
+        End Get
+    End Property
     '    Public Sub DetachFilesBookingUpload(ByVal ComServer As String, ByVal DBName As String, ByVal NegNum As String, ByVal Bank As String, ByVal Alt As String)
     '        Dim result As MsgBoxStyle = MsgBoxStyle.Critical
     '        Dim keys() As String = {NegNum, Bank, Alt}

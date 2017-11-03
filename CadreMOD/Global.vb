@@ -5,6 +5,7 @@
     Public Owner_Info As CM_ADDRS_IO.Address_TypeDec = CM_ADDRS_IO.Address_TypeDec.CreateInstance()
     Public JobContact As CM_ADDRS_IO.Contacts_TypeDec = CM_ADDRS_IO.Contacts_TypeDec.CreateInstance()
 
+    Public TestSystem As Boolean = False
 
     'Contract Manager
     Public gContractID As String = ""

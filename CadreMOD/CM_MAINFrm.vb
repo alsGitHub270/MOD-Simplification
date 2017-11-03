@@ -2954,6 +2954,7 @@ Partial Friend Class CM_MAIN_frm
         combinedSheet.Columns(23).Label = "Labor Rate"
         combinedSheet.ColumnHeader.Rows(0).Height = 30
     End Sub
+
     Private Function PromptForSave() As DialogResult
         Dim response As DialogResult = MessageBox.Show("Do you want to save all the changes?" & Environment.NewLine & "Selecting No will negate all changes.", "Please Confirm.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
 
@@ -2963,6 +2964,7 @@ Partial Friend Class CM_MAIN_frm
         Return response
 
     End Function
+
     Private Sub btnGatewayReview_Click(sender As System.Object, e As System.EventArgs) Handles btnGatewayReview.Click
         Dim sMsg As String
         If Me.txtGatewayStatus.Text = "Under Review" Then
@@ -2998,208 +3000,198 @@ Partial Friend Class CM_MAIN_frm
         Me.txtGatewayStatus.Text = "Under Review"
         SaveAll()
     End Sub
+
     Public Sub MDC_Add_Doc()
-        'Dim Filesystem As New Scripting.FileSystemObject()
-        'Try
-        '    Dim sRequestorNameKey As String = ""
-        '    Dim sRequestorName As String = ""
-        '    Dim sPhone As String = ""
-        '    Dim sPhone_mobile As String = ""
-        '    Dim sFax_requestor As String = ""
-        '    Dim bNewDocument As Boolean = False
-        '    Dim sOffice As String = ""
-        '    Dim sDistrict As String = ""
-        '    Dim sTerritory As String = ""
-        '    Dim sArea As String = ""
-        '    Dim skg As String = ""
-        '    Dim sDueDate As String = ""
-        '    Dim sDescriptionField As String = "description"
+        Dim Filesystem As New Scripting.FileSystemObject()
+        Try
+            Dim sRequestorNameKey As String = ""
+            Dim sRequestorName As String = ""
+            Dim sPhone As String = ""
+            Dim sPhone_mobile As String = ""
+            Dim sFax_requestor As String = ""
+            Dim bNewDocument As Boolean = False
+            Dim sOffice As String = ""
+            Dim sDistrict As String = ""
+            Dim sTerritory As String = ""
+            Dim sArea As String = ""
+            Dim skg As String = ""
+            Dim sDueDate As String = ""
+            Dim sDescriptionField As String = "description"
 
-        '    If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
-        '        If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
-        '            sRequestorNameKey = Left$(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
-        '            sRequestorName = clsNotes.CN_Username
-        '            If clsNotes.NotesDocKey(sRequestorNameKey) Then
-        '                sPhone = clsNotes.GetValue("Phone")
-        '                sFax_requestor = clsNotes.GetValue("Phone_1")           ' fax
-        '                sPhone_mobile = clsNotes.GetValue("Phone_2")            ' cell
-        '                sOffice = clsNotes.GetValue("officeNum")                ' Office
-        '                sDistrict = clsNotes.GetValue("districtNum")            ' District
-        '                sTerritory = clsNotes.GetValue("territory")             ' Territory
-        '                sArea = clsNotes.GetValue("area")                       ' Area
-        '                skg = clsNotes.GetValue("kg")                           ' kg
-        '            End If
-        '        End If
-        '    End If
+            If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
+                If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
+                    sRequestorNameKey = Left$(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
+                    sRequestorName = clsNotes.CN_Username
+                    If clsNotes.NotesDocKey(sRequestorNameKey) Then
+                        sPhone = clsNotes.GetValue("Phone")
+                        sFax_requestor = clsNotes.GetValue("Phone_1")           ' fax
+                        sPhone_mobile = clsNotes.GetValue("Phone_2")            ' cell
+                        sOffice = clsNotes.GetValue("officeNum")                ' Office
+                        sDistrict = clsNotes.GetValue("districtNum")            ' District
+                        sTerritory = clsNotes.GetValue("territory")             ' Territory
+                        sArea = clsNotes.GetValue("area")                       ' Area
+                        skg = clsNotes.GetValue("kg")                           ' kg
+                    End If
+                End If
+            End If
 
-        '    SetupMDCLink()
+            SetupMDCLink()
 
-        '    If Not FindMDCDocument() Then
-        '        clsNotes.CreateDOC("Quote Request")
-        '        bNewDocument = True
-        '    End If
+            If Not FindMDCDocument() Then
+                clsNotes.CreateDOC("Quote Request")
+                bNewDocument = True
+            End If
 
-        '    If bNewDocument Then
-        '        clsNotes.SetValue("status", "New")
-        '        clsNotes.SetValue("engineeringReviewStatus", "New")
-        '        Select Case Format(Now, "dddd")
-        '            Case "Saturday"
-        '                clsNotes.SetValue("duedate", DateAdd("d", 6, Now))
-        '            Case "Sunday"
-        '                clsNotes.SetValue("duedate", DateAdd("d", 5, Now))
-        '            Case Else
-        '                clsNotes.SetValue("duedate", DateAdd("d", 7, Now))
-        '        End Select
+            If bNewDocument Then
+                clsNotes.SetValue("status", "New")
+                clsNotes.SetValue("engineeringReviewStatus", "New")
+                Select Case Format(Now, "dddd")
+                    Case "Saturday"
+                        clsNotes.SetValue("duedate", DateAdd("d", 6, Now))
+                    Case "Sunday"
+                        clsNotes.SetValue("duedate", DateAdd("d", 5, Now))
+                    Case Else
+                        clsNotes.SetValue("duedate", DateAdd("d", 7, Now))
+                End Select
 
-        '        clsNotes.SetValue("createdDate", CDate(Now))
-        '        clsNotes.SetValue("quoteType", "Final Bid")
-        '        clsNotes.SetValue("approvalDrawingsRequired", "")
-        '        clsNotes.SetValue_Readers("creator", gsSalesRep)
-        '    Else
-        '        clsNotes.SetValue("flag_revised", "Yes")
-        '        sDescriptionField = "description_revised"
-        '    End If
-        '    clsNotes.SetValue_Readers("requestor", sRequestorName)
+                clsNotes.SetValue("createdDate", CDate(Now))
+                clsNotes.SetValue("quoteType", "Final Bid")
+                clsNotes.SetValue("approvalDrawingsRequired", "")
+                clsNotes.SetValue_Readers("creator", gsSalesRep)
+            Else
+                clsNotes.SetValue("flag_revised", "Yes")
+                sDescriptionField = "description_revised"
+            End If
+            clsNotes.SetValue_Readers("requestor", sRequestorName)
 
-        '    clsNotes.SetValue("phone_requestor", sPhone)
-        '    clsNotes.SetValue("fax_requestor", sFax_requestor)
-        '    clsNotes.SetValue("phone_mobile_requestor", sPhone_mobile)
+            clsNotes.SetValue("phone_requestor", sPhone)
+            clsNotes.SetValue("fax_requestor", sFax_requestor)
+            clsNotes.SetValue("phone_mobile_requestor", sPhone_mobile)
 
-        '    clsNotes.SetValue("office", sOffice)
-        '    clsNotes.SetValue("district", sDistrict)
-        '    clsNotes.SetValue("territory", sTerritory)
-        '    clsNotes.SetValue("area", sArea)
-        '    clsNotes.SetValue("kg", skg)
+            clsNotes.SetValue("office", sOffice)
+            clsNotes.SetValue("district", sDistrict)
+            clsNotes.SetValue("territory", sTerritory)
+            clsNotes.SetValue("area", sArea)
+            clsNotes.SetValue("kg", skg)
 
-        '    clsNotes.SetValue("businessline", "NI")
-        '    clsNotes.SetValue("unique", OpportunityID)
-        '    clsNotes.SetValue("proposal_num", OpportunityID)
-        '    If CurrentGOData_Typ. <> "0" Then
-        '        clsNotes.SetValue("goNum", CurrentGOData_Typ.GONum)
-        '    End If
-        '    If Contracts.NegNum <> 0 Then
-        '        clsNotes.SetValue("negNum", CStr(Contracts.NegNum))
-        '    End If
-        '    clsNotes.SetValue("jobName", Contracts.JobName)
-        '    Select Case CurrentGOData_Typ.Type
-        '        Case HYD_NI_PRODUCT_TYPE
-        '            clsNotes.SetValue("productType", "330A")
-        '        Case TRA_NI_PRODUCT_TYPE
-        '            clsNotes.SetValue("productType", ProductApplication)
-        '        Case ESC_NI_PRODUCT_TYPE
-        '            ' kab not listed in file
-        '            clsNotes.SetValue("productType", "9300")
-        '        Case HYD_POH_PRODUCT_TYPE
-        '            clsNotes.SetValue("productType", "POH")
-        '        Case Else
-        '    End Select
+            clsNotes.SetValue("businessline", "MOD")
+            clsNotes.SetValue("unique", HoldUniqueActivity)
+            clsNotes.SetValue("proposal_num", HoldUniqueActivity)
+            'If CurrentGOData_Typ. <> "0" Then
+            '    clsNotes.SetValue("goNum", CurrentGOData_Typ.GONum)
+            'End If
+            'If Contracts.NegNum <> 0 Then
+            '    clsNotes.SetValue("negNum", CStr(Contracts.NegNum))
+            'End If
+            clsNotes.SetValue("jobName", Contracts.JobName)
+            'Select Case CurrentGOData_Typ.Type
+            '    Case HYD_NI_PRODUCT_TYPE
+            '        clsNotes.SetValue("productType", "330A")
+            '    Case TRA_NI_PRODUCT_TYPE
+            '        clsNotes.SetValue("productType", ProductApplication)
+            '    Case ESC_NI_PRODUCT_TYPE
+            '        ' kab not listed in file
+            '        clsNotes.SetValue("productType", "9300")
+            '    Case HYD_POH_PRODUCT_TYPE
+            '        clsNotes.SetValue("productType", "POH")
+            '    Case Else
+            'End Select
 
-        '    clsNotes.SetValue("hydroCars", CInt(0))
-        '    clsNotes.SetValue("gearedCars", CInt(0))
-        '    clsNotes.SetValue("gearlessCars", CInt(0))
 
-        '    Select Case GoNumbers(CurrentGOSelection).Type
-        '        Case "070", "071", "072", "073", "076", "079", "370", "371"  'Traction
-        '            clsNotes.SetValue("gearedCars", CInt(NumberOfCarsinEstimate))
-        '        Case "510", "515", "535", "593", "597", "598"                       'Escalator
-        '        Case ESC_NI_PRODUCT_TYPE
-        '        Case HYD_NI_PRODUCT_TYPE, HYD_POH_PRODUCT_TYPE
-        '            clsNotes.SetValue("hydroCars", CInt(NumberOfCarsinEstimate))      'Hydro-s
-        '        Case TRA_NI_PRODUCT_TYPE
-        '            clsNotes.SetValue("gearedCars", CInt(NumberOfCarsinEstimate))   'Geared-s
-        '        Case Else
-        '    End Select
-        '    clsNotes.SetValue_Readers("salesRep", gsSalesRep)
+            'hack set to appropriate numbers
+            clsNotes.SetValue("hydroCars", CInt(0))
+            clsNotes.SetValue("gearedCars", CInt(0))
+            clsNotes.SetValue("gearlessCars", CInt(0))
 
-        '    Dim Reader(0 To 8) As String
+            
+            clsNotes.SetValue_Readers("salesRep", gsSalesRep)
 
-        '    Reader(0) = "[Admin]"
-        '    Reader(1) = "[Approver]"
-        '    Reader(2) = "[Engineer]"
-        '    Reader(3) = "[Full Access]"
-        '    Reader(4) = "T_SEC_" & sOffice
-        '    Reader(5) = "T_SEC_SMART_" & sOffice
-        '    Reader(6) = "T_SEC_SMART_" & sDistrict
-        '    Reader(7) = "T_SEC_SMART_" & sTerritory
-        '    Reader(8) = "T_SEC_SMART_" & sArea
+            Dim Reader(0 To 8) As String
 
-        '    clsNotes.SetValue_Readers("Reader", Reader)
+            Reader(0) = "[Admin]"
+            Reader(1) = "[Approver]"
+            Reader(2) = "[Engineer]"
+            Reader(3) = "[Full Access]"
+            Reader(4) = "T_SEC_" & sOffice
+            Reader(5) = "T_SEC_SMART_" & sOffice
+            Reader(6) = "T_SEC_SMART_" & sDistrict
+            Reader(7) = "T_SEC_SMART_" & sTerritory
+            Reader(8) = "T_SEC_SMART_" & sArea
 
-        '    clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
+            clsNotes.SetValue_Readers("Reader", Reader)
 
-        '    If EngReviewMsg <> "" Then
-        '        clsNotes.SetValue(sDescriptionField, EngReviewMsg & Environment.NewLine & NotesToEngineer)
-        '    Else
-        '        clsNotes.SetValue(sDescriptionField, NotesToEngineer)
-        '    End If
-        '    clsNotes.DocSave()
-        'Finally
-        '    MemoryHelper.ReleaseAndCleanObject(Filesystem)
-        'End Try
+            clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
+
+           
+            clsNotes.DocSave()
+       
+        End Try
     End Sub
-    '  Public Function SetupMDCLink() As Boolean
-        'Dim DataBaseError As String = ""
-        'Dim MDC As String = ""
-        'Dim ComServerMDC As String = ""
 
-        'Try
+    Public Function SetupMDCLink() As Boolean
+        Dim DataBaseError As String = ""
+        Dim MDC As String = ""
+        Dim ComServerMDC As String = ""
 
-        '    If TestSystem Then
-        '        ComServerMDC = "USSECNE1"
-        '        MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
-        '    Else
-        '        ComServerMDC = "USSECNN4"
-        '        MDC = "sec\engpro\MDCCustomQuotes.nsf"
-        '    End If
+        Try
 
-        '    If NotclsNotes.NotesDBName(ComServerMDC, MDC) Then
-        '        DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
-        '        Throw New Exception()
-        '    End If
-        '    If NotclsNotes.NotesDBView("(LU unique)") Then
-        '        MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
-        '        EndProgram()
-        '    End If
+            If TestSystem Then
+                ComServerMDC = "USSECNE1"
+                MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
+            Else
+                ComServerMDC = "USSECNN4"
+                MDC = "sec\engpro\MDCCustomQuotes.nsf"
+            End If
 
-        '    ReturnclsNotes.CRM_NotesDocKey(OpportunityID)
+            If Not clsNotes.NotesDBName(ComServerMDC, MDC) Then
+                DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
+                Throw New Exception()
+            End If
+            If clsNotes.NotesDBView("(LU unique)") Then
+                MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
+                EndProgram()
+            End If
 
-        'Catch
+            Return clsNotes.CRM_NotesDocKey(Contracts.ProposalNum)
 
-        '    MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
-        '    EndProgram()
-        'End Try
-    ' End Function
-    ' Function FindMDCDocument() As Boolean
-        'Dim result As Boolean = False
-        'Try
-        '    Dim Bank, Alt, CarNo
-        '    Dim b As Boolean
+        Catch
 
-        '    IfclsNotes.NotesDocKeyCollection(OpportunityID) Then
-        '    b = True
-        '    Do While b
-        '        If OpportunityID = clsNotes.GetValue("proposal_num") Then
-        '                IfclsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
-        '                    IfclsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
-        '                        IfclsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
-        '                            IfclsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
-        '            Return True
-        '        End If
-        '                        End If
-        '                    End If
-        '                End If
-        '            End If
-        '        b = clsNotes.GetNextDocumentFromCollection()
-        '        Loop
-        '    End If
+            MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
+            EndProgram()
+        End Try
+    End Function
 
-        '    Return result
+    Function FindMDCDocument() As Boolean
+        Dim result As Boolean = False
+        Try
+            Dim Bank, Alt, CarNo
+            Dim b As Boolean
 
-        'Catch
-        '    MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            If clsNotes.NotesDocKeyCollection(Contracts.ProposalNum) Then
+                b = True
+                Do While b
+                    If OpportunityID = clsNotes.GetValue("proposal_num") Then
+                        If clsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
+                            If clsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
+                                If clsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
+                                    If clsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
+                                        Return True
+                                    End If
+                                End If
+                            End If
+                        End If
+                    End If
+                    b = clsNotes.GetNextDocumentFromCollection()
+                Loop
+            End If
 
-        '    Return result
-    '  End Function
+            Return result
+
+        Catch
+            MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
+            Return result
+    End Function
     Private Function AllDocumentsExists() As Boolean
         Dim filename As String
         For Each row In dtSummaryGroup.Rows
