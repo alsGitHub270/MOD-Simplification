@@ -37,6 +37,8 @@ Partial Friend Class CM_MAIN_frm
         dsCadre = New DataSet()
         dsCadre.EnforceConstraints = False
 
+        '** NOTE:   Misc_Costs showing up on grid as 'P/O/B'
+
         dtSummaryGroup = dsCadre.Tables.Add("SummaryGroup")
         dtSummaryGroup.Columns.AddRange(New DataColumn() {New DataColumn("SummaryGroup", typeStr), _
                                                           New DataColumn("id", typeStr), _
@@ -53,8 +55,9 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("OT_Hours_Included", typeInt), _
                                                           New DataColumn("Labor_Cost", typeInt), _
                                                           New DataColumn("SubContract_Work", typeInt), _
-                                                          New DataColumn("Misc_Costs", typeInt), _
                                                           New DataColumn("Expenses", typeInt), _
+                                                          New DataColumn("Engineering_Cost", typeInt), _
+                                                          New DataColumn("Misc_Costs", typeInt), _
                                                           New DataColumn("Freight", typeInt), _
                                                           New DataColumn("NPS_Cost", typeInt), _
                                                           New DataColumn("Total_Bank_Cost", typeInt), _
@@ -84,8 +87,9 @@ Partial Friend Class CM_MAIN_frm
                                                        New DataColumn("OT_Hours_Included", typeInt), _
                                                        New DataColumn("Labor_Cost", typeInt), _
                                                        New DataColumn("SubContract_Work", typeInt), _
-                                                       New DataColumn("Misc_Costs", typeInt), _
                                                        New DataColumn("Expenses", typeInt), _
+                                                       New DataColumn("Engineering_Cost", typeInt), _
+                                                       New DataColumn("Misc_Costs", typeInt), _
                                                        New DataColumn("Freight", typeInt), _
                                                        New DataColumn("NPS_Cost", typeInt), _
                                                        New DataColumn("Total_Bank_Cost", typeInt), _
@@ -121,8 +125,9 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("OT_Hours_Included", typeInt), _
                                                       New DataColumn("Labor_Cost", typeInt), _
                                                       New DataColumn("SubContract_Work", typeInt), _
-                                                      New DataColumn("Misc_Costs", typeInt), _
                                                       New DataColumn("Expenses", typeInt), _
+                                                      New DataColumn("Engineering_Cost", typeInt), _
+                                                      New DataColumn("Misc_Costs", typeInt), _
                                                       New DataColumn("Freight", typeInt), _
                                                       New DataColumn("NPS_Cost", typeInt), _
                                                       New DataColumn("Total_Bank_Cost", typeInt), _
@@ -538,98 +543,128 @@ Partial Friend Class CM_MAIN_frm
             cmbocell_Bank.Items = cbstr_Bank
 
             FpSpread1.ActiveSheet.Rows(i).Locked = True
-            FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 20).Locked = False
-            FpSpread1.ActiveSheet.Cells(i, 25).Locked = False
 
             FpSpread1.ActiveSheet.Cells(i, 0).Column.Width = 75        'summary
-            FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 20         'STATUS
-            FpSpread1.ActiveSheet.Cells(i, 3).Column.Width = 35         'bank
-            FpSpread1.ActiveSheet.Cells(i, 4).Column.Width = 75         'bank_type
-            FpSpread1.ActiveSheet.Cells(i, 5).Column.Width = 60         'units
-            FpSpread1.ActiveSheet.Cells(i, 6).Column.Width = 65         'material_HQ
-            FpSpread1.ActiveSheet.Cells(i, 7).Column.Width = 63         'material_RL
-            FpSpread1.ActiveSheet.Cells(i, 8).Column.Width = 60         'sales tax
-            FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 60         'total BDP Hours
-            FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'total special hours
-            FpSpread1.ActiveSheet.Cells(i, 11).Column.Width = 60        'total labor hours
-            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 60        'Overtime hours included
-            FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'labor $
-            FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 70        'Subcontract work
-            FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 60        'expenses
-            FpSpread1.ActiveSheet.Cells(i, 16).Column.Width = 60        'misc costs
-            FpSpread1.ActiveSheet.Cells(i, 17).Column.Width = 60        'freight
-            FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 65        'NPS Cost
-            FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 70        'total bank cost
-            FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 50        'project c1
-            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 70        'bank net price
-            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 60        'sales commission
-            FpSpread1.ActiveSheet.Cells(i, 23).Column.Width = 70        'bank final price
-            FpSpread1.ActiveSheet.Cells(i, 24).Column.Width = 60        'Labor rate
-            FpSpread1.ActiveSheet.Cells(i, 25).Column.Width = 45      'Include indicator
-
-            FpSpread1.ActiveSheet.Cells(i, 3).CellType = cmbocell_Bank      ' bank
-            FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell_Machine   ' machine/bank type
-
-            FpSpread1.ActiveSheet.Cells(i, 6).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 7).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 8).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 13).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 14).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 15).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 16).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 17).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 18).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 19).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 21).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 22).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 23).CellType = currencyType
-            FpSpread1.ActiveSheet.Cells(i, 24).CellType = currencyType
-
-            FpSpread1.ActiveSheet.Cells(i, 9).CellType = numberType
-            FpSpread1.ActiveSheet.Cells(i, 10).CellType = numberType
-            FpSpread1.ActiveSheet.Cells(i, 11).CellType = numberType
-            FpSpread1.ActiveSheet.Cells(i, 12).CellType = numberType
-
-            percentType.ReadOnly = True
-            FpSpread1.ActiveSheet.Cells(i, 20).CellType = percentType
-
-            FpSpread1.ActiveSheet.Cells(i, 25).CellType = ckbxcell
-            FpSpread1.ActiveSheet.Cells(i, 25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+            FpSpread1.Sheets(0).ColumnHeader.Columns(0).Label = "Group"
 
             FpSpread1.ActiveSheet.Columns(1).Visible = False
-            FpSpread1.ActiveSheet.Columns(21).Visible = False       ' bank net price
-            FpSpread1.ActiveSheet.Columns(26).Visible = False       ' speed
-            FpSpread1.ActiveSheet.Columns(27).Visible = False       ' machine_model
-            FpSpread1.ActiveSheet.Columns(28).Visible = False       ' gateway_review_required
+
+            FpSpread1.ActiveSheet.Cells(i, 2).Column.Width = 20         'STATUS
+
+            FpSpread1.ActiveSheet.Cells(i, 3).Column.Width = 35         'bank
+            FpSpread1.ActiveSheet.Cells(i, 3).CellType = cmbocell_Bank      ' bank
+            FpSpread1.ActiveSheet.Cells(i, 3).Locked = False
+
+            FpSpread1.ActiveSheet.Cells(i, 4).Column.Width = 75         'bank_type
+            FpSpread1.ActiveSheet.Cells(i, 4).CellType = cmbocell_Machine   ' machine/bank type
+            FpSpread1.ActiveSheet.Cells(i, 4).Locked = False
+
+            FpSpread1.ActiveSheet.Cells(i, 5).Column.Width = 60         'units
+            FpSpread1.ActiveSheet.Cells(i, 5).Locked = False
+
+            FpSpread1.ActiveSheet.Cells(i, 6).Column.Width = 65         'material_HQ
+            FpSpread1.ActiveSheet.Cells(i, 6).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(6).Label = "Material HQ"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 7).Column.Width = 63         'material_RL
+            FpSpread1.ActiveSheet.Cells(i, 7).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(7).Label = "Material RL"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 8).Column.Width = 60         'sales tax
+            FpSpread1.ActiveSheet.Cells(i, 8).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(8).Label = "Sales Tax"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 9).Column.Width = 60         'total BDP Hours
+            FpSpread1.ActiveSheet.Cells(i, 9).CellType = numberType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(9).Label = "BDP Hours"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 10).Column.Width = 60        'total special hours
+            FpSpread1.ActiveSheet.Cells(i, 10).CellType = numberType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(10).Label = "Special Hours"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 11).Column.Width = 60        'total labor hours
+            FpSpread1.ActiveSheet.Cells(i, 11).CellType = numberType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(11).Label = "Labor Hours"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 12).Column.Width = 60        'Overtime hours included
+            FpSpread1.ActiveSheet.Cells(i, 12).CellType = numberType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(12).Label = "OT Hrs Included"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 13).Column.Width = 60        'labor $
+            FpSpread1.ActiveSheet.Cells(i, 13).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(13).Label = "Labor"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 14).Column.Width = 70        'Subcontract work
+            FpSpread1.ActiveSheet.Cells(i, 14).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(14).Label = "Subcontact Work"
+
+
+            FpSpread1.ActiveSheet.Cells(i, 15).Column.Width = 60        'expenses
+            FpSpread1.ActiveSheet.Cells(i, 15).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(15).Label = "Expenses"
+
+            FpSpread1.ActiveSheet.Cells(i, 16).Column.Width = 60        'engineering costs
+            FpSpread1.ActiveSheet.Cells(i, 16).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(16).Label = "Eng Cost"
+
+            FpSpread1.ActiveSheet.Cells(i, 17).Column.Width = 60        'misc costs
+            FpSpread1.ActiveSheet.Cells(i, 17).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(17).Label = "P/O/B"
+
+            FpSpread1.ActiveSheet.Cells(i, 18).Column.Width = 60        'freight
+            FpSpread1.ActiveSheet.Cells(i, 18).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(18).Label = "Freight"
+
+            FpSpread1.ActiveSheet.Cells(i, 19).Column.Width = 65        'NPS Cost
+            FpSpread1.ActiveSheet.Cells(i, 19).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(19).Label = "NPS Cost"
+
+            FpSpread1.ActiveSheet.Cells(i, 20).Column.Width = 70        'total bank cost
+            FpSpread1.Sheets(0).ColumnHeader.Columns(20).Label = "Total Bank Cost"
+            FpSpread1.ActiveSheet.Cells(i, 20).CellType = currencyType
+
+            FpSpread1.ActiveSheet.Cells(i, 21).Column.Width = 50        'project c1
+            FpSpread1.Sheets(0).ColumnHeader.Columns(21).Label = "C1"
+            percentType.ReadOnly = True
+            FpSpread1.ActiveSheet.Cells(i, 21).CellType = percentType
+            FpSpread1.ActiveSheet.Cells(i, 21).Locked = False
+
+            FpSpread1.ActiveSheet.Cells(i, 22).Column.Width = 70        'bank net price
+            FpSpread1.ActiveSheet.Cells(i, 22).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(22).Label = "Bank Net Price"
+            FpSpread1.ActiveSheet.Columns(22).Visible = False
+
+            FpSpread1.ActiveSheet.Cells(i, 23).Column.Width = 60        'sales commission
+            FpSpread1.ActiveSheet.Cells(i, 23).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Sales Com"
+
+            FpSpread1.ActiveSheet.Cells(i, 24).Column.Width = 70        'bank final price
+            FpSpread1.ActiveSheet.Cells(i, 24).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(24).Label = "Sell Price"
+
+            FpSpread1.ActiveSheet.Cells(i, 25).Column.Width = 60        'Labor rate
+            FpSpread1.ActiveSheet.Cells(i, 25).CellType = currencyType
+            FpSpread1.Sheets(0).ColumnHeader.Columns(25).Label = "Labor Rate"
+
+            FpSpread1.ActiveSheet.Cells(i, 26).Column.Width = 45      'Include indicator
+            FpSpread1.Sheets(0).ColumnHeader.Columns(26).Label = "Include"
+            FpSpread1.ActiveSheet.Cells(i, 26).CellType = ckbxcell
+            FpSpread1.ActiveSheet.Cells(i, 26).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
+            FpSpread1.ActiveSheet.Cells(i, 26).Locked = False
+
+            FpSpread1.ActiveSheet.Columns(27).Visible = False       ' speed
+            FpSpread1.ActiveSheet.Columns(28).Visible = False       ' machine_model
+            FpSpread1.ActiveSheet.Columns(29).Visible = False       ' gateway_review_required
 
             FpSpread1.ActiveSheet.ColumnHeader.Rows(0).Height = 30
-
-            ' Column Headers
-
-            FpSpread1.Sheets(0).ColumnHeader.Columns(0).Label = "Group"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(6).Label = "Material HQ"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(7).Label = "Material RL"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(8).Label = "Sales Tax"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(9).Label = "BDP Hours"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(10).Label = "Special Hours"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(11).Label = "Labor Hours"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(12).Label = "OT Hrs Included"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(13).Label = "Labor"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(14).Label = "Subcontact Work"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(15).Label = "Expenses"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(16).Label = "P/O/B"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(17).Label = "Freight"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(18).Label = "NPS Cost"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(19).Label = "Total Bank Cost"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(20).Label = "C1"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(21).Label = "Bank Net Price"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(22).Label = "Sales Com"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(23).Label = "Sell Price"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(24).Label = "Labor Rate"
-            FpSpread1.Sheets(0).ColumnHeader.Columns(25).Label = "Include"
 
         Next
 
@@ -861,66 +896,71 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(14).CellType = currencyType
                 .Columns(14).Width = 60
 
-                .Columns(15).Label = "P/O/B"
+                .Columns(15).Label = "Eng Cost"
                 .Columns(15).Locked = True
                 .Columns(15).CellType = currencyType
                 .Columns(15).Width = 60
 
-                .Columns(16).Label = "Freight"
+                .Columns(16).Label = "P/O/B"
                 .Columns(16).Locked = True
                 .Columns(16).CellType = currencyType
                 .Columns(16).Width = 60
 
-                .Columns(17).Label = "NPS Cost"
+                .Columns(17).Label = "Freight"
                 .Columns(17).Locked = True
                 .Columns(17).CellType = currencyType
-                .Columns(17).Width = 65
+                .Columns(17).Width = 60
 
-                .Columns(18).Label = "Total Bank Cost"
+                .Columns(18).Label = "NPS Cost"
                 .Columns(18).Locked = True
                 .Columns(18).CellType = currencyType
-                .Columns(18).Width = 70
+                .Columns(18).Width = 65
 
-                .Columns(19).Label = "C1"
-                .Columns(19).Locked = False
-                .Columns(19).CellType = percentType
-                .Columns(19).Width = 50
+                .Columns(19).Label = "Total Bank Cost"
+                .Columns(19).Locked = True
+                .Columns(19).CellType = currencyType
+                .Columns(19).Width = 70
 
-                .Columns(20).Label = "Bank Net Price"
-                .Columns(20).Locked = True
-                .Columns(20).CellType = currencyType
-                .Columns(20).Width = 70
-                .Columns(20).Visible = False
+                .Columns(20).Label = "C1"
+                .Columns(20).Locked = False
+                .Columns(20).CellType = percentType
+                .Columns(20).Width = 50
 
-                .Columns(21).Label = "Sales Com"
+                .Columns(21).Label = "Bank Net Price"
                 .Columns(21).Locked = True
                 .Columns(21).CellType = currencyType
-                .Columns(21).Width = 60
+                .Columns(21).Width = 70
+                .Columns(21).Visible = False
 
-                .Columns(22).Label = "Sell Price"
+                .Columns(22).Label = "Sales Com"
                 .Columns(22).Locked = True
                 .Columns(22).CellType = currencyType
-                .Columns(22).Width = 70
+                .Columns(22).Width = 60
 
-                .Columns(23).Label = "Labor Rate"
+                .Columns(23).Label = "Sell Price"
                 .Columns(23).Locked = True
                 .Columns(23).CellType = currencyType
-                .Columns(23).Width = 60
+                .Columns(23).Width = 70
 
-                .Columns(24).Label = "Comments"
-                .Columns(24).Locked = False
-                .Columns(24).Width = 175
+                .Columns(24).Label = "Labor Rate"
+                .Columns(24).Locked = True
+                .Columns(24).CellType = currencyType
+                .Columns(24).Width = 60
 
-                .Columns(25).Label = "Speed"
-                .Columns(25).Locked = True
-                .Columns(25).Width = 50
-                .Columns(25).Visible = False
+                .Columns(25).Label = "Comments"
+                .Columns(25).Locked = False
+                .Columns(25).Width = 175
 
-                .Columns(26).Label = "machine_model"
-                .Columns(26).Locked = False
-                .Columns(26).Width = 200
+                .Columns(26).Label = "Speed"
+                .Columns(26).Locked = True
                 .Columns(26).Width = 50
                 .Columns(26).Visible = False
+
+                .Columns(27).Label = "machine_model"
+                .Columns(27).Locked = False
+                .Columns(27).Width = 200
+                .Columns(27).Width = 50
+                .Columns(27).Visible = False
 
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
@@ -1008,66 +1048,71 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(15).CellType = currencyType
                 .Columns(15).Width = 60
 
-                .Columns(16).Label = "P/O/B"
+                .Columns(16).Label = "Eng Cost"
                 .Columns(16).Locked = True
                 .Columns(16).CellType = currencyType
                 .Columns(16).Width = 60
 
-                .Columns(17).Label = "Freight"
+                .Columns(17).Label = "P/O/B"
                 .Columns(17).Locked = True
                 .Columns(17).CellType = currencyType
                 .Columns(17).Width = 60
 
-                .Columns(18).Label = "NPS Cost"
+                .Columns(18).Label = "Freight"
                 .Columns(18).Locked = True
                 .Columns(18).CellType = currencyType
-                .Columns(18).Width = 65
+                .Columns(18).Width = 60
 
-                .Columns(19).Label = "Total Bank Cost"
+                .Columns(19).Label = "NPS Cost"
                 .Columns(19).Locked = True
                 .Columns(19).CellType = currencyType
-                .Columns(19).Width = 70
+                .Columns(19).Width = 65
 
-                .Columns(20).Label = "C1"
-                .Columns(20).Locked = False
-                .Columns(20).CellType = percentType
-                .Columns(20).Width = 50
+                .Columns(20).Label = "Total Bank Cost"
+                .Columns(20).Locked = True
+                .Columns(20).CellType = currencyType
+                .Columns(20).Width = 70
 
-                .Columns(21).Label = "Bank Net Price"
-                .Columns(21).Locked = True
-                .Columns(21).CellType = currencyType
-                .Columns(21).Width = 70
-                .Columns(21).Visible = False
+                .Columns(21).Label = "C1"
+                .Columns(21).Locked = False
+                .Columns(21).CellType = percentType
+                .Columns(21).Width = 50
 
-                .Columns(22).Label = "Sales Com"
+                .Columns(22).Label = "Bank Net Price"
                 .Columns(22).Locked = True
                 .Columns(22).CellType = currencyType
-                .Columns(22).Width = 60
+                .Columns(22).Width = 70
+                .Columns(22).Visible = False
 
-                .Columns(23).Label = "Sell Price"
+                .Columns(23).Label = "Sales Com"
                 .Columns(23).Locked = True
                 .Columns(23).CellType = currencyType
-                .Columns(23).Width = 70
+                .Columns(23).Width = 60
 
-                .Columns(24).Label = "Labor Rate"
+                .Columns(24).Label = "Sell Price"
                 .Columns(24).Locked = True
                 .Columns(24).CellType = currencyType
-                .Columns(24).Width = 60
+                .Columns(24).Width = 70
 
-                .Columns(25).Label = "Comments"
-                .Columns(25).Locked = False
-                .Columns(25).Width = 175
+                .Columns(25).Label = "Labor Rate"
+                .Columns(25).Locked = True
+                .Columns(25).CellType = currencyType
+                .Columns(25).Width = 60
 
-                .Columns(26).Label = "Speed"
-                .Columns(26).Locked = True
-                .Columns(26).Width = 50
-                .Columns(26).Visible = False
+                .Columns(26).Label = "Comments"
+                .Columns(26).Locked = False
+                .Columns(26).Width = 175
 
-                .Columns(27).Label = "machine_model"
-                .Columns(27).Locked = False
-                .Columns(27).Width = 200
+                .Columns(27).Label = "Speed"
+                .Columns(27).Locked = True
                 .Columns(27).Width = 50
                 .Columns(27).Visible = False
+
+                .Columns(28).Label = "machine_model"
+                .Columns(28).Locked = False
+                .Columns(28).Width = 200
+                .Columns(28).Width = 50
+                .Columns(28).Visible = False
 
                 'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
                 '.Columns(1).CellType = dateType
@@ -2171,18 +2216,18 @@ Partial Friend Class CM_MAIN_frm
                     End If
                 Next row
                 Select Case i
-                    Case 6 To 8, 13 To 19, 21 To 24
+                    Case 6 To 8, 13 To 20, 22 To 26
                         sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatCurrency(dblValue, 0)
                     Case 9 To 12
                         sprTotals.ActiveSheet.Cells(0, summaryColumn).Text = FormatNumber(dblValue, 0)
-                    Case 20
+                    Case 21
                         'calculate after loop
                 End Select
 
                 summaryColumn += 1
             Next i
-            dblC1 = (sprTotals.ActiveSheet.Cells(0, 17).Text - sprTotals.ActiveSheet.Cells(0, 16).Text) / (sprTotals.ActiveSheet.Cells(0, 13).Text) - 1.0
-            sprTotals.ActiveSheet.Cells(0, 14).Text = Math.Round(dblC1, 4).ToString("P")
+            dblC1 = (sprTotals.ActiveSheet.Cells(0, 18).Text - sprTotals.ActiveSheet.Cells(0, 17).Text) / (sprTotals.ActiveSheet.Cells(0, 14).Text) - 1.0
+            sprTotals.ActiveSheet.Cells(0, 15).Text = Math.Round(dblC1, 4).ToString("P")
 
             sprTotals.Refresh()
         End If
@@ -2201,19 +2246,20 @@ Partial Friend Class CM_MAIN_frm
         sprTotals.ActiveSheet.Cells(0, 7).Column.Width = 60        'labor $
         sprTotals.ActiveSheet.Cells(0, 8).Column.Width = 70        'Subcontract work
         sprTotals.ActiveSheet.Cells(0, 9).Column.Width = 60        'expenses
-        sprTotals.ActiveSheet.Cells(0, 10).Column.Width = 60        'misc costs
-        sprTotals.ActiveSheet.Cells(0, 11).Column.Width = 60        'freight
-        sprTotals.ActiveSheet.Cells(0, 12).Column.Width = 65        'NPS Cost
-        sprTotals.ActiveSheet.Cells(0, 13).Column.Width = 70        'total bank cost
-        sprTotals.ActiveSheet.Cells(0, 14).Column.Width = 50        'project c1
-        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 70        'bank sell price
-        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 60        'sales commission
-        sprTotals.ActiveSheet.Cells(0, 17).Column.Width = 70        'bank final price
-        sprTotals.ActiveSheet.Cells(0, 18).Column.Width = 60       'labor rate
+        sprTotals.ActiveSheet.Cells(0, 10).Column.Width = 60        'engineering cost
+        sprTotals.ActiveSheet.Cells(0, 11).Column.Width = 60        'misc costs
+        sprTotals.ActiveSheet.Cells(0, 12).Column.Width = 60        'freight
+        sprTotals.ActiveSheet.Cells(0, 13).Column.Width = 65        'NPS Cost
+        sprTotals.ActiveSheet.Cells(0, 14).Column.Width = 70        'total bank cost
+        sprTotals.ActiveSheet.Cells(0, 15).Column.Width = 50        'project c1
+        sprTotals.ActiveSheet.Cells(0, 16).Column.Width = 70        'bank net price
+        sprTotals.ActiveSheet.Cells(0, 17).Column.Width = 60        'sales commission
+        sprTotals.ActiveSheet.Cells(0, 18).Column.Width = 70        'bank final price (Sell Pric3
+        sprTotals.ActiveSheet.Cells(0, 19).Column.Width = 60       'labor rate
 
         sprTotals.ActiveSheet.Rows(0).Locked = True
 
-        sprTotals.ActiveSheet.Cells(0, 15).Column.Visible = False
+        sprTotals.ActiveSheet.Cells(0, 16).Column.Visible = False
 
     End Sub
 
@@ -2524,19 +2570,19 @@ Partial Friend Class CM_MAIN_frm
 
 
             For i = 0 To FpSpread1.ActiveSheet.RowCount - 1
-                speed = FpSpread1.ActiveSheet.Cells(i, 26).Value
-                machine_model = FpSpread1.ActiveSheet.Cells(i, 27).Value
+                speed = FpSpread1.ActiveSheet.Cells(i, 27).Value
+                machine_model = FpSpread1.ActiveSheet.Cells(i, 28).Value
                 bank_type = FpSpread1.ActiveSheet.Cells(i, 4).Value
-                spread_c1 = FpSpread1.ActiveSheet.Cells(i, 20).Value
+                spread_c1 = FpSpread1.ActiveSheet.Cells(i, 21).Value
 
                 budget_c1 = GetBudgetC1(speed, machine_model, bank_type)
 
                 If spread_c1 < budget_c1 Then
-                    FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Red
+                    FpSpread1.ActiveSheet.Cells(i, 21).BackColor = Color.Red
                 ElseIf spread_c1 >= budget_c1 + 0.04 Then
-                    FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Green
+                    FpSpread1.ActiveSheet.Cells(i, 21).BackColor = Color.Green
                 Else
-                    FpSpread1.ActiveSheet.Cells(i, 20).BackColor = Color.Yellow
+                    FpSpread1.ActiveSheet.Cells(i, 21).BackColor = Color.Yellow
                 End If
             Next
         Catch ex As Exception
@@ -2551,59 +2597,67 @@ Partial Friend Class CM_MAIN_frm
         Dim criteria As String
         Dim base_speed As Integer
         Dim base_model As String
+        Dim base_bank_type As String
         Dim alt_speed As Integer
         Dim alt_model As String
+        Dim alt_bank_type As String
+        Try
 
+            For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+                ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+                If Not ChildSheetView1 Is Nothing Then
+                    For i As Integer = 0 To ChildSheetView1.RowCount - 1
 
-        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If Not ChildSheetView1 Is Nothing Then
-                For i As Integer = 0 To ChildSheetView1.RowCount - 1
+                        criteria = "id = '" & ChildSheetView1.Cells(i, 1).Value & "'"
+                        Dim baseRow() As Data.DataRow
+                        baseRow = dtSummaryGroup.Select(criteria)
 
-                    criteria = "id = '" & ChildSheetView1.Cells(i, 1).Value & "'"
-                    Dim baseRow() As Data.DataRow
-                    baseRow = dtSummaryGroup.Select(criteria)
+                        base_speed = baseRow(0).Item("speed")
+                        base_model = baseRow(0).Item("machine_model")
+                        base_bank_type = baseRow(0).Item("Bank_Type")
+                        budget_c1 = GetBudgetC1(base_speed, base_model, base_bank_type)
 
-                    base_speed = ChildSheetView1.Cells(i, 25).Value
-                    base_model = ChildSheetView1.Cells(i, 26).Value
-                    budget_c1 = GetBudgetC1(base_speed, base_model, baseRow(0).Item("Bank_Type"))
+                        If ChildSheetView1.Cells(i, 20).Value < budget_c1 Then
+                            ChildSheetView1.Cells(i, 20).BackColor = Color.Red
+                        ElseIf ChildSheetView1.Cells(i, 20).Value > budget_c1 + 0.04 Then
+                            ChildSheetView1.Cells(i, 20).BackColor = Color.Green
+                        Else
+                            ChildSheetView1.Cells(i, 20).BackColor = Color.Yellow
+                        End If
+                    Next
 
-                    If ChildSheetView1.Cells(i, 19).Value < budget_c1 Then
-                        ChildSheetView1.Cells(i, 19).BackColor = Color.Red
-                    ElseIf ChildSheetView1.Cells(i, 19).Value > budget_c1 + 0.04 Then
-                        ChildSheetView1.Cells(i, 19).BackColor = Color.Green
-                    Else
-                        ChildSheetView1.Cells(i, 19).BackColor = Color.Yellow
-                    End If
-                Next
+                    For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
+                        ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
+                        If Not ChildSheetView2 Is Nothing Then
+                            For i As Integer = 0 To ChildSheetView2.RowCount - 1
+                                criteria = "id = '" & ChildSheetView2.Cells(i, 1).Value & "'"
+                                Dim altRow() As Data.DataRow
+                                altRow = dtSummaryGroup.Select(criteria)
 
-                For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
-                    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
-                    If Not ChildSheetView2 Is Nothing Then
-                        For i As Integer = 0 To ChildSheetView2.RowCount - 1
-                            criteria = "id = '" & ChildSheetView2.Cells(i, 1).Value & "'"
-                            Dim baseRow() As Data.DataRow
-                            baseRow = dtSummaryGroup.Select(criteria)
+                                alt_speed = altRow(0).Item("speed")
+                                alt_model = altRow(0).Item("machine_model")
+                                alt_bank_type = altRow(0).Item("Bank_Type")
 
-                            alt_speed = ChildSheetView2.Cells(i, 26).Value
-                            alt_model = ChildSheetView2.Cells(i, 27).Value
+                                budget_c1 = GetBudgetC1(alt_speed, alt_model, alt_bank_type)
 
-                            budget_c1 = GetBudgetC1(alt_speed, alt_model, baseRow(0).Item("Bank_Type"))
+                                If ChildSheetView2.Cells(i, 21).Value < budget_c1 Then
+                                    ChildSheetView2.Cells(i, 21).BackColor = Color.Red
+                                ElseIf ChildSheetView2.Cells(i, 21).Value > budget_c1 + 0.04 Then
+                                    ChildSheetView2.Cells(i, 21).BackColor = Color.Green
+                                Else
+                                    ChildSheetView2.Cells(i, 21).BackColor = Color.Yellow
+                                End If
+                            Next
 
-                            If ChildSheetView2.Cells(i, 20).Value < budget_c1 Then
-                                ChildSheetView2.Cells(i, 20).BackColor = Color.Red
-                            ElseIf ChildSheetView2.Cells(i, 20).Value > budget_c1 + 0.04 Then
-                                ChildSheetView2.Cells(i, 20).BackColor = Color.Green
-                            Else
-                                ChildSheetView2.Cells(i, 20).BackColor = Color.Yellow
-                            End If
-                        Next
+                        End If
+                    Next jindex
 
-                    End If
-                Next jindex
-
-            End If
-        Next iIndex
+                End If
+            Next iIndex
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error in SetBaseAltC1Colors", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Throw New System.Exception("  An Error Occurred.  Processing Terminated")
+        End Try
 
     End Sub
 
@@ -3025,14 +3079,16 @@ Partial Friend Class CM_MAIN_frm
         combinedSheet.Columns(12).Label = "Labor $"
         combinedSheet.Columns(13).Label = "SbCnrt $"
         combinedSheet.Columns(14).Label = "Exp $"
-        combinedSheet.Columns(15).Label = "P/O/B"
-        combinedSheet.Columns(16).Label = "Freight $"
-        combinedSheet.Columns(17).Label = "NPS $"
-        combinedSheet.Columns(18).Label = "Bank Cost"
-        combinedSheet.Columns(19).Label = "C1 %"
-        combinedSheet.Columns(20).Label = "Sales Comm"
-        combinedSheet.Columns(21).Label = "Sell Price"
-        combinedSheet.Columns(22).Label = "Labor Rate"
+        combinedSheet.Columns(15).Label = "Eng $"
+
+        combinedSheet.Columns(16).Label = "P/O/B"
+        combinedSheet.Columns(17).Label = "Freight $"
+        combinedSheet.Columns(18).Label = "NPS $"
+        combinedSheet.Columns(19).Label = "Bank Cost"
+        combinedSheet.Columns(20).Label = "C1 %"
+        combinedSheet.Columns(21).Label = "Sales Comm"
+        combinedSheet.Columns(22).Label = "Sell Price"
+        combinedSheet.Columns(23).Label = "Labor Rate"
        
         combinedSheet.ColumnHeader.Rows(0).Height = 30
     End Sub
@@ -3232,71 +3288,71 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Public Function SetupMDCLink() As Boolean
-        'Dim DataBaseError As String = ""
-        'Dim MDC As String = ""
-        'Dim ComServerMDC As String = ""
+    ' Public Function SetupMDCLink() As Boolean
+    'Dim DataBaseError As String = ""
+    'Dim MDC As String = ""
+    'Dim ComServerMDC As String = ""
 
-        'Try
+    'Try
 
-        '    If TestSystem Then
-        '        ComServerMDC = "USSECNE1"
-        '        MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
-        '    Else
-        '        ComServerMDC = "USSECNN4"
-        '        MDC = "sec\engpro\MDCCustomQuotes.nsf"
-        '    End If
+    '    If TestSystem Then
+    '        ComServerMDC = "USSECNE1"
+    '        MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
+    '    Else
+    '        ComServerMDC = "USSECNN4"
+    '        MDC = "sec\engpro\MDCCustomQuotes.nsf"
+    '    End If
 
-        '    If NotclsNotes.NotesDBName(ComServerMDC, MDC) Then
-        '        DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
-        '        Throw New Exception()
-        '    End If
-        '    If NotclsNotes.NotesDBView("(LU unique)") Then
-        '        MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
-        '        EndProgram()
-        '    End If
+    '    If NotclsNotes.NotesDBName(ComServerMDC, MDC) Then
+    '        DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
+    '        Throw New Exception()
+    '    End If
+    '    If NotclsNotes.NotesDBView("(LU unique)") Then
+    '        MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
+    '        EndProgram()
+    '    End If
 
-        '    ReturnclsNotes.CRM_NotesDocKey(OpportunityID)
+    '    ReturnclsNotes.CRM_NotesDocKey(OpportunityID)
 
-        'Catch
+    'Catch
 
-        '    MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
-        '    EndProgram()
-        'End Try
-    End Function
+    '    MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
+    '    EndProgram()
+    'End Try
+    ' End Function
 
-    Function FindMDCDocument() As Boolean
-        'Dim result As Boolean = False
-        'Try
-        '    Dim Bank, Alt, CarNo
-        '    Dim b As Boolean
+    ' Function FindMDCDocument() As Boolean
+    'Dim result As Boolean = False
+    'Try
+    '    Dim Bank, Alt, CarNo
+    '    Dim b As Boolean
 
-        '    IfclsNotes.NotesDocKeyCollection(OpportunityID) Then
-        '    b = True
-        '    Do While b
-        '        If OpportunityID = clsNotes.GetValue("proposal_num") Then
-        '                IfclsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
-        '                    IfclsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
-        '                        IfclsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
-        '                            IfclsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
-        '            Return True
-        '        End If
-        '                        End If
-        '                    End If
-        '                End If
-        '            End If
-        '        b = clsNotes.GetNextDocumentFromCollection()
-        '        Loop
-        '    End If
+    '    IfclsNotes.NotesDocKeyCollection(OpportunityID) Then
+    '    b = True
+    '    Do While b
+    '        If OpportunityID = clsNotes.GetValue("proposal_num") Then
+    '                IfclsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
+    '                    IfclsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
+    '                        IfclsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
+    '                            IfclsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
+    '            Return True
+    '        End If
+    '                        End If
+    '                    End If
+    '                End If
+    '            End If
+    '        b = clsNotes.GetNextDocumentFromCollection()
+    '        Loop
+    '    End If
 
-        '    Return result
+    '    Return result
 
-        'Catch
-        '    MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    'Catch
+    '    MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
 
-        '    Return result
-        'End Try
-    End Function
+    '    Return result
+    'End Try
+    ' End Function
 
 
     Private Function AllDocumentsExists() As Boolean

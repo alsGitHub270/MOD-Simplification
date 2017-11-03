@@ -1769,14 +1769,14 @@ Partial Class CM_MAIN_frm
         EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
         EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
         Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
-        Me.sprTotals.HorizontalScrollBar.TabIndex = 44
+        Me.sprTotals.HorizontalScrollBar.TabIndex = 0
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
         Me.sprTotals.Name = "sprTotals"
         Me.sprTotals.ScrollBarTrackPolicy = FarPoint.Win.Spread.ScrollBarTrackPolicy.Both
         Me.sprTotals.ScrollTipPolicy = FarPoint.Win.Spread.ScrollTipPolicy.Both
         Me.sprTotals.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.sprTotals_Sheet1})
-        Me.sprTotals.Size = New System.Drawing.Size(1411, 21)
+        Me.sprTotals.Size = New System.Drawing.Size(1472, 21)
         Me.sprTotals.Skin = FarPoint.Win.Spread.DefaultSpreadSkins.ArcticSea
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
@@ -1793,7 +1793,7 @@ Partial Class CM_MAIN_frm
         EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
         EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
         Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
-        Me.sprTotals.VerticalScrollBar.TabIndex = 45
+        Me.sprTotals.VerticalScrollBar.TabIndex = 1
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
         'sprTotals_Sheet1
@@ -1921,6 +1921,8 @@ Partial Class CM_MAIN_frm
         Me.sprTotals_Sheet1.Columns.Get(14).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(15).Width = 38.0!
         Me.sprTotals_Sheet1.Columns.Get(16).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(17).Width = 38.0!
+        Me.sprTotals_Sheet1.Columns.Get(18).Width = 38.0!
         Me.sprTotals_Sheet1.HorizontalGridLine = New FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.Color.Black)
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
         Me.sprTotals_Sheet1.RowHeader.Cells.Get(0, 0).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
@@ -2463,8 +2465,6 @@ Partial Class CM_MAIN_frm
     Public WithEvents lblCallBackHours As System.Windows.Forms.Label
     Public WithEvents txtOCPL As System.Windows.Forms.TextBox
     Public WithEvents lblOCPL As System.Windows.Forms.Label
-    Friend WithEvents sprTotals As FarPoint.Win.Spread.FpSpread
-    Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents txtTaxRate As System.Windows.Forms.TextBox
     Friend WithEvents btnLaborRates As System.Windows.Forms.Button
@@ -2474,5 +2474,7 @@ Partial Class CM_MAIN_frm
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Public WithEvents txtContractNumber As System.Windows.Forms.TextBox
     Private WithEvents lblContractNumber As System.Windows.Forms.Label
+    Friend WithEvents sprTotals As FarPoint.Win.Spread.FpSpread
+    Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
 #End Region
 End Class
