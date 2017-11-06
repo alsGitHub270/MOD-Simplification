@@ -32,7 +32,6 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub CreateDataSet()
 
-
         dsCadre = New DataSet()
         dsCadre.EnforceConstraints = False
 
@@ -3020,7 +3019,7 @@ Partial Friend Class CM_MAIN_frm
 
             If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
                 If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
-                    sRequestorNameKey = Left$(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
+                    sRequestorNameKey = Microsoft.VisualBasic.Strings.Left(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
                     sRequestorName = clsNotes.CN_Username
                     If clsNotes.NotesDocKey(sRequestorNameKey) Then
                         sPhone = clsNotes.GetValue("Phone")
@@ -3045,6 +3044,7 @@ Partial Friend Class CM_MAIN_frm
             If bNewDocument Then
                 clsNotes.SetValue("status", "New")
                 clsNotes.SetValue("engineeringReviewStatus", "New")
+
                 Select Case Format(Now, "dddd")
                     Case "Saturday"
                         clsNotes.SetValue("duedate", DateAdd("d", 6, Now))
@@ -3062,8 +3062,8 @@ Partial Friend Class CM_MAIN_frm
                 clsNotes.SetValue("flag_revised", "Yes")
                 sDescriptionField = "description_revised"
             End If
-            clsNotes.SetValue_Readers("requestor", sRequestorName)
 
+            clsNotes.SetValue_Readers("requestor", sRequestorName)
             clsNotes.SetValue("phone_requestor", sPhone)
             clsNotes.SetValue("fax_requestor", sFax_requestor)
             clsNotes.SetValue("phone_mobile_requestor", sPhone_mobile)
@@ -3122,9 +3122,8 @@ Partial Friend Class CM_MAIN_frm
 
             clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
 
-           
             clsNotes.DocSave()
-       
+        Catch
         End Try
     End Sub
 
@@ -3163,8 +3162,9 @@ Partial Friend Class CM_MAIN_frm
 
     Function FindMDCDocument() As Boolean
         Dim result As Boolean = False
+
         Try
-            Dim Bank, Alt, CarNo
+            ' Dim Bank, Alt, CarNo
             Dim b As Boolean
 
             If clsNotes.NotesDocKeyCollection(Contracts.ProposalNum) Then
@@ -3189,9 +3189,11 @@ Partial Friend Class CM_MAIN_frm
 
         Catch
             MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBySixFields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-
             Return result
+        End Try
+
     End Function
+
     Private Function AllDocumentsExists() As Boolean
         Dim filename As String
         For Each row In dtSummaryGroup.Rows
@@ -3208,9 +3210,11 @@ Partial Friend Class CM_MAIN_frm
         Next
         Return True
     End Function
+
     Private Sub CreateNewDocument()
         Throw New NotImplementedException
     End Sub
+
     Private Function GetConsultantsName() As String
         Dim consultants_name As String = ""
         Dim _foundRows() As DataRow
@@ -3220,4 +3224,5 @@ Partial Friend Class CM_MAIN_frm
         End If
         Return consultants_name
     End Function
+
 End Class
