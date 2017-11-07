@@ -3097,13 +3097,10 @@ Partial Friend Class CM_MAIN_frm
             '    Case Else
             'End Select
 
+            clsNotes.SetValue("hydroCars", CountCars(HYDRO_TYPE))
+            clsNotes.SetValue("gearedCars", CountCars(GEARED_TYPE))
+            clsNotes.SetValue("gearlessCars", CountCars(GEARLESS_TYPE))
 
-            'hack set to appropriate numbers
-            clsNotes.SetValue("hydroCars", CInt(0))
-            clsNotes.SetValue("gearedCars", CInt(0))
-            clsNotes.SetValue("gearlessCars", CInt(0))
-
-            
             clsNotes.SetValue_Readers("salesRep", gsSalesRep)
 
             Dim Reader(0 To 8) As String
@@ -3133,8 +3130,7 @@ Partial Friend Class CM_MAIN_frm
         Dim ComServerMDC As String = ""
 
         Try
-
-            If TestSystem Then
+            If TestVersion Then
                 ComServerMDC = "USSECNE1"
                 MDC = "sec\develop\Larry\MDC Custom Quotes_dev.nsf"
             Else
@@ -3146,18 +3142,18 @@ Partial Friend Class CM_MAIN_frm
                 DataBaseError = DataBaseError & "Missing - MDC Custom Quotes_dev.nsf"
                 Throw New Exception()
             End If
-            If clsNotes.NotesDBView("(LU unique)") Then
+
+            If Not clsNotes.NotesDBView("(LU Unique)") Then
                 MessageBox.Show("Could not find (LU opportunity id View", Application.ProductName)
                 EndProgram()
             End If
-
-            Return clsNotes.CRM_NotesDocKey(Contracts.ProposalNum)
-
         Catch
-
             MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes CRM database." & Environment.NewLine & "Closing Cadre!", "Error")
             EndProgram()
         End Try
+
+        Return clsNotes.NotesDocKey(Contracts.ProposalNum)
+
     End Function
 
     Function FindMDCDocument() As Boolean
@@ -3223,6 +3219,20 @@ Partial Friend Class CM_MAIN_frm
             consultants_name = _foundRows(0).Item("companyName")
         End If
         Return consultants_name
+    End Function
+
+    Private Function CountCars(bank_type As String) As Integer
+        Dim number_of_cars As Integer = 0
+
+        For Each row As DataRow In dtSummaryGroup.Rows
+            If row.Item("gateway_review_required") Then
+                If bank_type = (row.Item("Bank_Type")) Then
+                    number_of_cars += CalculateNumberOfCarsInEstimate(row.Item("Units"))
+                End If
+            End If
+        Next
+
+        Return number_of_cars
     End Function
 
 End Class
