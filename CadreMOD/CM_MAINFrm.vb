@@ -378,7 +378,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-
+        FpSpread1.Hide()
         DetachFeedback()
 
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
@@ -661,6 +661,7 @@ Partial Friend Class CM_MAIN_frm
         ' FpSpread1.ActiveSheet.Cells(0, 20).Locked = True
 
         initializing = False
+        FpSpread1.Show()
     End Sub
 
 
