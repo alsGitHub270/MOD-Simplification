@@ -45,8 +45,8 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
-        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer3 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer4 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.cboSupt = New System.Windows.Forms.ComboBox()
@@ -155,8 +155,8 @@ Partial Class CM_MAIN_frm
         Me.txtEstimateNum = New System.Windows.Forms.MaskedTextBox()
         Me.btnCopy = New System.Windows.Forms.Button()
         Me.Menu_pic = New System.Windows.Forms.PictureBox()
-        Me.btnContacts = New System.Windows.Forms.Button()
         Me.btnSuptReview = New System.Windows.Forms.Button()
+        Me.btnContact = New System.Windows.Forms.Button()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
         Me.StatusBar1.SuspendLayout()
@@ -1629,18 +1629,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
         Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.HorizontalScrollBar.Name = ""
-        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
+        EnhancedScrollBarRenderer3.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer3.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer3
         Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
@@ -1653,18 +1653,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.VerticalScrollBar.Name = ""
-        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
+        EnhancedScrollBarRenderer4.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer4.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer4
         Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
@@ -2321,21 +2321,6 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic.TabIndex = 37
         Me.Menu_pic.TabStop = False
         '
-        'btnContacts
-        '
-        Me.btnContacts.BackColor = System.Drawing.SystemColors.Control
-        Me.btnContacts.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnContacts.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
-        Me.btnContacts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnContacts.Location = New System.Drawing.Point(415, 5)
-        Me.btnContacts.Name = "btnContacts"
-        Me.btnContacts.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnContacts.Size = New System.Drawing.Size(53, 44)
-        Me.btnContacts.TabIndex = 108
-        Me.btnContacts.Text = "Contacts"
-        Me.btnContacts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnContacts.UseVisualStyleBackColor = False
-        '
         'btnSuptReview
         '
         Me.btnSuptReview.BackColor = System.Drawing.SystemColors.Control
@@ -2351,6 +2336,18 @@ Partial Class CM_MAIN_frm
         Me.btnSuptReview.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.btnSuptReview.UseVisualStyleBackColor = False
         '
+        'btnContact
+        '
+        Me.btnContact.BackColor = System.Drawing.SystemColors.Control
+        Me.btnContact.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
+        Me.btnContact.Location = New System.Drawing.Point(417, 5)
+        Me.btnContact.Name = "btnContact"
+        Me.btnContact.Size = New System.Drawing.Size(51, 46)
+        Me.btnContact.TabIndex = 110
+        Me.btnContact.Text = "Contacts"
+        Me.btnContact.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnContact.UseVisualStyleBackColor = False
+        '
         'CM_MAIN_frm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -2360,10 +2357,10 @@ Partial Class CM_MAIN_frm
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(1484, 795)
+        Me.Controls.Add(Me.btnContact)
         Me.Controls.Add(Me.btnSuptReview)
         Me.Controls.Add(Me.txtEstimateNum)
         Me.Controls.Add(Me.txtEstimator)
-        Me.Controls.Add(Me.btnContacts)
         Me.Controls.Add(Me.btnProposal)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -2450,7 +2447,7 @@ Partial Class CM_MAIN_frm
 
     Sub InitializeForms_btn()
         ReDim Forms_btn(2)
-        Me.Forms_btn(0) = btnContacts
+
         Me.Forms_btn(1) = btnForms
         Me.Forms_btn(2) = btnEstimate
     End Sub
@@ -2543,10 +2540,10 @@ Partial Class CM_MAIN_frm
     Public WithEvents txtEstimateNum As System.Windows.Forms.MaskedTextBox
     Private WithEvents btnCopy As System.Windows.Forms.Button
     Public WithEvents Menu_pic As System.Windows.Forms.PictureBox
-    Private WithEvents btnContacts As System.Windows.Forms.Button
     Private WithEvents btnSuptReview As System.Windows.Forms.Button
     Public WithEvents cboSupt As System.Windows.Forms.ComboBox
     Public WithEvents lblSupt As System.Windows.Forms.Label
     Private WithEvents btnLaborRates As System.Windows.Forms.Button
+    Private WithEvents btnContact As System.Windows.Forms.Button
 #End Region
 End Class

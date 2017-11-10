@@ -1822,12 +1822,7 @@ Partial Friend Class CM_MAIN_frm
         End If
     End Sub
 
-    Private Sub btnContacts_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnContacts.Click
-        'Dim datatable As New DataTable
-        'datatable = dtContactGroup
-        'Dim f2 As frmAddresses = New frmAddresses(datatable)
-        'f2.ShowDialog()
-
+    Private Sub btnContact_Click(sender As System.Object, e As System.EventArgs) Handles btnContact.Click
         frmContacts.ShowDialog()
     End Sub
     Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cboSeismicZone.Leave, cboSeismicZone.SelectedIndexChanged
@@ -2478,64 +2473,64 @@ Partial Friend Class CM_MAIN_frm
         Dim alt_model As String = String.Empty
         Dim alt_bank_type As String = String.Empty
         Try
-        For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If Not ChildSheetView1 Is Nothing Then
-                For i As Integer = 0 To ChildSheetView1.RowCount - 1
-                    criteria = "id = '" & ChildSheetView1.Cells(i, 1).Value & "'"
-                    Dim baseRow() As Data.DataRow
-                    baseRow = dtSummaryGroup.Select(criteria)
+            For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
+                ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+                If Not ChildSheetView1 Is Nothing Then
+                    For i As Integer = 0 To ChildSheetView1.RowCount - 1
+                        criteria = "id = '" & ChildSheetView1.Cells(i, 1).Value & "'"
+                        Dim baseRow() As Data.DataRow
+                        baseRow = dtSummaryGroup.Select(criteria)
                         If Not IsDBNull(baseRow(0).Item("speed")) Then
-                        base_speed = baseRow(0).Item("speed")
+                            base_speed = baseRow(0).Item("speed")
                         End If
                         If Not IsDBNull(baseRow(0).Item("machine_model")) Then
-                        base_model = baseRow(0).Item("machine_model")
+                            base_model = baseRow(0).Item("machine_model")
                         End If
                         If Not IsDBNull(baseRow(0).Item("Bank_Type")) Then
-                        base_bank_type = baseRow(0).Item("Bank_Type")
+                            base_bank_type = baseRow(0).Item("Bank_Type")
                         End If
                         budget_c1 = GetBudgetC1(base_speed, base_model, base_bank_type)
                         If ChildSheetView1.Cells(i, 20).Value < budget_c1 Then
                             ChildSheetView1.Cells(i, 20).BackColor = Color.Red
                         ElseIf ChildSheetView1.Cells(i, 20).Value > budget_c1 + 0.04 Then
                             ChildSheetView1.Cells(i, 20).BackColor = Color.Green
-                    Else
+                        Else
                             ChildSheetView1.Cells(i, 20).BackColor = Color.Yellow
-                    End If
-                Next
+                        End If
+                    Next
 
-                For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
-                    ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
-                    If Not ChildSheetView2 Is Nothing Then
-                        For i As Integer = 0 To ChildSheetView2.RowCount - 1
-                            criteria = "id = '" & ChildSheetView2.Cells(i, 1).Value & "'"
+                    For jindex As Integer = 0 To ChildSheetView1.RowCount - 1
+                        ChildSheetView2 = ChildSheetView1.FindChildView(jindex, 0)
+                        If Not ChildSheetView2 Is Nothing Then
+                            For i As Integer = 0 To ChildSheetView2.RowCount - 1
+                                criteria = "id = '" & ChildSheetView2.Cells(i, 1).Value & "'"
                                 Dim altRow() As Data.DataRow
                                 altRow = dtSummaryGroup.Select(criteria)
 
                                 If Not IsDBNull(altRow(0).Item("speed")) Then
-                                alt_speed = altRow(0).Item("speed")
+                                    alt_speed = altRow(0).Item("speed")
                                 End If
                                 If Not IsDBNull(altRow(0).Item("machine_model")) Then
-                                alt_model = altRow(0).Item("machine_model")
+                                    alt_model = altRow(0).Item("machine_model")
                                 End If
                                 If Not IsDBNull(altRow(0).Item("Bank_Type")) Then
-                                alt_bank_type = altRow(0).Item("Bank_Type")
+                                    alt_bank_type = altRow(0).Item("Bank_Type")
                                 End If
                                 budget_c1 = GetBudgetC1(alt_speed, alt_model, alt_bank_type)
                                 If ChildSheetView2.Cells(i, 21).Value < budget_c1 Then
                                     ChildSheetView2.Cells(i, 21).BackColor = Color.Red
                                 ElseIf ChildSheetView2.Cells(i, 21).Value > budget_c1 + 0.04 Then
                                     ChildSheetView2.Cells(i, 21).BackColor = Color.Green
-                            Else
+                                Else
                                     ChildSheetView2.Cells(i, 21).BackColor = Color.Yellow
-                            End If
-                        Next
+                                End If
+                            Next
 
-                    End If
-                Next jindex
+                        End If
+                    Next jindex
 
-            End If
-        Next iIndex
+                End If
+            Next iIndex
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error in SetBaseAltC1Colors", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Throw New System.Exception("  An Error Occurred.  Processing Terminated")
@@ -2851,8 +2846,8 @@ Partial Friend Class CM_MAIN_frm
 
         myList = GetDataFromOptions(sSQL)
         If myList.Count > 0 Then
-        c1 = myList(0)
-        c1 += 0.06
+            c1 = myList(0)
+            c1 += 0.06
         End If
         Return c1
 
@@ -3303,11 +3298,11 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub btnSuptReview_Click(sender As System.Object, e As System.EventArgs) Handles btnSuptReview.Click
-        Dim cc As DialogResult
+
         Dim sSuptReview As String
         Dim sSuptStatus As String
         Dim sSUPTFileName As String = ""
-        Dim CriticalTitle, CriticalMsg As String
+        ' Dim CriticalTitle, CriticalMsg As String
         Dim sMessage As String = ""
 
         sSuptReview = Get_SuptStatus("Decision")
@@ -3364,9 +3359,15 @@ Partial Friend Class CM_MAIN_frm
 
         SaveAll()
 
-        'sSUPTFileName = OutputSuptFile()
+        For Each row As DataRow In dtSummaryGroup.Rows
+            If Not IsDBNull(row("Include")) AndAlso row("Include") Then
 
-        'SUPT_Add_Doc(sSUPTFileName)
+                sSUPTFileName = OutputSuptFile(row("bank"), row("units"))
+
+                'SUPT_Add_Doc(sSUPTFileName)
+            End If
+        Next
+
 
         MessageBox.Show("Supt Approval submitted", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
 
@@ -3569,6 +3570,7 @@ Partial Friend Class CM_MAIN_frm
 
         Return True
     End Function
+
 
 
 End Class

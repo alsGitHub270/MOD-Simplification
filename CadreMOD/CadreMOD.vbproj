@@ -145,6 +145,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Constants.vb" />
+    <Compile Include="EXCEL_DOCUMENT.vb" />
     <Compile Include="ExpensesPerDay_frm.Designer.vb">
       <DependentUpon>ExpensesPerDay_frm.vb</DependentUpon>
     </Compile>
