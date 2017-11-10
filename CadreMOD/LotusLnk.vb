@@ -1355,55 +1355,57 @@ GETNOTESDATADIR_ERROR:
 
     End Function
 
-    '    Public Function SetupSuptReviewLink() As Boolean
-    '        Dim DataBaseError As String = ""
-    '        Dim SUPT As String = ""
-    '        Dim ComServerSupt As String = ""
-    '        Dim bNotesDocKey As Boolean = False
+    Public Function SetupSuptReviewLink() As Boolean
+        Dim DataBaseError As String = ""
+        Dim SUPT As String = ""
+        Dim ComServerSupt As String = ""
+        Dim bNotesDocKey As Boolean = False
 
-    '        Try
-    '            If TestVersion Then
-    '                ComServerSupt = "USSECNE1"
-    '                SUPT = "sec\develop\Larry\Approval Center_dev.nsf"
-    '            Else
-    '                ComServerSupt = "USSECNN4"
-    '                SUPT = "sec\ApprovalCenter.nsf"
-    '            End If
-    '            If Not clsNotes.NotesDBName(ComServerSupt, SUPT) Then
-    '                DataBaseError = DataBaseError & "Missing - Supt Review Approval Center_dev.nsf"
-    '                Throw New Exception()
-    '            End If
-    '            If Not clsNotes.NotesDBView("(LU review key)") Then
-    '                MessageBox.Show("Could not find (LU review key) View", Application.ProductName)
-    '                EndProgram()
-    '            End If
-    '            bNotesDocKey = True
+        Try
+            If TestVersion Then
+                ComServerSupt = "USSECNE1"
+                SUPT = "sec\develop\Larry\Approval Center_dev.nsf"
+            Else
+                ComServerSupt = "USSECNN4"
+                SUPT = "sec\ApprovalCenter.nsf"
+            End If
+            If Not clsNotes.NotesDBName(ComServerSupt, SUPT) Then
+                DataBaseError = DataBaseError & "Missing - Supt Review Approval Center_dev.nsf"
+                Throw New Exception()
+            End If
+            If Not clsNotes.NotesDBView("(LU review key)") Then
+                MessageBox.Show("Could not find (LU review key) View", Application.ProductName)
+                EndProgram()
+            End If
+            bNotesDocKey = True
 
-    '        Catch
-    '            MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes Supt database." & Environment.NewLine & "Closing Cadre!", "Error")
-    '            EndProgram()
+        Catch
+            MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes Supt database." & Environment.NewLine & "Closing Cadre!", "Error")
+            EndProgram()
 
-    '        End Try
+        End Try
 
-    '        Return bNotesDocKey
+        Return bNotesDocKey
 
-    '    End Function
-    '    Public Function Get_SuptStatus(ByVal sStatusDecision As String) As String
-    '        Dim sSuptStatus As String = ""
+    End Function
 
-    '        If SetupSuptReviewLink() Then
-    '            If clsNotes.FindSUPTDocument() Then
-    '                Select Case sStatusDecision
-    '                    Case "Decision"
-    '                        sSuptStatus = clsNotes.GetValue("Decision")
-    '                    Case "Status"
-    '                        sSuptStatus = clsNotes.GetValue("Status")
-    '                End Select
-    '            End If
-    '        End If
-    '        Return sSuptStatus
+    Public Function Get_SuptStatus(ByVal sStatusDecision As String) As String
+        Dim sSuptStatus As String = ""
 
-    '    End Function
+        If SetupSuptReviewLink() Then
+            If clsNotes.FindSUPTDocument() Then
+                Select Case sStatusDecision
+                    Case "Decision"
+                        sSuptStatus = clsNotes.GetValue("Decision")
+                    Case "Status"
+                        sSuptStatus = clsNotes.GetValue("Status")
+                End Select
+            End If
+        End If
+        Return sSuptStatus
+
+    End Function
+
     '    Public Sub CreateNewOpportunity()
 
     '        clsNotes.CreateDOC("MOD Estimate")

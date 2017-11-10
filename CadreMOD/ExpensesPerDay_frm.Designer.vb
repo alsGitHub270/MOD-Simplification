@@ -168,7 +168,7 @@ Partial Class ExpensesPerDay_frm
         '
         'Cost_lbl
         '
-        Me.Cost_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.Cost_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.Cost_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.Cost_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Cost_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -183,7 +183,7 @@ Partial Class ExpensesPerDay_frm
         '
         'Total_lbl
         '
-        Me.Total_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.Total_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.Total_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.Total_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Total_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -198,7 +198,7 @@ Partial Class ExpensesPerDay_frm
         '
         'Zone_lbl
         '
-        Me.Zone_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.Zone_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.Zone_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Zone_lbl.Location = New System.Drawing.Point(8, 33)
         Me.Zone_lbl.Name = "Zone_lbl"
@@ -209,7 +209,7 @@ Partial Class ExpensesPerDay_frm
         '
         'Parking_lbl
         '
-        Me.Parking_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.Parking_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.Parking_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Parking_lbl.Location = New System.Drawing.Point(8, 57)
         Me.Parking_lbl.Name = "Parking_lbl"
@@ -220,7 +220,7 @@ Partial Class ExpensesPerDay_frm
         '
         'OutOfTownExpenses_lbl
         '
-        Me.OutOfTownExpenses_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.OutOfTownExpenses_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.OutOfTownExpenses_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OutOfTownExpenses_lbl.Location = New System.Drawing.Point(8, 81)
         Me.OutOfTownExpenses_lbl.Name = "OutOfTownExpenses_lbl"
@@ -231,7 +231,7 @@ Partial Class ExpensesPerDay_frm
         '
         'TravelTime_lbl
         '
-        Me.TravelTime_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.TravelTime_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.TravelTime_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TravelTime_lbl.Location = New System.Drawing.Point(8, 105)
         Me.TravelTime_lbl.Name = "TravelTime_lbl"
@@ -242,7 +242,7 @@ Partial Class ExpensesPerDay_frm
         '
         'Miscellaneous_lbl
         '
-        Me.Miscellaneous_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.Miscellaneous_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.Miscellaneous_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Miscellaneous_lbl.Location = New System.Drawing.Point(8, 129)
         Me.Miscellaneous_lbl.Name = "Miscellaneous_lbl"

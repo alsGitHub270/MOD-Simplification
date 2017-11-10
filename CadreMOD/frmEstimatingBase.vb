@@ -18,10 +18,9 @@ Public Class frmEstimatingBase
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
     Private SheetCornerColWidth As Integer = 0
-    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODEST.JSON"
     Private OrderingForms_spc As Object
 
-    Private Sub CreateDataSet(ByVal CurUnits As String)
+    Public Sub CreateEstimatingDataSet(ByVal CurUnits As String)
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer
         Dim HeaderSetup() As System.Data.DataColumn = Nothing
         Dim AddMaterial As Boolean = False
@@ -75,8 +74,7 @@ Public Class frmEstimatingBase
             SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_EST).HeaderType = typeSingle
             SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_EST).HeaderType = typeStr
 
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                           FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON"
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A", CurUnits) & "MODEST.JSON"
             If Not File.Exists(EST_Filename) Then
                 MaterialItemRecordSet = New ADODB.Recordset
                 MaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
@@ -151,10 +149,17 @@ Public Class frmEstimatingBase
                         SubGroups.Columns.AddRange(HeaderSetup)
                         If Not IsNothing(a_MaterialGroup) Then
                             For jIndex = a_MaterialGroup.GetLowerBound(0) To a_MaterialGroup.GetUpperBound(0)
-                                SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description, a_MaterialGroup(jIndex).MainID, a_MaterialGroup(jIndex).MaterialID,
-                                                                 a_MaterialGroup(jIndex).Units, a_MaterialGroup(jIndex).OptionStr, a_MaterialGroup(jIndex).Type,
-                                                                 a_MaterialGroup(jIndex).OrderBy, a_MaterialGroup(jIndex).Qty, a_MaterialGroup(jIndex).MaterialCost,
-                                                                 a_MaterialGroup(jIndex).StandardHours, a_MaterialGroup(jIndex).SpecialHours, ""})
+                                SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description,
+                                                                 a_MaterialGroup(jIndex).MainID,
+                                                                 a_MaterialGroup(jIndex).MaterialID,
+                                                                 a_MaterialGroup(jIndex).Units,
+                                                                 a_MaterialGroup(jIndex).OptionStr,
+                                                                 a_MaterialGroup(jIndex).Type,
+                                                                 a_MaterialGroup(jIndex).OrderBy,
+                                                                 a_MaterialGroup(jIndex).Qty,
+                                                                 a_MaterialGroup(jIndex).MaterialCost,
+                                                                 a_MaterialGroup(jIndex).StandardHours,
+                                                                 a_MaterialGroup(jIndex).SpecialHours, ""})
                             Next jIndex
                         End If
                     Case Else
@@ -190,8 +195,8 @@ Public Class frmEstimatingBase
                                          New DataColumn("TopFloorToOverhead_txt", typeStr),
                                          New DataColumn("Travel_txt", typeStr),
                                          New DataColumn("PitDepth_txt", typeStr),
-                                         New DataColumn("RiserQtyExistingFront_Cmb", typeStr),
-                                         New DataColumn("RiserQtyExistingRear_Cmb", typeStr),
+                                         New DataColumn("RiserQtyFront_Cmb", typeStr),
+                                         New DataColumn("RiserQtyRear_Cmb", typeStr),
                                          New DataColumn("FixtureFinish_cmb", typeStr),
                                          New DataColumn("DTRequestedShipDate", typeStr),
                                          New DataColumn("BankCompleteDate_txt", typeStr),
@@ -213,11 +218,11 @@ Public Class frmEstimatingBase
                                          New DataColumn("GatewayReviewRequired_chk", typeInt),
                                          New DataColumn("Destination_cmb", typeStr)})
 
-            Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & TabControl1.SelectedTab.Text, FormIsDirty)
+            Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             EstimatingDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
 
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In Estimating - CreateDataSet")
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In CreateEstimatingDataSet")
 
         End Try
 
@@ -330,11 +335,15 @@ Public Class frmEstimatingBase
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
 
-        Me.Cursor = Cursors.WaitCursor
-        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
-        Me.Cursor = Cursors.Default
-        CM_MAIN_frm.Show()
-        Me.Dispose()
+        Select Case PromptForSave()
+            Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                Me.Cursor = Cursors.WaitCursor
+                UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
+                Me.Cursor = Cursors.Default
+                CM_MAIN_frm.Show()
+                Me.Dispose()
+            Case Else
+        End Select
 
     End Sub
     Private Sub ExpandAll_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandAll_cmd.Click
@@ -727,11 +736,15 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
+
         If Not isInitializingComponent Then
-            If PromptForSave() Then
-                DisplayEST_vs_ORD()
-            End If
+            Select Case PromptForSave()
+                Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                    DisplayEST_vs_ORD()
+                Case Else
+            End Select
         End If
+
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
@@ -819,7 +832,7 @@ Public Class frmEstimatingBase
                 End If
             End If
             BillOfMaterials_spr.ActiveSheet.RowCount = 0
-            CreateDataSet(UseUnits)
+            CreateEstimatingDataSet(UseUnits)
             model = BillOfMaterials_spr.ActiveSheet.Models.Data
             For Each dt In EstimatingDataset.Tables
                 dt.DefaultView.AllowNew = False
@@ -831,15 +844,13 @@ Public Class frmEstimatingBase
                 dr = GeneralInfo.Rows(0)
                 For Each Cntrl As Control In GeneralInformation_fra.Controls
                     If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
-                        [Cntrl].Text = dr([Cntrl].Name)
+                        [Cntrl].Text = FindValueInDataRow([Cntrl].Name, dr)
                     ElseIf TypeOf [Cntrl] Is DateTimePicker Then
-                        If Not IsDBNull(dr([Cntrl].Name)) Then
-                            Dim UseDTPicker As DateTimePicker = [Cntrl]
-                            UseDTPicker.Value = CDate(dr([Cntrl].Name))
-                        End If
+                        Dim UseDTPicker As DateTimePicker = [Cntrl]
+                        UseDTPicker.Value = CDate(FindValueInDataRow([Cntrl].Name, dr))
                     ElseIf TypeOf [Cntrl] Is CheckBox Then
                         Dim UseCheckbox As CheckBox = [Cntrl]
-                        UseCheckbox.CheckState = Conversion.Val(dr([Cntrl].Name))
+                        UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
                     End If
                 Next Cntrl
                 For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
@@ -1000,7 +1011,7 @@ Public Class frmEstimatingBase
             If is_new_row Then
                 GeneralInfo.Rows.Add(_row)
             End If
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                        FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON"
             If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
                 Throw New Exception
@@ -1042,7 +1053,7 @@ Public Class frmEstimatingBase
             'If is_new_row Then
             '    GeneralInfo.Rows.Add(_row)
             'End If
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                        FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODORD.JSON"
             If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
                 Throw New Exception
@@ -1198,12 +1209,12 @@ Public Class frmEstimatingBase
             FormIsDirty = True
         End If
     End Sub
-    Private Sub RiserQtyExistingFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyFront_Cmb.SelectedIndexChanged
+    Private Sub RiserQtyFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyFront_Cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
     End Sub
-    Private Sub RiserQtyExistingRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyRear_Cmb.SelectedIndexChanged
+    Private Sub RiserQtyRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyRear_Cmb.SelectedIndexChanged
         If Not isInitializingComponent Then
             FormIsDirty = True
         End If
@@ -1303,76 +1314,76 @@ Public Class frmEstimatingBase
         Dim CurUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
         Dim iIndex As Integer = 0, AryIndex As Integer = -1
 
-        If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+        If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                                  FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON") Then
-            If PromptForSave() Then
-                ArchiveFiles()
-                UnitCopyMerge_frm.Text = CurButtonLabel
-                UnitCopyMerge_frm.CurUnits = CurUnits
-                Erase UnitCopyMerge_frm.UnitOptions
-                If CurButtonLabel.Contains("Copy") Then
-                    CalculateNumberOfCarsInEstimate(CurUnits)
-                    UnitCopyMerge_frm.UnitOptions = UnitsInEstimate
-                ElseIf TabControl1.TabPages.Count > 1 Then
-                    For iIndex = 0 To TabControl1.TabPages.Count
-                        Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                        If CurTab.Text.IndexOf(EST_Suffix) > -1 And CurTab.Text <> TabControl1.SelectedTab.Text Then
-                            AryIndex += 1
-                            ReDim Preserve UnitCopyMerge_frm.UnitOptions(AryIndex)
-                            UnitCopyMerge_frm.UnitOptions(AryIndex) = Strings.Left(CurTab.Text.Trim, CurTab.Text.Length - 6)
-                        End If
-                    Next iIndex
-                    If AryIndex = -1 Then
-                        Exit Sub
-                    End If
-                Else
-                    Exit Sub
-                End If
-                UnitCopyMerge_frm.ShowDialog()
-                If UnitCopyMerge_frm.CopyMergeStatus = "Successful" Then
+            Select Case PromptForSave()
+                Case MsgBoxResult.Yes, 0
                     ArchiveFiles()
-                    If CurButtonLabel.Contains("Merge") Then
-                        For iIndex = TabControl1.TabPages.Count - 1 To 0 Step -1
+                    UnitCopyMerge_frm.Text = CurButtonLabel
+                    UnitCopyMerge_frm.CurUnits = CurUnits
+                    Erase UnitCopyMerge_frm.UnitOptions
+                    If CurButtonLabel.Contains("Copy") Then
+                        CalculateNumberOfCarsInEstimate(CurUnits)
+                        UnitCopyMerge_frm.UnitOptions = UnitsInEstimate
+                    ElseIf TabControl1.TabPages.Count > 1 Then
+                        For iIndex = 0 To TabControl1.TabPages.Count
                             Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                            If CurTab.Text = CurUnits & EST_Suffix Then
-                                TabControl1.TabPages.Remove(CurTab)
-                                Exit For
+                            If CurTab.Text.IndexOf(EST_Suffix) > -1 And CurTab.Text <> TabControl1.SelectedTab.Text Then
+                                AryIndex += 1
+                                ReDim Preserve UnitCopyMerge_frm.UnitOptions(AryIndex)
+                                UnitCopyMerge_frm.UnitOptions(AryIndex) = Strings.Left(CurTab.Text.Trim, CurTab.Text.Length - 6)
                             End If
                         Next iIndex
-                        TabControl1.SelectTab(0)
+                        If AryIndex = -1 Then
+                            Exit Sub
+                        End If
+                    Else
+                        Exit Sub
                     End If
-                End If
-                DisplayEST_vs_ORD()
-            End If
+                    UnitCopyMerge_frm.ShowDialog()
+                    If UnitCopyMerge_frm.CopyMergeStatus = "Successful" Then
+                        ArchiveFiles()
+                        If CurButtonLabel.Contains("Merge") Then
+                            For iIndex = TabControl1.TabPages.Count - 1 To 0 Step -1
+                                Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
+                                If CurTab.Text = CurUnits & EST_Suffix Then
+                                    TabControl1.TabPages.Remove(CurTab)
+                                    Exit For
+                                End If
+                            Next iIndex
+                            TabControl1.SelectTab(0)
+                        End If
+                    End If
+                    DisplayEST_vs_ORD()
+                Case Else
+                    MsgBox("Current data for " & TabControl1.SelectedTab.Text & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
+            End Select
         Else
             MsgBox("Current data for " & TabControl1.SelectedTab.Text & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
         End If
 
     End Sub
-    Private Function PromptForSave() As Boolean
-        Dim ReturnVal As Boolean = True
+    Private Function PromptForSave() As DialogResult
         Dim SaveResponse As Integer = 0
 
         If FormIsDirty Then
             If TabControl1.SelectedTab.Text.ToUpper.Contains(EST_Suffix) Then
-                SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+                SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine &
+                                      "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
                 If SaveResponse = MsgBoxResult.Yes Then
                     SaveEstimatingData()
                     ArchiveFiles()
-                Else
-                    ReturnVal = False
                 End If
             Else
-                SaveResponse = MsgBox("You must save the current Ordering Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+                SaveResponse = MsgBox("You must save the current Ordering Data before continuing!" & Environment.NewLine &
+                                      "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
                 If SaveResponse = MsgBoxResult.Yes Then
                     SaveOrderingData()
                     ArchiveFiles()
-                Else
-                    ReturnVal = False
                 End If
             End If
         End If
-        Return ReturnVal
+        Return SaveResponse
 
     End Function
     Private Sub Set_Fields_Grey_EST()

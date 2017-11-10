@@ -18,17 +18,18 @@ Public Class frmEstimatingAlt
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
     Private SheetCornerColWidth As Integer = 0
-    Private EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurrentGOData_Typ.Units) & "MODALT.JSON"
 
     Private Sub CreateDataSet(ByVal CurUnits As String)
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer
         Dim HeaderSetup() As System.Data.DataColumn = Nothing
         Dim AddMaterial As Boolean = False
+        Dim UseBaseDataRow As DataRow = Nothing, UseAltDataRow As DataRow = Nothing
 
         Try
-            EstimatingDataset = Nothing
-            EstimatingDataset = New DataSet()
-            EstimatingDataset.EnforceConstraints = False
+            frmEstimatingBase.CreateEstimatingDataSet(CurUnits)
+            AltDataset = Nothing
+            AltDataset = New DataSet()
+            AltDataset.EnforceConstraints = False
             MainGroups = Nothing
             SubGroups = Nothing
             GeneralInfo = Nothing
@@ -82,9 +83,8 @@ Public Class frmEstimatingAlt
             SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_ALT).HeaderType = typeSingle
             SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_ALT).HeaderType = typeStr
 
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
-                                           FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODALT.JSON"
-            If Not File.Exists(EST_Filename) Then
+            ALT_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurUnits) & "MODALT.JSON"
+            If Not File.Exists(ALT_Filename) Then
                 MaterialItemRecordSet = New ADODB.Recordset
                 MaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
                 If MaterialItemRecordSet.RecordCount > 0 Then
@@ -120,9 +120,13 @@ Public Class frmEstimatingAlt
                             a_MaterialGroup(jIndex).MaterialID = MaterialItemRecordSet.Fields("Sub ID").Value.ToString.Trim
                             a_MaterialGroup(jIndex).Description = MaterialItemRecordSet.Fields("Sub").Value.ToString.Trim
                             a_MaterialGroup(jIndex).Units = CurUnits
+                            a_MaterialGroup(jIndex).OptionStrBase = Nothing
                             a_MaterialGroup(jIndex).OptionStr = Nothing
+                            a_MaterialGroup(jIndex).TypeBase = Nothing
                             a_MaterialGroup(jIndex).Type = Nothing
+                            a_MaterialGroup(jIndex).OrderByBase = Nothing
                             a_MaterialGroup(jIndex).OrderBy = Nothing
+                            a_MaterialGroup(jIndex).QtyBase = -999
                             a_MaterialGroup(jIndex).Qty = -999
                             a_MaterialGroup(jIndex).MaterialCost = 0
                             a_MaterialGroup(jIndex).StandardHours = 0
@@ -146,7 +150,7 @@ Public Class frmEstimatingAlt
                 Next jIndex
                 Select Case iIndex
                     Case MAIN_GROUP
-                        MainGroups = EstimatingDataset.Tables.Add(TABLENAME_MAIN)
+                        MainGroups = AltDataset.Tables.Add(TABLENAME_MAIN)
                         MainGroups.Columns.AddRange(HeaderSetup)
                         If Not IsNothing(a_MainGroup) Then
                             For jIndex = a_MainGroup.GetLowerBound(0) To a_MainGroup.GetUpperBound(0)
@@ -154,20 +158,31 @@ Public Class frmEstimatingAlt
                             Next jIndex
                         End If
                     Case MATERIAL_GROUP
-                        SubGroups = EstimatingDataset.Tables.Add(TABLENAME_MATERIALS)
+                        SubGroups = AltDataset.Tables.Add(TABLENAME_MATERIALS)
                         SubGroups.Columns.AddRange(HeaderSetup)
                         If Not IsNothing(a_MaterialGroup) Then
                             For jIndex = a_MaterialGroup.GetLowerBound(0) To a_MaterialGroup.GetUpperBound(0)
-                                SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description, a_MaterialGroup(jIndex).MainID, a_MaterialGroup(jIndex).MaterialID,
-                                                                 a_MaterialGroup(jIndex).Units, a_MaterialGroup(jIndex).OptionStr, a_MaterialGroup(jIndex).Type,
-                                                                 a_MaterialGroup(jIndex).OrderBy, a_MaterialGroup(jIndex).Qty, a_MaterialGroup(jIndex).MaterialCost,
-                                                                 a_MaterialGroup(jIndex).StandardHours, a_MaterialGroup(jIndex).SpecialHours, ""})
+                                SubGroups.Rows.Add(New Object() {a_MaterialGroup(jIndex).Description,
+                                                                 a_MaterialGroup(jIndex).MainID,
+                                                                 a_MaterialGroup(jIndex).MaterialID,
+                                                                 a_MaterialGroup(jIndex).Units,
+                                                                 a_MaterialGroup(jIndex).OptionStrBase,
+                                                                 a_MaterialGroup(jIndex).OptionStr,
+                                                                 a_MaterialGroup(jIndex).TypeBase,
+                                                                 a_MaterialGroup(jIndex).Type,
+                                                                 a_MaterialGroup(jIndex).OrderByBase,
+                                                                 a_MaterialGroup(jIndex).OrderBy,
+                                                                 a_MaterialGroup(jIndex).QtyBase,
+                                                                 a_MaterialGroup(jIndex).Qty,
+                                                                 a_MaterialGroup(jIndex).MaterialCost,
+                                                                 a_MaterialGroup(jIndex).StandardHours,
+                                                                 a_MaterialGroup(jIndex).SpecialHours, ""})
                             Next jIndex
                         End If
                     Case Else
                 End Select
             Next iIndex
-            GeneralInfo = EstimatingDataset.Tables.Add(TABLENAME_GENERALINFO)
+            GeneralInfo = AltDataset.Tables.Add(TABLENAME_GENERALINFO)
             GeneralInfo.Columns.AddRange(New DataColumn() {New DataColumn("UnitsInTab", typeStr),
                                          New DataColumn("CapacityNew_cmb", typeStr),
                                          New DataColumn("SpeedNew_cmb", typeStr),
@@ -197,8 +212,8 @@ Public Class frmEstimatingAlt
                                          New DataColumn("TopFloorToOverhead_txt", typeStr),
                                          New DataColumn("Travel_txt", typeStr),
                                          New DataColumn("PitDepth_txt", typeStr),
-                                         New DataColumn("RiserQtyExistingFront_Cmb", typeStr),
-                                         New DataColumn("RiserQtyExistingRear_Cmb", typeStr),
+                                         New DataColumn("RiserQtyFront_Cmb", typeStr),
+                                         New DataColumn("RiserQtyRear_Cmb", typeStr),
                                          New DataColumn("FixtureFinish_cmb", typeStr),
                                          New DataColumn("DTRequestedShipDate", typeStr),
                                          New DataColumn("BankCompleteDate_txt", typeStr),
@@ -220,11 +235,82 @@ Public Class frmEstimatingAlt
                                          New DataColumn("GatewayReviewRequired_chk", typeInt),
                                          New DataColumn("Destination_cmb", typeStr)})
 
-            Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & TabControl1.SelectedTab.Text, FormIsDirty)
-            EstimatingDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+            Deserialize(ALT_Filename, AltDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
+            AltDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+
+            For iIndex = 0 To AltDataset.Tables.Count - 1
+                For jIndex = 0 To AltDataset.Tables(iIndex).Rows.Count - 1
+                    UseAltDataRow = AltDataset.Tables(iIndex).Rows(jIndex)
+                    Select Case AltDataset.Tables(iIndex).TableName
+                        Case TABLENAME_MATERIALS
+                            UseAltDataRow(TABLECOL_OPTION_BASE) = GetValue(EstimatingDataset.Tables(TABLENAME_MATERIALS), TABLECOL_OPTION_EST,
+                                                                          UseAltDataRow(TABLECOL_MAINID), UseAltDataRow(TABLECOL_MATERIALID))
+                            UseAltDataRow(TABLECOL_TYPE_BASE) = GetValue(EstimatingDataset.Tables(TABLENAME_MATERIALS), TABLECOL_TYPE_EST,
+                                                                          UseAltDataRow(TABLECOL_MAINID), UseAltDataRow(TABLECOL_MATERIALID))
+                            UseAltDataRow(TABLECOL_ORDERBY_BASE) = GetValue(EstimatingDataset.Tables(TABLENAME_MATERIALS), TABLECOL_ORDERBY_EST,
+                                                                          UseAltDataRow(TABLECOL_MAINID), UseAltDataRow(TABLECOL_MATERIALID))
+                            UseAltDataRow(TABLECOL_UNITQTY_BASE) = GetValue(EstimatingDataset.Tables(TABLENAME_MATERIALS), TABLECOL_UNITQTY_EST,
+                                                                          UseAltDataRow(TABLECOL_MAINID), UseAltDataRow(TABLECOL_MATERIALID))
+                        Case TABLENAME_GENERALINFO
+                            UseAltDataRow("UnitsInTab") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "UnitsInTab")
+                            UseAltDataRow("CapacityNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CapacityNew_cmb")
+                            UseAltDataRow("SpeedNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")
+                            UseAltDataRow("NumberofStopsTotal_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsTotal_cmb")
+                            UseAltDataRow("NumberofStopsFront_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb")
+                            UseAltDataRow("NumberofStopsRear_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb")
+                            UseAltDataRow("PowerSupply_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PowerSupply_cmb")
+                            UseAltDataRow("Application_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
+                            UseAltDataRow("LayoutRequirements_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "LayoutRequirements_cmb")
+                            UseAltDataRow("DoorOperatorTypeFront_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DoorOperatorTypeFront_cmb")
+                            UseAltDataRow("CarDoorOpeningWidthFtFront_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthFtFront_txt")
+                            UseAltDataRow("CarDoorOpeningWidthInFront_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthInFront_txt")
+                            UseAltDataRow("CarDoorOpeningHeightFtFront_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightFtFront_txt")
+                            UseAltDataRow("CarDoorOpeningHeightInFront_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightInFront_txt")
+                            UseAltDataRow("DoorOperatorTypeRear_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DoorOperatorTypeRear_cmb")
+                            UseAltDataRow("CarDoorOpeningWidthFtRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthFtRear_txt")
+                            UseAltDataRow("CarDoorOpeningWidthInRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthInRear_txt")
+                            UseAltDataRow("CarDoorOpeningHeightFtRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightFtRear_txt")
+                            UseAltDataRow("CarDoorOpeningHeightInRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightInRear_txt")
+                            UseAltDataRow("MachineType_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
+                            UseAltDataRow("DriveType_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
+                            UseAltDataRow("CarWeight_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarWeight_txt")
+                            UseAltDataRow("HoistMotorHP_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "HoistMotorHP_txt")
+                            UseAltDataRow("HoistMotorRpm_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "HoistMotorRpm_txt")
+                            UseAltDataRow("MachineLocation_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb")
+                            UseAltDataRow("RopingNew_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_Cmb")
+                            UseAltDataRow("TopFloorToOverhead_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")
+                            UseAltDataRow("Travel_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")
+                            UseAltDataRow("PitDepth_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt")
+                            UseAltDataRow("RiserQtyFront_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RiserQtyFront_Cmb")
+                            UseAltDataRow("RiserQtyRear_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RiserQtyRear_Cmb")
+                            UseAltDataRow("FixtureFinish_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "FixtureFinish_cmb")
+                            UseAltDataRow("DTRequestedShipDate") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DTRequestedShipDate")
+                            UseAltDataRow("BankCompleteDate_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "BankCompleteDate_txt")
+                            UseAltDataRow("ExistingControlVendor_lst") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst")
+                            UseAltDataRow("ExistingControlModel_lst") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlModel_lst")
+                            UseAltDataRow("OriginalGONumberAvailable_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "OriginalGONumberAvailable_cmb")
+                            UseAltDataRow("OriginalGOnumber_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "OriginalGOnumber_txt")
+                            UseAltDataRow("PEStampRequired_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PEStampRequired_cmb")
+                            UseAltDataRow("ShortFloorOperation_chk") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ShortFloorOperation_chk")
+                            UseAltDataRow("Permits_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Permits_txt")
+                            UseAltDataRow("Bonds_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Bonds_txt")
+                            UseAltDataRow("ExpensesPerDayZone_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayZone_txt")
+                            UseAltDataRow("ExpensesPerDayParking_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayParking_txt")
+                            UseAltDataRow("ExpensesPerDayOutOfTownExpenses_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayOutOfTownExpenses_txt")
+                            UseAltDataRow("ExpensesPerDayTravelTime_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayTravelTime_txt")
+                            UseAltDataRow("ExpensesPerDayMiscellaneous_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayMiscellaneous_txt")
+                            UseAltDataRow("ExpensesPerDayTotal_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayTotal_txt")
+                            UseAltDataRow("ExpensesPerDay_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDay_txt")
+                            UseAltDataRow("GatewayReviewRequired_chk") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "GatewayReviewRequired_chk")
+                            UseAltDataRow("Destination_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Destination_cmb")
+                        Case Else
+                            Exit For
+                    End Select
+                Next jIndex
+            Next iIndex
 
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In Estimating - CreateDataSet")
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In Alt - CreateDataSet")
 
         End Try
 
@@ -316,11 +402,15 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
 
-        Me.Cursor = Cursors.WaitCursor
-        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
-        Me.Cursor = Cursors.Default
-        CM_MAIN_frm.Show()
-        Me.Dispose()
+        Select Case PromptForSave()
+            Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                Me.Cursor = Cursors.WaitCursor
+                UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
+                Me.Cursor = Cursors.Default
+                CM_MAIN_frm.Show()
+                Me.Dispose()
+            Case Else
+        End Select
 
     End Sub
     Private Sub ExpandAll_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandAll_cmd.Click
@@ -664,7 +754,7 @@ Public Class frmEstimatingAlt
         Dim CurUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
 
         If Not isInitializingComponent Then
-            FormIsDirty = EstimatingDataset.HasChanges()
+            FormIsDirty = AltDataset.HasChanges()
             If FormIsDirty Then
                 ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(CurRow, 0)
                 If Not ChildSheetView Is Nothing Then
@@ -693,7 +783,7 @@ Public Class frmEstimatingAlt
 
         SetIsPOHController()
         If Not isInitializingComponent Then
-            FormIsDirty = EstimatingDataset.HasChanges()
+            FormIsDirty = AltDataset.HasChanges()
             If FormIsDirty Then
                 RetrieveCostHours(e.Row)
             End If
@@ -701,11 +791,15 @@ Public Class frmEstimatingAlt
 
     End Sub
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
+
         If Not isInitializingComponent Then
-            If PromptForSave() Then
-                DisplayEST_vs_ORD()
-            End If
+            Select Case PromptForSave()
+                Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                    DisplayEST_vs_ORD()
+                Case Else
+            End Select
         End If
+
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
@@ -769,25 +863,23 @@ Public Class frmEstimatingAlt
             BillOfMaterials_spr.ActiveSheet.RowCount = 0
             CreateDataSet(UseUnits)
             model = BillOfMaterials_spr.ActiveSheet.Models.Data
-            For Each dt In EstimatingDataset.Tables
+            For Each dt In AltDataset.Tables
                 dt.DefaultView.AllowNew = False
             Next dt
             model.DataMember = "EstimatingData"
-            model.DataSource = EstimatingDataset
+            model.DataSource = AltDataset
 
             If GeneralInfo.Rows.Count = 1 Then
                 dr = GeneralInfo.Rows(0)
                 For Each Cntrl As Control In GeneralInformation_fra.Controls
                     If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
-                        [Cntrl].Text = dr([Cntrl].Name)
+                        [Cntrl].Text = FindValueInDataRow([Cntrl].Name, dr)
                     ElseIf TypeOf [Cntrl] Is DateTimePicker Then
-                        If Not IsDBNull(dr([Cntrl].Name)) Then
-                            Dim UseDTPicker As DateTimePicker = [Cntrl]
-                            UseDTPicker.Value = CDate(dr([Cntrl].Name))
-                        End If
+                        Dim UseDTPicker As DateTimePicker = [Cntrl]
+                        UseDTPicker.Value = CDate(FindValueInDataRow([Cntrl].Name, dr))
                     ElseIf TypeOf [Cntrl] Is CheckBox Then
                         Dim UseCheckbox As CheckBox = [Cntrl]
-                        UseCheckbox.CheckState = Conversion.Val(dr([Cntrl].Name))
+                        UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
                     End If
                 Next Cntrl
                 For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
@@ -844,6 +936,8 @@ Public Class frmEstimatingAlt
                     ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_ALT, 100)
                     ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_BASE, 100)
                     ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_ALT, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_QTY_BASE, 90)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_QTY_ALT, 90)
 
                     For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
                         ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
@@ -914,7 +1008,7 @@ Public Class frmEstimatingAlt
             Me.Cursor = Cursors.Default
 
         Catch ex As Exception
-            MessageBox.Show(Err.Description, "Error Populating Estimating", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(Err.Description, "Error Populating Alt", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
 
@@ -948,14 +1042,14 @@ Public Class frmEstimatingAlt
             If is_new_row Then
                 GeneralInfo.Rows.Add(_row)
             End If
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+            ALT_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
                                                        FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODALT.JSON"
-            If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
+            If Not Serialize(ALT_Filename, AltDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
                 Throw New Exception
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error saving data", "Error Saving Estimating Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error saving data", "Error Saving Alt Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
 
@@ -964,20 +1058,17 @@ Public Class frmEstimatingAlt
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
         SaveAll()
     End Sub
-    Private Function PromptForSave() As Boolean
-        Dim ReturnVal As Boolean = True
-        Dim SaveResponse As Integer = 0
+    Private Function PromptForSave() As DialogResult
+        Dim SaveResponse As DialogResult = 0
 
         If FormIsDirty Then
-            SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+            SaveResponse = MsgBox("You must save the current Alt Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
             If SaveResponse = MsgBoxResult.Yes Then
                 SaveAltData()
                 ArchiveFiles()
-            Else
-                ReturnVal = False
             End If
         End If
-        Return ReturnVal
+        Return SaveResponse
 
     End Function
     Private Sub Set_Fields_Grey_EST()
@@ -1012,6 +1103,8 @@ Public Class frmEstimatingAlt
                                 Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = True
                                 End If
+                            Case MAT_COL_OPTION_BASE, MAT_COL_TYPE_BASE, MAT_COL_ORDER_BY_BASE, MAT_COL_QTY_BASE
+                                ChildSheetView1.Cells(jIndex, kIndex).Locked = True
                             Case Else
                                 ChildSheetView1.Cells(jIndex, kIndex).Locked = False
                         End Select

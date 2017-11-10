@@ -14,11 +14,15 @@ Module frmEstimatingBaseMOD
     End Structure
 
     Public EstimatingDataset As System.Data.DataSet
+    Public AltDataset As System.Data.DataSet
     Public OrderingDataset As System.Data.DataSet
     Public MainGroups As DataTable = Nothing
     Public SubGroups As DataTable = Nothing
     Public GeneralInfo As DataTable = Nothing
     Public OrderingInfo As DataTable = Nothing
+
+    Public EST_Filename As String = String.Empty
+    Public ALT_Filename As String = String.Empty
 
     Public Const TABLENAME_MAIN As String = "EstMainGroup"
     Public Const TABLENAME_MATERIALS As String = "EstMaterials"
@@ -102,9 +106,13 @@ Module frmEstimatingBaseMOD
         Dim Description As String
         Dim MainID As String
         Dim MaterialID As String
+        Dim OptionStrBase As String
         Dim OptionStr() As String
+        Dim TypeBase As String
         Dim Type() As String
+        Dim OrderByBase As String
         Dim OrderBy() As String
+        Dim QtyBase As Integer
         Dim Qty As Integer
         Dim Units As String
         Dim MaterialCost As Single
@@ -115,6 +123,9 @@ Module frmEstimatingBaseMOD
             result.MainID = String.Empty
             result.MaterialID = String.Empty
             result.Description = String.Empty
+            result.OptionStrBase = String.Empty
+            result.TypeBase = String.Empty
+            result.OrderByBase = String.Empty
             result.Units = String.Empty
             Return result
         End Function
@@ -404,13 +415,9 @@ Module frmEstimatingBaseMOD
         Dim UseFrontWidth As Single = 0, UseFrontHeight As Single = 0, UseRearWidth As Single = 0, UseRearHeight As Single = 0
         Dim UseMaterialItemRecordSet As New ADODB.Recordset
         Dim UseField As String = String.Empty
-        Dim TotalTravel As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Travel_txt")) +
-                                    Conversion.Val(GetValue(TABLENAME_GENERALINFO, "TopFloorToOverhead_txt")) +
-                                    Conversion.Val(GetValue(TABLENAME_GENERALINFO, "PitDepth_txt"))
-        Dim FrontOpenings As Integer = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "NumberofStopsFront_cmb"))
-        Dim RearOpenings As Integer = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "NumberofStopsRear_cmb"))
-        Dim TotalOpenings As Integer = FrontOpenings + RearOpenings
+        Dim TotalTravel As Single = 0, FrontOpenings As Integer = 0, RearOpenings As Integer = 0, TotalOpenings As Integer = 0
         Dim AddValue As Boolean = False
+        Dim CurDataset As DataSet = Nothing
 
         Try
             If String.IsNullOrEmpty(CurOption) Then
@@ -421,398 +428,355 @@ Module frmEstimatingBaseMOD
             ElseIf CurOrderBy = "RL" Then
                 Exit Sub
             End If
-            Try
-                Select Case CurOption
-                    Case "New"
-                        UseField = "Labor Hours - New"
-                    Case "Reuse"
-                        UseField = "Labor Hours - Reuse"
-                    Case "Refurbish"
-                        UseField = "Labor Hours - Refurbish"
-                    Case Else
-                        UseField = String.Empty
-                End Select
-                UseMaterialItemRecordSet = New ADODB.Recordset
-                UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
-                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                    Select Case MaterialID
-                        Case MAT_ID_Controller
-                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            If Not IsPOHController Then
-                                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                                    UseMaterialItemRecordSet.MoveFirst()
-                                                    Do Until UseMaterialItemRecordSet.EOF
-                                                        Select Case UseMaterialItemRecordSet.Fields("Usage").Value
-                                                            Case MACHINE_FMM200
-                                                                If GetValue(TABLENAME_GENERALINFO, "MachineType_cmb") = MACHINE_FMM200 Then
-                                                                    CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                                End If
-                                                            Case "Haughton or Otis"
-                                                                If Not String.IsNullOrEmpty(GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst")) Then
-                                                                    Select Case GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst").ToUpper
-                                                                        Case "HAUGHTON", "OTIS"
-                                                                            CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                                        Case Else
-                                                                    End Select
-                                                                End If
-                                                            Case "spare parts kit"
-                                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                            Case Else
-                                                        End Select
-                                                        UseMaterialItemRecordSet.MoveNext()
-                                                    Loop
-                                                End If
-                                            End If
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_SecurityPackage, MAT_ID_IntergroupEmergencyPower, MAT_ID_TractionBatteryLowering, MAT_ID_CodeBlueOption, MAT_ID_PanicFeatureRiotControl,
-                             MAT_ID_CodePinkOption, MAT_ID_InconspicuousRiserSoftware, MAT_ID_CustomSoftware, MAT_ID_MTO, MAT_ID_MachineRoomWiring,
-                             MAT_ID_MachineRoomDuct, MAT_ID_SeismicHolddowns, MAT_ID_MachineRoomSeismicSwitch, MAT_ID_PTG, MAT_ID_InterfaceBoxes,
-                             MAT_ID_StatisticsperYear, MAT_ID_DriveSheave, MAT_ID_BrakePads, MAT_ID_DrainFlushSeals, MAT_ID_MachineBearings,
-                             MAT_ID_SheaveGuardNGD, MAT_ID_Sheave, MAT_ID_SheaveGuardRGL, MAT_ID_BrakeWork, MAT_ID_FieldCoils,
-                             MAT_ID_BearingsSeals, MAT_ID_TurnUndercutCommutator, MAT_ID_Sheaves, MAT_ID_SheaveGuardNGL, MAT_ID_MachineAlignment,
-                             MAT_ID_MachineBlockingwhenraisingmachineup, MAT_ID_CarDuct, MAT_ID_ToeGuard, MAT_ID_CarPlatform, MAT_ID_CabIsolationPads,
-                             MAT_ID_CarSling, MAT_ID_CarSheaveAttachmentandGuard, MAT_ID_DoorLockMonitor, MAT_ID_NewCabComplete, MAT_ID_CabShell,
-                             MAT_ID_CeilingLighting, MAT_ID_EmergencyLightCanopyType, MAT_ID_CabReturns, MAT_ID_WallPanels, MAT_ID_CarDoor, MAT_ID_Handrails,
-                             MAT_ID_CarSill, MAT_ID_Fan, MAT_ID_CabFlooring, MAT_ID_Subflooring, MAT_ID_CabPads, MAT_ID_FreightEnclosure, MAT_ID_Gate,
-                             MAT_ID_HoistwayDoorPackagetotalopenings, MAT_ID_HoistwayDoorTracks, MAT_ID_NylonTrackInserts, MAT_ID_HoistwayDoorHanger,
-                             MAT_ID_HoistwayDoorInterlocksPickups, MAT_ID_HoistwayDoorClosers, MAT_ID_HoistwayDoorGibs, MAT_ID_FireTabs,
-                             MAT_ID_HoistwayFrameComplete, MAT_ID_SillSupports, MAT_ID_HoistwayDoor, MAT_ID_SightGuard, MAT_ID_Escutheons,
-                             MAT_ID_HoistwaySill, MAT_ID_Astragals, MAT_ID_HoistwayHeaders, MAT_ID_Struts, MAT_ID_FreightDoorPackage,
-                             MAT_ID_TravelCableHangers, MAT_ID_HoistwayDuct, MAT_ID_CWTSheaveattachmentandGuard, MAT_ID_CounterweightDerailmentDevice,
-                             MAT_ID_GuideRails, MAT_ID_RailBrackets, MAT_ID_CounterweightFrame, MAT_ID_CounterweightSubWeights, MAT_ID_HoistwayScreening,
-                             MAT_ID_Fascia, MAT_ID_POEBoxesandconnectioncables, MAT_ID_POEBoxesforTurnstileApplication, MAT_ID_DestinationWiringinft,
-                             MAT_ID_AdditionalDuctforPHASEMODDIinft, MAT_ID_AdditonalTravelingCableforPHASEMODDI, MAT_ID_CarTravelingLantern,
-                             MAT_ID_CarPositionIndicatorInTransom, MAT_ID_VoiceAnnunciator, MAT_ID_HandsFreePhone, MAT_ID_MainFloorHallStationsEgress,
-                             MAT_ID_HallPositionIndicator, MAT_ID_HallLantern, MAT_ID_HallPILanternCombo, MAT_ID_HoistwayAccessSwitch,
-                             MAT_ID_FireEmergencyRecallSwitchifseparate, MAT_ID_PhoneLineMonitoringifseparate, MAT_ID_InconspicuousRisers, MAT_ID_JambBraille,
-                             MAT_ID_EmergencyPowerPanelifseparate, MAT_ID_FireCommandCenterPanel, MAT_ID_LobbyStatusPanel, MAT_ID_IntercomSystem,
-                             MAT_ID_TemporaryDestinationIndicators, MAT_ID_TempCOPCoversMain, MAT_ID_TempCOPCoversAux, MAT_ID_Platestocoverexistingholes,
-                             MAT_ID_CarBufferBlockingStand, MAT_ID_CwtBufferBlockingStand, MAT_ID_BufferSwitchCar, MAT_ID_BufferSwitchCwt, MAT_ID_PitLight,
-                             MAT_ID_PitFloodSwitch, MAT_ID_SumpPumpCoverforexisting, MAT_ID_SwayDevice, MAT_ID_CompensationSheave,
-                             MAT_ID_CompensationSwitch, MAT_ID_CounterweightGuard, MAT_ID_CleaningandPainting, MAT_ID_SystemAdjusting, MAT_ID_SAISInspection,
-                             MAT_ID_ConsultantGSAInspection, MAT_ID_FireServiceEPTesting, MAT_ID_StandbyTime, MAT_ID_MachineRoomSpecialAccess,
-                             MAT_ID_TestingandComissioningforPORT, MAT_ID_Miscelleneous, MAT_ID_FrontRecladding, MAT_ID_NitroCleaning,
-                             MAT_ID_FireAlarmSystem, MAT_ID_ElectricalWork, MAT_ID_CabWork, MAT_ID_BuildingGCWork, MAT_ID_Crane,
-                             MAT_ID_ThirdPartySecurityCompanyFee
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_CwtSeismicKit
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            CurField *= 77 + (1.25 * TotalTravel)
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_LevelingUnit
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            CurField *= (11.75 * TotalOpenings) + (11.25 * 2) + (11.75 * (TotalOpenings / 6))
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                    If Conversion.Val(GetValue(TABLENAME_GENERALINFO, "SpeedNew_cmb")) < 200 Then
-                                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                        If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                            UseMaterialItemRecordSet.MoveFirst()
-                                            CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                        End If
-                                    End If
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_Drive, MAT_ID_Transformer, MAT_ID_ChokeFilter, MAT_ID_ConfigurationStation, MAT_ID_PORTSecurityType, MAT_ID_ACMotorRGD,
-                             MAT_ID_ACMotorCoupler, MAT_ID_MotorAdapterPlateKitforfootmountedmotorsonly, MAT_ID_BrakeSwitchRGD, MAT_ID_MachineNGD,
-                             MAT_ID_ACMotorNGD, MAT_ID_BrakeSwitchNGD, MAT_ID_MachineIsolation, MAT_ID_DeflectorSheaves, MAT_ID_BlockingAssemblyNGD,
-                             MAT_ID_MachineFMM, MAT_ID_FMM200FrameMechanicalParts, MAT_ID_STM, MAT_ID_AntitwistDevice, MAT_ID_KSSContacts,
-                             MAT_ID_KSSInterfaceKit, MAT_ID_LMSKit, MAT_ID_CarPulleySingleAxleAdapter, MAT_ID_Encoder, MAT_ID_BrakeSwitchRGL,
-                             MAT_ID_MachineFrameandSecondarySheave, MAT_ID_MachineBedplateIsolation, MAT_ID_AssemblyTool, MAT_ID_ManualHandwindingDevice,
-                             MAT_ID_HydraulicTool, MAT_ID_MachineDisassembly, MAT_ID_GovernorCar, MAT_ID_GovernorMountingSlaborRail, MAT_ID_GovernorEncoder,
-                             MAT_ID_GovernerCWT, MAT_ID_GovernorCWTmounting, MAT_ID_RopeGripper, MAT_ID_RopeGripperMountingKit, MAT_ID_LevelingUnit,
-                             MAT_ID_ETSETSL, MAT_ID_LoadWeighingDevice, MAT_ID_ETSETSL, MAT_ID_LoadWeighingDevice, MAT_ID_CarTopHandRail,
-                             MAT_ID_RollerGuidesCar, MAT_ID_CarRollerGuideAdapterPlate, MAT_ID_GuideShoeCovers,
-                             MAT_ID_FrontCarDoorOperatorPackageOperatorGateSwitchHangerClutch, MAT_ID_FrontCarDoorOperator, MAT_ID_FrontClutch,
-                             MAT_ID_FrontCarDoorGateSwitch, MAT_ID_FrontCarDoorTrackHanger, MAT_ID_RearCarDoorOperatorPackageOperatorGateSwitchHangerClutch,
-                             MAT_ID_RearCarDoorOperator, MAT_ID_RearClutch, MAT_ID_RearCarDoorGateSwitch, MAT_ID_RearCarDoorTrackHanger,
-                             MAT_ID_DoorRestrictor, MAT_ID_EmergencyExitSwitch, MAT_ID_HoistRopes, MAT_ID_CarGovernorRope, MAT_ID_CWTGovernorRope,
-                             MAT_ID_CWTRollerGuides, MAT_ID_CWTRollerGuideAdapterPlate, MAT_ID_CWTGuideShoeCovers, MAT_ID_RopeSplayClamp,
-                             MAT_ID_MainCarStation, MAT_ID_AuxCarStation, MAT_ID_TypicalFloorHallStations, MAT_ID_LobbyVisionMachineRoom,
-                             MAT_ID_LobbyVisionOther, MAT_ID_DesignationSignageStatic, MAT_ID_DesignationSignageActive, MAT_ID_BrailleAddDestinatononly,
-                             MAT_ID_DestinationIndicators, MAT_ID_LobbyPORTDevices, MAT_ID_FrontTypicalPORTDevices, MAT_ID_RearTypicalPORTDevices,
-                             MAT_ID_SparePORTDevicesType1, MAT_ID_SparePORTDevicesType2, MAT_ID_SparePORTDevicesType3, MAT_ID_PedestalBase,
-                             MAT_ID_BackPlates, MAT_ID_CarBuffer, MAT_ID_CarBufferBlockingSupport, MAT_ID_CarBufferFootingChannels, MAT_ID_CwtBuffer,
-                             MAT_ID_CwtBufferBlockingSupport, MAT_ID_CwtBufferFootingChannels, MAT_ID_GovernorTensionSheaveCar,
-                             MAT_ID_GovernorTensionSheaveCwt, MAT_ID_PitSwitch, MAT_ID_PitLadder, MAT_ID_WhisperFlexCompensationHitch,
-                             MAT_ID_CompensationRope
-                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_CarTopInspectionStation
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            UseField = String.Empty
-                                            Select Case Contracts.JobState
-                                                Case "WA"
-                                                    If Contracts.JobCity = "Seattle" Then
-                                                        UseField = "Light Test Switch Assembly"
-                                                    Else
-                                                        UseField = "CMTS Work Light"
-                                                    End If
-                                                Case "MI", "OR"
-                                                    UseField = "CMTS Work Light"
-                                                Case Else
-                                            End Select
-                                            If Not String.IsNullOrEmpty(UseField) Then
-                                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder' AND Types = '" & UseField & "'"
-                                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                                    UseMaterialItemRecordSet.MoveFirst()
-                                                    CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                End If
-                                            End If
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_CarSafety, MAT_ID_CwtSafety
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+            CurDataset = SetCurrentDataset()
+            TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
+                          Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
+                          Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
+            FrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
+            RearOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+            TotalOpenings = FrontOpenings + RearOpenings
+            Select Case CurOption
+                Case "New"
+                    UseField = "Labor Hours - New"
+                Case "Reuse"
+                    UseField = "Labor Hours - Reuse"
+                Case "Refurbish"
+                    UseField = "Labor Hours - Refurbish"
+                Case Else
+                    UseField = String.Empty
+            End Select
+            UseMaterialItemRecordSet = New ADODB.Recordset
+            UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
+            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                Select Case MaterialID
+                    Case MAT_ID_Controller
+                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If Not IsPOHController Then
                                             UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
                                             If UseMaterialItemRecordSet.RecordCount > 0 Then
                                                 UseMaterialItemRecordSet.MoveFirst()
                                                 Do Until UseMaterialItemRecordSet.EOF
-                                                    CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                    Select Case UseMaterialItemRecordSet.Fields("Usage").Value
+                                                        Case MACHINE_FMM200
+                                                            If GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb") = MACHINE_FMM200 Then
+                                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                            End If
+                                                        Case "Haughton or Otis"
+                                                            If Not String.IsNullOrEmpty(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst")) Then
+                                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst").ToUpper
+                                                                    Case "HAUGHTON", "OTIS"
+                                                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                                    Case Else
+                                                                End Select
+                                                            End If
+                                                        Case "spare parts kit"
+                                                            CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                        Case Else
+                                                    End Select
                                                     UseMaterialItemRecordSet.MoveNext()
                                                 Loop
                                             End If
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
                                 End If
                             End If
-                        Case MAT_ID_DoorDetectors
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            If CurType.IndexOf("Minimax") > -1 And RearOpenings > 0 Then
-                                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                                    UseMaterialItemRecordSet.MoveFirst()
-                                                    CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                        End If
+                    Case MAT_ID_SecurityPackage, MAT_ID_IntergroupEmergencyPower, MAT_ID_TractionBatteryLowering, MAT_ID_CodeBlueOption, MAT_ID_PanicFeatureRiotControl,
+                         MAT_ID_CodePinkOption, MAT_ID_InconspicuousRiserSoftware, MAT_ID_CustomSoftware, MAT_ID_MTO, MAT_ID_MachineRoomWiring,
+                         MAT_ID_MachineRoomDuct, MAT_ID_SeismicHolddowns, MAT_ID_MachineRoomSeismicSwitch, MAT_ID_PTG, MAT_ID_InterfaceBoxes,
+                         MAT_ID_StatisticsperYear, MAT_ID_DriveSheave, MAT_ID_BrakePads, MAT_ID_DrainFlushSeals, MAT_ID_MachineBearings,
+                         MAT_ID_SheaveGuardNGD, MAT_ID_Sheave, MAT_ID_SheaveGuardRGL, MAT_ID_BrakeWork, MAT_ID_FieldCoils,
+                         MAT_ID_BearingsSeals, MAT_ID_TurnUndercutCommutator, MAT_ID_Sheaves, MAT_ID_SheaveGuardNGL, MAT_ID_MachineAlignment,
+                         MAT_ID_MachineBlockingwhenraisingmachineup, MAT_ID_CarDuct, MAT_ID_ToeGuard, MAT_ID_CarPlatform, MAT_ID_CabIsolationPads,
+                         MAT_ID_CarSling, MAT_ID_CarSheaveAttachmentandGuard, MAT_ID_DoorLockMonitor, MAT_ID_NewCabComplete, MAT_ID_CabShell,
+                         MAT_ID_CeilingLighting, MAT_ID_EmergencyLightCanopyType, MAT_ID_CabReturns, MAT_ID_WallPanels, MAT_ID_CarDoor, MAT_ID_Handrails,
+                         MAT_ID_CarSill, MAT_ID_Fan, MAT_ID_CabFlooring, MAT_ID_Subflooring, MAT_ID_CabPads, MAT_ID_FreightEnclosure, MAT_ID_Gate,
+                         MAT_ID_HoistwayDoorPackagetotalopenings, MAT_ID_HoistwayDoorTracks, MAT_ID_NylonTrackInserts, MAT_ID_HoistwayDoorHanger,
+                         MAT_ID_HoistwayDoorInterlocksPickups, MAT_ID_HoistwayDoorClosers, MAT_ID_HoistwayDoorGibs, MAT_ID_FireTabs,
+                         MAT_ID_HoistwayFrameComplete, MAT_ID_SillSupports, MAT_ID_HoistwayDoor, MAT_ID_SightGuard, MAT_ID_Escutheons,
+                         MAT_ID_HoistwaySill, MAT_ID_Astragals, MAT_ID_HoistwayHeaders, MAT_ID_Struts, MAT_ID_FreightDoorPackage,
+                         MAT_ID_TravelCableHangers, MAT_ID_HoistwayDuct, MAT_ID_CWTSheaveattachmentandGuard, MAT_ID_CounterweightDerailmentDevice,
+                         MAT_ID_GuideRails, MAT_ID_RailBrackets, MAT_ID_CounterweightFrame, MAT_ID_CounterweightSubWeights, MAT_ID_HoistwayScreening,
+                         MAT_ID_Fascia, MAT_ID_POEBoxesandconnectioncables, MAT_ID_POEBoxesforTurnstileApplication, MAT_ID_DestinationWiringinft,
+                         MAT_ID_AdditionalDuctforPHASEMODDIinft, MAT_ID_AdditonalTravelingCableforPHASEMODDI, MAT_ID_CarTravelingLantern,
+                         MAT_ID_CarPositionIndicatorInTransom, MAT_ID_VoiceAnnunciator, MAT_ID_HandsFreePhone, MAT_ID_MainFloorHallStationsEgress,
+                         MAT_ID_HallPositionIndicator, MAT_ID_HallLantern, MAT_ID_HallPILanternCombo, MAT_ID_HoistwayAccessSwitch,
+                         MAT_ID_FireEmergencyRecallSwitchifseparate, MAT_ID_PhoneLineMonitoringifseparate, MAT_ID_InconspicuousRisers, MAT_ID_JambBraille,
+                         MAT_ID_EmergencyPowerPanelifseparate, MAT_ID_FireCommandCenterPanel, MAT_ID_LobbyStatusPanel, MAT_ID_IntercomSystem,
+                         MAT_ID_TemporaryDestinationIndicators, MAT_ID_TempCOPCoversMain, MAT_ID_TempCOPCoversAux, MAT_ID_Platestocoverexistingholes,
+                         MAT_ID_CarBufferBlockingStand, MAT_ID_CwtBufferBlockingStand, MAT_ID_BufferSwitchCar, MAT_ID_BufferSwitchCwt, MAT_ID_PitLight,
+                         MAT_ID_PitFloodSwitch, MAT_ID_SumpPumpCoverforexisting, MAT_ID_SwayDevice, MAT_ID_CompensationSheave,
+                         MAT_ID_CompensationSwitch, MAT_ID_CounterweightGuard, MAT_ID_CleaningandPainting, MAT_ID_SystemAdjusting, MAT_ID_SAISInspection,
+                         MAT_ID_ConsultantGSAInspection, MAT_ID_FireServiceEPTesting, MAT_ID_StandbyTime, MAT_ID_MachineRoomSpecialAccess,
+                         MAT_ID_TestingandComissioningforPORT, MAT_ID_Miscelleneous, MAT_ID_FrontRecladding, MAT_ID_NitroCleaning,
+                         MAT_ID_FireAlarmSystem, MAT_ID_ElectricalWork, MAT_ID_CabWork, MAT_ID_BuildingGCWork, MAT_ID_Crane,
+                         MAT_ID_ThirdPartySecurityCompanyFee
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_CwtSeismicKit
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        CurField *= 77 + (1.25 * TotalTravel)
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_LevelingUnit
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        CurField *= (11.75 * TotalOpenings) + (11.25 * 2) + (11.75 * (TotalOpenings / 6))
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                                If Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")) < 200 Then
+                                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                    If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                        UseMaterialItemRecordSet.MoveFirst()
+                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                    End If
+                                End If
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_Drive, MAT_ID_Transformer, MAT_ID_ChokeFilter, MAT_ID_ConfigurationStation, MAT_ID_PORTSecurityType, MAT_ID_ACMotorRGD,
+                         MAT_ID_ACMotorCoupler, MAT_ID_MotorAdapterPlateKitforfootmountedmotorsonly, MAT_ID_BrakeSwitchRGD, MAT_ID_MachineNGD,
+                         MAT_ID_ACMotorNGD, MAT_ID_BrakeSwitchNGD, MAT_ID_MachineIsolation, MAT_ID_DeflectorSheaves, MAT_ID_BlockingAssemblyNGD,
+                         MAT_ID_MachineFMM, MAT_ID_FMM200FrameMechanicalParts, MAT_ID_STM, MAT_ID_AntitwistDevice, MAT_ID_KSSContacts,
+                         MAT_ID_KSSInterfaceKit, MAT_ID_LMSKit, MAT_ID_CarPulleySingleAxleAdapter, MAT_ID_Encoder, MAT_ID_BrakeSwitchRGL,
+                         MAT_ID_MachineFrameandSecondarySheave, MAT_ID_MachineBedplateIsolation, MAT_ID_AssemblyTool, MAT_ID_ManualHandwindingDevice,
+                         MAT_ID_HydraulicTool, MAT_ID_MachineDisassembly, MAT_ID_GovernorCar, MAT_ID_GovernorMountingSlaborRail, MAT_ID_GovernorEncoder,
+                         MAT_ID_GovernerCWT, MAT_ID_GovernorCWTmounting, MAT_ID_RopeGripper, MAT_ID_RopeGripperMountingKit, MAT_ID_LevelingUnit,
+                         MAT_ID_ETSETSL, MAT_ID_LoadWeighingDevice, MAT_ID_ETSETSL, MAT_ID_LoadWeighingDevice, MAT_ID_CarTopHandRail,
+                         MAT_ID_RollerGuidesCar, MAT_ID_CarRollerGuideAdapterPlate, MAT_ID_GuideShoeCovers,
+                         MAT_ID_FrontCarDoorOperatorPackageOperatorGateSwitchHangerClutch, MAT_ID_FrontCarDoorOperator, MAT_ID_FrontClutch,
+                         MAT_ID_FrontCarDoorGateSwitch, MAT_ID_FrontCarDoorTrackHanger, MAT_ID_RearCarDoorOperatorPackageOperatorGateSwitchHangerClutch,
+                         MAT_ID_RearCarDoorOperator, MAT_ID_RearClutch, MAT_ID_RearCarDoorGateSwitch, MAT_ID_RearCarDoorTrackHanger,
+                         MAT_ID_DoorRestrictor, MAT_ID_EmergencyExitSwitch, MAT_ID_HoistRopes, MAT_ID_CarGovernorRope, MAT_ID_CWTGovernorRope,
+                         MAT_ID_CWTRollerGuides, MAT_ID_CWTRollerGuideAdapterPlate, MAT_ID_CWTGuideShoeCovers, MAT_ID_RopeSplayClamp,
+                         MAT_ID_MainCarStation, MAT_ID_AuxCarStation, MAT_ID_TypicalFloorHallStations, MAT_ID_LobbyVisionMachineRoom,
+                         MAT_ID_LobbyVisionOther, MAT_ID_DesignationSignageStatic, MAT_ID_DesignationSignageActive, MAT_ID_BrailleAddDestinatononly,
+                         MAT_ID_DestinationIndicators, MAT_ID_LobbyPORTDevices, MAT_ID_FrontTypicalPORTDevices, MAT_ID_RearTypicalPORTDevices,
+                         MAT_ID_SparePORTDevicesType1, MAT_ID_SparePORTDevicesType2, MAT_ID_SparePORTDevicesType3, MAT_ID_PedestalBase,
+                         MAT_ID_BackPlates, MAT_ID_CarBuffer, MAT_ID_CarBufferBlockingSupport, MAT_ID_CarBufferFootingChannels, MAT_ID_CwtBuffer,
+                         MAT_ID_CwtBufferBlockingSupport, MAT_ID_CwtBufferFootingChannels, MAT_ID_GovernorTensionSheaveCar,
+                         MAT_ID_GovernorTensionSheaveCwt, MAT_ID_PitSwitch, MAT_ID_PitLadder, MAT_ID_WhisperFlexCompensationHitch,
+                         MAT_ID_CompensationRope
+                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_CarTopInspectionStation
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        UseField = String.Empty
+                                        Select Case Contracts.JobState
+                                            Case "WA"
+                                                If Contracts.JobCity = "Seattle" Then
+                                                    UseField = "Light Test Switch Assembly"
+                                                Else
+                                                    UseField = "CMTS Work Light"
                                                 End If
-                                            End If
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_TravellingCableHoistwayWiring
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            If CurType.IndexOf("Travelling Cable + Hoistway Wiring") > -1 Then
-                                                CurField += 1000 + (12 * TotalTravel)
-                                            End If
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_Shackles
-                            UseMaterialItemRecordSet.Filter = UseWhere
-                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseMaterialItemRecordSet.MoveFirst()
-                                If CostOrHours = "Cost" Then
-                                    Select Case CurOption
-                                        Case "New"
-                                            CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            If Contracts.JobState = "NY" And Contracts.JobCity = "New York" Then
-                                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                                    UseMaterialItemRecordSet.MoveFirst()
-                                                    CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                End If
-                                            End If
-                                        Case "Reuse"
-                                            CurField = 0
-                                        Case Else
-                                    End Select
-                                ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                    If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                        CurField = UseMaterialItemRecordSet.Fields(UseField).Value
-                                    End If
-                                End If
-                            End If
-                        Case MAT_ID_HoistwayLimitSwitch
-                            Select Case CurOption
-                                Case "New"
-                                    UseMaterialItemRecordSet.Filter = UseWhere
-                                    AddValue = True
-                                Case "Refurbish"
-                                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
-                                    AddValue = True
-                                Case Else
-                                    AddValue = False
-                            End Select
-                            If AddValue Then
-                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                    UseMaterialItemRecordSet.MoveFirst()
-                                    If CostOrHours = "Cost" Then
-                                        Select Case CurOption
-                                            Case "New"
-                                                CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            Case "Reuse"
-                                                CurField = 0
+                                            Case "MI", "OR"
+                                                UseField = "CMTS Work Light"
                                             Case Else
                                         End Select
-                                    ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
-                                        If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
-                                            CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                        If Not String.IsNullOrEmpty(UseField) Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder' AND Types = '" & UseField & "'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            End If
                                         End If
-                                    End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
                                 End If
                             End If
-                        Case MAT_ID_WhisperFlex
-                            UseMaterialItemRecordSet.Filter = UseWhere
+                        End If
+                    Case MAT_ID_CarSafety, MAT_ID_CwtSafety
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                            UseMaterialItemRecordSet.MoveFirst()
+                                            Do Until UseMaterialItemRecordSet.EOF
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                UseMaterialItemRecordSet.MoveNext()
+                                            Loop
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_DoorDetectors
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If CurType.IndexOf("Minimax") > -1 And RearOpenings > 0 Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_TravellingCableHoistwayWiring
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If CurType.IndexOf("Travelling Cable + Hoistway Wiring") > -1 Then
+                                            CurField += 1000 + (12 * TotalTravel)
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_Shackles
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        If Contracts.JobState = "NY" And Contracts.JobCity = "New York" Then
+                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case MAT_ID_HoistwayLimitSwitch
+                        Select Case CurOption
+                            Case "New"
+                                UseMaterialItemRecordSet.Filter = UseWhere
+                                AddValue = True
+                            Case "Refurbish"
+                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
+                                AddValue = True
+                            Case Else
+                                AddValue = False
+                        End Select
+                        If AddValue Then
                             If UseMaterialItemRecordSet.RecordCount > 0 Then
                                 UseMaterialItemRecordSet.MoveFirst()
                                 If CostOrHours = "Cost" Then
                                     Select Case CurOption
                                         Case "New"
                                             CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                            UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
-                                            If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                                If CurType.IndexOf("WF10") > -1 Then
-                                                    UseField = "WF10"
-                                                ElseIf CurType.IndexOf("WF15") > -1 Then
-                                                    UseField = "WF10"
-                                                ElseIf CurType.IndexOf("WF20") > -1 Then
-                                                    UseField = "WF10"
-                                                ElseIf CurType.IndexOf("WF25") > -1 Then
-                                                    UseField = "WF10"
-                                                ElseIf CurType.IndexOf("WF30") > -1 Then
-                                                    UseField = "WF10"
-                                                ElseIf CurType.IndexOf("WF35") > -1 Then
-                                                    UseField = "WF10"
-                                                ElseIf CurType.IndexOf("WF40") > -1 Then
-                                                    UseField = "WF10"
-                                                Else
-                                                    UseField = String.Empty
-                                                End If
-                                                If Not String.IsNullOrEmpty(UseField) Then
-                                                    UseMaterialItemRecordSet.MoveFirst()
-                                                    Do Until UseMaterialItemRecordSet.EOF
-                                                        If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(UseField) > -1 Then
-                                                            CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
-                                                            Exit Do
-                                                        End If
-                                                        UseMaterialItemRecordSet.MoveNext()
-                                                    Loop
-                                                End If
-                                            End If
                                         Case "Reuse"
                                             CurField = 0
                                         Case Else
@@ -823,30 +787,74 @@ Module frmEstimatingBaseMOD
                                     End If
                                 End If
                             End If
-                        Case Else
-                    End Select
-                End If
-                UseMaterialItemRecordSet.Close()
-                CurField = Math.Round(CurField, 2)
-
-            Catch ex As Exception
-                Dim ComponentDesc As String = String.Empty
-
-                UseMaterialItemRecordSet.Close()
-                UseMaterialItemRecordSet = New ADODB.Recordset
-                UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
-                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                    UseMaterialItemRecordSet.Filter = "[Sub ID] = '" & MaterialID & "'"
-                    UseMaterialItemRecordSet.MoveFirst()
-                    ComponentDesc = UseMaterialItemRecordSet.Fields("Sub").Value.ToString
-                End If
-                UseMaterialItemRecordSet.Close()
-                MessageBox.Show("Error retrieving " & CostOrHours & " for " & ComponentDesc, "Error Retrieving " & CostOrHours & " Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
-            End Try
+                        End If
+                    Case MAT_ID_WhisperFlex
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            If CostOrHours = "Cost" Then
+                                Select Case CurOption
+                                    Case "New"
+                                        CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                        UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                            If CurType.IndexOf("WF10") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF15") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF20") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF25") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF30") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF35") > -1 Then
+                                                UseField = "WF10"
+                                            ElseIf CurType.IndexOf("WF40") > -1 Then
+                                                UseField = "WF10"
+                                            Else
+                                                UseField = String.Empty
+                                            End If
+                                            If Not String.IsNullOrEmpty(UseField) Then
+                                                UseMaterialItemRecordSet.MoveFirst()
+                                                Do Until UseMaterialItemRecordSet.EOF
+                                                    If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(UseField) > -1 Then
+                                                        CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                                        Exit Do
+                                                    End If
+                                                    UseMaterialItemRecordSet.MoveNext()
+                                                Loop
+                                            End If
+                                        End If
+                                    Case "Reuse"
+                                        CurField = 0
+                                    Case Else
+                                End Select
+                            ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                                If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                    CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                                End If
+                            End If
+                        End If
+                    Case Else
+                End Select
+            End If
+            UseMaterialItemRecordSet.Close()
+            CurField = Math.Round(CurField, 2)
 
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In GetCostHours")
+            Dim ComponentDesc As String = String.Empty
+
+            UseMaterialItemRecordSet.Close()
+            UseMaterialItemRecordSet = New ADODB.Recordset
+            UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
+            If UseMaterialItemRecordSet.RecordCount > 0 Then
+                UseMaterialItemRecordSet.Filter = "[Sub ID] = '" & MaterialID & "'"
+                UseMaterialItemRecordSet.MoveFirst()
+                ComponentDesc = UseMaterialItemRecordSet.Fields("Sub").Value.ToString
+            End If
+            UseMaterialItemRecordSet.Close()
+            MessageBox.Show("Error retrieving " & CostOrHours & " for " & ComponentDesc, "Error Retrieving " & CostOrHours & " Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
 
@@ -860,12 +868,15 @@ Module frmEstimatingBaseMOD
         Dim UseFieldName As String = String.Empty, CurValue As String = String.Empty
         Dim UseMaterialItemRecordSet As New ADODB.Recordset
         Dim AddToOptions As Boolean = True
-        Dim NumberOfFrontOpenings As Integer = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "NumberofStopsFront_cmb"))
-        Dim NumberOfRearOpenings As Integer = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "NumberofStopsRear_cmb"))
-        Dim OEMVendor As String = GetValue(TABLENAME_GENERALINFO, "ExistingControlVendor_lst")
-        Dim OEMModel As String = GetValue(TABLENAME_GENERALINFO, "ExistingControlModel_lst")
+        Dim NumberOfFrontOpenings As Integer = 0, NumberOfRearOpenings As Integer = 0, OEMVendor As String = String.Empty, OEMModel As String = String.Empty
+        Dim CurDataset As DataSet = Nothing
 
         Try
+            CurDataset = SetCurrentDataset()
+            NumberOfFrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
+            NumberOfRearOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+            OEMVendor = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst")
+            OEMModel = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlModel_lst")
             If Math.Round(Conversion.Val(CurMATID)) > 900 Then
                 CurMATID = "900" & Strings.Right(CurMATID, 3)
                 UseWhere = "[Sub ID] = '" & CurMATID & "'"
@@ -885,7 +896,7 @@ Module frmEstimatingBaseMOD
                                 AddToOptions = True
                                 Select Case CurMATID
                                     Case MAT_ID_GovernorTensionSheaveCar, MAT_ID_GovernorTensionSheaveCwt
-                                        UseFieldName = GetValue(TABLENAME_MATERIALS, UseTypeCol, MAIN_ID_Governor, MAT_ID_GovernorCar)
+                                        UseFieldName = GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseTypeCol, MAIN_ID_Governor, MAT_ID_GovernorCar)
                                         If String.IsNullOrEmpty(UseFieldName) Then
                                             AddToOptions = False
                                         Else
@@ -925,7 +936,7 @@ Module frmEstimatingBaseMOD
                                     AddToOptions = False
                                     Select Case CurMATID
                                         Case MAT_ID_TractionBatteryLowering
-                                            Select Case GetValue(TABLENAME_MATERIALS, UseTypeCol, MAIN_ID_Controller, MAT_ID_Drive)
+                                            Select Case GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseTypeCol, MAIN_ID_Controller, MAT_ID_Drive)
                                                 Case "VF33BR", "VF44BR"
                                                     AddToOptions = True
                                                 Case Else
@@ -935,7 +946,7 @@ Module frmEstimatingBaseMOD
                                             If IsPOHController Then
                                                 UseFieldName = "POH"
                                             Else
-                                                Select Case GetValue(TABLENAME_GENERALINFO, "DriveType_cmb")
+                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
                                                     Case AC_TYPE
                                                         UseFieldName = "BR"
                                                     Case AC_REGEN_TYPE
@@ -957,7 +968,7 @@ Module frmEstimatingBaseMOD
                                             If IsPOHController Then
                                                 UseFieldName = "POH"
                                             Else
-                                                Select Case GetValue(TABLENAME_GENERALINFO, "DriveType_cmb")
+                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
                                                     Case AC_TYPE, AC_REGEN_TYPE
                                                         UseFieldName = "VF"
                                                     Case QUATTRO_TYPE
@@ -977,7 +988,7 @@ Module frmEstimatingBaseMOD
                                             If IsPOHController Then
                                                 UseFieldName = "POH"
                                             Else
-                                                Select Case GetValue(TABLENAME_GENERALINFO, "DriveType_cmb")
+                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
                                                     Case QUATTRO_TYPE
                                                         UseFieldName = "Quattro"
                                                     Case DC_TYPE
@@ -991,9 +1002,9 @@ Module frmEstimatingBaseMOD
                                                 End If
                                             End If
                                         Case MAT_ID_MachineNGD
-                                            Select Case GetValue(TABLENAME_GENERALINFO, "MachineLocation_Cmb")
+                                            Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb")
                                                 Case "Overhead", "Basement"
-                                                    If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GetValue(TABLENAME_GENERALINFO, "MachineLocation_Cmb")) > -1 Then
+                                                    If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb")) > -1 Then
                                                         AddToOptions = True
                                                     End If
                                                 Case Else
@@ -1007,7 +1018,7 @@ Module frmEstimatingBaseMOD
                                             End If
                                         Case MAT_ID_GovernorEncoder
                                             If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Rim Mounted") > -1 Then
-                                                If GetValue(TABLENAME_MATERIALS, UseOptionCol, MAIN_ID_Governor, MAT_ID_GovernorCar).IndexOf("Reuse") > -1 Then
+                                                If GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseOptionCol, MAIN_ID_Governor, MAT_ID_GovernorCar).IndexOf("Reuse") > -1 Then
                                                     AddToOptions = True
                                                 End If
                                             Else
@@ -1043,18 +1054,18 @@ Module frmEstimatingBaseMOD
                                                 AddToOptions = True
                                             End If
                                         Case MAT_ID_HoistRopes
-                                            If (GetValue(TABLENAME_GENERALINFO, "RopingNew_Cmb").IndexOf("1:1") > -1 And
+                                            If (GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_Cmb").IndexOf("1:1") > -1 And
                                                UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("1:1") > -1) AndAlso
-                                               ((GetValue(TABLENAME_GENERALINFO, "MachineType_cmb").IndexOf(GEARED_TYPE) > -1 And
+                                               ((GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb").IndexOf(GEARED_TYPE) > -1 And
                                                UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GEARED_TYPE) > -1) Or
-                                               (GetValue(TABLENAME_GENERALINFO, "MachineType_cmb").IndexOf(GEARLESS_TYPE) > -1 And
+                                               (GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb").IndexOf(GEARLESS_TYPE) > -1 And
                                                UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GEARLESS_TYPE) > -1)) Then
                                                 AddToOptions = True
-                                            ElseIf (GetValue(TABLENAME_GENERALINFO, "RopingNew_Cmb").IndexOf("2:1") > -1 And
+                                            ElseIf (GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_Cmb").IndexOf("2:1") > -1 And
                                                    UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("2:1") > -1) AndAlso
-                                                   ((GetValue(TABLENAME_GENERALINFO, "MachineType_cmb").IndexOf(GEARED_TYPE) > -1 And
+                                                   ((GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb").IndexOf(GEARED_TYPE) > -1 And
                                                    UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GEARED_TYPE) > -1) Or
-                                                   (GetValue(TABLENAME_GENERALINFO, "MachineType_cmb").IndexOf(GEARLESS_TYPE) > -1 And
+                                                   (GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb").IndexOf(GEARLESS_TYPE) > -1 And
                                                    UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GEARLESS_TYPE) > -1)) Then
                                                 AddToOptions = True
                                             ElseIf (UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("FMR") > -1 Or
@@ -1063,14 +1074,14 @@ Module frmEstimatingBaseMOD
                                                     AddToOptions = True
                                                 End If
                                             ElseIf UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Basement") > -1 Then
-                                                If GetValue(TABLENAME_GENERALINFO, "MachineLocation_Cmb") = "Basement" Then
+                                                If GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb") = "Basement" Then
                                                     AddToOptions = True
                                                 End If
                                             Else
                                                 AddToOptions = True
                                             End If
                                         Case MAT_ID_HoistwayLimitSwitch
-                                            Select Case GetValue(TABLENAME_MATERIALS, UseOptionCol, MAIN_ID_Hoistway, MAT_ID_HoistwayLimitSwitch)
+                                            Select Case GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseOptionCol, MAIN_ID_Hoistway, MAT_ID_HoistwayLimitSwitch)
                                                 Case "New"
                                                     AddToOptions = True
                                                 Case "Refurbish"
@@ -1095,11 +1106,11 @@ Module frmEstimatingBaseMOD
                                                 AddToOptions = True
                                             End If
                                         Case MAT_ID_CarBuffer, MAT_ID_CwtBuffer
-                                            Select Case Math.Round(Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Application_cmb")))
+                                            Select Case Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")))
                                                 Case Is = 0
                                                     UseFieldName = String.Empty
                                                 Case Is <= 100
-                                                    Select Case GetValue(TABLENAME_GENERALINFO, "Application_cmb")
+                                                    Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
                                                         Case "Passenger"
                                                             UseFieldName = "100 fpm (passenger)"
                                                         Case "Freight"
@@ -1108,7 +1119,7 @@ Module frmEstimatingBaseMOD
                                                             UseFieldName = String.Empty
                                                     End Select
                                                 Case Is <= 150
-                                                    Select Case GetValue(TABLENAME_GENERALINFO, "Application_cmb")
+                                                    Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
                                                         Case "Passenger"
                                                             UseFieldName = "150 fpm (passenger)"
                                                         Case "Freight"
@@ -1117,7 +1128,7 @@ Module frmEstimatingBaseMOD
                                                             UseFieldName = String.Empty
                                                     End Select
                                                 Case Is <= 200
-                                                    Select Case GetValue(TABLENAME_GENERALINFO, "Application_cmb")
+                                                    Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
                                                         Case "Passenger"
                                                             UseFieldName = "200 fpm (passenger)"
                                                         Case "Freight"
@@ -1197,11 +1208,14 @@ Module frmEstimatingBaseMOD
         Dim UseMaterialItemRecordSet As New ADODB.Recordset
         Dim ReturnIntVal As Integer = -999
         Dim ReturnVal As String = String.Empty
-        Dim CurTravel As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Travel_txt"))
-        Dim CurPitDepth As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "PitDepth_txt"))
-        Dim TotalTravel As Single = CurTravel + Conversion.Val(GetValue(TABLENAME_GENERALINFO, "TopFloorToOverhead_txt")) + CurPitDepth
+        Dim CurTravel As Single = 0, CurPitDepth As Single = 0, TotalTravel As Single = 0
+        Dim CurDataset As DataSet = Nothing
 
         Try
+            CurDataset = SetCurrentDataset()
+            CurTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt"))
+            CurPitDepth = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
+            TotalTravel = CurTravel + Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) + CurPitDepth
             If Math.Round(Conversion.Val(CurMATID)) > 900.0 Then
                 CurMATID = "900" & Strings.Right(CurMATID, 3)
                 UseWhere = "[Sub ID] = '" & CurMATID & "'"
@@ -1285,10 +1299,9 @@ Module frmEstimatingBaseMOD
         Return ReturnVal
 
     End Function
-    Public Function GetValue(ByVal UseTable As String, ByVal UseField As String, Optional ByVal UseMainID As String = "", Optional ByVal UseMaterialID As String = "") As String
+    Public Function GetValue(ByVal CurMaterialTable As DataTable, ByVal UseField As String, Optional ByVal UseMainID As String = "", Optional ByVal UseMaterialID As String = "") As String
         Dim ReturnVal As String = String.Empty
         Dim CurRow As Integer = 0, iIndex As Integer = 0
-        Dim CurMaterialTable As DataTable = EstimatingDataset.Tables(UseTable)
         Dim CurDataRow As DataRow = Nothing
 
         For iIndex = 0 To CurMaterialTable.Rows.Count - 1
@@ -1309,8 +1322,10 @@ Module frmEstimatingBaseMOD
 
     End Function
     Public Sub SetIsPOHController()
+        Dim CurDataset As DataSet = Nothing
 
-        If GetValue(TABLENAME_MATERIALS, UseTypeCol, MAIN_ID_Controller, MAT_ID_Controller).ToString.IndexOf("TXR5") = -1 Then
+        CurDataset = SetCurrentDataset()
+        If GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseTypeCol, MAIN_ID_Controller, MAT_ID_Controller).ToString.IndexOf("TXR5") = -1 Then
             IsPOHController = True
         Else
             IsPOHController = False
@@ -1325,21 +1340,25 @@ Module frmEstimatingBaseMOD
         Dim Material_HQ As Single = 0, Material_RL As Single = 0, TempCost As Single = 0
         Dim BDP_Hours As Single = 0, Special_Hours As Single = 0, Labor_Hours As Single = 0, Labor_Cost As Single = 0
         Dim SubContract_Work As Single = 0, Misc_Costs As Single = 0, Expenses As Single = 0, Freight As Single = 0, NPS_Cost As Single = 0
+        Dim Engineering As Single = 0
         Dim Total_Bank_Cost As Single = 0, Bank_Net_Price As Single = 0
         Dim Sales_Commission As Single = 0, NPS_Surcharge As Single = 0, Taxes As Single = 0
         Dim UseMaterialItemRecordSet As New ADODB.Recordset
         Dim UseWhere As String = String.Empty, PerUnit As String = String.Empty
         Dim PerCarQty As Single = CalculateNumberOfCarsInEstimate(CurUnits)
         Dim MaterialQty As Single = 0, LaborQty As Single = 0
-        Dim TotalTravel As Single = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Travel_txt")) +
-                                    Conversion.Val(GetValue(TABLENAME_GENERALINFO, "TopFloorToOverhead_txt")) +
-                                    Conversion.Val(GetValue(TABLENAME_GENERALINFO, "PitDepth_txt"))
-        Dim FrontOpenings As Integer = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "NumberofStopsFront_cmb"))
-        Dim RearOpenings As Integer = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "NumberofStopsRear_cmb"))
-        Dim TotalOpenings As Integer = FrontOpenings + RearOpenings
+        Dim TotalTravel As Single = 0, FrontOpenings As Integer = 0, RearOpenings As Integer = 0, TotalOpenings As Integer = 0
         Dim UseFieldName As String = String.Empty
+        Dim CurDataset As DataSet = Nothing
 
         Try
+            CurDataset = SetCurrentDataset()
+            TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
+                          Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
+                          Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
+            FrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
+            RearOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+            TotalOpenings = FrontOpenings + RearOpenings
             'CJ (10/23/17) - still need to program multiple tabs - will only update based on single tab
             For iIndex = 0 To SubGroups.Rows.Count - 1
                 CurDataRow = SubGroups.Rows(iIndex)
@@ -1379,11 +1398,11 @@ Module frmEstimatingBaseMOD
                                             Else
                                                 UseFieldName = MAT_ID_RearCarDoorOperator
                                             End If
-                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(TABLENAME_MATERIALS, UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
+                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
                                         Case "PER DOOR"
-                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(TABLENAME_MATERIALS, UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
+                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
                                         Case "PER ROPE PER CAR"
-                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(TABLENAME_MATERIALS, UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
+                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
                                         Case "PER OPENING PER CAR"
                                             MaterialQty = PerCarQty * TotalOpenings
                                         Case "PER PORT"
@@ -1466,7 +1485,7 @@ Module frmEstimatingBaseMOD
                     Next iIndex
                     For iIndex = 0 To dtAltGroup.Rows.Count - 1
                         CurDataRow = dtAltGroup.Rows(iIndex)
-                        If CurDataRow("alt_id") = UseAltId Then
+                        If CurDataRow("id") = UseAltId Then
                             If AltIndex = CurrentGOData_Typ.Alt Then
                                 FoundDataRow = True
                                 Exit For
@@ -1477,55 +1496,61 @@ Module frmEstimatingBaseMOD
                 Case Else
             End Select
             If FoundDataRow Then
-                CurDataRow("Material_HQ") = Math.Round(Material_HQ, 2)
-                CurDataRow("Material_RL") = Math.Round(Material_RL, 2)
-                CurDataRow("BDP_Hours") = Math.Round(BDP_Hours, 2)
-                CurDataRow("Special_Hours") = Math.Round(Special_Hours, 2)
-                Labor_Hours = BDP_Hours + Special_Hours
-                Labor_Cost = Labor_Hours * CurDataRow("Labor_Rate")
-                CurDataRow("Labor_Cost") = Math.Round(Labor_Cost, 2)
-                If CurDataRow("OT_Hours_Included") > Labor_Hours Then
-                    CurDataRow("OT_Hours_Included") = 0
+                If CurrentGOData_Typ.EstimateLevel = "Alt" Then     'Adjsut costs = Base - curcost
                 Else
-                    Labor_Hours -= CurDataRow("OT_Hours_Included")
+                    CurDataRow("Material_HQ") = Math.Round(Material_HQ, 2)
+                    CurDataRow("Material_RL") = Math.Round(Material_RL, 2)
+                    CurDataRow("BDP_Hours") = Math.Round(BDP_Hours, 2)
+                    CurDataRow("Special_Hours") = Math.Round(Special_Hours, 2)
+                    Labor_Hours = BDP_Hours + Special_Hours
+                    Labor_Cost = Labor_Hours * CurDataRow("Labor_Rate")
+                    CurDataRow("Labor_Cost") = Math.Round(Labor_Cost, 2)
+                    If CurDataRow("OT_Hours_Included") > Labor_Hours Then
+                        CurDataRow("OT_Hours_Included") = 0
+                    Else
+                        Labor_Hours -= CurDataRow("OT_Hours_Included")
+                    End If
+                    CurDataRow("Labor_Hours") = Math.Round(Labor_Hours, 2)
+                    CurDataRow("SubContract_Work") = Math.Round(SubContract_Work, 2)
+                    CurDataRow("Misc_Costs") = Math.Round(Misc_Costs, 2)
+                    Expenses = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDay_txt"))
+                    CurDataRow("Expenses") = Math.Round(Expenses, 2)
+                    Freight = (Material_HQ + Material_RL) * FREIGHT_RATE
+                    CurDataRow("Freight") = Math.Round(Freight, 2)
+                    Engineering = (Material_HQ + Material_RL) * ENGINEERING_RATE
+                    CurDataRow("Engineering_Cost") = Math.Round(Engineering, 2)
+                    NPS_Cost = Conversion.Val(dtBuildingInfo(0)("nps_one_time_cost").ToString)
+                    NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_material_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString)
+                    NPS_Cost *= PerCarQty
+                    NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_labor_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString) * PerCarQty
+                    Total_Bank_Cost = Material_HQ + Material_RL + Labor_Cost + SubContract_Work + Misc_Costs + Expenses + Freight + NPS_Cost +
+                                      (Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Permits_txt")) * PerCarQty) +
+                                      Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Bonds_txt"))
+                    Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
+
+                    NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
+                    Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
+                    Sales_Commission = CalculateSalesCommission()
+                    Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
+                    Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
+                    NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
+                    Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
+                    Sales_Commission = CalculateSalesCommission()
+                    Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
+                    Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
+
+                    CurDataRow("NPS_Cost") = Math.Round(NPS_Cost + NPS_Surcharge, 2)
+                    CurDataRow("Tax") = Math.Round(Taxes, 2)
+                    CurDataRow("Sales_Commission") = Math.Round(Sales_Commission, 2)
+
+                    CurDataRow("Total_Bank_Cost") = Math.Round(Total_Bank_Cost, 2)
+                    CurDataRow("Bank_Net_Price") = Math.Round(Bank_Net_Price, 2)
+                    CurDataRow("speed") = Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")))
+                    CurDataRow("machine_model") = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
                 End If
-                CurDataRow("Labor_Hours") = Math.Round(Labor_Hours, 2)
-                CurDataRow("SubContract_Work") = Math.Round(SubContract_Work, 2)
-                CurDataRow("Misc_Costs") = Math.Round(Misc_Costs, 2)
-                Expenses = Conversion.Val(GetValue(TABLENAME_GENERALINFO, "ExpensesPerDay_txt"))
-                CurDataRow("Expenses") = Math.Round(Expenses, 2)
-                Freight = (Material_HQ + Material_RL) * FREIGHT_RATE
-                CurDataRow("Freight") = Math.Round(Freight, 2)
-                NPS_Cost = Conversion.Val(dtBuildingInfo(0)("nps_one_time_cost").ToString)
-                NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_material_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString)
-                NPS_Cost *= PerCarQty
-                NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_labor_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString) * PerCarQty
-                Total_Bank_Cost = Material_HQ + Material_RL + Labor_Cost + SubContract_Work + Misc_Costs + Expenses + Freight + NPS_Cost +
-                                  (Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Permits_txt")) * PerCarQty) +
-                                  Conversion.Val(GetValue(TABLENAME_GENERALINFO, "Bonds_txt"))
-                Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
-
-                NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
-                Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
-                Sales_Commission = CalculateSalesCommission()
-                Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
-                Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
-                NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
-                Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
-                Sales_Commission = CalculateSalesCommission()
-                Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
-                Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
-
-                CurDataRow("NPS_Cost") = Math.Round(NPS_Cost + NPS_Surcharge, 2)
-                CurDataRow("Tax") = Math.Round(Taxes, 2)
-                CurDataRow("Sales_Commission") = Math.Round(Sales_Commission, 2)
-
-                CurDataRow("Total_Bank_Cost") = Math.Round(Total_Bank_Cost, 2)
-                CurDataRow("Bank_Net_Price") = Math.Round(Bank_Net_Price, 2)
-                CurDataRow("speed") = Math.Round(Conversion.Val(GetValue(TABLENAME_GENERALINFO, "SpeedNew_cmb")))
-                CurDataRow("machine_model") = GetValue(TABLENAME_GENERALINFO, "MachineType_cmb")
             End If
             CM_MAIN_frm.CalculateFinalBankPrice()
+
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In UpdateAllTotals")
 
@@ -1599,7 +1624,35 @@ Module frmEstimatingBaseMOD
             UseOptionCol = TABLECOL_OPTION_ALT
             UseOrderByCol = TABLECOL_ORDERBY_ALT
             UseUnitQtyCol = TABLECOL_UNITQTY_ALT
+        Else
+            UseTypeCol = TABLECOL_TYPE_EST
+            UseOptionCol = TABLECOL_OPTION_EST
+            UseOrderByCol = TABLECOL_ORDERBY_EST
+            UseUnitQtyCol = TABLECOL_UNITQTY_EST
         End If
 
     End Sub
+    Public Function FindValueInDataRow(ByVal FieldName As String, ByVal UseDataRow As System.Data.DataRow) As String
+        Dim drIndex As Integer = 0
+        Dim ReturnVal As String = String.Empty
+
+        If Not IsDBNull(UseDataRow(FieldName)) Then
+            ReturnVal = UseDataRow(FieldName)
+        End If
+        Return ReturnVal
+
+    End Function
+    Public Function SetCurrentDataset() As DataSet
+        Dim UseDataset As DataSet = Nothing
+
+        Select Case CurrentGOData_Typ.EstimateLevel
+            Case "Base", "Master"
+                UseDataset = EstimatingDataset
+            Case "Alt"
+                UseDataset = AltDataset
+            Case Else
+        End Select
+        Return UseDataset
+
+    End Function
 End Module

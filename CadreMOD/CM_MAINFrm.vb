@@ -163,6 +163,7 @@ Partial Friend Class CM_MAIN_frm
 
         dtBuildingInfo = dsCadre.Tables.Add("BldgInfo")
         dtBuildingInfo.Columns.AddRange(New DataColumn() {New DataColumn("building_type", typeStr), _
+                                                          New DataColumn("superintendent", typeStr), _
                                                           New DataColumn("sales_rep", typeStr), _
                                                           New DataColumn("sales_office", typeStr), _
                                                           New DataColumn("installing_office", typeStr), _
@@ -1585,21 +1586,6 @@ Partial Friend Class CM_MAIN_frm
         End Try
     End Sub
 
-    Private Sub AlsPrint()
-
-        Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
-
-        Dim iIndex As Integer
-
-        For iIndex = 0 To FpSpread1.ActiveSheet.RowCount - 1
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
-            If Not IsNothing(ChildSheetView1) Then
-
-            End If
-        Next
-    End Sub
-
     Private Sub btnDeleteMaster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If MessageBox.Show("You are about to delete the Master for this Summary Row.  Are you Sure", "Are you Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
@@ -1796,7 +1782,8 @@ Partial Friend Class CM_MAIN_frm
         End Select
 
         Populate_SalesRep(Me.cboSalesRep)
-    
+        Populate_FieldSup()
+
     End Sub
 
     Private Sub Text2Fields()
@@ -2030,6 +2017,7 @@ Partial Friend Class CM_MAIN_frm
                 txtContractNumber.Text = Contracts.ContractNumber
 
                 cboBuildingType.SelectedItem = row("building_type")
+                cboSupt.SelectedItem = row("superintendent")
                 cboSalesRep.SelectedItem = row.Item("sales_rep").ToString
                 cboSalesOffice.SelectedItem = row.Item("Sales_Office").ToString
                 cboInstallingOffice.SelectedItem = row.Item("installing_office").ToString
@@ -2101,6 +2089,7 @@ Partial Friend Class CM_MAIN_frm
             End If
 
             dtBuildingInfo.Rows(0)("building_type") = cboBuildingType.Text
+            dtBuildingInfo.Rows(0)("superintendent") = cboSupt.Text
 
             dtBuildingInfo.Rows(0)("sales_rep") = cboSalesRep.Text
             dtBuildingInfo.Rows(0)("sales_office") = cboSalesOffice.Text
@@ -2282,7 +2271,9 @@ Partial Friend Class CM_MAIN_frm
     Private Sub chkEngineeringSurvey_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-
+    Private Sub cboSupt_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSupt.SelectedIndexChanged
+        If Not initializing Then isDirty = True
+    End Sub
 
     Private Sub btnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopy.Click
         ' copy the selected summary, and copy, along with all base, master  and  alt data
@@ -2481,11 +2472,11 @@ Partial Friend Class CM_MAIN_frm
         Dim budget_c1 As Decimal
         Dim criteria As String
         Dim base_speed As Integer
-        Dim base_model As String
-        Dim base_bank_type As String
+        Dim base_model As String = String.Empty
+        Dim base_bank_type As String = String.Empty
         Dim alt_speed As Integer
-        Dim alt_model As String
-        Dim alt_bank_type As String
+        Dim alt_model As String = String.Empty
+        Dim alt_bank_type As String = String.Empty
         Try
         For iIndex As Integer = 0 To FpSpread1.ActiveSheet.RowCount - 1
             ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
@@ -2494,10 +2485,15 @@ Partial Friend Class CM_MAIN_frm
                     criteria = "id = '" & ChildSheetView1.Cells(i, 1).Value & "'"
                     Dim baseRow() As Data.DataRow
                     baseRow = dtSummaryGroup.Select(criteria)
-
+                        If Not IsDBNull(baseRow(0).Item("speed")) Then
                         base_speed = baseRow(0).Item("speed")
+                        End If
+                        If Not IsDBNull(baseRow(0).Item("machine_model")) Then
                         base_model = baseRow(0).Item("machine_model")
+                        End If
+                        If Not IsDBNull(baseRow(0).Item("Bank_Type")) Then
                         base_bank_type = baseRow(0).Item("Bank_Type")
+                        End If
                         budget_c1 = GetBudgetC1(base_speed, base_model, base_bank_type)
                         If ChildSheetView1.Cells(i, 20).Value < budget_c1 Then
                             ChildSheetView1.Cells(i, 20).BackColor = Color.Red
@@ -2516,9 +2512,15 @@ Partial Friend Class CM_MAIN_frm
                                 Dim altRow() As Data.DataRow
                                 altRow = dtSummaryGroup.Select(criteria)
 
+                                If Not IsDBNull(altRow(0).Item("speed")) Then
                                 alt_speed = altRow(0).Item("speed")
+                                End If
+                                If Not IsDBNull(altRow(0).Item("machine_model")) Then
                                 alt_model = altRow(0).Item("machine_model")
+                                End If
+                                If Not IsDBNull(altRow(0).Item("Bank_Type")) Then
                                 alt_bank_type = altRow(0).Item("Bank_Type")
+                                End If
                                 budget_c1 = GetBudgetC1(alt_speed, alt_model, alt_bank_type)
                                 If ChildSheetView2.Cells(i, 21).Value < budget_c1 Then
                                     ChildSheetView2.Cells(i, 21).BackColor = Color.Red
@@ -3235,5 +3237,338 @@ Partial Friend Class CM_MAIN_frm
 
         Return number_of_cars
     End Function
+
+    Private Sub Populate_FieldSup()
+        ' Private Sub Populate_FieldSup(ByRef ComboCntl As ComboBox, ByRef FilterNames As Boolean, ByRef AddZZZOther As Boolean)   
+        ' Leaving in should user want to filter.  See Mod 1.0 for filtering
+        Dim FieldSup_Field As String = ""
+        Dim tempstore As String = ""
+
+        If Me.cboSupt.Text <> "" Then
+            tempstore = Me.cboSupt.Text
+        End If
+
+        Me.cboSupt.Items.Clear()
+        If Not (Not clsNotes.NotesDBName(ComServer, HoldNotesFeedbackPath) OrElse Not clsNotes.NotesDocProfile("Names")) Then
+            FieldSup_Field = IIf(All_LocalCodeDep.CanadaJob, "FieldSupervisorNames_TOR", "FieldSupervisorNames_SEC")
+            If Not clsNotes.GetValue_Readers(FieldSup_Field) Then
+                FieldSup_Field = "FieldSupervisorNames"
+            End If
+            clsNotes.GetArray(FieldSup_Field, Me.cboSupt)
+            'If FilterNames Then
+            '    FilterNamesByRegion(MComboCntl)
+            'End If
+        End If
+
+        'If AddZZZOther Then
+        '    [ComboCntl].Items.Add("ZZZ Other")
+        'End If
+
+        AssignListIndex(Me.cboSupt, tempstore)
+
+    End Sub
+
+    Private Sub FilterNamesByRegion(ByRef cmb As ComboBox)
+        'Dim jIndx As Integer = 1
+        'Dim AllNames() As String = Nothing, AddNames() As String = Nothing
+
+        'If [cmb].Items.Count = 0 OrElse Contracts.RegionCode.Length = 0 OrElse Not clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) OrElse _
+        '   Not clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
+        '    Exit Sub
+        'End If
+
+        'For iIndx As Integer = 0 To [cmb].Items.Count - 1
+        '    ReDim Preserve AllNames(iIndx)
+        '    '  AllNames(iIndx) = [cmb].GetListItem(iIndx)
+        'Next iIndx
+
+        'ReDim AddNames(0)
+        'For iIndx As Integer = 0 To AllNames.GetUpperBound(0)
+        '    If clsNotes.NotesDocKey(AllNames(iIndx)) Then
+        '        If clsNotes.GetValue("RegionCode").IndexOf(Contracts.RegionCode) >= 0 Then
+        '            ReDim Preserve AddNames(jIndx)
+        '            AddNames(jIndx) = AllNames(iIndx)
+        '            jIndx += 1
+        '        End If
+        '    End If
+        'Next iIndx
+
+        'If AddNames.GetUpperBound(0) > 0 Then
+        '    [cmb].Items.Clear()
+        '    For iIndx As Integer = 0 To AddNames.GetUpperBound(0)
+        '        [cmb].Items.Add(AddNames(iIndx))
+        '    Next iIndx
+        'End If
+
+    End Sub
+
+    Private Sub btnSuptReview_Click(sender As System.Object, e As System.EventArgs) Handles btnSuptReview.Click
+        Dim cc As DialogResult
+        Dim sSuptReview As String
+        Dim sSuptStatus As String
+        Dim sSUPTFileName As String = ""
+        Dim CriticalTitle, CriticalMsg As String
+        Dim sMessage As String = ""
+
+        sSuptReview = Get_SuptStatus("Decision")
+        If sSuptStatus <> "" Then
+            If sSuptStatus = "Rejected" Then
+                sSuptReview = "Required"
+            Else
+                sSuptReview = sSuptStatus
+            End If
+        End If
+
+        If sSuptReview = "Under Review" Then
+            MessageBox.Show("Estimate is Under Supt Review - Cannot resend for Approval", "Supt Review Status ", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+
+        Select Case sSuptReview
+            Case "Approved"
+                sMessage = "Estimate has already been " & sSuptReview & ". There is no need for further review.  "
+                If MessageBox.Show(sMessage, "Superintendent Review", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
+                    Exit Sub
+                End If
+            Case "Not Required"
+                sMessage = "The estimate does not require Supt Review; do you still wish to submit? "
+                If MessageBox.Show(sMessage, "Superintendent Review", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
+                    Exit Sub
+                End If
+        End Select
+
+        If Me.cboSupt.Text = "ZZZ Other" Or Me.cboSupt.Text = "" Then
+            MessageBox.Show("The Superintendent Name is required.", "Supt Review", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            Exit Sub
+        End If
+
+        If NoBanksIncluded() Then
+            sMessage = "No Summary Items have been 'Included'.  Please check 'Included' for the bank(s) to process the Superintendent Review.  " & vbCrLf & vbCrLf & "Supt. Review Processing Terminated."
+            MessageBox.Show(sMessage, "No Banks Included", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+
+        sMessage = "Please note that when Supt Approval is requested, you will not be able to make any further changes to the estimate."
+        Cursor.Current = Cursors.Default
+        If MessageBox.Show(sMessage, "Continue?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
+            Exit Sub
+        End If
+
+        If isDirty Then
+            sMessage = "Contract information has changed.  To proceed with the Superintendent Review, you must save.  Are you ready to save?"
+            If MessageBox.Show(sMessage, "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                MessageBox.Show("Superintendent Review Process Terminated by User", "Processing Terminated", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
+        End If
+
+        SaveAll()
+
+        'sSUPTFileName = OutputSuptFile()
+
+        'SUPT_Add_Doc(sSUPTFileName)
+
+        MessageBox.Show("Supt Approval submitted", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
+        Exit Sub
+
+    End Sub
+
+    Public Sub SUPT_Add_Doc(ByVal sSUPTFileName As String)
+
+        'Dim sRequestorNameKey As String = ""
+        'Dim sRequestorName As String = ""
+        'Dim sFieldSuperintendentName As String = ""
+        'Dim sPhone As String = ""
+        'Dim sPhone_mobile As String = ""
+        'Dim sFax_requestor As String = ""
+        'Dim bNewDocument As Boolean = False
+        'Dim sOffice As String = ""
+        'Dim sDistrict As String = ""
+        'Dim sTerritory As String = ""
+        'Dim sArea As String = ""
+        'Dim skg As String = ""
+        'Dim sDueDate As String = ""
+        'Dim Name As String = ""
+        'Dim PowerUnitType As String = String.Empty
+        'Dim MachineType As String = String.Empty
+        'Dim Diameters As String = String.Empty
+        'Dim MeasuredPressure As String = String.Empty
+        'Dim MeasuredPressureType As String = String.Empty
+        'Dim Filesystem As New Scripting.FileSystemObject()
+        'Dim thisFolder As Scripting.Folder = Nothing
+        'Dim theseFiles As Scripting.Files
+
+        'Try
+        '    If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
+        '        If clsNotes.NotesDBView("(>LU Offices \ By Office Number No Sat)") Then
+        '            sOffice = Contracts.SalesOffice
+        '            If clsNotes.NotesDocKey(sOffice) Then
+        '                sPhone = clsNotes.GetValue("Phone")
+        '                sFax_requestor = clsNotes.GetValue("Fax")
+        '                sPhone_mobile = clsNotes.GetValue("Phone_2")
+        '                sDistrict = clsNotes.GetValue("DistrictNum")
+        '                sTerritory = clsNotes.GetValue("Territory")
+        '                sArea = clsNotes.GetValue("area")
+        '                skg = clsNotes.GetValue("KG")
+        '            End If
+        '        End If
+        '    End If
+
+        '    If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
+        '        If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
+        '            sRequestorNameKey = Left$(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
+        '            sRequestorName = clsNotes.CN_Username
+        '        End If
+        '    End If
+
+        '    sFieldSuperintendentName = Screen_BOOK.SuperintendentName
+        '    sFieldSuperintendentName = clsNotes.GetNotesCanonicalName(sFieldSuperintendentName)
+        '    SetupSuptReviewLink()
+        '    If Not clsNotes.FindSUPTDocument() Then
+        '        clsNotes.CreateDOC("Booking Approval Review MOD")
+        '        bNewDocument = True
+        '    End If
+
+        '    If bNewDocument Then
+        '        '  Splash.Splash_lbl.Text = "Creating Superintendent Form for Approval"
+        '        clsNotes.SetValue("reviewKey", Contracts.ProposalNum)
+        '        clsNotes.SetValue("createdDate", CDate(Now))
+        '        clsNotes.SetValue_Readers("creator", sRequestorName)
+        '        clsNotes.SetValue("Status", "New")
+        '    Else
+        '        ' Splash.Splash_lbl.Text = "Updating Superintendent Form for Approval"
+        '        clsNotes.SetValue("Status", "Resubmitted")
+        '    End If
+
+        '    clsNotes.SetValue_Readers("Estimator", sRequestorName)
+        '    clsNotes.SetValue_Readers("SalesRep", gsSalesRep)
+        '    clsNotes.SetValue_Readers("Superintendent", sFieldSuperintendentName)
+        '    clsNotes.SetValue("office", sOffice)
+        '    clsNotes.SetValue("district", sDistrict)
+        '    clsNotes.SetValue("territory", sTerritory)
+        '    clsNotes.SetValue("area", sArea)
+        '    clsNotes.SetValue("kg", skg)
+        '    clsNotes.SetValue("proposal_num", Contracts.ProposalNum)
+        '    clsNotes.SetValue("jobName", Contracts.JobName)
+        '    ' clsNotes.SetValue("units_bank", UnitsInBankFormat)
+        '    clsNotes.SetValue("units_estimate", UnitsInEstimate)
+        '    clsNotes.SetValue("product_line", GONumbers(CurrentGOSelection).Type)
+        '    clsNotes.SetValue("product_code", GONumbers(CurrentGOSelection).ProductCode)
+        '    clsNotes.SetValue("capacity", GONumbers(CurrentGOSelection).Capacity)
+        '    clsNotes.SetValue("speed", GONumbers(CurrentGOSelection).Speed)
+        '    clsNotes.SetValue("travel_rise", GONumbers(CurrentGOSelection).TravelFt + RoundToNextHigherOrEqualInteger(GONumbers(CurrentGOSelection).TravelIn / 12))
+        '    clsNotes.SetValue("landings", GONumbers(CurrentGOSelection).TotalStops)
+        '    clsNotes.SetValue("openings_front", GONumbers(CurrentGOSelection).FrontOpenings)
+        '    clsNotes.SetValue("openings_rear", GONumbers(CurrentGOSelection).RearOpenings)
+        '    clsNotes.SetValue("date_delivery", CDate(ME_ADM01Bnk_typ.DeliveryDate))
+        '    clsNotes.SetValue("date_completion", CDate(ME_ADM01Bnk_typ.BankCompleteDate))
+        '    clsNotes.SetValue("hours_standard", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs, HOUR_MASK)))
+        '    clsNotes.SetValue("hours_labor", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs + MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
+        '    clsNotes.SetValue("hours_special", Val(Strings.Format(MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
+        '    clsNotes.SetValue("hours_overtime", Val(Strings.Format(MOD_Cost_typ.Overtime_Hrs, HOUR_MASK)))
+        '    clsNotes.SetValue("unionLocalNumber", ME_ADM01Bnk_typ.UnionLocal)
+        '    clsNotes.SetValue("seismicZone", ME_ADM01Bnk_typ.SeismicZone.ToString)
+        '    clsNotes.SetValue("localCode", ME_ADM01Bnk_typ.LocalCode)
+        '    clsNotes.SetValue("cost_foremanBonus", IIf(ME_ADM02Bnk_typ.ForemansBonus = CheckState.Checked, "Yes", "No"))
+        '    clsNotes.SetValue("cost_regionLocal", MOD_Cost_typ.RLMaterial_Cost)
+        '    clsNotes.SetValue("cost_expenses", MOD_Cost_typ.Expenses_Cost)
+        '    clsNotes.SetValue("cost_subcontractor", MOD_Cost_typ.OtherSubcontract_Cost)
+        '    clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
+        '    clsNotes.SetValue("cost_bonds", MOD_Cost_typ.Bonds_Cost)
+        '    clsNotes.SetValue("cost_projectManager", MOD_Cost_typ.ProjectManager_Cost)
+        '    clsNotes.SetValue("ansiCode", ME_ADM01Bnk_typ.ANSICode)
+        '    clsNotes.SetValue("blendedLaborRate", Math.Round(RATES.FieldLabor_Rate, 2))
+        '    clsNotes.SetValue("businessLine", "MOD")
+        '    clsNotes.SetValue("Form", "Booking Approval Review MOD")
+        '    If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
+        '        PowerUnitType = ME_HYDMRM01Car_typ.PowerUnit
+        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage) Then
+        '            Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage
+        '        End If
+        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage) Then
+        '            If String.IsNullOrEmpty(Diameters.Trim) Then
+        '                Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage
+        '            Else
+        '                Diameters = Diameters & Environment.NewLine & ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage
+        '            End If
+        '        End If
+        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage) Then
+        '            If String.IsNullOrEmpty(Diameters.Trim) Then
+        '                Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage
+        '            Else
+        '                Diameters = Diameters & Environment.NewLine & ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage
+        '            End If
+        '        End If
+        '        If ME_HYDHSTPITCar_typ.MeasuredPressure > 0 Then
+        '            MeasuredPressure = ME_HYDHSTPITCar_typ.MeasuredPressure.ToString
+        '        End If
+        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.MeasuredPressureType) Then
+        '            MeasuredPressureType = ME_HYDHSTPITCar_typ.MeasuredPressureType
+        '        End If
+        '    Else
+        '        MachineType = ME_MRM01Car_typ.Machine
+        '    End If
+        '    clsNotes.SetValue("powerUnitType", PowerUnitType)
+        '    clsNotes.SetValue("machine_type", MachineType)
+        '    clsNotes.SetValue("existingPistonsDiameters", Diameters)
+        '    clsNotes.SetValue("measuredPressure", MeasuredPressure)
+        '    clsNotes.SetValue("measurePressureType", MeasuredPressureType)
+        '    clsNotes.SetValue("power", ME_COM01Car_typ.PowerSupply)
+        '    clsNotes.SetValue("reason", SuptReviewMsg)
+        '    clsNotes.SetValue("bank", GONumbers(CurrentGOSelection).Bank & " / " & GONumbers(CurrentGOSelection).Alt)
+        '    bNewDocument = clsNotes.AttachSUPTFile(sSUPTFileName)
+        '    If clsNotes.CADREFilePath(ReportsPath) Then
+        '        If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
+        '            Execute_Word_Report(REPORT_HXPressFieldData, True, True)
+        '        Else
+        '            Execute_Word_Report(REPORT_QUANTUMLEAP_FIELDSURVEY_DATAFORM, True, True)
+        '        End If
+        '        Execute_Excel_Report(REPORT_BDP_PERCENTCOMPLETE, True)
+        '        thisFolder = MemoryHelper.ReleaseAndCleanObject(Of Scripting.Folder)(thisFolder, Filesystem.GetFolder(ReportsPath))
+        '        theseFiles = thisFolder.Files
+        '        For Each thisFile As Scripting.File In theseFiles
+        '            Name = thisFile.Name.ToUpper()
+        '            If (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & REPORT_HXPressFieldData.ToUpper & "*") Or
+        '               (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & REPORT_QUANTUMLEAP_FIELDSURVEY_DATAFORM.ToUpper & "*") Or
+        '               (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & GONumbers(CurrentGOSelection).Units & REPORT_BDP_PERCENTCOMPLETE.ToUpper & "*") Then
+        '                bNewDocument = clsNotes.AttachSUPTFile(ReportsPath & Name)
+        '                thisFile.Delete(True)
+        '            End If
+        '        Next thisFile
+        '    End If
+        '    Dim Reader(0 To 8) As String
+        '    Reader(0) = "[Admin]"
+        '    Reader(1) = "[Approver]"
+        '    Reader(2) = "[Engineer]"
+        '    Reader(3) = "[Full Access]"
+        '    Reader(4) = "T_SEC_" & sOffice
+        '    Reader(5) = "T_SEC_SMART_" & sOffice
+        '    Reader(6) = "T_SEC_SMART_" & sDistrict
+        '    Reader(7) = "T_SEC_SMART_" & sTerritory
+        '    Reader(8) = "T_SEC_SMART_" & sArea
+        '    clsNotes.SetValue_Readers("Reader", Reader)
+        '    clsNotes.DocSave()
+
+        'Catch
+        '    MessageBox.Show(Err.Description, "Error in creating Supt Approval Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        'End Try
+
+    End Sub
+
+    Private Function NoBanksIncluded() As Boolean
+        'Scroll through the dataset to determine if any summary items are included (include = true)
+        ' Returns true if no banks marked as included.
+
+        For Each row As DataRow In dtSummaryGroup.Rows
+            If Not IsDBNull(row("Include")) AndAlso row("Include") Then
+                Return False
+            End If
+        Next
+
+        Return True
+    End Function
+
 
 End Class

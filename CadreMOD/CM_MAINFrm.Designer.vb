@@ -16,7 +16,6 @@ Partial Class CM_MAIN_frm
     Private components As System.ComponentModel.IContainer
     Public ToolTipMain As System.Windows.Forms.ToolTip
     Public WithEvents BuildingInformation_fra As System.Windows.Forms.GroupBox
-    Private WithEvents btnContacts As System.Windows.Forms.Button
     Public WithEvents txtJobAddress2 As System.Windows.Forms.TextBox
     Public WithEvents txtJobCity As System.Windows.Forms.TextBox
     Public WithEvents txtJobAddress As System.Windows.Forms.TextBox
@@ -28,16 +27,7 @@ Partial Class CM_MAIN_frm
     Private WithEvents _label_10 As System.Windows.Forms.Label
     Private WithEvents _label_9 As System.Windows.Forms.Label
     Private WithEvents _label_8 As System.Windows.Forms.Label
-    Private WithEvents btnCopy As System.Windows.Forms.Button
-    Public WithEvents txtEstimateNum As System.Windows.Forms.MaskedTextBox
-    Public WithEvents txtEstimator As System.Windows.Forms.MaskedTextBox
-    Private WithEvents btnExit As System.Windows.Forms.Button
-    Private WithEvents btnSave As System.Windows.Forms.Button
-    Private WithEvents _Menu_tlb_3 As System.Windows.Forms.Button
     Private WithEvents btn_Help As System.Windows.Forms.Button
-    Private WithEvents _label_0 As System.Windows.Forms.Label
-    Private WithEvents _label_4 As System.Windows.Forms.Label
-    Public WithEvents Menu_pic As System.Windows.Forms.PictureBox
     Private WithEvents _StatusBar1_Panel1 As System.Windows.Forms.ToolStripStatusLabel
     Private WithEvents _StatusBar1_Panel2 As System.Windows.Forms.ToolStripStatusLabel
     Private WithEvents _StatusBar1_Panel3 As System.Windows.Forms.ToolStripStatusLabel
@@ -59,6 +49,8 @@ Partial Class CM_MAIN_frm
         Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.cboSupt = New System.Windows.Forms.ComboBox()
+        Me.lblSupt = New System.Windows.Forms.Label()
         Me.txtContractNumber = New System.Windows.Forms.TextBox()
         Me.lblContractNumber = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -74,7 +66,6 @@ Partial Class CM_MAIN_frm
         Me.cboBuildingType = New System.Windows.Forms.ComboBox()
         Me.lblBuildingType = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Proposal_cmd = New System.Windows.Forms.Button()
         Me.cboStatus = New System.Windows.Forms.ComboBox()
         Me._label_7 = New System.Windows.Forms.Label()
         Me.Status_lbl = New System.Windows.Forms.Label()
@@ -87,7 +78,6 @@ Partial Class CM_MAIN_frm
         Me.ServiceOffice_lbl = New System.Windows.Forms.Label()
         Me.cboProbabilityOfSale = New System.Windows.Forms.ComboBox()
         Me.ProbabilityOfSale_lbl = New System.Windows.Forms.Label()
-        Me.btnContacts = New System.Windows.Forms.Button()
         Me.txtJobAddress2 = New System.Windows.Forms.TextBox()
         Me.txtJobCity = New System.Windows.Forms.TextBox()
         Me.txtJobAddress = New System.Windows.Forms.TextBox()
@@ -115,16 +105,7 @@ Partial Class CM_MAIN_frm
         Me.ANSICode_lbl = New System.Windows.Forms.Label()
         Me.lblLocalCode = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Menu_pic = New System.Windows.Forms.PictureBox()
-        Me.btnCopy = New System.Windows.Forms.Button()
-        Me.txtEstimateNum = New System.Windows.Forms.MaskedTextBox()
-        Me.txtEstimator = New System.Windows.Forms.MaskedTextBox()
-        Me.btnExit = New System.Windows.Forms.Button()
-        Me.btnSave = New System.Windows.Forms.Button()
-        Me._Menu_tlb_3 = New System.Windows.Forms.Button()
         Me.btn_Help = New System.Windows.Forms.Button()
-        Me._label_0 = New System.Windows.Forms.Label()
-        Me._label_4 = New System.Windows.Forms.Label()
         Me.StatusBar1 = New System.Windows.Forms.StatusStrip()
         Me._StatusBar1_Panel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me._StatusBar1_Panel2 = New System.Windows.Forms.ToolStripStatusLabel()
@@ -163,10 +144,21 @@ Partial Class CM_MAIN_frm
         Me.lblGatewayStatus = New System.Windows.Forms.Label()
         Me.txtGatewayStatus = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.btnProposal = New System.Windows.Forms.Button()
+        Me._label_4 = New System.Windows.Forms.Label()
+        Me._label_0 = New System.Windows.Forms.Label()
+        Me._Menu_tlb_3 = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
+        Me.btnExit = New System.Windows.Forms.Button()
+        Me.txtEstimator = New System.Windows.Forms.MaskedTextBox()
+        Me.txtEstimateNum = New System.Windows.Forms.MaskedTextBox()
+        Me.btnCopy = New System.Windows.Forms.Button()
+        Me.Menu_pic = New System.Windows.Forms.PictureBox()
+        Me.btnContacts = New System.Windows.Forms.Button()
+        Me.btnSuptReview = New System.Windows.Forms.Button()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
-        CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Menu_pic.SuspendLayout()
         Me.StatusBar1.SuspendLayout()
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.FpSpread1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -175,11 +167,16 @@ Partial Class CM_MAIN_frm
         CType(Me.sprTotals_Sheet1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.NewProductService_fra.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Menu_pic.SuspendLayout()
         Me.SuspendLayout()
         '
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingInformation_fra.Controls.Add(Me.cboSupt)
+        Me.BuildingInformation_fra.Controls.Add(Me.lblSupt)
         Me.BuildingInformation_fra.Controls.Add(Me.txtContractNumber)
         Me.BuildingInformation_fra.Controls.Add(Me.lblContractNumber)
         Me.BuildingInformation_fra.Controls.Add(Me.Label7)
@@ -195,7 +192,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.cboBuildingType)
         Me.BuildingInformation_fra.Controls.Add(Me.lblBuildingType)
         Me.BuildingInformation_fra.Controls.Add(Me.Label1)
-        Me.BuildingInformation_fra.Controls.Add(Me.Proposal_cmd)
         Me.BuildingInformation_fra.Controls.Add(Me.cboStatus)
         Me.BuildingInformation_fra.Controls.Add(Me._label_7)
         Me.BuildingInformation_fra.Controls.Add(Me.Status_lbl)
@@ -208,7 +204,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Controls.Add(Me.ServiceOffice_lbl)
         Me.BuildingInformation_fra.Controls.Add(Me.cboProbabilityOfSale)
         Me.BuildingInformation_fra.Controls.Add(Me.ProbabilityOfSale_lbl)
-        Me.BuildingInformation_fra.Controls.Add(Me.btnContacts)
         Me.BuildingInformation_fra.Controls.Add(Me.txtJobAddress2)
         Me.BuildingInformation_fra.Controls.Add(Me.txtJobCity)
         Me.BuildingInformation_fra.Controls.Add(Me.txtJobAddress)
@@ -229,23 +224,56 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
+        '
+        'cboSupt
+        '
+        Me.cboSupt.BackColor = System.Drawing.SystemColors.Window
+        Me.cboSupt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboSupt.DropDownWidth = 222
+        Me.cboSupt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboSupt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboSupt.Location = New System.Drawing.Point(123, 140)
+        Me.cboSupt.Name = "cboSupt"
+        Me.cboSupt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboSupt.Size = New System.Drawing.Size(157, 21)
+        Me.cboSupt.TabIndex = 104
+        '
+        'lblSupt
+        '
+        Me.lblSupt.BackColor = System.Drawing.SystemColors.Window
+        Me.lblSupt.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblSupt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSupt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.lblSupt.Location = New System.Drawing.Point(23, 145)
+        Me.lblSupt.Name = "lblSupt"
+        Me.lblSupt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblSupt.Size = New System.Drawing.Size(94, 13)
+        Me.lblSupt.TabIndex = 105
+        Me.lblSupt.Text = "Superintendent:"
+        Me.lblSupt.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'txtContractNumber
+        '
         Me.txtContractNumber.AcceptsReturn = True
         Me.txtContractNumber.BackColor = System.Drawing.SystemColors.Window
         Me.txtContractNumber.Enabled = False
         Me.txtContractNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtContractNumber.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtContractNumber.Location = New System.Drawing.Point(357, 158)
+        Me.txtContractNumber.Location = New System.Drawing.Point(357, 141)
         Me.txtContractNumber.MaxLength = 42
         Me.txtContractNumber.Name = "txtContractNumber"
         Me.txtContractNumber.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtContractNumber.Size = New System.Drawing.Size(101, 20)
         Me.txtContractNumber.TabIndex = 102
+        '
+        'lblContractNumber
+        '
         Me.lblContractNumber.BackColor = System.Drawing.SystemColors.Window
         Me.lblContractNumber.Enabled = False
         Me.lblContractNumber.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblContractNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblContractNumber.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblContractNumber.Location = New System.Drawing.Point(286, 161)
+        Me.lblContractNumber.Location = New System.Drawing.Point(286, 144)
         Me.lblContractNumber.Name = "lblContractNumber"
         Me.lblContractNumber.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblContractNumber.Size = New System.Drawing.Size(65, 13)
@@ -326,7 +354,7 @@ Partial Class CM_MAIN_frm
         Me.txtConsultant.BackColor = System.Drawing.SystemColors.Window
         Me.txtConsultant.Enabled = False
         Me.txtConsultant.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtConsultant.Location = New System.Drawing.Point(121, 121)
+        Me.txtConsultant.Location = New System.Drawing.Point(122, 117)
         Me.txtConsultant.Name = "txtConsultant"
         Me.txtConsultant.Size = New System.Drawing.Size(336, 20)
         Me.txtConsultant.TabIndex = 94
@@ -337,17 +365,11 @@ Partial Class CM_MAIN_frm
         Me.Label3.Enabled = False
         Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(51, 124)
+        Me.Label3.Location = New System.Drawing.Point(52, 120)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(71, 13)
         Me.Label3.TabIndex = 93
         Me.Label3.Text = "Consultant:"
-        '
-        'txtOwner
-        '
-        '
-        'Label2
-        '
         '
         'txtBidDate
         '
@@ -397,16 +419,6 @@ Partial Class CM_MAIN_frm
         Me.Label1.TabIndex = 84
         Me.Label1.Text = "Bid Date:"
         '
-        'Proposal_cmd
-        '
-        Me.Proposal_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Proposal_cmd.Location = New System.Drawing.Point(740, 66)
-        Me.Proposal_cmd.Name = "Proposal_cmd"
-        Me.Proposal_cmd.Size = New System.Drawing.Size(87, 23)
-        Me.Proposal_cmd.TabIndex = 73
-        Me.Proposal_cmd.Text = "Proposal"
-        Me.Proposal_cmd.UseVisualStyleBackColor = True
-        '
         'cboStatus
         '
         Me.cboStatus.BackColor = System.Drawing.SystemColors.Window
@@ -433,9 +445,6 @@ Partial Class CM_MAIN_frm
         Me._label_7.TabIndex = 81
         Me._label_7.Text = "Sales Rep:"
         Me._label_7.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'chkMajorProject
-        '
         '
         'Status_lbl
         '
@@ -566,21 +575,6 @@ Partial Class CM_MAIN_frm
         Me.ProbabilityOfSale_lbl.TabIndex = 80
         Me.ProbabilityOfSale_lbl.Text = "Probability of Sale:"
         Me.ProbabilityOfSale_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'btnContacts
-        '
-        Me.btnContacts.BackColor = System.Drawing.SystemColors.Control
-        Me.btnContacts.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnContacts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnContacts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnContacts.Location = New System.Drawing.Point(121, 155)
-        Me.btnContacts.Name = "btnContacts"
-        Me.btnContacts.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btnContacts.Size = New System.Drawing.Size(142, 25)
-        Me.btnContacts.TabIndex = 6
-        Me.btnContacts.Text = "Contacts"
-        Me.btnContacts.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnContacts.UseVisualStyleBackColor = False
         '
         'txtJobAddress2
         '
@@ -985,106 +979,11 @@ Partial Class CM_MAIN_frm
         Me.Label4.TabIndex = 49
         Me.Label4.Text = "Seismic Zone:"
         '
-        'Menu_pic
-        '
-        Me.Menu_pic.BackColor = System.Drawing.SystemColors.Control
-        Me.Menu_pic.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Menu_pic.Controls.Add(Me.btnCopy)
-        Me.Menu_pic.Controls.Add(Me.txtEstimateNum)
-        Me.Menu_pic.Controls.Add(Me.txtEstimator)
-        Me.Menu_pic.Controls.Add(Me.btnExit)
-        Me.Menu_pic.Controls.Add(Me.btnSave)
-        Me.Menu_pic.Controls.Add(Me._Menu_tlb_3)
-        Me.Menu_pic.Controls.Add(Me.btn_Help)
-        Me.Menu_pic.Controls.Add(Me._label_0)
-        Me.Menu_pic.Controls.Add(Me._label_4)
-        Me.Menu_pic.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Menu_pic.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Menu_pic.Location = New System.Drawing.Point(0, 0)
-        Me.Menu_pic.Name = "Menu_pic"
-        Me.Menu_pic.Size = New System.Drawing.Size(1484, 57)
-        Me.Menu_pic.TabIndex = 37
-        Me.Menu_pic.TabStop = False
-        '
-        'btnCopy
-        '
-        Me.btnCopy.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCopy.Image = CType(resources.GetObject("btnCopy.Image"), System.Drawing.Image)
-        Me.btnCopy.Location = New System.Drawing.Point(112, 1)
-        Me.btnCopy.Name = "btnCopy"
-        Me.btnCopy.Size = New System.Drawing.Size(46, 46)
-        Me.btnCopy.TabIndex = 35
-        Me.btnCopy.TabStop = False
-        Me.btnCopy.Tag = "Copy Equipment"
-        Me.btnCopy.Text = "Copy"
-        Me.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        'txtEstimateNum
-        '
-        Me.txtEstimateNum.AllowPromptAsInput = False
-        Me.txtEstimateNum.Enabled = False
-        Me.txtEstimateNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtEstimateNum.Location = New System.Drawing.Point(644, 8)
-        Me.txtEstimateNum.Name = "txtEstimateNum"
-        Me.txtEstimateNum.Size = New System.Drawing.Size(137, 20)
-        Me.txtEstimateNum.TabIndex = 6
-        Me.txtEstimateNum.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
-        '
-        'txtEstimator
-        '
-        Me.txtEstimator.AllowPromptAsInput = False
-        Me.txtEstimator.Enabled = False
-        Me.txtEstimator.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtEstimator.Location = New System.Drawing.Point(643, 30)
-        Me.txtEstimator.Name = "txtEstimator"
-        Me.txtEstimator.Size = New System.Drawing.Size(137, 20)
-        Me.txtEstimator.TabIndex = 7
-        Me.txtEstimator.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
-        '
-        'btnExit
-        '
-        Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnExit.Image = CType(resources.GetObject("btnExit.Image"), System.Drawing.Image)
-        Me.btnExit.Location = New System.Drawing.Point(8, 1)
-        Me.btnExit.Name = "btnExit"
-        Me.btnExit.Size = New System.Drawing.Size(46, 46)
-        Me.btnExit.TabIndex = 33
-        Me.btnExit.TabStop = False
-        Me.btnExit.Tag = "Exit System"
-        Me.btnExit.Text = "Exit"
-        Me.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        'btnSave
-        '
-        Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
-        Me.btnSave.Location = New System.Drawing.Point(60, 1)
-        Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(46, 46)
-        Me.btnSave.TabIndex = 34
-        Me.btnSave.TabStop = False
-        Me.btnSave.Tag = "Save Data"
-        Me.btnSave.Text = "Save"
-        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        '_Menu_tlb_3
-        '
-        Me._Menu_tlb_3.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._Menu_tlb_3.Image = CType(resources.GetObject("_Menu_tlb_3.Image"), System.Drawing.Image)
-        Me._Menu_tlb_3.Location = New System.Drawing.Point(164, 1)
-        Me._Menu_tlb_3.Name = "_Menu_tlb_3"
-        Me._Menu_tlb_3.Size = New System.Drawing.Size(46, 46)
-        Me._Menu_tlb_3.TabIndex = 36
-        Me._Menu_tlb_3.TabStop = False
-        Me._Menu_tlb_3.Tag = "Print Screen"
-        Me._Menu_tlb_3.Text = "Screen"
-        Me._Menu_tlb_3.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
         'btn_Help
         '
         Me.btn_Help.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Help.Image = CType(resources.GetObject("btn_Help.Image"), System.Drawing.Image)
-        Me.btn_Help.Location = New System.Drawing.Point(300, 1)
+        Me.btn_Help.Location = New System.Drawing.Point(249, 5)
         Me.btn_Help.Name = "btn_Help"
         Me.btn_Help.Size = New System.Drawing.Size(46, 46)
         Me.btn_Help.TabIndex = 37
@@ -1092,37 +991,6 @@ Partial Class CM_MAIN_frm
         Me.btn_Help.Tag = "Help"
         Me.btn_Help.Text = "Help"
         Me.btn_Help.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        '_label_0
-        '
-        Me._label_0.AutoSize = True
-        Me._label_0.BackColor = System.Drawing.SystemColors.Control
-        Me._label_0.Enabled = False
-        Me._label_0.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me._label_0.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._label_0.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._label_0.Location = New System.Drawing.Point(581, 32)
-        Me._label_0.Name = "_label_0"
-        Me._label_0.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me._label_0.Size = New System.Drawing.Size(63, 13)
-        Me._label_0.TabIndex = 66
-        Me._label_0.Text = "Estimator "
-        Me._label_0.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        '_label_4
-        '
-        Me._label_4.BackColor = System.Drawing.SystemColors.Control
-        Me._label_4.Enabled = False
-        Me._label_4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me._label_4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me._label_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._label_4.Location = New System.Drawing.Point(577, 11)
-        Me._label_4.Name = "_label_4"
-        Me._label_4.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me._label_4.Size = New System.Drawing.Size(67, 13)
-        Me._label_4.TabIndex = 62
-        Me._label_4.Text = "Estimate # "
-        Me._label_4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'StatusBar1
         '
@@ -1139,8 +1007,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel1.AutoSize = False
         Me._StatusBar1_Panel1.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel1.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel1.DoubleClickEnabled = True
         Me._StatusBar1_Panel1.Margin = New System.Windows.Forms.Padding(0)
@@ -1153,8 +1021,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel2.AutoSize = False
         Me._StatusBar1_Panel2.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel2.DoubleClickEnabled = True
         Me._StatusBar1_Panel2.Margin = New System.Windows.Forms.Padding(0)
@@ -1166,8 +1034,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel3.AutoSize = False
         Me._StatusBar1_Panel3.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel3.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel3.DoubleClickEnabled = True
         Me._StatusBar1_Panel3.Margin = New System.Windows.Forms.Padding(0)
@@ -1179,8 +1047,8 @@ Partial Class CM_MAIN_frm
         '
         Me._StatusBar1_Panel4.AutoSize = False
         Me._StatusBar1_Panel4.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
-                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+            Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me._StatusBar1_Panel4.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._StatusBar1_Panel4.DoubleClickEnabled = True
         Me._StatusBar1_Panel4.Margin = New System.Windows.Forms.Padding(0)
@@ -1718,8 +1586,8 @@ Partial Class CM_MAIN_frm
         '
         Me.FpSpread1.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
         Me.FpSpread1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FpSpread1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         Me.FpSpread1.Location = New System.Drawing.Point(6, 67)
@@ -1732,8 +1600,8 @@ Partial Class CM_MAIN_frm
         'Equipment_fra
         '
         Me.Equipment_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
         Me.Equipment_fra.Controls.Add(Me.sprTotals)
         Me.Equipment_fra.Controls.Add(Me.btnAdd)
@@ -2230,7 +2098,7 @@ Partial Class CM_MAIN_frm
         Me.txtOCPL.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtOCPL.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtOCPL.Location = New System.Drawing.Point(1349, 215)
+        Me.txtOCPL.Location = New System.Drawing.Point(157, 16)
         Me.txtOCPL.MaxLength = 0
         Me.txtOCPL.Name = "txtOCPL"
         Me.txtOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2244,24 +2112,30 @@ Partial Class CM_MAIN_frm
         Me.lblOCPL.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblOCPL.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOCPL.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblOCPL.Location = New System.Drawing.Point(1200, 218)
+        Me.lblOCPL.Location = New System.Drawing.Point(8, 19)
         Me.lblOCPL.Name = "lblOCPL"
         Me.lblOCPL.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblOCPL.Size = New System.Drawing.Size(138, 18)
         Me.lblOCPL.TabIndex = 100
-        Me.lblOCPL.Text = "OCPL ($ in Millions) :"
+        Me.lblOCPL.Text = "($ in Millions) :"
         Me.lblOCPL.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'btnLaborRates
         '
-        Me.btnLaborRates.Location = New System.Drawing.Point(1230, 262)
+        Me.btnLaborRates.BackColor = System.Drawing.SystemColors.Control
+        Me.btnLaborRates.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
+        Me.btnLaborRates.Location = New System.Drawing.Point(474, 5)
         Me.btnLaborRates.Name = "btnLaborRates"
-        Me.btnLaborRates.Size = New System.Drawing.Size(75, 23)
+        Me.btnLaborRates.Size = New System.Drawing.Size(51, 46)
         Me.btnLaborRates.TabIndex = 101
         Me.btnLaborRates.Text = "Labor Rates"
-        Me.btnLaborRates.UseVisualStyleBackColor = True
+        Me.btnLaborRates.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnLaborRates.UseVisualStyleBackColor = False
+        '
+        'btnGatewayReview
+        '
         Me.btnGatewayReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnGatewayReview.Location = New System.Drawing.Point(361, 3)
+        Me.btnGatewayReview.Location = New System.Drawing.Point(301, 5)
         Me.btnGatewayReview.Name = "btnGatewayReview"
         Me.btnGatewayReview.Size = New System.Drawing.Size(51, 46)
         Me.btnGatewayReview.TabIndex = 102
@@ -2269,6 +2143,9 @@ Partial Class CM_MAIN_frm
         Me.btnGatewayReview.Tag = ""
         Me.btnGatewayReview.Text = "Gateway"
         Me.btnGatewayReview.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
+        'lblGatewayStatus
+        '
         Me.lblGatewayStatus.AutoSize = True
         Me.lblGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblGatewayStatus.Location = New System.Drawing.Point(117, 17)
@@ -2276,11 +2153,17 @@ Partial Class CM_MAIN_frm
         Me.lblGatewayStatus.Size = New System.Drawing.Size(47, 13)
         Me.lblGatewayStatus.TabIndex = 104
         Me.lblGatewayStatus.Text = "Status:"
+        '
+        'txtGatewayStatus
+        '
         Me.txtGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtGatewayStatus.Location = New System.Drawing.Point(170, 12)
         Me.txtGatewayStatus.Name = "txtGatewayStatus"
         Me.txtGatewayStatus.Size = New System.Drawing.Size(134, 20)
         Me.txtGatewayStatus.TabIndex = 103
+        '
+        'GroupBox1
+        '
         Me.GroupBox1.Controls.Add(Me.lblGatewayStatus)
         Me.GroupBox1.Controls.Add(Me.txtGatewayStatus)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -2291,6 +2174,183 @@ Partial Class CM_MAIN_frm
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Gateway Review"
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.txtOCPL)
+        Me.GroupBox2.Controls.Add(Me.lblOCPL)
+        Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox2.Location = New System.Drawing.Point(1192, 208)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(244, 48)
+        Me.GroupBox2.TabIndex = 106
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "OCPL"
+        '
+        'btnProposal
+        '
+        Me.btnProposal.BackColor = System.Drawing.SystemColors.Control
+        Me.btnProposal.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnProposal.Location = New System.Drawing.Point(358, 5)
+        Me.btnProposal.Name = "btnProposal"
+        Me.btnProposal.Size = New System.Drawing.Size(51, 46)
+        Me.btnProposal.TabIndex = 107
+        Me.btnProposal.TabStop = False
+        Me.btnProposal.Tag = ""
+        Me.btnProposal.Text = "Proposal"
+        Me.btnProposal.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnProposal.UseVisualStyleBackColor = False
+        '
+        '_label_4
+        '
+        Me._label_4.BackColor = System.Drawing.SystemColors.Control
+        Me._label_4.Enabled = False
+        Me._label_4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me._label_4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me._label_4.ForeColor = System.Drawing.SystemColors.WindowText
+        Me._label_4.Location = New System.Drawing.Point(664, 9)
+        Me._label_4.Name = "_label_4"
+        Me._label_4.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me._label_4.Size = New System.Drawing.Size(70, 13)
+        Me._label_4.TabIndex = 62
+        Me._label_4.Text = "Estimate # :"
+        Me._label_4.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        '_label_0
+        '
+        Me._label_0.AutoSize = True
+        Me._label_0.BackColor = System.Drawing.SystemColors.Control
+        Me._label_0.Enabled = False
+        Me._label_0.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me._label_0.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me._label_0.ForeColor = System.Drawing.SystemColors.ControlText
+        Me._label_0.Location = New System.Drawing.Point(671, 28)
+        Me._label_0.Name = "_label_0"
+        Me._label_0.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me._label_0.Size = New System.Drawing.Size(63, 13)
+        Me._label_0.TabIndex = 66
+        Me._label_0.Text = "Estimator:"
+        Me._label_0.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        '_Menu_tlb_3
+        '
+        Me._Menu_tlb_3.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me._Menu_tlb_3.Image = CType(resources.GetObject("_Menu_tlb_3.Image"), System.Drawing.Image)
+        Me._Menu_tlb_3.Location = New System.Drawing.Point(164, 1)
+        Me._Menu_tlb_3.Name = "_Menu_tlb_3"
+        Me._Menu_tlb_3.Size = New System.Drawing.Size(46, 46)
+        Me._Menu_tlb_3.TabIndex = 36
+        Me._Menu_tlb_3.TabStop = False
+        Me._Menu_tlb_3.Tag = "Print Screen"
+        Me._Menu_tlb_3.Text = "Screen"
+        Me._Menu_tlb_3.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
+        'btnSave
+        '
+        Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
+        Me.btnSave.Location = New System.Drawing.Point(60, 1)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(46, 46)
+        Me.btnSave.TabIndex = 34
+        Me.btnSave.TabStop = False
+        Me.btnSave.Tag = "Save Data"
+        Me.btnSave.Text = "Save"
+        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
+        'btnExit
+        '
+        Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExit.Image = CType(resources.GetObject("btnExit.Image"), System.Drawing.Image)
+        Me.btnExit.Location = New System.Drawing.Point(8, 1)
+        Me.btnExit.Name = "btnExit"
+        Me.btnExit.Size = New System.Drawing.Size(46, 46)
+        Me.btnExit.TabIndex = 33
+        Me.btnExit.TabStop = False
+        Me.btnExit.Tag = "Exit System"
+        Me.btnExit.Text = "Exit"
+        Me.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
+        'txtEstimator
+        '
+        Me.txtEstimator.AllowPromptAsInput = False
+        Me.txtEstimator.Enabled = False
+        Me.txtEstimator.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEstimator.Location = New System.Drawing.Point(739, 28)
+        Me.txtEstimator.Name = "txtEstimator"
+        Me.txtEstimator.Size = New System.Drawing.Size(137, 20)
+        Me.txtEstimator.TabIndex = 7
+        Me.txtEstimator.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        '
+        'txtEstimateNum
+        '
+        Me.txtEstimateNum.AllowPromptAsInput = False
+        Me.txtEstimateNum.Enabled = False
+        Me.txtEstimateNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEstimateNum.Location = New System.Drawing.Point(740, 6)
+        Me.txtEstimateNum.Name = "txtEstimateNum"
+        Me.txtEstimateNum.Size = New System.Drawing.Size(137, 20)
+        Me.txtEstimateNum.TabIndex = 6
+        Me.txtEstimateNum.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        '
+        'btnCopy
+        '
+        Me.btnCopy.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCopy.Image = CType(resources.GetObject("btnCopy.Image"), System.Drawing.Image)
+        Me.btnCopy.Location = New System.Drawing.Point(112, 1)
+        Me.btnCopy.Name = "btnCopy"
+        Me.btnCopy.Size = New System.Drawing.Size(46, 46)
+        Me.btnCopy.TabIndex = 35
+        Me.btnCopy.TabStop = False
+        Me.btnCopy.Tag = "Copy Equipment"
+        Me.btnCopy.Text = "Copy"
+        Me.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
+        'Menu_pic
+        '
+        Me.Menu_pic.BackColor = System.Drawing.SystemColors.Control
+        Me.Menu_pic.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Menu_pic.Controls.Add(Me.btnCopy)
+        Me.Menu_pic.Controls.Add(Me.btnExit)
+        Me.Menu_pic.Controls.Add(Me.btnSave)
+        Me.Menu_pic.Controls.Add(Me._Menu_tlb_3)
+        Me.Menu_pic.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Menu_pic.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Menu_pic.Location = New System.Drawing.Point(0, 0)
+        Me.Menu_pic.Name = "Menu_pic"
+        Me.Menu_pic.Size = New System.Drawing.Size(1484, 57)
+        Me.Menu_pic.TabIndex = 37
+        Me.Menu_pic.TabStop = False
+        '
+        'btnContacts
+        '
+        Me.btnContacts.BackColor = System.Drawing.SystemColors.Control
+        Me.btnContacts.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnContacts.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
+        Me.btnContacts.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnContacts.Location = New System.Drawing.Point(415, 5)
+        Me.btnContacts.Name = "btnContacts"
+        Me.btnContacts.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnContacts.Size = New System.Drawing.Size(53, 44)
+        Me.btnContacts.TabIndex = 108
+        Me.btnContacts.Text = "Contacts"
+        Me.btnContacts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnContacts.UseVisualStyleBackColor = False
+        '
+        'btnSuptReview
+        '
+        Me.btnSuptReview.BackColor = System.Drawing.SystemColors.Control
+        Me.btnSuptReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSuptReview.Image = CType(resources.GetObject("btnSuptReview.Image"), System.Drawing.Image)
+        Me.btnSuptReview.Location = New System.Drawing.Point(531, 5)
+        Me.btnSuptReview.Name = "btnSuptReview"
+        Me.btnSuptReview.Size = New System.Drawing.Size(51, 46)
+        Me.btnSuptReview.TabIndex = 109
+        Me.btnSuptReview.TabStop = False
+        Me.btnSuptReview.Tag = "Supt"
+        Me.btnSuptReview.Text = "Supt"
+        Me.btnSuptReview.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnSuptReview.UseVisualStyleBackColor = False
+        '
         'CM_MAIN_frm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -2300,12 +2360,19 @@ Partial Class CM_MAIN_frm
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(1484, 795)
+        Me.Controls.Add(Me.btnSuptReview)
+        Me.Controls.Add(Me.txtEstimateNum)
+        Me.Controls.Add(Me.txtEstimator)
+        Me.Controls.Add(Me.btnContacts)
+        Me.Controls.Add(Me.btnProposal)
+        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me._label_0)
         Me.Controls.Add(Me.btnGatewayReview)
+        Me.Controls.Add(Me._label_4)
         Me.Controls.Add(Me.btnLaborRates)
-        Me.Controls.Add(Me.txtOCPL)
-        Me.Controls.Add(Me.lblOCPL)
         Me.Controls.Add(Me.NewProductService_fra)
+        Me.Controls.Add(Me.btn_Help)
         Me.Controls.Add(Me.BuildingInformation_fra)
         Me.Controls.Add(Me.Equipment_fra)
         Me.Controls.Add(Me.Menu_pic)
@@ -2325,9 +2392,6 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.PerformLayout()
         Me.fraCode.ResumeLayout(False)
         Me.fraCode.PerformLayout()
-        CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Menu_pic.ResumeLayout(False)
-        Me.Menu_pic.PerformLayout()
         Me.StatusBar1.ResumeLayout(False)
         Me.StatusBar1.PerformLayout()
         CType(Me.SheetView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2339,6 +2403,10 @@ Partial Class CM_MAIN_frm
         Me.NewProductService_fra.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
+        CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Menu_pic.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2390,7 +2458,6 @@ Partial Class CM_MAIN_frm
 
     End Sub
     Friend WithEvents CurrentTime_tim As System.Windows.Forms.Timer
-    Friend WithEvents Proposal_cmd As System.Windows.Forms.Button
     Public WithEvents cboStatus As System.Windows.Forms.ComboBox
     Private WithEvents _label_7 As System.Windows.Forms.Label
     Public WithEvents Status_lbl As System.Windows.Forms.Label
@@ -2459,12 +2526,27 @@ Partial Class CM_MAIN_frm
     Friend WithEvents sprTotals_Sheet1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents txtTaxRate As System.Windows.Forms.TextBox
-    Friend WithEvents btnLaborRates As System.Windows.Forms.Button
     Private WithEvents btnGatewayReview As System.Windows.Forms.Button
     Friend WithEvents lblGatewayStatus As System.Windows.Forms.Label
     Friend WithEvents txtGatewayStatus As System.Windows.Forms.TextBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Public WithEvents txtContractNumber As System.Windows.Forms.TextBox
     Private WithEvents lblContractNumber As System.Windows.Forms.Label
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Private WithEvents btnProposal As System.Windows.Forms.Button
+    Private WithEvents _label_4 As System.Windows.Forms.Label
+    Private WithEvents _label_0 As System.Windows.Forms.Label
+    Private WithEvents _Menu_tlb_3 As System.Windows.Forms.Button
+    Private WithEvents btnSave As System.Windows.Forms.Button
+    Private WithEvents btnExit As System.Windows.Forms.Button
+    Public WithEvents txtEstimator As System.Windows.Forms.MaskedTextBox
+    Public WithEvents txtEstimateNum As System.Windows.Forms.MaskedTextBox
+    Private WithEvents btnCopy As System.Windows.Forms.Button
+    Public WithEvents Menu_pic As System.Windows.Forms.PictureBox
+    Private WithEvents btnContacts As System.Windows.Forms.Button
+    Private WithEvents btnSuptReview As System.Windows.Forms.Button
+    Public WithEvents cboSupt As System.Windows.Forms.ComboBox
+    Public WithEvents lblSupt As System.Windows.Forms.Label
+    Private WithEvents btnLaborRates As System.Windows.Forms.Button
 #End Region
 End Class

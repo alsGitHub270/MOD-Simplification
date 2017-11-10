@@ -85,6 +85,14 @@ Partial Friend Class ExpensesPerDay_frm
         isInitializingComponent = True
         Type2Fields()
         isInitializingComponent = False
+        If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+            ExpensesPerDayZone_txt.Enabled = False
+            ExpensesPerDayParking_txt.Enabled = False
+            ExpensesPerDayOutOfTownExpenses_txt.Enabled = False
+            ExpensesPerDayTravelTime_txt.Enabled = False
+            ExpensesPerDayMiscellaneous_txt.Enabled = False
+            ExpensesPerDayTotal_txt.Enabled = False
+        End If
 
     End Sub
     Private Sub Action_btn_Click(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles _Action_btn_1.Click, _Action_btn_0.Click

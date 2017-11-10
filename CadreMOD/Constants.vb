@@ -1,6 +1,6 @@
 ﻿Module Constants
     ' Contract Manager
-    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 11/01/2017"
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 11/08/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
@@ -189,4 +189,5 @@
     Public typeBool As System.Type = System.Type.GetType("System.Boolean")
     Public typeSingle As System.Type = System.Type.GetType("System.Single")
     Public Const FREIGHT_RATE As Single = 1.032
+    Public Const ENGINEERING_RATE As Single = 1.032
 End Module

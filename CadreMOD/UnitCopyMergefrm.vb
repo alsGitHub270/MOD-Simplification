@@ -30,9 +30,9 @@ Public Class UnitCopyMerge_frm
 
     End Sub
     Private Sub CopyMerge_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyMerge_cmd.Click
-        Dim EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+        Dim EST_Filename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                                  FormatFileNameFromTab(CurUnits & EST_Suffix)) & "MODEST.JSON"
-        Dim EST_NewFilename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+        Dim EST_NewFilename As String = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                                     FormatFileNameFromTab(UnitsTo_cmb.Text & EST_Suffix)) & "MODEST.JSON"
         Dim TempDataset As System.Data.DataSet = EstimatingDataset
         Dim iIndex As Integer = 0, jIndex As Integer = 0, AryIndex As Integer = 0
@@ -81,7 +81,7 @@ Public Class UnitCopyMerge_frm
                         TempUnits &= TempUnitsInEstimate(iIndex) & ","
                     Next iIndex
                     TempUnits = Strings.Left(TempUnits, TempUnits.Length - 1)
-                    EST_NewFilename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                    EST_NewFilename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                                   FormatFileNameFromTab(FormatUnits(TempUnits) & EST_Suffix)) & "MODEST.JSON"
                     TempDataset = EstimatingDataset
                     File.Copy(EST_Filename, EST_NewFilename)
@@ -114,9 +114,9 @@ Public Class UnitCopyMerge_frm
                 Next iIndex
                 TempUnits = Strings.Left(TempUnits, TempUnits.Length - 1)
                 AddToFilesList("Deleted", EST_Filename)
-                EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                            FormatFileNameFromTab(UnitsTo_cmb.Text & EST_Suffix)) & "MODEST.JSON"
-                EST_NewFilename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
+                EST_NewFilename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                               FormatFileNameFromTab(FormatUnits(TempUnits) & EST_Suffix)) & "MODEST.JSON"
                 If EST_Filename <> EST_NewFilename Then
                     File.Copy(EST_Filename, EST_NewFilename)

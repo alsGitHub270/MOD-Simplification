@@ -163,7 +163,7 @@
     Private Sub Load_ListBoxes()
 
         CarGovernorNewModel_cmb.Items.Clear()
-        If Conversion.Val(GetValue(TABLENAME_GENERALINFO, "SpeedNew_cmb")) > 800 Then
+        If Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")) > 800 Then
             CarGovernorNewModel_cmb.Items.Add("GB 32")
             CarGovernorNewModel_cmb.Items.Add("GB 42")
         Else
@@ -223,7 +223,7 @@
         End If
 
         CwtGovernorNewModel_cmb.Items.Clear()
-        If Conversion.Val(GetValue(TABLENAME_GENERALINFO, "SpeedNew_cmb")) > 800 Then
+        If Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")) > 800 Then
             CwtGovernorNewModel_cmb.Items.Add("GB 32")
             CwtGovernorNewModel_cmb.Items.Add("GB 42")
         Else

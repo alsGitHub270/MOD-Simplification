@@ -471,31 +471,33 @@ DetachFilesError:
     '        Return sFull_NotesName
 
     '    End Function
-    '    Public Function FindSUPTDocument() As Boolean
-    '        Dim result As Boolean = False
 
-    '        Try
-    '            Dim b As Boolean
-    '            Dim sProposal As String = Contracts.ProposalNum & "_" & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & GONumbers(CurrentGOSelection).Units
+    Public Function FindSUPTDocument() As Boolean
+        Dim result As Boolean = False
 
-    '            If NotesDocKeyCollection(sProposal) Then
-    '                b = True
-    '                Do While b
-    '                    If Contracts.ProposalNum = GetValue("proposal_num") Then
-    '                        Return True
-    '                    End If
-    '                    b = GetNextDocumentFromCollection()
-    '                Loop
-    '            End If
-    '            Return result
 
-    '        Catch
-    '            MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBy4Fields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '            Return result
+        Try
+            Dim b As Boolean
+           
+            If NotesDocKeyCollection(Contracts.ProposalNum) Then
+                b = True
+                Do While b
+                    If Contracts.ProposalNum = GetValue("proposal_num") Then
+                        Return True
+                    End If
+                    b = GetNextDocumentFromCollection()
+                Loop
+            End If
+            Return result
 
-    '        End Try
+        Catch
+            MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBy4Fields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Return result
 
-    '    End Function
+        End Try
+
+    End Function
+
     Public Function GetNextDocumentFromCollection() As Boolean
         Dim result As Boolean = False
 
