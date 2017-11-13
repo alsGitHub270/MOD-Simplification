@@ -2881,7 +2881,7 @@ Partial Friend Class CM_MAIN_frm
                 CombinedSheet.RowCount = RowCount
                 ColumnCount = 0
                 For jIndex = 0 To FpSpread1.ActiveSheet.ColumnCount - 1
-                    If FpSpread1.ActiveSheet.Columns(jIndex).Visible = True Then
+                    If FpSpread1.ActiveSheet.Columns(jIndex).Visible = True And FpSpread1.ActiveSheet.Columns(jIndex).Label <> "Y" Then
                         CombinedSheet.Cells(RowCount - 1, ColumnCount).Text = FpSpread1.ActiveSheet.Cells(iIndex, jIndex).Value
                         ColumnCount += 1
                     End If
