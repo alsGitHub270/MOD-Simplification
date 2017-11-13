@@ -2353,10 +2353,7 @@ Partial Friend Class CM_MAIN_frm
         cmbocell_bank.MaxDrop = 4
         FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 3).CellType = cmbocell_bank
 
-
-
         FpSpread1.ActiveSheet.Columns(25).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Center
-
 
         FpSpread1.ActiveSheet.SetRowExpandable(FpSpread1.ActiveSheet.ActiveRowIndex, False)
         FpSpread1.Refresh()
@@ -2408,7 +2405,6 @@ Partial Friend Class CM_MAIN_frm
         Else
             cboNationalAccount.SelectedIndex = 0
         End If
-
 
         txtEstimateNum.Text = Contracts.EstimateNum
         txtEstimator.Text = Contracts.Estimator
@@ -2576,8 +2572,6 @@ Partial Friend Class CM_MAIN_frm
         ' id_to_copy used later to create base and alt rows
 
         Dim criteria As String
-
-
 
         id_to_copy = FpSpread1.ActiveSheet.Cells(FpSpread1.ActiveSheet.ActiveRowIndex, 1).Value
 
