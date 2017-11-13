@@ -1238,24 +1238,37 @@ Partial Friend Class CM_MAIN_frm
         printset.ZoomFactor = 0.9
         printset.BestFitCols = True
 
-        Dim combinedSheet As New FarPoint.Win.Spread.SheetView
-        combinedSheet = CreateCombinedSheet()
+        Try
 
-        SetCombinedSheetHeaders(combinedSheet)
+            If File.Exists(printset.PdfFileName) Then
+                File.Delete(printset.PdfFileName)
+                Application.DoEvents()
+            End If
 
-        Dim header As String
-        header = "Contract Management" & vbCrLf & vbCrLf & "Estimate:  " & Contracts.EstimateNum & vbCrLf & "Job Name:  " & Contracts.JobName & vbCrLf & vbCrLf
+            ExpandCollapseAll("Expand")
+            ExpandCollapseAll("Collapse")
 
-        printset.Header = header
+            Dim combinedSheet As New FarPoint.Win.Spread.SheetView
+            combinedSheet = CreateCombinedSheet()
 
-        combinedSheet.PrintInfo = printset
+            SetCombinedSheetHeaders(combinedSheet)
 
-        If Not IsNothing(combinedSheet) Then
-            FpSpread1.PrintSheet(combinedSheet)
-            'Process.Start("c:\temp\results.pdf")
-            MessageBox.Show("PDF generated")
-        End If
+            Dim header As String
+            header = "Contract Management" & vbCrLf & vbCrLf & "Estimate:  " & Contracts.EstimateNum & vbCrLf & "Job Name:  " & Contracts.JobName & vbCrLf & vbCrLf
 
+            printset.Header = header
+
+            combinedSheet.PrintInfo = printset
+
+            If Not IsNothing(combinedSheet) Then
+                FpSpread1.PrintSheet(combinedSheet)
+                Application.DoEvents()
+                Process.Start(printset.PdfFileName)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Generating PDF (btnPrint)", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub AddAlternateRow()
@@ -3300,7 +3313,7 @@ Partial Friend Class CM_MAIN_frm
     Private Sub btnSuptReview_Click(sender As System.Object, e As System.EventArgs) Handles btnSuptReview.Click
 
         Dim sSuptReview As String
-        Dim sSuptStatus As String
+        Dim sSuptStatus As String = ""
         Dim sSUPTFileName As String = ""
         ' Dim CriticalTitle, CriticalMsg As String
         Dim sMessage As String = ""

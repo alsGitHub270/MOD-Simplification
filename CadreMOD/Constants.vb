@@ -177,8 +177,8 @@
     Public Const NONE_TYPE As Integer = 7
     Public Const OTHER_TYPE As Integer = 8
     Public Const QUOTE_TYPE As Integer = 9
-    Public Const PreferredScreenWidth As Integer = 1920     '1400
-    Public Const PreferredScreenHeight As Integer = 1080    '900
+    Public Const PreferredScreenWidth As Integer = 1600
+    Public Const PreferredScreenHeight As Integer = 900
     Public Const GRID_IS_CLEAN As Integer = 0
     Public Const GRID_IS_DIRTY As Integer = 1
     Public Const EST_Suffix As String = " [EST]"

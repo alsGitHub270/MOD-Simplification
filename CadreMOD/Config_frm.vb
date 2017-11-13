@@ -31,7 +31,7 @@ Partial Friend Class Config_frm
         SaveWidth = GetDeviceCaps(hDCSrc, HORZRES)
         SaveHeight = GetDeviceCaps(hDCSrc, VERTRES)
         SaveRefresh = GetDeviceCaps(hDCSrc, VREFRESH)
-        If SupportsRes And SaveWidth < PreferredScreenWidth And SaveHeight < PreferredScreenHeight Then
+        If SupportsRes And (SaveWidth < PreferredScreenWidth Or SaveHeight < PreferredScreenHeight) Then
             ChangeDisplayResolution(PreferredScreenWidth, PreferredScreenHeight)
             ChangedResolution = True
         End If
