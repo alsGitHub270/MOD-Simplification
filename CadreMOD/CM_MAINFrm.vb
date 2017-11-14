@@ -1239,7 +1239,7 @@ Partial Friend Class CM_MAIN_frm
         printset.BestFitCols = True
 
         Try
-            printset.PdfFileName = ReportsPath & Contracts.ProposalNum & "-" & Contracts.JobName & ".pdf"
+            printset.PdfFileName = ReportsPath & Me.txtEstimateNum.Text & "-" & Contracts.JobName & ".pdf"
 
             If File.Exists(printset.PdfFileName) Then
                 File.Delete(printset.PdfFileName)
