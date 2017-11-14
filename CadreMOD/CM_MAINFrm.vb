@@ -1229,7 +1229,7 @@ Partial Friend Class CM_MAIN_frm
 
         Dim printset As New FarPoint.Win.Spread.PrintInfo()
         printset.PrintToPdf = True
-        printset.PdfFileName = "c:\temp\results.pdf"
+        'printset.PdfFileName = "c:\temp\results.pdf"
         printset.Orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
         printset.Margin.Top = 2
         printset.Margin.Bottom = 2
@@ -1239,6 +1239,7 @@ Partial Friend Class CM_MAIN_frm
         printset.BestFitCols = True
 
         Try
+            printset.PdfFileName = "Proposal - " & Contracts.JobName & ".pdf"
 
             If File.Exists(printset.PdfFileName) Then
                 File.Delete(printset.PdfFileName)
@@ -2881,7 +2882,7 @@ Partial Friend Class CM_MAIN_frm
                 CombinedSheet.RowCount = RowCount
                 ColumnCount = 0
                 For jIndex = 0 To FpSpread1.ActiveSheet.ColumnCount - 1
-                    If FpSpread1.ActiveSheet.Columns(jIndex).Visible = True And FpSpread1.ActiveSheet.Columns(jIndex).Label <> "Y" Then
+                    If FpSpread1.ActiveSheet.Columns(jIndex).Visible = True And FpSpread1.ActiveSheet.Columns(jIndex).Label <> "Include" Then
                         CombinedSheet.Cells(RowCount - 1, ColumnCount).Text = FpSpread1.ActiveSheet.Cells(iIndex, jIndex).Value
                         ColumnCount += 1
                     End If
