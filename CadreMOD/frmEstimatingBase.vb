@@ -1492,4 +1492,8 @@ Public Class frmEstimatingBase
         OrderingForms_con.Controls.Add(NewGovForm)
 
     End Sub
+
+    Private Sub btnTorque_Click(sender As System.Object, e As System.EventArgs) Handles btnTorque.Click
+        Form1.Show()
+    End Sub
 End Class
