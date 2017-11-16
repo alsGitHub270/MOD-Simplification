@@ -1494,6 +1494,7 @@ Public Class frmEstimatingBase
     End Sub
 
     Private Sub btnTorque_Click(sender As System.Object, e As System.EventArgs) Handles btnTorque.Click
-        Form1.Show()
+        TorqueFrm.ShowDialog()
     End Sub
+
 End Class

@@ -47,6 +47,7 @@
     Public ImageFileLocation As String = My.Application.Info.DirectoryPath & "\images\"
 
     Public EstimateModified As Boolean
+    Public isInitializingComponent As Boolean
 
     Public gsCommand As String = ""
     Public OpportunityID As String = String.Empty

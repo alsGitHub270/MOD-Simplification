@@ -153,10 +153,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExpensesPerDay_mod.vb" />
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="TorqueFrm.Designer.vb">
+      <DependentUpon>TorqueFrm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form1.vb">
+    <Compile Include="TorqueFrm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmContacts.Designer.vb">
@@ -187,6 +187,42 @@
     <Compile Include="General.vb" />
     <Compile Include="Global.vb" />
     <Compile Include="LotusLnk.vb" />
+    <Compile Include="MN_TRQ01Frm.Designer.vb">
+      <DependentUpon>MN_TRQ01Frm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MN_TRQ01Frm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MN_TRQ02Frm.Designer.vb">
+      <DependentUpon>MN_TRQ02Frm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MN_TRQ02Frm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MN_TRQ03Frm.Designer.vb">
+      <DependentUpon>MN_TRQ03Frm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MN_TRQ03Frm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MN_TRQ04Frm.Designer.vb">
+      <DependentUpon>MN_TRQ04Frm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MN_TRQ04Frm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MN_TRQ05Frm.Designer.vb">
+      <DependentUpon>MN_TRQ05Frm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MN_TRQ05Frm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MN_TRQ06GRFrm.Designer.vb">
+      <DependentUpon>MN_TRQ06GRFrm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MN_TRQ06GRFrm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -226,8 +262,8 @@
     <EmbeddedResource Include="ExpensesPerDay_frm.resX">
       <DependentUpon>ExpensesPerDay_frm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <EmbeddedResource Include="TorqueFrm.resx">
+      <DependentUpon>TorqueFrm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmContacts.resx">
       <DependentUpon>frmContacts.vb</DependentUpon>
@@ -240,6 +276,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmLaborRates.resx">
       <DependentUpon>frmLaborRates.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MN_TRQ01Frm.resX">
+      <DependentUpon>MN_TRQ01Frm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MN_TRQ02Frm.resX">
+      <DependentUpon>MN_TRQ02Frm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MN_TRQ03Frm.resX">
+      <DependentUpon>MN_TRQ03Frm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MN_TRQ04Frm.resX">
+      <DependentUpon>MN_TRQ04Frm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MN_TRQ05Frm.resX">
+      <DependentUpon>MN_TRQ05Frm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MN_TRQ06GRFrm.resX">
+      <DependentUpon>MN_TRQ06GRFrm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
