@@ -1447,14 +1447,15 @@ Partial Class MN_TRQ06GL_frm
         ' functionality of automatically
         ' loading and showing an MDI
         ' child's parent.
-        Me.MdiParent = CadreMO.Main_MDI_frm
-        If Not FromCM Then
-            CadreMO.Main_MDI_frm.Show()
-        End If
-        If addEvents Then
-            AddHandler MyBase.Load, AddressOf Me.MN_TRQ06GL_frm_Load
-            AddHandler MyBase.Closed, AddressOf Me.MN_TRQ06GL_frm_Closed
-        End If
+
+        'Me.MdiParent = CadreMO.Main_MDI_frm
+        'If Not FromCM Then
+        '    CadreMO.Main_MDI_frm.Show()
+        'End If
+        'If addEvents Then
+        '    AddHandler MyBase.Load, AddressOf Me.MN_TRQ06GL_frm_Load
+        '    AddHandler MyBase.Closed, AddressOf Me.MN_TRQ06GL_frm_Closed
+        'End If
     End Sub
     Sub InitializeTransformer_lbl()
         ReDim Transformer_lbl(1)

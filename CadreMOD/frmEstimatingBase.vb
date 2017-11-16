@@ -719,7 +719,7 @@ Public Class frmEstimatingBase
                         Set_Fields_Grey_EST()
                     End If
                 End If
-                RetrieveCostHours(e.Row)
+                RetrieveCostHours(CurRow)
             End If
         End If
 
@@ -1496,5 +1496,25 @@ Public Class frmEstimatingBase
     Private Sub btnTorque_Click(sender As System.Object, e As System.EventArgs) Handles btnTorque.Click
         TorqueFrm.ShowDialog()
     End Sub
+    Private Sub BillOfMaterials_spr_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles BillOfMaterials_spr.KeyDown
+        Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
 
+        Select Case e.KeyCode
+            Case Keys.Delete
+                If Not isInitializingComponent Then
+                    ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(BillOfMaterials_spr.ActiveSheet.ActiveRowIndex, 0)
+                    If Not ChildSheetView Is Nothing Then
+                        Select Case ChildSheetView.ActiveColumnIndex
+                            Case MAT_COL_QTY_EST, MAT_COL_MATERIAL_COST_EST, MAT_COL_STANDARD_HOURS_EST, MAT_COL_SPECIAL_HOURS_EST
+                                ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = 0
+                            Case Else
+                                ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = ""
+                        End Select
+                    End If
+                    RetrieveCostHours(ChildSheetView.ActiveRowIndex)
+                    FormIsDirty = True
+                End If
+            Case Else
+        End Select
+    End Sub
 End Class

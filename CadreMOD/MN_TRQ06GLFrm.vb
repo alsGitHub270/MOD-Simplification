@@ -1,10 +1,10 @@
 Option Strict Off
 Option Explicit On
-Imports UpgradeHelpers.VB6.Utils
+
 Imports Microsoft.VisualBasic
 Imports System
 Partial Friend Class MN_TRQ06GL_frm
-    'Inherits System.Windows.Forms.Form
+    Inherits System.Windows.Forms.Form
     'Private Sub MN_TRQ06GL_frm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
 
     '    If Not (UpgradeHelpers.VB6.Gui.ActivateHelper.myActiveForm Is eventSender) Then
