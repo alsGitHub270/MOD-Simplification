@@ -2518,7 +2518,6 @@ Partial Friend Class CM_MAIN_frm
         Dim speed As Integer
         Dim machine_model As String = ""
         Dim bank_type As String = ""
-        Dim spread_c1 As Decimal
         Dim _id As String
         Dim _C1 As Decimal
         Try
