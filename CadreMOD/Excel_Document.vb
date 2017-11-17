@@ -16,7 +16,7 @@ Module Excel_Document
 
 
         Try
-            Dim xlApp As Excel.Application = New Microsoft.Office.Interop.Excel.Application()
+            Dim xlApp As Excel.Application = New Excel.Application()
 
             If xlApp Is Nothing Then
                 MessageBox.Show("Excel is not properly installed!!")
