@@ -135,7 +135,7 @@
     <Compile Include="frmLaborRates.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmEstimatingBaseMOD.vb" />
+    <Compile Include="EstimatingMOD.vb" />
     <Compile Include="MN_TRQ01Frm.Designer.vb">
       <DependentUpon>MN_TRQ01Frm.vb</DependentUpon>
     </Compile>

@@ -365,8 +365,8 @@ Partial Friend Class CM_MAIN_frm
                 frmEstimatingBase.Show()
                 Me.Hide()
             Case "Alt"
-                frmEstimatingAlt.Show()
-                Me.Hide()
+                frmEstimatingAlt.ShowDialog()
+                ' Me.Hide()
             Case Else
         End Select
 
@@ -745,6 +745,7 @@ Partial Friend Class CM_MAIN_frm
                 End If
             End If
         End If
+        CurrentGOData_Typ.CurrentRow = e.Row
         UseCurRow = e.Row
         UseCurCol = e.Column
 
@@ -1643,46 +1644,6 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub btnDeleteBank_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim summaryRow As Integer
-        Dim activeRows As Array
-
-        activeRows = FindActiveRows()
-        summaryRow = activeRows(0)
-        If summaryRow = -1 Then
-            summaryRow = FpSpread1.ActiveSheet.ActiveRowIndex
-        End If
-
-        Try
-            If MessageBox.Show("You are about to delete all data for Bank '" & FpSpread1.ActiveSheet.Cells(summaryRow, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
-                FpSpread1.ActiveSheet.RemoveRows(summaryRow, 1)
-                isDirty = True
-            Else
-                MessageBox.Show("Delete Canceled!", "Delete Canceled!")
-            End If
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Cannot Delete the Bank Row")
-        End Try
-    End Sub
-
-    Private Sub btnDeleteMaster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        If MessageBox.Show("You are about to delete the Master for this Summary Row.  Are you Sure", "Are you Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
-            Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-            ChildSheetView1 = FpSpread1.ActiveSheet.FindChildView(0, 0)
-            If ChildSheetView1.RowCount > 1 Then
-                ChildSheetView1.RemoveRows(0, 1)
-            End If
-
-            Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "openned.png"), FarPoint.Win.RenderStyle.Normal)
-            Dim t As New FarPoint.Win.Spread.CellType.TextCellType
-            t.BackgroundImage = p
-            ' Apply the text cell.
-            FpSpread1.ActiveSheet.Cells(0, 2).CellType = t
-        End If
-
-
-    End Sub
 
     Private Function BuildAvailableBanks() As String()
         ' Roll thru all the banks in the summary row. 
@@ -1706,7 +1667,6 @@ Partial Friend Class CM_MAIN_frm
                     End If
                 End If
             End If
-
         Next dr
 
         Return myList.ToArray
@@ -1723,7 +1683,6 @@ Partial Friend Class CM_MAIN_frm
         myList.Sort()
 
         Return myList.ToArray
-
 
     End Function
 

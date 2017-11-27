@@ -335,10 +335,10 @@ Public Class frmEstimatingBase
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
 
+        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         Select Case PromptForSave()
             Case MsgBoxResult.Yes, MsgBoxResult.No, 0
                 Me.Cursor = Cursors.WaitCursor
-                UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
                 Me.Cursor = Cursors.Default
                 CM_MAIN_frm.Show()
                 Me.Dispose()
@@ -1067,6 +1067,7 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
+        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         SaveAll()
     End Sub
     Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
@@ -1492,7 +1493,6 @@ Public Class frmEstimatingBase
         OrderingForms_con.Controls.Add(NewGovForm)
 
     End Sub
-
     Private Sub btnTorque_Click(sender As System.Object, e As System.EventArgs) Handles btnTorque.Click
         TorqueFrm.ShowDialog()
     End Sub
@@ -1516,5 +1516,6 @@ Public Class frmEstimatingBase
                 End If
             Case Else
         End Select
+
     End Sub
 End Class

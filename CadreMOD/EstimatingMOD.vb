@@ -1,7 +1,7 @@
 ﻿Option Strict Off
 Option Explicit On
 
-Module frmEstimatingBaseMOD
+Module EstimatingMOD
     Public FormIsDirty As Boolean
     Public Structure a_SheetHeaders_typ
         Dim HeaderDesc As String
@@ -1189,6 +1189,9 @@ Module frmEstimatingBaseMOD
                 For iIndex = Options.GetLowerBound(0) To Options.GetUpperBound(0)
                     Options(iIndex) = Options(iIndex).Trim
                 Next iIndex
+                iIndex = Options.GetUpperBound(0) + 1
+                ReDim Preserve Options(iIndex)
+                Options(iIndex) = ""
                 ReturnCmb.Items = Options
                 ReturnCmb.MaxDrop = Options.Length
                 ReturnCmb.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
@@ -1337,9 +1340,10 @@ Module frmEstimatingBaseMOD
         Dim CurDataRow As DataRow = Nothing
         Dim UseId As String = String.Empty, UseAltId As String = String.Empty
         Dim FoundDataRow As Boolean = False
-        Dim Material_HQ As Single = 0, Material_RL As Single = 0, TempCost As Single = 0
+        Dim Material_HQ As Single = 0, Material_RL As Single = 0, TempCost As Single = 0, TempBaseCost As Single = 0
         Dim BDP_Hours As Single = 0, Special_Hours As Single = 0, Labor_Hours As Single = 0, Labor_Cost As Single = 0
-        Dim SubContract_Work As Single = 0, Misc_Costs As Single = 0, Expenses As Single = 0, Freight As Single = 0, NPS_Cost As Single = 0
+        Dim TempBDP_Hours As Single = 0, TempSpecial_Hours As Single = 0, TempBaseBDP_Hours As Single = 0, TempBaseSpecial_Hours As Single = 0
+        Dim SubContract_Work As Single = 0, PBO_Costs As Single = 0, Expenses As Single = 0, Freight As Single = 0, NPS_Cost As Single = 0
         Dim Engineering As Single = 0
         Dim Total_Bank_Cost As Single = 0, Bank_Net_Price As Single = 0
         Dim Sales_Commission As Single = 0, NPS_Surcharge As Single = 0, Taxes As Single = 0
@@ -1350,31 +1354,142 @@ Module frmEstimatingBaseMOD
         Dim TotalTravel As Single = 0, FrontOpenings As Integer = 0, RearOpenings As Integer = 0, TotalOpenings As Integer = 0
         Dim UseFieldName As String = String.Empty
         Dim CurDataset As DataSet = Nothing
+        Dim SubContract_Work_Base As Single = 0, Material_RL_Base As Single = 0, Material_HQ_Base As Single = 0, BDP_Hours_Base As Single = 0,
+            Special_Hours_Base As Single = 0
 
         Try
             CurDataset = SetCurrentDataset()
-            TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
-                          Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
-                          Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
-            FrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
-            RearOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
-            TotalOpenings = FrontOpenings + RearOpenings
             'CJ (10/23/17) - still need to program multiple tabs - will only update based on single tab
             For iIndex = 0 To SubGroups.Rows.Count - 1
                 CurDataRow = SubGroups.Rows(iIndex)
                 If Not IsDBNull(CurDataRow(UseOptionCol)) Then
-                    Select Case CurDataRow(UseOptionCol)
-                        Case "New", "Refurbish", "Included"
-                            UseMaterialItemRecordSet = New ADODB.Recordset
-                            UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
+                    UseMaterialItemRecordSet = New ADODB.Recordset
+                    UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
+                    If UseMaterialItemRecordSet.RecordCount > 0 Then
+                        'Base Cost/Hours
+                        If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                            TotalTravel = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
+                                          Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
+                                          Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
+                            FrontOpenings = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
+                            RearOpenings = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+                            TotalOpenings = FrontOpenings + RearOpenings
+                            UseWhere = "[Sub ID] = '" & CurDataRow(TABLECOL_MATERIALID) & "'"
+                            If Not IsDBNull(CurDataRow(TABLECOL_TYPE_BASE)) Then
+                                UseWhere &= " AND Types = '" & CurDataRow(TABLECOL_TYPE_BASE) & "'"
+                            End If
+                            UseMaterialItemRecordSet.Filter = UseWhere
                             If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                UseWhere = "[Sub ID] = '" & CurDataRow(TABLECOL_MATERIALID) & "'"
-                                If Not IsDBNull(CurDataRow(UseTypeCol)) Then
-                                    UseWhere &= " AND Types = '" & CurDataRow(UseTypeCol) & "'"
-                                End If
-                                UseMaterialItemRecordSet.Filter = UseWhere
-                                If UseMaterialItemRecordSet.RecordCount > 0 Then
-                                    UseMaterialItemRecordSet.MoveFirst()
+                                UseMaterialItemRecordSet.MoveFirst()
+                                Select Case CurDataRow(TABLECOL_OPTION_BASE)
+                                    Case "New", "Refurbish", "Included"
+                                        'Material Qty and Cost
+                                        If IsDBNull(UseMaterialItemRecordSet.Fields("Unit").Value) Then
+                                            PerUnit = "PER CAR"
+                                        Else
+                                            PerUnit = UseMaterialItemRecordSet.Fields("Unit").Value.ToString.Trim.ToUpper
+                                        End If
+                                        Select Case PerUnit
+                                            Case "PER CAR", "PER ASSEMBLY (1 PER CAR)", "PER UNIT", "PER CAR PER FT (2 CABLES)"
+                                                MaterialQty = PerCarQty
+                                            Case "PER BANK", "PER JOB"
+                                                MaterialQty = 1
+                                            Case "PER BANK/FT"
+                                                MaterialQty = TotalTravel
+                                            Case "PER FOOT", "PER FT"
+                                                MaterialQty = TotalTravel
+                                            Case "PER CAR PER FT"
+                                                MaterialQty = PerCarQty * TotalTravel
+                                            Case "PER OPERATOR"
+                                                If CurDataRow(TABLECOL_MATERIALDESC).ToString.ToUpper.IndexOf("FRONT") > -1 Then
+                                                    UseFieldName = MAT_ID_FrontCarDoorOperator
+                                                Else
+                                                    UseFieldName = MAT_ID_RearCarDoorOperator
+                                                End If
+                                                MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
+                                            Case "PER DOOR"
+                                                MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
+                                            Case "PER ROPE PER CAR"
+                                                MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
+                                            Case "PER OPENING PER CAR"
+                                                MaterialQty = PerCarQty * TotalOpenings
+                                            Case "PER PORT"
+                                                Select Case CurDataRow(TABLECOL_MATERIALDESC).ToString.ToUpper
+                                                    Case "PEDESTAL & BASE", "BACK PLATES"
+                                                        MaterialQty = GetPORTQty(MAT_ID_LobbyPORTDevices, True) +
+                                                                      GetPORTQty(MAT_ID_FrontTypicalPORTDevices, True) +
+                                                                      GetPORTQty(MAT_ID_RearTypicalPORTDevices, True) +
+                                                                      GetPORTQty(MAT_ID_SparePORTDevicesType1, True) +
+                                                                      GetPORTQty(MAT_ID_SparePORTDevicesType2, True) +
+                                                                      GetPORTQty(MAT_ID_SparePORTDevicesType3, True)
+                                                        MaterialQty *= PerCarQty
+                                                    Case Else
+                                                        MaterialQty = PerCarQty * GetPORTQty(CurDataRow(TABLECOL_MATERIALID), True)
+                                                End Select
+                                            Case Else
+                                                MaterialQty = 0
+                                        End Select
+                                        TempBaseCost = GetBaseValue(CurDataRow(TABLECOL_MATERIALID), "Cost") * MaterialQty
+                                        Select Case CurDataRow(TABLECOL_MAINID)
+                                            Case MAIN_ID_Miscellaneous, MAIN_ID_SubcontractingWork
+                                                SubContract_Work_Base += TempBaseCost
+                                            Case Else
+                                                If String.IsNullOrEmpty(CurDataRow(TABLECOL_ORDERBY_BASE)) OrElse
+                                                   CurDataRow(TABLECOL_ORDERBY_BASE).ToString = "RL" Then
+                                                    Material_RL_Base += TempBaseCost
+                                                Else
+                                                    Material_HQ_Base += TempBaseCost
+                                                End If
+                                        End Select
+                                        Select Case True
+                                            Case UseMaterialItemRecordSet.Fields("Labor Per Car").Value
+                                                LaborQty = PerCarQty
+                                            Case UseMaterialItemRecordSet.Fields("Labor Per Bank").Value
+                                                LaborQty = 1
+                                            Case UseMaterialItemRecordSet.Fields("Labor Per Job").Value
+                                                LaborQty = 1
+                                            Case Else
+                                                LaborQty = 0
+                                        End Select
+                                        TempBaseBDP_Hours = GetBaseValue(CurDataRow(TABLECOL_MATERIALID), "BDP Hours") * LaborQty
+                                        TempBaseSpecial_Hours = GetBaseValue(CurDataRow(TABLECOL_MATERIALID), "Spec Hours") * LaborQty
+                                        BDP_Hours_Base += TempBaseBDP_Hours
+                                        Special_Hours_Base += TempBaseSpecial_Hours
+                                    Case "Reuse"
+                                        Select Case True
+                                            Case UseMaterialItemRecordSet.Fields("Labor Per Car").Value
+                                                LaborQty = PerCarQty
+                                            Case UseMaterialItemRecordSet.Fields("Labor Per Bank").Value
+                                                LaborQty = 1
+                                            Case UseMaterialItemRecordSet.Fields("Labor Per Job").Value
+                                                LaborQty = 1
+                                            Case Else
+                                                LaborQty = 0
+                                        End Select
+                                        TempBaseBDP_Hours = GetBaseValue(CurDataRow(TABLECOL_MATERIALID), "BDP Hours") * LaborQty
+                                        TempBaseSpecial_Hours = GetBaseValue(CurDataRow(TABLECOL_MATERIALID), "Spec Hours") * LaborQty
+                                        BDP_Hours_Base += TempBaseBDP_Hours
+                                        Special_Hours_Base += TempBaseSpecial_Hours
+                                    Case Else
+                                End Select
+                            End If
+                        End If
+                        'Cost/Hours
+                        TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
+                                      Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
+                                      Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
+                        FrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
+                        RearOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+                        TotalOpenings = FrontOpenings + RearOpenings
+                        UseWhere = "[Sub ID] = '" & CurDataRow(TABLECOL_MATERIALID) & "'"
+                        If Not IsDBNull(CurDataRow(UseTypeCol)) Then
+                            UseWhere &= " AND Types = '" & CurDataRow(UseTypeCol) & "'"
+                        End If
+                        UseMaterialItemRecordSet.Filter = UseWhere
+                        If UseMaterialItemRecordSet.RecordCount > 0 Then
+                            UseMaterialItemRecordSet.MoveFirst()
+                            Select Case CurDataRow(UseOptionCol)
+                                Case "New", "Refurbish", "Included"
                                     'Material Qty and Cost
                                     If IsDBNull(UseMaterialItemRecordSet.Fields("Unit").Value) Then
                                         PerUnit = "PER CAR"
@@ -1409,8 +1524,8 @@ Module frmEstimatingBaseMOD
                                             Select Case CurDataRow(TABLECOL_MATERIALDESC).ToString.ToUpper
                                                 Case "PEDESTAL & BASE", "BACK PLATES"
                                                     MaterialQty = GetPORTQty(MAT_ID_LobbyPORTDevices) + GetPORTQty(MAT_ID_FrontTypicalPORTDevices) +
-                                                             GetPORTQty(MAT_ID_RearTypicalPORTDevices) + GetPORTQty(MAT_ID_SparePORTDevicesType1) +
-                                                             GetPORTQty(MAT_ID_SparePORTDevicesType2) + GetPORTQty(MAT_ID_SparePORTDevicesType3)
+                                                                  GetPORTQty(MAT_ID_RearTypicalPORTDevices) + GetPORTQty(MAT_ID_SparePORTDevicesType1) +
+                                                                  GetPORTQty(MAT_ID_SparePORTDevicesType2) + GetPORTQty(MAT_ID_SparePORTDevicesType3)
                                                     MaterialQty *= PerCarQty
                                                 Case Else
                                                     MaterialQty = PerCarQty * GetPORTQty(CurDataRow(TABLECOL_MATERIALID))
@@ -1419,10 +1534,17 @@ Module frmEstimatingBaseMOD
                                             MaterialQty = 0
                                     End Select
                                     TempCost = CurDataRow(TABLECOL_UNITCOST) * MaterialQty
+                                    If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                                        If Math.Round(TempCost, 2) = Math.Round(TempBaseCost, 2) Then
+                                            TempCost = 0
+                                        ElseIf Math.Round(TempCost, 2) < Math.Round(TempBaseCost, 2) Then
+                                            TempCost -= TempBaseCost
+                                        Else
+                                            TempCost = TempBaseCost - TempCost
+                                        End If
+                                    End If
                                     Select Case CurDataRow(TABLECOL_MAINID)
-                                        Case MAIN_ID_Miscellaneous
-                                            Misc_Costs += TempCost
-                                        Case MAIN_ID_SubcontractingWork
+                                        Case MAIN_ID_Miscellaneous, MAIN_ID_SubcontractingWork
                                             SubContract_Work += TempCost
                                         Case Else
                                             If String.IsNullOrEmpty(CurDataRow(UseOrderByCol)) OrElse CurDataRow(UseOrderByCol).ToString = "RL" Then
@@ -1431,13 +1553,6 @@ Module frmEstimatingBaseMOD
                                                 Material_HQ += TempCost
                                             End If
                                     End Select
-
-                                    'Labor Qty, Hours, and Cost
-                                    'If IsDBNull(UseMaterialItemRecordSet.Fields("Labor Qty").Value) Then           'CJ (10/23/17) - Labor Qty = 'x'?
-                                    '    PerUnit = "PER CAR"
-                                    'Else
-                                    '    LaborQty = MaterialQty
-                                    'End If
                                     Select Case True
                                         Case UseMaterialItemRecordSet.Fields("Labor Per Car").Value
                                             LaborQty = PerCarQty
@@ -1448,14 +1563,85 @@ Module frmEstimatingBaseMOD
                                         Case Else
                                             LaborQty = 0
                                     End Select
-                                    BDP_Hours += (CurDataRow(TABLECOL_STDHOURS) * LaborQty)
-                                    Special_Hours += (CurDataRow(TABLECOL_SPECHOURS) * LaborQty)
-                                End If
-                            End If
-                            UseMaterialItemRecordSet.Close()
-                        Case "Reuse"
-                        Case Else
-                    End Select
+                                    TempBDP_Hours = CurDataRow(TABLECOL_STDHOURS) * LaborQty
+                                    If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                                        If Math.Round(TempBDP_Hours, 2) = Math.Round(TempBaseBDP_Hours, 2) Then
+                                            TempBDP_Hours = 0
+                                        ElseIf Math.Round(TempBDP_Hours, 2) < Math.Round(TempBaseBDP_Hours, 2) Then
+                                            TempBDP_Hours -= TempBaseBDP_Hours
+                                        Else
+                                            TempBDP_Hours = TempBaseBDP_Hours - TempBDP_Hours
+                                        End If
+                                    End If
+                                    BDP_Hours += TempBDP_Hours
+                                    TempSpecial_Hours = CurDataRow(TABLECOL_SPECHOURS) * LaborQty
+                                    If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                                        If Math.Round(TempSpecial_Hours, 2) = Math.Round(TempBaseSpecial_Hours, 2) Then
+                                            TempSpecial_Hours = 0
+                                        ElseIf Math.Round(TempSpecial_Hours, 2) < Math.Round(TempBaseSpecial_Hours, 2) Then
+                                            TempSpecial_Hours -= TempBaseSpecial_Hours
+                                        Else
+                                            TempSpecial_Hours = TempBaseSpecial_Hours - TempSpecial_Hours
+                                        End If
+                                    End If
+                                    Special_Hours += TempSpecial_Hours
+                                Case "Reuse"
+                                    If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                                        If Math.Round(TempCost, 2) = Math.Round(TempBaseCost, 2) Then
+                                            TempCost = 0
+                                        ElseIf Math.Round(TempCost, 2) < Math.Round(TempBaseCost, 2) Then
+                                            TempCost -= TempBaseCost
+                                        Else
+                                            TempCost = TempBaseCost - TempCost
+                                        End If
+                                        Select Case CurDataRow(TABLECOL_MAINID)
+                                            Case MAIN_ID_Miscellaneous, MAIN_ID_SubcontractingWork
+                                                SubContract_Work += TempCost
+                                            Case Else
+                                                If String.IsNullOrEmpty(CurDataRow(UseOrderByCol)) OrElse CurDataRow(UseOrderByCol).ToString = "RL" Then
+                                                    Material_RL += TempCost
+                                                Else
+                                                    Material_HQ += TempCost
+                                                End If
+                                        End Select
+                                    End If
+                                    Select Case True
+                                        Case UseMaterialItemRecordSet.Fields("Labor Per Car").Value
+                                            LaborQty = PerCarQty
+                                        Case UseMaterialItemRecordSet.Fields("Labor Per Bank").Value
+                                            LaborQty = 1
+                                        Case UseMaterialItemRecordSet.Fields("Labor Per Job").Value
+                                            LaborQty = 1
+                                        Case Else
+                                            LaborQty = 0
+                                    End Select
+                                    TempBDP_Hours = CurDataRow(TABLECOL_STDHOURS) * LaborQty
+                                    If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                                        If Math.Round(TempBDP_Hours, 2) = Math.Round(TempBaseBDP_Hours, 2) Then
+                                            TempBDP_Hours = 0
+                                        ElseIf Math.Round(TempBDP_Hours, 2) < Math.Round(TempBaseBDP_Hours, 2) Then
+                                            TempBDP_Hours -= TempBaseBDP_Hours
+                                        Else
+                                            TempBDP_Hours = TempBaseBDP_Hours - TempBDP_Hours
+                                        End If
+                                    End If
+                                    BDP_Hours += TempBDP_Hours
+                                    TempSpecial_Hours = CurDataRow(TABLECOL_SPECHOURS) * LaborQty
+                                    If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                                        If Math.Round(TempSpecial_Hours, 2) = Math.Round(TempBaseSpecial_Hours, 2) Then
+                                            TempSpecial_Hours = 0
+                                        ElseIf Math.Round(TempSpecial_Hours, 2) < Math.Round(TempBaseSpecial_Hours, 2) Then
+                                            TempSpecial_Hours -= TempBaseSpecial_Hours
+                                        Else
+                                            TempSpecial_Hours = TempBaseSpecial_Hours - TempSpecial_Hours
+                                        End If
+                                    End If
+                                    Special_Hours += TempSpecial_Hours
+                                Case Else
+                            End Select
+                        End If
+                    End If
+                    UseMaterialItemRecordSet.Close()
                 End If
             Next iIndex
 
@@ -1496,59 +1682,134 @@ Module frmEstimatingBaseMOD
                 Case Else
             End Select
             If FoundDataRow Then
-                If CurrentGOData_Typ.EstimateLevel = "Alt" Then     'Adjsut costs = Base - curcost
+                If CurrentGOData_Typ.EstimateLevel = "Alt" Then     'Adjsut costs = Base - curcost       
+                    PBO_Costs = 0
+                    Expenses = 0
+                    NPS_Cost = 0
                 Else
-                    CurDataRow("Material_HQ") = Math.Round(Material_HQ, 2)
-                    CurDataRow("Material_RL") = Math.Round(Material_RL, 2)
-                    CurDataRow("BDP_Hours") = Math.Round(BDP_Hours, 2)
-                    CurDataRow("Special_Hours") = Math.Round(Special_Hours, 2)
-                    Labor_Hours = BDP_Hours + Special_Hours
-                    Labor_Cost = Labor_Hours * CurDataRow("Labor_Rate")
-                    CurDataRow("Labor_Cost") = Math.Round(Labor_Cost, 2)
-                    If CurDataRow("OT_Hours_Included") > Labor_Hours Then
-                        CurDataRow("OT_Hours_Included") = 0
-                    Else
-                        Labor_Hours -= CurDataRow("OT_Hours_Included")
-                    End If
-                    CurDataRow("Labor_Hours") = Math.Round(Labor_Hours, 2)
-                    CurDataRow("SubContract_Work") = Math.Round(SubContract_Work, 2)
-                    CurDataRow("Misc_Costs") = Math.Round(Misc_Costs, 2)
+                    PBO_Costs = (Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Permits_txt")) * PerCarQty) +
+                                 Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Bonds_txt")) +
+                                 Conversion.Val(dtBuildingInfo(0)("ocpl"))
                     Expenses = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDay_txt"))
-                    CurDataRow("Expenses") = Math.Round(Expenses, 2)
-                    Freight = (Material_HQ + Material_RL) * FREIGHT_RATE
-                    CurDataRow("Freight") = Math.Round(Freight, 2)
-                    Engineering = (Material_HQ + Material_RL) * ENGINEERING_RATE
-                    CurDataRow("Engineering_Cost") = Math.Round(Engineering, 2)
                     NPS_Cost = Conversion.Val(dtBuildingInfo(0)("nps_one_time_cost").ToString)
                     NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_material_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString)
                     NPS_Cost *= PerCarQty
                     NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_labor_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString) * PerCarQty
-                    Total_Bank_Cost = Material_HQ + Material_RL + Labor_Cost + SubContract_Work + Misc_Costs + Expenses + Freight + NPS_Cost +
-                                      (Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Permits_txt")) * PerCarQty) +
-                                      Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Bonds_txt"))
-                    Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
-
-                    NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
-                    Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
-                    Sales_Commission = CalculateSalesCommission()
-                    Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
-                    Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
-                    NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
-                    Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
-                    Sales_Commission = CalculateSalesCommission()
-                    Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
-                    Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
-
-                    CurDataRow("NPS_Cost") = Math.Round(NPS_Cost + NPS_Surcharge, 2)
-                    CurDataRow("Tax") = Math.Round(Taxes, 2)
-                    CurDataRow("Sales_Commission") = Math.Round(Sales_Commission, 2)
-
-                    CurDataRow("Total_Bank_Cost") = Math.Round(Total_Bank_Cost, 2)
-                    CurDataRow("Bank_Net_Price") = Math.Round(Bank_Net_Price, 2)
-                    CurDataRow("speed") = Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")))
-                    CurDataRow("machine_model") = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
                 End If
+                CurDataRow("Material_HQ") = Math.Round(Material_HQ, 2)
+                CurDataRow("Material_RL") = Math.Round(Material_RL, 2)
+                CurDataRow("BDP_Hours") = Math.Round(BDP_Hours, 2)
+                CurDataRow("Special_Hours") = Math.Round(Special_Hours, 2)
+                Labor_Hours = BDP_Hours + Special_Hours
+                Labor_Cost = Labor_Hours * CurDataRow("Labor_Rate")
+                CurDataRow("Labor_Cost") = Math.Round(Labor_Cost, 2)
+                If CurDataRow("OT_Hours_Included") > Labor_Hours Then
+                    CurDataRow("OT_Hours_Included") = 0
+                Else
+                    Labor_Hours -= CurDataRow("OT_Hours_Included")
+                End If
+                CurDataRow("Labor_Hours") = Math.Round(Labor_Hours, 2)
+                CurDataRow("SubContract_Work") = Math.Round(SubContract_Work, 2)
+                CurDataRow("Misc_Costs") = Math.Round(PBO_Costs, 2)
+                CurDataRow("Expenses") = Math.Round(Expenses, 2)
+                Freight = (Material_HQ + Material_RL) * FREIGHT_RATE
+                CurDataRow("Freight") = Math.Round(Freight, 2)
+                Engineering = (Material_HQ + Material_RL) * ENGINEERING_RATE
+                CurDataRow("Engineering_Cost") = Math.Round(Engineering, 2)
+                Total_Bank_Cost = Material_HQ + Material_RL + Labor_Cost + SubContract_Work + PBO_Costs + Expenses + Freight + NPS_Cost +
+                                  PBO_Costs
+                Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
+
+                NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
+                Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
+                Sales_Commission = CalculateSalesCommission()
+                Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
+                Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
+                NPS_Surcharge = CalculateNPSSurcharge(Bank_Net_Price)
+                Taxes = CalculateTaxes(Bank_Net_Price, (Material_HQ + Material_RL))
+                Sales_Commission = CalculateSalesCommission()
+                Total_Bank_Cost += NPS_Surcharge + Taxes + Sales_Commission
+                Bank_Net_Price = Total_Bank_Cost / (1 - CurDataRow("C1"))
+
+                CurDataRow("NPS_Cost") = Math.Round(NPS_Cost + NPS_Surcharge, 2)
+                CurDataRow("Tax") = Math.Round(Taxes, 2)
+                CurDataRow("Sales_Commission") = Math.Round(Sales_Commission, 2)
+
+                CurDataRow("Total_Bank_Cost") = Math.Round(Total_Bank_Cost, 2)
+                CurDataRow("Bank_Net_Price") = Math.Round(Bank_Net_Price, 2)
+                CurDataRow("speed") = Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")))
+                CurDataRow("machine_model") = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
             End If
+            Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
+            Select Case CurrentGOData_Typ.EstimateLevel
+                Case "Master", "Base"
+                    For iIndex = 0 To CM_MAIN_frm.FpSpread1.ActiveSheet.RowCount - 1
+                        If CM_MAIN_frm.FpSpread1.ActiveSheet.GetValue(iIndex, 1) = UseId Then
+                            ChildSheetView1 = CM_MAIN_frm.FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+                            Exit For
+                        End If
+                    Next iIndex
+                    If Not IsNothing(ChildSheetView1) Then
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 5, Math.Round(Material_HQ, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 6, Math.Round(Material_RL, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 8, Math.Round(BDP_Hours, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 9, Math.Round(Special_Hours, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 12, Math.Round(Labor_Cost, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 10, Math.Round(Labor_Hours, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 13, Math.Round(SubContract_Work, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 16, Math.Round(PBO_Costs, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 14, Math.Round(Expenses, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 17, Math.Round(Freight, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 15, Math.Round(Engineering, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 18, Math.Round(NPS_Cost + NPS_Surcharge, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 7, Math.Round(Taxes, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 22, Math.Round(Sales_Commission, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 19, Math.Round(Total_Bank_Cost, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 21, Math.Round(Bank_Net_Price, 2))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 28,
+                                                 Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb"))))
+                        ChildSheetView1.SetValue(CurrentGOData_Typ.CurrentRow, 29,
+                                                 GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb"))
+                    End If
+                Case "Alt"
+                    For iIndex = 0 To CM_MAIN_frm.FpSpread1.ActiveSheet.RowCount - 1
+                        If CM_MAIN_frm.FpSpread1.ActiveSheet.GetValue(iIndex, 1) = UseId Then
+                            ChildSheetView1 = CM_MAIN_frm.FpSpread1.ActiveSheet.FindChildView(iIndex, 0)
+                            If Not IsNothing(ChildSheetView1) Then
+                                If ChildSheetView1.RowCount = 1 Then
+                                    ChildSheetView2 = ChildSheetView1.FindChildView(0, 0)
+                                ElseIf ChildSheetView1.RowCount = 2 Then
+                                    ChildSheetView2 = ChildSheetView1.FindChildView(1, 0)
+                                End If
+                                If Not IsNothing(ChildSheetView2) Then
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 6, Math.Round(Material_HQ, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 7, Math.Round(Material_RL, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 9, Math.Round(BDP_Hours, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 10, Math.Round(Special_Hours, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 13, Math.Round(Labor_Cost, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 11, Math.Round(Labor_Hours, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 14, Math.Round(SubContract_Work, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 17, Math.Round(PBO_Costs, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 15, Math.Round(Expenses, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 18, Math.Round(Freight, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 16, Math.Round(Engineering, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 19, Math.Round(NPS_Cost + NPS_Surcharge, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 8, Math.Round(Taxes, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 23, Math.Round(Sales_Commission, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 20, Math.Round(Total_Bank_Cost, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 22, Math.Round(Bank_Net_Price, 2))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 29,
+                                                             Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb"))))
+                                    ChildSheetView2.SetValue(CurrentGOData_Typ.CurrentRow, 30,
+                                                             GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb"))
+                                End If
+                            End If
+                            Exit For
+                        End If
+                    Next iIndex
+                Case Else
+            End Select
+            CM_MAIN_frm.FpSpread1.Refresh()
             CM_MAIN_frm.CalculateFinalBankPrice()
 
         Catch ex As Exception
@@ -1560,20 +1821,22 @@ Module frmEstimatingBaseMOD
     Private Function CalculateNPSSurcharge(ByVal CurrentPrice As Single) As Single
         Dim NPSSurcharge As Single = 0, NPSSurchargeRate As Single = 0
 
-        If Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString) > 12 Then
-            If CurrentPrice <= 500000 Then
-                NPSSurchargeRate = 1.8
-            ElseIf CurrentPrice <= 2500000 Then
-                NPSSurchargeRate = 3.3
-            ElseIf CurrentPrice <= 5000000 Then
-                NPSSurchargeRate = 4.55
-            ElseIf CurrentPrice <= 7500000 Then
-                NPSSurchargeRate = 5.65
-            Else
-                NPSSurchargeRate = 6.65
+        If CurrentGOData_Typ.EstimateLevel <> "Alt" Then
+            If Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString) > 12 Then
+                If CurrentPrice <= 500000 Then
+                    NPSSurchargeRate = 1.8
+                ElseIf CurrentPrice <= 2500000 Then
+                    NPSSurchargeRate = 3.3
+                ElseIf CurrentPrice <= 5000000 Then
+                    NPSSurchargeRate = 4.55
+                ElseIf CurrentPrice <= 7500000 Then
+                    NPSSurchargeRate = 5.65
+                Else
+                    NPSSurchargeRate = 6.65
+                End If
             End If
+            NPSSurcharge = (CurrentPrice * NPSSurchargeRate) / 1000
         End If
-        NPSSurcharge = (CurrentPrice * NPSSurchargeRate) / 1000
         Return NPSSurcharge
 
     End Function
@@ -1602,13 +1865,17 @@ Module frmEstimatingBaseMOD
     Private Function CalculateSalesCommission() As Single
         Return 0            'CJ (10/23/17) - will be zero until logic provided
     End Function
-    Private Function GetPORTQty(ByVal MAT_ID As String) As Single
+    Private Function GetPORTQty(ByVal MAT_ID As String, Optional ByVal UseBaseDataTable As Boolean = False) As Single
         Dim ReturnVal As Single = 0
         Dim PORTIndex As Integer = 0
         Dim PORTDataRow As DataRow = Nothing
+        Dim UseDataTable As System.Data.DataTable = SubGroups
 
-        For PORTIndex = 0 To SubGroups.Rows.Count - 1
-            PORTDataRow = SubGroups.Rows(PORTIndex)
+        If UseBaseDataTable Then
+            UseDataTable = EstimatingDataset.Tables(TABLENAME_MATERIALS)
+        End If
+        For PORTIndex = 0 To UseDataTable.Rows.Count - 1
+            PORTDataRow = UseDataTable.Rows(PORTIndex)
             If PORTDataRow(TABLECOL_MATERIALID).ToString = MAT_ID Then
                 ReturnVal = Conversion.Val(PORTDataRow(UseUnitQtyCol).ToString)
                 Exit For
@@ -1653,6 +1920,29 @@ Module frmEstimatingBaseMOD
             Case Else
         End Select
         Return UseDataset
+
+    End Function
+    Private Function GetBaseValue(ByVal MAT_ID As String, ByVal ValueType As String) As Single
+        Dim ReturnVal As Single = 0
+        Dim BaseIndex As Integer = 0
+        Dim BaseDataRow As DataRow = Nothing
+        Dim FieldName As String = TABLECOL_UNITCOST
+
+        Select Case ValueType
+            Case "BDP Hours"
+                FieldName = TABLECOL_STDHOURS
+            Case "Spec Hours"
+                FieldName = TABLECOL_SPECHOURS
+            Case Else
+        End Select
+        For BaseIndex = 0 To EstimatingDataset.Tables(TABLENAME_MATERIALS).Rows.Count - 1
+            BaseDataRow = EstimatingDataset.Tables(TABLENAME_MATERIALS).Rows(BaseIndex)
+            If BaseDataRow(TABLECOL_MATERIALID).ToString = MAT_ID Then
+                ReturnVal = Conversion.Val(BaseDataRow(FieldName).ToString)
+                Exit For
+            End If
+        Next BaseIndex
+        Return ReturnVal
 
     End Function
 End Module

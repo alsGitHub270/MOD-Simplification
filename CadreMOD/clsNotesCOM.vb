@@ -206,48 +206,48 @@ DetachFilesError:
         End Try
 
     End Function
-    '    Public Sub DeleteALLAttachments()
-    '        Dim i As Byte
-    '        Dim EngFile() As String
-    '        Dim TempObj As Object = doc.GetFirstItem("FILEATTACH")
+    Public Sub DeleteALLAttachments()
+        Dim i As Byte
+        Dim EngFile() As String
+        Dim TempObj As Object = doc.GetFirstItem("FILEATTACH")
 
-    '        Do Until TempObj Is Nothing
-    '            TempObj.Remove()
-    '            doc.Save(True, True)
-    '            TempObj = doc.GetFirstItem("FILEATTACH")
-    '        Loop
-    '        TempObj = doc.GetFirstItem("EstimateFile")
-    '        Do Until TempObj Is Nothing
-    '            TempObj.Remove()
-    '            doc.Save(True, True)
-    '            TempObj = doc.GetFirstItem("EstimateFile")
-    '        Loop
-    '        TempObj = doc.GetFirstItem("ATTACHMENTELECTRICAL")
-    '        If Not (TempObj Is Nothing) Then
-    '            ReadersValue = doc.GetItemValue("FileAttachments")
-    '            ReDim EngFile(0)
-    '            i = 1
-    '            For X As Integer = ReadersValue.GetLowerBound(0) To ReadersValue.GetUpperBound(0)
-    '                If Strings.Right(ReadersValue(X), 3).ToUpper() = "XLS" Or Strings.Right(ReadersValue(X), 4).ToUpper() = "XLSX" Or Strings.Right(ReadersValue(X), 3).ToUpper() = "A2B" Or _
-    '                   Strings.Right(ReadersValue(X), 10).ToUpper() = "LETTER.DOC" Or Strings.Right(ReadersValue(X), 11).ToUpper() = "LETTER.DOCX" Or _
-    '                   Strings.Right(ReadersValue(X), 11).ToUpper() = "SCRIPTS.DOC" Or Strings.Right(ReadersValue(X), 12).ToUpper() = "SCRIPTS.DOCX" Then
-    '                    ReDim Preserve EngFile(i)
-    '                    EngFile(i) = ReadersValue(X).Trim()
-    '                    i += 1
-    '                End If
-    '            Next
-    '            TempObj = doc.ReplaceItemValue("FileAttachments", "")
-    '            doc.Save(True, True)
-    '            If EngFile.GetUpperBound(0) > 0 Then
-    '                TempObj = doc.GetFirstItem("FileAttachments")
-    '                For i = 1 To EngFile.GetUpperBound(0)
-    '                    TempObj.AppendToTextList(EngFile(i))
-    '                    doc.Save(True, True)
-    '                Next i
-    '            End If
-    '        End If
+        Do Until TempObj Is Nothing
+            TempObj.Remove()
+            doc.Save(True, True)
+            TempObj = doc.GetFirstItem("FILEATTACH")
+        Loop
+        TempObj = doc.GetFirstItem("EstimateFile")
+        Do Until TempObj Is Nothing
+            TempObj.Remove()
+            doc.Save(True, True)
+            TempObj = doc.GetFirstItem("EstimateFile")
+        Loop
+        TempObj = doc.GetFirstItem("ATTACHMENTELECTRICAL")
+        If Not (TempObj Is Nothing) Then
+            ReadersValue = doc.GetItemValue("FileAttachments")
+            ReDim EngFile(0)
+            i = 1
+            For X As Integer = ReadersValue.GetLowerBound(0) To ReadersValue.GetUpperBound(0)
+                If Strings.Right(ReadersValue(X), 3).ToUpper() = "XLS" Or Strings.Right(ReadersValue(X), 4).ToUpper() = "XLSX" Or Strings.Right(ReadersValue(X), 3).ToUpper() = "A2B" Or _
+                   Strings.Right(ReadersValue(X), 10).ToUpper() = "LETTER.DOC" Or Strings.Right(ReadersValue(X), 11).ToUpper() = "LETTER.DOCX" Or _
+                   Strings.Right(ReadersValue(X), 11).ToUpper() = "SCRIPTS.DOC" Or Strings.Right(ReadersValue(X), 12).ToUpper() = "SCRIPTS.DOCX" Then
+                    ReDim Preserve EngFile(i)
+                    EngFile(i) = ReadersValue(X).Trim()
+                    i += 1
+                End If
+            Next
+            TempObj = doc.ReplaceItemValue("FileAttachments", "")
+            doc.Save(True, True)
+            If EngFile.GetUpperBound(0) > 0 Then
+                TempObj = doc.GetFirstItem("FileAttachments")
+                For i = 1 To EngFile.GetUpperBound(0)
+                    TempObj.AppendToTextList(EngFile(i))
+                    doc.Save(True, True)
+                Next i
+            End If
+        End If
 
-    '    End Sub
+    End Sub
     Public ReadOnly Property NotesDBName(ByVal ComServer As String, ByVal DBName As String) As Boolean
 
         Get

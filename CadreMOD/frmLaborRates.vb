@@ -4,13 +4,11 @@ Public Class frmLaborRates
 
     Public Property localOffice As String
 
-
-
     Private Sub frmLaborRates_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
         Dim summary_row As Integer = 0
         Try
-            
+
             DataGridView1.DataSource = dtLaborRates
 
             DataGridView1.Columns(0).ReadOnly = True
@@ -31,7 +29,5 @@ Public Class frmLaborRates
 
         Me.lblLocalOffice.Text = "Local Office:  " & localOffice
     End Sub
-
-   
 
 End Class

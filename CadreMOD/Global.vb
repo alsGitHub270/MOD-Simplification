@@ -173,6 +173,7 @@
         Dim MachineType As String
         Dim CurrentUnits As String
         Dim EstimateLevel As String
+        Dim CurrentRow As Integer
         Public Shared Function CreateInstance() As CurrentGOData_Type
             Dim result As New CurrentGOData_Type()
             result.Type = String.Empty

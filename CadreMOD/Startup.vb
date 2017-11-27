@@ -193,7 +193,6 @@ Module Startup
 
         Try
             If All_LocalCodeDep.CanadaJob Then
-
                 sql_string = "SELECT PSTRate FROM [Rate (Canada Tax)] Where Province ='" & Contracts.JobState & "'"
                 my_list = GetDataFromOptions(sql_string)
                 If my_list.Count = 0 OrElse my_list("0") = 0 Then
@@ -201,7 +200,6 @@ Module Startup
                 Else
                     DefaultTaxCode = "Taxable"
                 End If
-
             Else
                 sql_string = "SELECT [Tax Type], [Tax Rate], ExemptionAllowed FROM [Rate (US Tax)] WHERE State = '" & Contracts.JobState & "'"
                 my_list = GetDataFromOptions(sql_string, True)
@@ -217,12 +215,9 @@ Module Startup
                 End If
             End If
 
-
         Catch
-
             MessageBox.Show(Conversion.ErrorToString(), "DetermineTaxability", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
-
 
     End Sub
 End Module

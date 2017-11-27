@@ -253,11 +253,21 @@ Public Class frmEstimatingAlt
                                                                           UseAltDataRow(TABLECOL_MAINID), UseAltDataRow(TABLECOL_MATERIALID))
                         Case TABLENAME_GENERALINFO
                             UseAltDataRow("UnitsInTab") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "UnitsInTab")
-                            UseAltDataRow("CapacityNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CapacityNew_cmb")
-                            UseAltDataRow("SpeedNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")
-                            UseAltDataRow("NumberofStopsTotal_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsTotal_cmb")
-                            UseAltDataRow("NumberofStopsFront_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb")
-                            UseAltDataRow("NumberofStopsRear_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb")
+                            If IsDBNull(UseAltDataRow("CapacityNew_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("CapacityNew_cmb")) Then
+                                UseAltDataRow("CapacityNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CapacityNew_cmb")
+                            End If
+                            If IsDBNull(UseAltDataRow("SpeedNew_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("SpeedNew_cmb")) Then
+                                UseAltDataRow("SpeedNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")
+                            End If
+                            If IsDBNull(UseAltDataRow("NumberofStopsTotal_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("NumberofStopsTotal_cmb")) Then
+                                UseAltDataRow("NumberofStopsTotal_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsTotal_cmb")
+                            End If
+                            If IsDBNull(UseAltDataRow("NumberofStopsFront_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("NumberofStopsFront_cmb")) Then
+                                UseAltDataRow("NumberofStopsFront_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb")
+                            End If
+                            If IsDBNull(UseAltDataRow("NumberofStopsRear_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("NumberofStopsRear_cmb")) Then
+                                UseAltDataRow("NumberofStopsRear_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb")
+                            End If
                             UseAltDataRow("PowerSupply_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PowerSupply_cmb")
                             UseAltDataRow("Application_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
                             UseAltDataRow("LayoutRequirements_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "LayoutRequirements_cmb")
@@ -271,16 +281,28 @@ Public Class frmEstimatingAlt
                             UseAltDataRow("CarDoorOpeningWidthInRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthInRear_txt")
                             UseAltDataRow("CarDoorOpeningHeightFtRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightFtRear_txt")
                             UseAltDataRow("CarDoorOpeningHeightInRear_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightInRear_txt")
-                            UseAltDataRow("MachineType_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
-                            UseAltDataRow("DriveType_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
+                            If IsDBNull(UseAltDataRow("MachineType_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("MachineType_cmb")) Then
+                                UseAltDataRow("MachineType_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
+                            End If
+                            If IsDBNull(UseAltDataRow("DriveType_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("DriveType_cmb")) Then
+                                UseAltDataRow("DriveType_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
+                            End If
                             UseAltDataRow("CarWeight_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarWeight_txt")
                             UseAltDataRow("HoistMotorHP_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "HoistMotorHP_txt")
                             UseAltDataRow("HoistMotorRpm_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "HoistMotorRpm_txt")
                             UseAltDataRow("MachineLocation_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb")
-                            UseAltDataRow("RopingNew_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_Cmb")
-                            UseAltDataRow("TopFloorToOverhead_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")
-                            UseAltDataRow("Travel_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")
-                            UseAltDataRow("PitDepth_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt")
+                            If IsDBNull(UseAltDataRow("RopingNew_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("RopingNew_cmb")) Then
+                                UseAltDataRow("RopingNew_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_cmb")
+                            End If
+                            If IsDBNull(UseAltDataRow("TopFloorToOverhead_txt")) OrElse String.IsNullOrEmpty(UseAltDataRow("TopFloorToOverhead_txt")) Then
+                                UseAltDataRow("TopFloorToOverhead_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")
+                            End If
+                            If IsDBNull(UseAltDataRow("Travel_txt")) OrElse String.IsNullOrEmpty(UseAltDataRow("Travel_txt")) Then
+                                UseAltDataRow("Travel_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")
+                            End If
+                            If IsDBNull(UseAltDataRow("PitDepth_txt")) OrElse String.IsNullOrEmpty(UseAltDataRow("PitDepth_txt")) Then
+                                UseAltDataRow("PitDepth_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt")
+                            End If
                             UseAltDataRow("RiserQtyFront_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RiserQtyFront_Cmb")
                             UseAltDataRow("RiserQtyRear_Cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RiserQtyRear_Cmb")
                             UseAltDataRow("FixtureFinish_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "FixtureFinish_cmb")
@@ -302,7 +324,9 @@ Public Class frmEstimatingAlt
                             UseAltDataRow("ExpensesPerDayTotal_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDayTotal_txt")
                             UseAltDataRow("ExpensesPerDay_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDay_txt")
                             UseAltDataRow("GatewayReviewRequired_chk") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "GatewayReviewRequired_chk")
-                            UseAltDataRow("Destination_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Destination_cmb")
+                            If IsDBNull(UseAltDataRow("Destination_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("Destination_cmb")) Then
+                                UseAltDataRow("Destination_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Destination_cmb")
+                            End If
                         Case Else
                             Exit For
                     End Select
@@ -373,6 +397,7 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub frmEstimatingAlt_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PrepareThisForm()
+
     End Sub
     Private Sub BillOfMaterials_spr_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles BillOfMaterials_spr.ChildViewCreated
 
@@ -402,12 +427,12 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
 
+        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         Select Case PromptForSave()
             Case MsgBoxResult.Yes, MsgBoxResult.No, 0
                 Me.Cursor = Cursors.WaitCursor
-                UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
                 Me.Cursor = Cursors.Default
-                CM_MAIN_frm.Show()
+                ' CM_MAIN_frm.Show()
                 Me.Dispose()
             Case Else
         End Select
@@ -886,6 +911,18 @@ Public Class frmEstimatingAlt
                     SubcontractedLaborCost.LaborCost(iIndex).Cost = dr(SubcontractedLaborCost.LaborCost(iIndex).Description)
                 Next iIndex
             End If
+            CapacityNewBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CapacityNew_cmb")
+            SpeedNewBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")
+            NumberofStopsTotalBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsTotal_cmb")
+            NumberofStopsFrontBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb")
+            NumberofStopsRearBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb")
+            MachineTypeBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
+            DriveTypeBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "DriveType_cmb")
+            RopingNewBase_Cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_cmb")
+            TopFloorToOverheadBase_txt.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")
+            TravelBase_txt.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")
+            PitDepthBase_txt.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt")
+            DestinationBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Destination_cmb")
 
             BillOfMaterials_spr.ActiveSheet.GetDataView(False).AllowNew = False
             BillOfMaterials_spr.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
@@ -1056,6 +1093,7 @@ Public Class frmEstimatingAlt
 
     End Sub
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
+        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         SaveAll()
     End Sub
     Private Function PromptForSave() As DialogResult
@@ -1074,7 +1112,6 @@ Public Class frmEstimatingAlt
     Private Sub Set_Fields_Grey_EST()
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
-        GeneralInformation_fra.Enabled = False
         For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
             BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
             ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
@@ -1128,5 +1165,134 @@ Public Class frmEstimatingAlt
             CurCell.Locked = False
         End If
 
+    End Sub
+    Private Sub BillOfMaterials_spr_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles BillOfMaterials_spr.KeyDown
+        Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
+
+        Select Case e.KeyCode
+            Case Keys.Delete
+                If Not isInitializingComponent Then
+                    ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(BillOfMaterials_spr.ActiveSheet.ActiveRowIndex, 0)
+                    If Not ChildSheetView Is Nothing Then
+                        Select Case ChildSheetView.ActiveColumnIndex
+                            Case MAT_COL_QTY_EST, MAT_COL_MATERIAL_COST_EST, MAT_COL_STANDARD_HOURS_EST, MAT_COL_SPECIAL_HOURS_EST
+                                ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = 0
+                            Case Else
+                                ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = ""
+                        End Select
+                    End If
+                    RetrieveCostHours(ChildSheetView.ActiveRowIndex)
+                    FormIsDirty = True
+                End If
+            Case Else
+        End Select
+
+    End Sub
+    Private Sub ShowGeneralInfoBaseValue(ByVal CurControl As Control)
+        Dim UseControlName As String = Strings.Left(CurControl.Name, CurControl.Name.Length - 4)
+        Dim UseBaseControlName As String = String.Empty
+
+        For Each BaseControl As Control In GeneralInformationBase_fra.Controls
+            UseBaseControlName = Strings.Left(BaseControl.Name, BaseControl.Name.Length - 8)
+            If UseBaseControlName.ToUpper = UseControlName.ToUpper Then
+                BaseControl.Visible = True
+                If Strings.Right(BaseControl.Name, 3) = "lbl" Then
+                    BaseControl.Left = 7
+                    BaseControl.Top = 13
+                Else
+                    BaseControl.Left = 143
+                    BaseControl.Top = 10
+                End If
+            Else
+                BaseControl.Visible = False
+            End If
+        Next BaseControl
+        If CurControl.Left > 900 Then
+            GeneralInformationBase_fra.Left = CurControl.Left - CurControl.Width - 3
+        Else
+            GeneralInformationBase_fra.Left = CurControl.Left + CurControl.Width + 3
+        End If
+        GeneralInformationBase_fra.Top = CurControl.Top
+        GeneralInformationBase_fra.Visible = True
+        GeneralInformationBase_fra.BringToFront()
+
+    End Sub
+    Private Sub HideGeneralInfoBaseValue()
+        GeneralInformationBase_fra.Left = 1329
+        GeneralInformationBase_fra.Top = 10
+        GeneralInformationBase_fra.Visible = False
+        GeneralInformationBase_fra.SendToBack()
+    End Sub
+    Private Sub CapacityNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.GotFocus
+        ShowGeneralInfoBaseValue(CapacityNew_cmb)
+    End Sub
+    Private Sub CapacityNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub SpeedNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.GotFocus
+        ShowGeneralInfoBaseValue(SpeedNew_cmb)
+    End Sub
+    Private Sub SpeedNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.GotFocus
+        ShowGeneralInfoBaseValue(NumberofStopsTotal_cmb)
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsFront_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.GotFocus
+        ShowGeneralInfoBaseValue(NumberofStopsFront_cmb)
+    End Sub
+    Private Sub NumberofStopsFront_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsRear_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.GotFocus
+        ShowGeneralInfoBaseValue(NumberofStopsRear_cmb)
+    End Sub
+    Private Sub NumberofStopsRear_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub MachineType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.GotFocus
+        ShowGeneralInfoBaseValue(MachineType_cmb)
+    End Sub
+    Private Sub MachineType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub DriveType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.GotFocus
+        ShowGeneralInfoBaseValue(DriveType_cmb)
+    End Sub
+    Private Sub DriveType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub RopingNew_Cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.GotFocus
+        ShowGeneralInfoBaseValue(RopingNew_Cmb)
+    End Sub
+    Private Sub RopingNew_Cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub TopFloorToOverhead_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.GotFocus
+        ShowGeneralInfoBaseValue(TopFloorToOverhead_txt)
+    End Sub
+    Private Sub TopFloorToOverhead_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub Travel_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Travel_txt.GotFocus
+        ShowGeneralInfoBaseValue(Travel_txt)
+    End Sub
+    Private Sub Travel_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Travel_txt.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub PitDepth_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.GotFocus
+        ShowGeneralInfoBaseValue(PitDepth_txt)
+    End Sub
+    Private Sub PitDepth_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PitDepth_txt.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub Destination_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.GotFocus
+        ShowGeneralInfoBaseValue(Destination_cmb)
+    End Sub
+    Private Sub Destination_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Destination_cmb.LostFocus
+        HideGeneralInfoBaseValue()
     End Sub
 End Class

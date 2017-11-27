@@ -297,16 +297,17 @@ Module Lotuslnk
     '            clsNotes.SetValue("maxAdder", UseMaxPercentSpecial)
             clsNotes.SetValue_Readers("Reader", Contracts.Reader)
             clsNotes.SetValue_Readers("reader_global", Contracts.ReaderGlobal)
-    '            If clsNotes.CheckAttachments() Then
-    '                clsNotes.DeleteALLAttachments()
-    '            End If
+            If clsNotes.CheckAttachments() Then
+                clsNotes.DeleteALLAttachments()
+            End If
             VerifyPath(ReportsPath)
             Dim thisFolder As Scripting.Folder = Filesystem.GetFolder(ReportsPath)
             Dim theseFiles As Scripting.Files = thisFolder.Files
             For Each thisFile As Scripting.File In theseFiles
                 Name = thisFile.Name.ToUpper()
     '                If (Name Like Contracts.EstimateNum & "*.*" Or Name Like "*.XLS*") And Not Name Like "*.A2B" And Not Name Like "*LETTER.DOC*" And Not Name Like "*SCRIPTS.DOC*" Then
-                If (Name Like Contracts.EstimateNum & "*.JSON") Then
+                If (Name Like Contracts.EstimateNum & "*.JSON") Or (Name Like Contracts.EstimateNum & "*.CM") Or
+                   (Name Like Contracts.EstimateNum & "*.M*") Or (Name Like Contracts.EstimateNum & "*.DOC*") Then
     '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
     '                            If Name Like Get_FileName(Contracts.EstimateNum, GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, GONumbers(iIndx).Units) Then
     '                                clsNotes.AttachFile(Name)
