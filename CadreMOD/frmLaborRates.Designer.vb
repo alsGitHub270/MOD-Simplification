@@ -22,20 +22,24 @@ Partial Class frmLaborRates
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmLaborRates))
+        Me.dgvLaborRatios = New System.Windows.Forms.DataGridView()
         Me.lblLocalOffice = New System.Windows.Forms.Label()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.dgvOverTime = New System.Windows.Forms.DataGridView()
+        Me.btnExit = New System.Windows.Forms.Button()
+        CType(Me.dgvLaborRatios, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvOverTime, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'DataGridView1
+        'dgvLaborRatios
         '
-        Me.DataGridView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.dgvLaborRatios.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Location = New System.Drawing.Point(32, 46)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.Size = New System.Drawing.Size(509, 261)
-        Me.DataGridView1.TabIndex = 66
+        Me.dgvLaborRatios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvLaborRatios.Location = New System.Drawing.Point(32, 53)
+        Me.dgvLaborRatios.Name = "dgvLaborRatios"
+        Me.dgvLaborRatios.Size = New System.Drawing.Size(509, 261)
+        Me.dgvLaborRatios.TabIndex = 66
         '
         'lblLocalOffice
         '
@@ -47,20 +51,49 @@ Partial Class frmLaborRates
         Me.lblLocalOffice.TabIndex = 74
         Me.lblLocalOffice.Text = "Local Office:"
         '
+        'dgvOverTime
+        '
+        Me.dgvOverTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvOverTime.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvOverTime.Location = New System.Drawing.Point(32, 338)
+        Me.dgvOverTime.Name = "dgvOverTime"
+        Me.dgvOverTime.Size = New System.Drawing.Size(509, 286)
+        Me.dgvOverTime.TabIndex = 75
+        '
+        'btnExit
+        '
+        Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExit.Image = CType(resources.GetObject("btnExit.Image"), System.Drawing.Image)
+        Me.btnExit.Location = New System.Drawing.Point(508, 1)
+        Me.btnExit.Name = "btnExit"
+        Me.btnExit.Size = New System.Drawing.Size(46, 46)
+        Me.btnExit.TabIndex = 76
+        Me.btnExit.TabStop = False
+        Me.btnExit.Tag = "Exit System"
+        Me.btnExit.Text = "Exit"
+        Me.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        '
         'frmLaborRates
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(566, 326)
+        Me.ClientSize = New System.Drawing.Size(566, 636)
+        Me.ControlBox = False
+        Me.Controls.Add(Me.btnExit)
+        Me.Controls.Add(Me.dgvOverTime)
         Me.Controls.Add(Me.lblLocalOffice)
-        Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.dgvLaborRatios)
         Me.Name = "frmLaborRates"
         Me.Text = "Labor Rates"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvLaborRatios, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvOverTime, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
+    Friend WithEvents dgvLaborRatios As System.Windows.Forms.DataGridView
     Friend WithEvents lblLocalOffice As System.Windows.Forms.Label
+    Friend WithEvents dgvOverTime As System.Windows.Forms.DataGridView
+    Private WithEvents btnExit As System.Windows.Forms.Button
 End Class

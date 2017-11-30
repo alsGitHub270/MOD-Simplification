@@ -2326,7 +2326,7 @@ Partial Class CM_MAIN_frm
         Me.btnSuptReview.BackColor = System.Drawing.SystemColors.Control
         Me.btnSuptReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSuptReview.Image = CType(resources.GetObject("btnSuptReview.Image"), System.Drawing.Image)
-        Me.btnSuptReview.Location = New System.Drawing.Point(531, 5)
+        Me.btnSuptReview.Location = New System.Drawing.Point(528, 6)
         Me.btnSuptReview.Name = "btnSuptReview"
         Me.btnSuptReview.Size = New System.Drawing.Size(51, 46)
         Me.btnSuptReview.TabIndex = 109

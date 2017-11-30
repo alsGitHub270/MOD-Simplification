@@ -19,7 +19,7 @@ Partial Friend Class CM_MAIN_frm
     Dim svCollection As New System.Collections.ArrayList(10)
 
     Dim dsTemp As DataSet
-    Dim isDirty As Boolean = False
+
     Dim addingNewRow As Boolean = False
     Dim initializing As Boolean
     Dim id_to_copy As String = ""
@@ -211,6 +211,9 @@ Partial Friend Class CM_MAIN_frm
         End If
 
         CreateLaborRateDataset()
+
+        CreateOverTimeDataset()
+
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("id"), dsCadre.Tables("BaseGroup").Columns("id"))
         dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("alt_id"), dsCadre.Tables("AltGroup").Columns("id"))
@@ -227,6 +230,49 @@ Partial Friend Class CM_MAIN_frm
         Next
         ReadInLaborRates()
     End Sub
+
+    Private Sub CreateOverTimeDataset()
+        Dim column As DataColumn
+
+        dtOverTime = dsCadre.Tables.Add("OverTime")
+
+        dtOverTime.Columns.Add("rate_year")
+        For Each row As DataRow In dtSummaryGroup.Rows
+            column = New DataColumn
+            column.DataType = typeInt
+            column.DefaultValue = 5
+            column.ColumnName = "work_days_" & row("Bank")
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "work_hours_" & row("Bank")
+            column.DataType = typeInt
+            column.DefaultValue = 8
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "#_teams_" & row("Bank")
+            column.DataType = typeInt
+            column.DefaultValue = 1
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "ot%_" & row("Bank")
+            column.DataType = typeSingle
+            column.DefaultValue = 0
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "ot_labor_inefficiency_" & row("Bank")
+            column.DataType = typeSingle
+            column.DefaultValue = 0
+            dtOverTime.Columns.Add(column)
+        Next
+
+        ReadInOvertime()
+
+    End Sub
+
     Private Sub ReadInLaborRates()
         Dim json As String
         Dim rate_year As Integer = Year(Now)
@@ -262,6 +308,7 @@ Partial Friend Class CM_MAIN_frm
         End If
     End Sub
     Private Sub RecalculateLaborRates()
+
         Dim rate_year As Integer = Year(Now)
         Dim adjustment As Decimal = 1.035
         Dim st_rate As Decimal
@@ -269,27 +316,29 @@ Partial Friend Class CM_MAIN_frm
         Dim myList As New List(Of String)()
         Dim installation_office As String
         Dim x As Integer
+
         If dtLaborRates.Rows.Count = 0 Then
             ReadInLaborRates()
         End If
-        'Me.btnLaborRates.Enabled = True
+
         If initializing Then
             installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
         Else
             installation_office = Me.cboInstallingOffice.Text
         End If
+
         Try
-            x = CInt(dtLaborRates(0).Item("rate_year")) - rate_year
+
             Dim sSQL As String = "SELECT STRate, OTRate " & _
                     "FROM [Rate (MOD Labor)] " & _
                     "WHERE Office = '" & installation_office & "';"
+
             myList = GetDataFromOptions(sSQL, True)
+            x = CInt(dtLaborRates(0).Item("rate_year")) - rate_year
+
             For i As Integer = 0 To dtLaborRates.Rows.Count - 1
                 st_rate = myList(0) * adjustment ^ x
                 ot_rate = myList(1) * adjustment ^ x
-
-                'For Each row As DataRow In dtLaborRates.Rows
-
                 dtLaborRates.Rows(i).Item("st_rate") = Math.Round(st_rate, 2)
                 dtLaborRates.Rows(i).Item("ot_rate") = Math.Round(ot_rate, 2)
                 x += 1
@@ -298,6 +347,7 @@ Partial Friend Class CM_MAIN_frm
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Processing Labor Rates", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
     End Sub
 
 
@@ -345,6 +395,48 @@ Partial Friend Class CM_MAIN_frm
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error in InitializeLaborRates", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub ReadInOvertime()
+        Dim json As String
+        Dim OT_not_found As Boolean = True
+
+        If File.Exists(CM_file) Then
+            Using sr As StreamReader = New StreamReader(CM_file)  ' to be changed to CM_file
+                json = sr.ReadToEnd
+            End Using
+
+            Dim ser As JObject = JObject.Parse(json)
+            Dim data As List(Of JToken) = ser.Children().ToList
+
+            For Each item As JProperty In data
+                item.CreateReader()
+                Select Case item.Name
+                    Case "OverTime"
+                        For Each ot As JObject In item.Values
+                            OT_not_found = False
+                            Dim workRow As DataRow = dtOverTime.NewRow
+                            For i As Integer = 0 To dtOverTime.Columns.Count - 1
+                                workRow.Item(i) = ot.Item(dtOverTime.Columns(i).ColumnName)   ' Column names and key from json must be the same. 
+                            Next
+                            dtOverTime.Rows.Add(workRow)
+                        Next
+                End Select
+            Next
+        End If
+        If OT_not_found Then
+            InitializeOverTime()
+        End If
+    End Sub
+
+    Private Sub InitializeOverTime()
+
+        For Each row As DataRow In dtLaborRates.Rows
+            Dim newRow As DataRow = dtOverTime.NewRow
+            newRow("rate_year") = row.Item("rate_year")
+            dtOverTime.Rows.Add(newRow)
+        Next
+        isDirty = True
     End Sub
 
     Private Sub btnEstimate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEstimate.Click

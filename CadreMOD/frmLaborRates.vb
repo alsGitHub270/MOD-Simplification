@@ -9,25 +9,59 @@ Public Class frmLaborRates
         Dim summary_row As Integer = 0
         Try
 
-            DataGridView1.DataSource = dtLaborRates
+            dgvLaborRatios.DataSource = dtLaborRates
 
-            DataGridView1.Columns(0).ReadOnly = True
-            DataGridView1.Columns(0).HeaderText = "Rate Year"
-            DataGridView1.Columns(1).HeaderText = "ST Rate"
-            DataGridView1.Columns(2).HeaderText = "OT Rate"
+            dgvLaborRatios.Columns(0).ReadOnly = True
+            dgvLaborRatios.Columns(0).HeaderText = "Rate Year"
+            dgvLaborRatios.Columns(1).HeaderText = "ST Rate"
+            dgvLaborRatios.Columns(2).HeaderText = "OT Rate"
 
             For i = 3 To dtLaborRates.Columns.Count - 1
-                DataGridView1.Columns(i).HeaderText = "Labor Ratio (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
+                dgvLaborRatios.Columns(i).HeaderText = "Labor Ratio (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
                 summary_row += 1
             Next
 
-            DataGridView1.AutoResizeColumns()
+            dgvLaborRatios.AutoResizeColumns()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Building Labor Rate Grid")
 
         End Try
 
+
+        summary_row = 0
+
+        For i = 1 To dtOverTime.Columns.Count - 1 Step 5
+            Try
+                dgvOverTime.DataSource = dtOverTime
+
+                dgvOverTime.Columns(0).ReadOnly = True
+                dgvOverTime.Columns(0).HeaderText = "Rate Year"
+                dgvOverTime.Columns(i).HeaderText = "# of Work Hrs (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
+                dgvOverTime.Columns(i + 1).HeaderText = "# of Work Days (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
+                dgvOverTime.Columns(i + 2).HeaderText = "# of Teams (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
+                dgvOverTime.Columns(i + 3).HeaderText = "OT % Bank (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
+                dgvOverTime.Columns(i + 4).HeaderText = "OT Labor Inefficiency (" & dtSummaryGroup.Rows(summary_row).Item("Bank") & ")"
+                summary_row += 1
+            Catch ex As Exception
+
+        End Try
+
+        dgvOverTime.AutoResizeColumns()
+        Next
+
         Me.lblLocalOffice.Text = "Local Office:  " & localOffice
+
     End Sub
 
+    Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
+        Me.Dispose()
+    End Sub
+
+    Private Sub dgvLaborRatios_CellValueChanged(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgvLaborRatios.CellValueChanged
+        isDirty = True
+    End Sub
+
+    Private Sub dgvOverTime_CellValueChanged(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgvOverTime.CellValueChanged
+        isDirty = True
+    End Sub
 End Class

@@ -26,6 +26,7 @@
     Public dtContactGroup As DataTable
     Public dtBuildingInfo As DataTable
     Public dtLaborRates As DataTable
+    Public dtOverTime As DataTable
 
     Public BookingType As Integer
     Public DefaultTaxCode As String = ""
@@ -48,6 +49,7 @@
 
     Public EstimateModified As Boolean
     Public isInitializingComponent As Boolean
+    Public isDirty As Boolean = False
 
     Public gsCommand As String = ""
     Public OpportunityID As String = String.Empty
