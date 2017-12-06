@@ -1953,8 +1953,11 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub btnContact_Click(sender As System.Object, e As System.EventArgs) Handles btnContact.Click
-        frmContacts.ShowDialog()
+        Using obj As New frmContacts
+            obj.ShowDialog()
+        End Using
     End Sub
+
     Private Sub cmbSeismicZone_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles cboSeismicZone.Leave, cboSeismicZone.SelectedIndexChanged
         ValidateTextBoxInput_Text(Me, cboSeismicZone, ENTRY_NOT_AN_INTEGER, True)
         If Not initializing Then isDirty = True
@@ -2837,14 +2840,17 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnLaborRates_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLaborRates.Click
 
-        Dim obj As New frmLaborRates
+        'Dim obj As New frmLaborRates
         If Me.cboInstallingOffice.Text = "" Then
             MessageBox.Show("Please select an Installing Office to calculate Labor Rates", "Missing Installing Office", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             Exit Sub
         End If
         Try
-            obj.localOffice = Me.cboInstallingOffice.Text
-            obj.ShowDialog()
+            Using obj As New frmLaborRates
+                obj.localOffice = Me.cboInstallingOffice.Text
+                obj.ShowDialog()
+            End Using      ' calls dispose automatically
+
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

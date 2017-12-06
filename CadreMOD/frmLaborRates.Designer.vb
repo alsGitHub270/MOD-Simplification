@@ -53,6 +53,7 @@ Partial Class frmLaborRates
         '
         'dgvOverTime
         '
+        Me.dgvOverTime.AllowUserToDeleteRows = False
         Me.dgvOverTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvOverTime.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
