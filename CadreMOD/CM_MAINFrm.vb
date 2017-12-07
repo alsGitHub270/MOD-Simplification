@@ -454,11 +454,13 @@ Partial Friend Class CM_MAIN_frm
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
             Case "Master", "Base"
-                frmEstimatingBase.Show()
-                Me.Hide()
+                Me.ShowInTaskbar = False
+                frmEstimatingBase.ShowDialog()
+                Me.ShowInTaskbar = True
             Case "Alt"
+                Me.ShowInTaskbar = False
                 frmEstimatingAlt.ShowDialog()
-                ' Me.Hide()
+                Me.ShowInTaskbar = True
             Case Else
         End Select
 
@@ -842,11 +844,11 @@ Partial Friend Class CM_MAIN_frm
         UseCurCol = e.Column
 
         ProcessNegSummaryTotals()
-
+         
     End Sub
     Private Sub FpSpread1_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
         If Not initializing Then isDirty = True
-        CalculateFinalBankPrice()
+        CalculateC1_FinalBankPrice()
         SetSummaryC1Colors()
         SetBaseAltC1Colors()
     End Sub
@@ -1298,15 +1300,12 @@ Partial Friend Class CM_MAIN_frm
                         ChildSheetView1.SortRows(1, True, True)
                         ChildSheetView1.SetRowExpandable(0, False)
 
-                        'percentType.ReadOnly = True
-                        'ChildSheetView1.Cells(0, 19).CellType = percentType
-
+                        percentType.ReadOnly = True
+                        ChildSheetView1.Cells(0, 20).CellType = percentType
+                        ChildSheetView1.Cells(1, 20).CellType = percentType
                         ChildSheetView1.Cells(0, 23).Locked = False
+
                         SetBaseAltC1Colors()
-
-
-                        'ChildSheetView1.Cells(0, 7).Locked = False
-                        ' ChildSheetView1.Cells(0, 7).BackColor = Color.White
 
                         Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
                         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
@@ -1462,7 +1461,7 @@ Partial Friend Class CM_MAIN_frm
             End If
             baseID = ChildSheetView.Cells(baseRowIndex, 4).Value
             thisRowDescription = "Alt"
-            
+
             default_c1 = CalculateDefaultC1()
 
             dsCadre.Tables("AltGroup").Rows.Add(New Object() {thisRowDescription, baseID, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0})
@@ -2069,6 +2068,9 @@ Partial Friend Class CM_MAIN_frm
         _newRow("BaseGroup") = "Master"
         _newRow("alt_id") = ""
 
+        'TODO lock base C1
+
+
         dtBaseGroup.Rows.Add(_newRow)
 
         isDirty = True
@@ -2084,6 +2086,11 @@ Partial Friend Class CM_MAIN_frm
             ChildSheetView1.RemoveRows(0, 1)
             isDirty = True
         End If
+
+        '  "Unlock" C1
+        Dim percentType As New FarPoint.Win.Spread.CellType.PercentCellType
+        percentType.DecimalPlaces = 2
+        ChildSheetView1.Cells(0, 20).CellType = percentType
 
         Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "openned.png"), FarPoint.Win.RenderStyle.Normal)
         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
@@ -2252,6 +2259,8 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub CM_MAIN_frm_Activated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Activated
         sprTotals.Refresh()
+        FpSpread1.Refresh()
+        FpSpread1.ActiveSheet.ExpandRow(UseCurRow, True)
     End Sub
 
     Private Sub ProcessNegSummaryTotals()
@@ -2858,14 +2867,13 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Public Sub CalculateFinalBankPrice()
-        CalculateFinalBankPriceSummary()
-        CalculateFinalBankPriceBase()
-        CalculateFinalBankPriceAlt()
-
+    Public Sub CalculateC1_FinalBankPrice()
+        CalculateSummaryC1()
+        CalculateBaseFinalBankPriceOrMasterC1()
+        CalculateAltFinalBankPrice()
     End Sub
 
-    Private Sub CalculateFinalBankPriceSummary()
+    Private Sub CalculateSummaryC1()
 
         Dim sales_commission As Double
 
@@ -2879,26 +2887,52 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub CalculateFinalBankPriceBase()
+    Private Sub CalculateBaseFinalBankPriceOrMasterC1()
 
         Dim sales_commission As Double
 
         For Each row As DataRow In dtBaseGroup.Rows
             If Not IsDBNull(row.Item("Total_Bank_Cost")) Then
                 sales_commission = IIf(IsDBNull(row.Item("Sales_Commission")), 0, row.Item("Sales_Commission"))
-                If row.Item(0) <> "Master" Then
-                    row.Item("Bank_Final_Price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
-                Else
+                If row.Item(0) = "Master" Then
                     row.Item("C1") = (((row.Item("Bank_Final_Price") - sales_commission)) / (row.Item("Total_Bank_Cost"))) - 1.0
                     row.Item("C1") = Math.Round(row.Item("C1"), 4)
+                Else
+                    row.Item("Bank_Final_Price") = (row.Item("Total_Bank_Cost") * (1.0 + row.Item("C1"))) + sales_commission
                 End If
             End If
 
         Next row
 
+        UpdateSummary()
+
     End Sub
 
-    Private Sub CalculateFinalBankPriceAlt()
+    Private Sub UpdateSummary()
+        Dim _id As String = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
+        Dim _level As String = String.Empty
+
+        If CurrentGOData_Typ.EstimateLevel = "Base" Then
+            _level = "Base"
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Master" Then
+            _level = "Master"
+        End If
+
+        If _level <> String.Empty Then
+            Dim dataRow() As Data.DataRow
+            dataRow = dtBaseGroup.Select("id = '" & _id & "' and BaseGroup = '" & _level & "'")
+
+
+            Dim summaryRow() As Data.DataRow
+            summaryRow = dtSummaryGroup.Select("id = '" & _id & "'")
+
+            summaryRow(0)("C1") = dataRow(0)("C1")
+            summaryRow(0)("Bank_Final_Price") = dataRow(0)("Bank_Final_Price")
+
+        End If
+    End Sub
+
+    Private Sub CalculateAltFinalBankPrice()
 
         Dim sales_commission As Double
 

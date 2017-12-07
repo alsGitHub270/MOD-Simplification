@@ -233,6 +233,7 @@ Public Class frmEstimatingBase
         Dim UseTabName As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
+        UseMaterialItemRecordSet = New ADODB.Recordset
         SetAssociatedFieldNames()
         txtHdrBldgName.Text = Contracts.JobName
         txtHdrGONegNum.Text = HoldUniqueActivity
@@ -257,20 +258,27 @@ Public Class frmEstimatingBase
                 OrderTab.Text = CurrentGOData_Typ.CurrentUnits & ORD_Suffix
             End If
         Else
-            UseTabName = FormatTabName(JSONFileList(0).Name)
-            CarTab.Text = UseTabName & EST_Suffix
-            If JSONFileList(0).Name.ToUpper.Contains("MODORD") Then
-                OrderTab.Text = UseTabName & ORD_Suffix
-            End If
-            If JSONFileList.Count >= 2 Then
-                For iIndex As Integer = 1 To JSONFileList.Count - 1
-                    UseTabName = FormatTabName(JSONFileList(iIndex).Name)
-                    If JSONFileList(iIndex).Name.ToUpper.Contains("MODEST") Then
+            Dim FoundFirstEstTab As Boolean = False, FoundFirstOrdTab As Boolean = False
+            For iIndex As Integer = 0 To JSONFileList.Count - 1
+                UseTabName = FormatTabName(JSONFileList(iIndex).Name)
+                If JSONFileList(iIndex).Name.ToUpper.Contains("MODEST") Then
+                    If FoundFirstEstTab Then
                         TabControl1.TabPages.Add(UseTabName & EST_Suffix)
-                    ElseIf JSONFileList(iIndex).Name.ToUpper.Contains("MODORD") Then
-                        TabControl1.TabPages.Add(UseTabName & ORD_Suffix)
+                    Else
+                        CarTab.Text = UseTabName & EST_Suffix
+                        FoundFirstEstTab = True
                     End If
-                Next iIndex
+                ElseIf JSONFileList(iIndex).Name.ToUpper.Contains("MODORD") Then
+                    If FoundFirstOrdTab Then
+                        TabControl1.TabPages.Add(UseTabName & ORD_Suffix)
+                    Else
+                        OrderTab.Text = UseTabName & ORD_Suffix
+                        FoundFirstOrdTab = True
+                    End If
+                End If
+            Next iIndex
+            If Not FoundFirstOrdTab Then
+                OrderTab.Text = UseTabName & ORD_Suffix
             End If
         End If
         If CurrentGOData_Typ.EstimateLevel = "Base" Then
@@ -299,6 +307,8 @@ Public Class frmEstimatingBase
                 UseIndex += 1
             End If
         Next Cntrl
+        UseMaterialItemRecordSet = New ADODB.Recordset
+        UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         DisplayEST_vs_ORD()
         isInitializingComponent = False
         Me.Cursor = Cursors.Default
@@ -330,17 +340,17 @@ Public Class frmEstimatingBase
                 SaveAll()
             End If
         End If
+        UseMaterialItemRecordSet.Close()
         EndProgram()
 
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
 
+        UseMaterialItemRecordSet.Close()
         UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         Select Case PromptForSave()
             Case MsgBoxResult.Yes, MsgBoxResult.No, 0
-                Me.Cursor = Cursors.WaitCursor
                 Me.Cursor = Cursors.Default
-                CM_MAIN_frm.Show()
                 Me.Dispose()
             Case Else
         End Select
@@ -681,16 +691,10 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub MachineType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub DriveType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub BillOfMaterials_spr_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles BillOfMaterials_spr.Change
         Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
@@ -749,7 +753,7 @@ Public Class frmEstimatingBase
     Private Sub DisplayEST_vs_ORD()
 
         If TabControl1.SelectedTab.Text.IndexOf(EST_Suffix) > -1 Then
-            PopulateEstimating()
+            PopulateEstimating(True)
             Set_Fields_Grey_EST()
             CarData_fra.Visible = True
             CarData_fra.BringToFront()
@@ -812,7 +816,7 @@ Public Class frmEstimatingBase
         BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_SPEC_HRS, TotalSpecHours)
 
     End Sub
-    Private Sub PopulateEstimating()
+    Private Sub PopulateEstimating(ByVal ResetData As Boolean)
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         Dim dt As DataTable, dr As DataRow
@@ -831,15 +835,16 @@ Public Class frmEstimatingBase
                     CurActiveChildCol = ChildSheetView1.ActiveColumnIndex()
                 End If
             End If
-            BillOfMaterials_spr.ActiveSheet.RowCount = 0
-            CreateEstimatingDataSet(UseUnits)
-            model = BillOfMaterials_spr.ActiveSheet.Models.Data
-            For Each dt In EstimatingDataset.Tables
-                dt.DefaultView.AllowNew = False
-            Next dt
-            model.DataMember = "EstimatingData"
-            model.DataSource = EstimatingDataset
-
+            If ResetData Then
+                BillOfMaterials_spr.ActiveSheet.RowCount = 0
+                CreateEstimatingDataSet(UseUnits)
+                model = BillOfMaterials_spr.ActiveSheet.Models.Data
+                For Each dt In EstimatingDataset.Tables
+                    dt.DefaultView.AllowNew = False
+                Next dt
+                model.DataMember = "EstimatingData"
+                model.DataSource = EstimatingDataset
+            End If
             If GeneralInfo.Rows.Count = 1 Then
                 dr = GeneralInfo.Rows(0)
                 For Each Cntrl As Control In GeneralInformation_fra.Controls
@@ -974,6 +979,7 @@ Public Class frmEstimatingBase
             Me.Cursor = Cursors.Default
 
         Catch ex As Exception
+            UseMaterialItemRecordSet.Close()
             MessageBox.Show(Err.Description, "Error Populating Estimating", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
@@ -982,7 +988,7 @@ Public Class frmEstimatingBase
     Private Sub PopulateOrdering()
 
     End Sub
-    Public Sub SaveEstimatingData()
+    Private Sub UpdateGeneralInfoDatatable()
         Dim _row As DataRow
         Dim is_new_row As Boolean = False
 
@@ -1011,6 +1017,16 @@ Public Class frmEstimatingBase
             If is_new_row Then
                 GeneralInfo.Rows.Add(_row)
             End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error updating General Information", "Updating General Information", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+    End Sub
+    Public Sub SaveEstimatingData()
+
+        Try
+            UpdateGeneralInfoDatatable()
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                        FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON"
             If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
@@ -1018,10 +1034,9 @@ Public Class frmEstimatingBase
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error saving data", "Error Saving Estimating Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error saving data", "Saving Estimating Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
-
 
     End Sub
     Public Sub SaveOrderingData()
@@ -1070,240 +1085,147 @@ Public Class frmEstimatingBase
         UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         SaveAll()
     End Sub
-    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
+    Private Sub GeneralInfoValueChanged()
+
         If Not isInitializingComponent Then
+            UpdateGeneralInfoDatatable()
+            PopulateEstimating(False)
             FormIsDirty = True
+            Set_Fields_Grey_EST()
         End If
+
+    End Sub
+    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub SpeedNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub NumberofStopsTotal_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub NumberofStopsFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub NumberofStopsRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
-        Set_Fields_Grey_EST()
+        GeneralInfoValueChanged()
     End Sub
     Private Sub PowerSupply_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PowerSupply_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Application_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Application_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub LayoutRequirements_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LayoutRequirements_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub DoorOperatorTypeFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeFront_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningWidthFtFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningWidthInFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningHeightFtFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningHeightInFront_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInFront_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub DoorOperatorTypeRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeRear_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningWidthFtRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningWidthInRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningHeightFtRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarDoorOpeningHeightInRear_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInRear_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub CarWeight_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarWeight_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub HoistMotorHP_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorHP_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub HoistMotorRpm_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorRpm_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub MachineLocation_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineLocation_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub RopingNew_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub TopFloorToOverhead_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Travel_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Travel_txt.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub PitDepth_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PitDepth_txt.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub RiserQtyFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyFront_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub RiserQtyRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyRear_Cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub FixtureFinish_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FixtureFinish_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub DTRequestedShipDate_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DTRequestedShipDate.ValueChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub BankCompleteDate_txt_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BankCompleteDate_txt.ValueChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub ExistingControlVendor_lst_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub ExistingControlVendor_lst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub ExistingControlModel_lst_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub ExistingControlModel_lst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.TextChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub OriginalGONumberAvailable_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGONumberAvailable_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub OriginalGOnumber_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGOnumber_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub PEStampRequired_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PEStampRequired_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub ShortFloorOperation_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShortFloorOperation_chk.CheckedChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Permits_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Permits_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Bonds_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Bonds_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub ExpensesPerDay_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDay_txt.TextChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub GatewayReviewRequired_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GatewayReviewRequired_chk.CheckedChanged
-        If Not isInitializingComponent Then
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Destination_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.SelectedIndexChanged
-        If Not isInitializingComponent Then
-            PopulateEstimating()
-            FormIsDirty = True
-        End If
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Copy_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Copy_cmd.Click
         ShowCopyMergeDialog(Copy_cmd.Tag)
@@ -1372,15 +1294,19 @@ Public Class frmEstimatingBase
                 SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine &
                                       "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
                 If SaveResponse = MsgBoxResult.Yes Then
+                    Me.Cursor = Cursors.WaitCursor
                     SaveEstimatingData()
                     ArchiveFiles()
+                    Me.Cursor = Cursors.Default
                 End If
             Else
                 SaveResponse = MsgBox("You must save the current Ordering Data before continuing!" & Environment.NewLine &
                                       "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
                 If SaveResponse = MsgBoxResult.Yes Then
+                    Me.Cursor = Cursors.WaitCursor
                     SaveOrderingData()
                     ArchiveFiles()
+                    Me.Cursor = Cursors.Default
                 End If
             End If
         End If
@@ -1449,6 +1375,7 @@ Public Class frmEstimatingBase
                                 LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
                             Case MAT_COL_MATERIAL_COST_EST
                                 If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text = "RL" Or
+                                   ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "PL" Or
                                    String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text) Or
                                    ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text = "Refurbish" Then
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = False
@@ -1493,7 +1420,7 @@ Public Class frmEstimatingBase
         OrderingForms_con.Controls.Add(NewGovForm)
 
     End Sub
-    Private Sub btnTorque_Click(sender As System.Object, e As System.EventArgs) Handles btnTorque.Click
+    Private Sub btnTorque_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTorque.Click
         TorqueFrm.ShowDialog()
     End Sub
     Private Sub BillOfMaterials_spr_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles BillOfMaterials_spr.KeyDown

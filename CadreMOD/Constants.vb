@@ -1,12 +1,11 @@
 ﻿Module Constants
     ' Contract Manager
-    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 11/08/2017"
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 12/05/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
     ' Public DEFAULT_C1 As Single = 0.2
 
-    'New Machines
     Public Const MACHINE_FMM200 As String = "FMM200"
 
     ' dB Operations
@@ -33,9 +32,14 @@
     Public Const UPDATE_PITDRAW As Integer = 20
     Public Const NON_CRITICAL_ERROR As Integer = 21
     Public Const CRITICAL_ERROR As Integer = 22
+
     Public Const MODDATA_DATABASE_NAME As String = "MODData.accdb"
+
+    ' Building Codes
     Public Const BUILDING_CODE_TABLE_QUERY_NAME As String = "BUILDING_CODE_TABLE_SQL"
     Public Const BUILDING_CODE_ONLY_QUERY_NAME As String = "BUILDING_CODE_ONLY_SQL"
+
+    ' Error Code Constants
     Public Const ENTRY_VALID As Integer = 0
     Public Const ENTRY_NOT_AN_INTEGER As Integer = 1
     Public Const ENTRY_NOT_A_NUMBER As Integer = 2
@@ -45,13 +49,18 @@
     Public Const ENTRY_NOT_BLANK As Integer = 6
     Public Const ENTRY_HAS_TOO_MANY_DECIMALS As Integer = 7
 
+    ' Machine types ------------------------------------
     Public Const HYDRO_TYPE As String = "Hydro"
     Public Const GEARED_TYPE As String = "Geared"
     Public Const GEARLESS_TYPE As String = "Gearless"
+
+    ' Drive types ------------------------------------
     Public Const AC_TYPE As String = "AC Non-Regen"
     Public Const AC_REGEN_TYPE As String = "AC Regen"
     Public Const DC_TYPE As String = "SCR/DC"
     Public Const QUATTRO_TYPE As String = "Quattro"
+
+    'Vendors
     Public Const SEC As String = "Schindler"
     Public Const EPCO As String = "EPCO"
     Public Const Gettysburg As String = "Gettysburg"
@@ -105,9 +114,13 @@
     Public Const WARNERDRUM As String = "WARNER DRUM"
     Public Const TYPE_NAME_HERE As String = "<Type Name Here>"
     Public Const MAXTON As String = "Maxton"
+
+    ' Limits
     Public Const MIN_BLDG_FLRS As Integer = 2
     Public Const MAX_BLDG_FLRS As Integer = 126
     Public Const MAX_NUM_UNITS As Integer = 8
+
+    'Door types
     Public Const DOORTYPE_1SSS As String = "1SSS (T1)"
     Public Const DOORTYPE_2SSS As String = "2SSS (T2)"
     Public Const DOORTYPE_1SCO As String = "1SCO (C2)"
@@ -115,6 +128,8 @@
     Public Const DOORTYPE_FREIGHTMANUAL As String = "Freight-Manual"
     Public Const DOORTYPE_FREIGHTPOWER As String = "Freight-Power"
     Public Const DOORTYPE_SWING As String = "Swing"
+
+    'Finishes
     Public Const FINISH_4SS As String = "#4 Stainless Steel"
     Public Const FINISH_4BZ As String = "#4 Bronze"
     Public Const FINISH_8SS As String = "#8 Stainless Steel"
@@ -134,11 +149,7 @@
     Public Const FINISH_CHROME As String = "Chrome"
     Public Const FINISH_GLASS As String = "Glass"
 
-
-    ' Operational Constants
     Public Const APPLICATION_INI_FILE_NAME As String = "CadreMO.INI"
-
-    ' From CRM.vb
     Public Const Status_OpportunityInProgress As String = "2 - Opp In Progress"
     Public Const Status_OpportunityOnHold As String = "2 - Opp On Hold"
     Public Const Status_OpportunityLost As String = "2 - Opp Lost"
@@ -149,23 +160,19 @@
     Public Const Status_OfferOnHold As String = "4 - Offer On Hold"
     Public Const Status_OfferWon As String = "4 - Offer Won"
     Public Const Status_OfferLost As String = "4 - Offer Lost"
-
     Public Const NOTES_BOOKING_DATABASE As String = "cdreup.nsf"
     Public Const NOTES_BOOKING_DATABASE_TEST As String = "testCdreup.nsf"
-
-    'Bid Types
     Public Const BID_TYPE_CAPITAL_PLAN As String = "Capital Plan"
     Public Const BID_TYPE_FIRM_BID As String = "Firm Bid"
-
     Public Const USER_DIRECTOR As String = "YGNSLSPDRZNA" ' C CRM WebClient Business Role   Sales Director
     Public Const USER_MANAGER As String = "YGNSLSPMGZNA" ' C CRM WebClient Business Role   Sales Manager
     Public Const USER_SALES As String = "YGNSLSPROZNA" ' C CRM WebClient Business Role   Sales Professional
     Public Const USER_ENGINEER As String = "YGNSLSENGZNA" ' C CRM WebClient Business Role   Engineer
-
     Public Const USER_QM_SALES As String = "YGC_SALPRO"
     Public Const USER_QM_DIRECTOR As String = "YGC_SALDIR"
     Public Const USER_QM_MANAGER As String = "YGC_SALMAN"
 
+    'Run Configuration
     Public Const NUMBEROFTYPES As Integer = 10
     Public Const REUSE_TYPE As Integer = 0
     Public Const REPLACE_TYPE As Integer = 1
@@ -177,10 +184,13 @@
     Public Const NONE_TYPE As Integer = 7
     Public Const OTHER_TYPE As Integer = 8
     Public Const QUOTE_TYPE As Integer = 9
+
     Public Const PreferredScreenWidth As Integer = 1600
     Public Const PreferredScreenHeight As Integer = 900
+
     Public Const GRID_IS_CLEAN As Integer = 0
     Public Const GRID_IS_DIRTY As Integer = 1
+
     Public Const EST_Suffix As String = " [EST]"
     Public Const ORD_Suffix As String = " [ORD]"
 
@@ -188,6 +198,7 @@
     Public typeInt As System.Type = System.Type.GetType("System.Int64")
     Public typeBool As System.Type = System.Type.GetType("System.Boolean")
     Public typeSingle As System.Type = System.Type.GetType("System.Single")
+
     Public Const FREIGHT_RATE As Single = 1.032
     Public Const ENGINEERING_RATE As Single = 1.032
 End Module

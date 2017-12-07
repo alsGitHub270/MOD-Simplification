@@ -2,10 +2,12 @@
 Imports System.Collections.Generic
 Imports System.IO
 Imports Newtonsoft.Json
+
 Module General
 
     Public Function AssignListIndex(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
         Dim result As Boolean = False
+
         If [ThisListBox].Items.Count > 0 Then
             For i As Integer = 0 To ([ThisListBox].Items.Count - 1)
                 If [ThisListBox].Items(i).ToString = ThisValue Then
@@ -15,9 +17,11 @@ Module General
             Next
         End If
         Return result
+
     End Function
     Public Function AssignListIndex_First(ByRef ThisListBox As ComboBox, ByRef ThisValue As String) As Boolean
         Dim result As Boolean = False
+
         If Not AssignListIndex(ThisListBox, ThisValue) Then
             If [ThisListBox].Items.Count > 0 Then
                 result = True
@@ -26,6 +30,7 @@ Module General
             End If
         End If
         Return result
+
     End Function
     Public Sub SelectInputArea(ByRef ThisControl As Object, ByRef ThisStartSel As Byte, ByRef ThisStartLen As Byte)
 
@@ -63,6 +68,7 @@ Module General
     End Sub
     Public Sub DAO2ADO(ByRef ADODBConnection As ADODB.Connection, ByRef ADOCatalogConnection As ADOX.Catalog, ByRef sDBPath As String, ByRef sDBName As String, ByVal AsReadOnly As Boolean)
         Dim sConnectionString As String = ""
+
         Try
             If Strings.Right(sDBPath, 1) <> "\" Then
                 sDBPath = sDBPath & "\"
@@ -81,16 +87,21 @@ Module General
             ADODBConnection.Open()
             ADODBConnection.CursorLocation = ADODB.CursorLocationEnum.adUseClient
             ADOCatalogConnection = New ADOX.Catalog
+
             ADOCatalogConnection.ActiveConnection = ADODBConnection
+
         Catch
             MessageBox.Show(Conversion.ErrorToString(), "DAO2ADO", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
         End Try
+
     End Sub
     Private Function ConvertFieldPropertyToString(ByVal PropValue As String) As String
         Return PropValue
     End Function
     Private Function FixQueryName(ByRef ThisQueryName As String) As String
         Dim s As String = ThisQueryName.Trim()
+
         If Not s.StartsWith("[") Then
             If s.IndexOf(" ") >= 0 Then
                 s = "[" & s & "]"
@@ -99,9 +110,11 @@ Module General
             s = s.Substring(1, Math.Min(s.Length - 2, s.Length - 1))
         End If
         Return s
+
     End Function
     Public Function SQLfromCatalog(ByRef ThisQueryName As String, ByRef lADOCatalogDB As ADOX.Catalog) As String
         Dim cmd As New ADODB.Command
+
         Try
             cmd = lADOCatalogDB.Procedures.Item(ThisQueryName).Command
         Catch
@@ -112,19 +125,46 @@ Module General
             End Try
         End Try
         Return cmd.CommandText
+
     End Function
+    'Public Sub db2List(ByRef ThisDataBase As ADODB.Connection, ByRef ThisCriteria As String, ByRef ThisControl As ComboBox, ByRef ThisDBFieldName As String, Optional ByRef ThisDBIndexName As String = "", Optional ByRef ThisWhere As String = "", Optional ByRef ThisOrderBy As String = "", Optional ByRef ThisUniqueValues As String = "", Optional ByRef lADOCatalogDB As ADOX.Catalog = Nothing)
+    '    Dim r As Integer
+    '    Dim tempRecordSet As New ADODB.Recordset
+    '    Dim TempStr As String = ""
+
+    '    Query_Execute(ThisDataBase, tempRecordSet, 1, OPEN_RECORD, ThisCriteria, IIf(ThisWhere Is Nothing, String.Empty, CStr(ThisWhere)), , _
+    '                 IIf(ThisOrderBy Is Nothing, String.Empty, ThisOrderBy), IIf(ThisUniqueValues Is Nothing, String.Empty, ThisUniqueValues), , lADOCatalogDB)
+
+    '    While Not tempRecordSet.EOF
+    '        TempStr = tempRecordSet(ThisDBFieldName).Value.ToString
+    '        r = ThisControl.Items.Add(TempStr)
+    '        If ThisDBIndexName <> "" Then
+    '            ThisControl.SetItemData(r, tempRecordSet.Fields(ThisDBIndexName).Value)
+    '        End If
+    '        tempRecordSet.MoveNext()
+    '    End While
+
+    '    Query_Execute(ThisDataBase, tempRecordSet, 1, CLOSE_RECORD)
+
+    'End Sub
     Public Function ValidateTextBoxInput_Text(ByRef ThisForm As Form, ByRef ThisControl As Control, ByRef CheckForThisErrorType As Byte, ByRef AllowZeroLength As Boolean, Optional ByRef minvalue As String = "", Optional ByRef MaxValue As String = "") As Byte
         Dim rc As Byte = ValidateEntry_Common(ThisControl.Text, CheckForThisErrorType, AllowZeroLength, minvalue, MaxValue)
+
         If rc <> ENTRY_VALID Then
+            'MessageHandler_Common(Message_Common_RecordSet, Label_Specific_RecordSet, ThisForm, ThisControl, rc, minvalue, MaxValue)
             Return rc
         ElseIf AllowZeroLength Then
             Return ENTRY_VALID
         Else
             Return ENTRY_VALID
         End If
+
     End Function
     Public Function ValidateEntry_Common(ByRef ThisControlText As String, ByRef CheckForThisErrorType As Byte, ByRef AllowZeroLength As Boolean, Optional ByRef minvalue As String = "", Optional ByRef MaxValue As String = "") As Byte
+
         Dim ReturnCode As Byte = ENTRY_VALID
+
+        ' Critical Errors -----------------------------------------------------------------------------------------------------------------------------
         Select Case CheckForThisErrorType
             Case ENTRY_NOT_A_NUMBER
                 Dim dbNumericTemp As Double
@@ -186,7 +226,9 @@ Module General
                 End If
             Case Else
         End Select
+
         Return ReturnCode
+
     End Function
     Public Function CalculateNumberOfCarsInEstimate(ByRef Units As String) As Integer
         Dim TempLine As String = ""
@@ -194,40 +236,41 @@ Module General
         Dim Pos As Integer
         Dim RngeStart, RngeEnd As Byte
         Dim ReturnVal As Integer = 0
+
         If Not String.IsNullOrEmpty(Units) Then
-        Erase UnitsInEstimate
-        Const Comma As String = ","
-        Dim LowUnit As Byte = 255
-        Dim HighUnit As Byte = 0
-        UnitsInEstimate = Units.Split(New String() {Comma}, StringSplitOptions.None)
-        For Each UnitsInEstimate_item As String In UnitsInEstimate
-            UnitsLine.Append(Comma & UnitsInEstimate_item)
-            Pos = (UnitsInEstimate_item.IndexOf("-") + 1)
-            If Pos = 0 Then
-                TempLine = TempLine & Comma & UnitsInEstimate_item
-                If (UnitsInEstimate_item) < LowUnit Then LowUnit = Conversion.Val(UnitsInEstimate_item)
-                If (UnitsInEstimate_item) > HighUnit Then HighUnit = Conversion.Val(UnitsInEstimate_item)
-            Else
-                RngeStart = Conversion.Val(Strings.Left(UnitsInEstimate_item, 2))
-                RngeEnd = Conversion.Val(Strings.Right(UnitsInEstimate_item, 2))
-                For k As Integer = RngeStart To RngeEnd
-                    TempLine = TempLine & Comma & CStr(k)
-                Next k
-                If RngeStart < LowUnit Then LowUnit = RngeStart
-                If RngeEnd > HighUnit Then HighUnit = RngeEnd
-            End If
-        Next UnitsInEstimate_item
-        TempLine = Strings.Mid(TempLine, 2)
-        UnitsInEstimate = TempLine.Split(",")
-        ReturnVal = UnitsInEstimate.GetUpperBound(0) + 1
+            Erase UnitsInEstimate
+            Const Comma As String = ","
+            Dim LowUnit As Byte = 255
+            Dim HighUnit As Byte = 0
+            UnitsInEstimate = Units.Split(New String() {Comma}, StringSplitOptions.None)
+            For Each UnitsInEstimate_item As String In UnitsInEstimate
+                UnitsLine.Append(Comma & UnitsInEstimate_item)
+                Pos = (UnitsInEstimate_item.IndexOf("-") + 1)
+                If Pos = 0 Then
+                    TempLine = TempLine & Comma & UnitsInEstimate_item
+                    If (UnitsInEstimate_item) < LowUnit Then LowUnit = Conversion.Val(UnitsInEstimate_item)
+                    If (UnitsInEstimate_item) > HighUnit Then HighUnit = Conversion.Val(UnitsInEstimate_item)
+                Else
+                    RngeStart = Conversion.Val(Strings.Left(UnitsInEstimate_item, 2))
+                    RngeEnd = Conversion.Val(Strings.Right(UnitsInEstimate_item, 2))
+                    For k As Integer = RngeStart To RngeEnd
+                        TempLine = TempLine & Comma & CStr(k)
+                    Next k
+                    If RngeStart < LowUnit Then LowUnit = RngeStart
+                    If RngeEnd > HighUnit Then HighUnit = RngeEnd
+                End If
+            Next UnitsInEstimate_item
+            TempLine = Strings.Mid(TempLine, 2)
+            UnitsInEstimate = TempLine.Split(",")
+            ReturnVal = UnitsInEstimate.GetUpperBound(0) + 1
         End If
         Return ReturnVal
+
     End Function
     Public Sub EndProgram()
         Reset_Resolution()
         Environment.Exit(0)
     End Sub
-
     Public Function TranslateOfficeNumber(ByVal sOfficeNumberOld As String, Optional ByVal bSalesOffice As Boolean = False, Optional ByVal bIgnoreShape As Boolean = False) As String
         Dim sWhere As String = "[Office] = " & FixSQLString(sOfficeNumberOld)
         Dim sNewOffice As String = "New Office"
@@ -356,17 +399,14 @@ Module General
             'End If
         End If
         'If Not String.IsNullOrEmpty(sOfficeNumberOld) Then
-            'If Record_FindFirst(ADOConnectionOptionDataBase, ADOCatalogOptionDataBase, "MOD_OFFICE_SQL", sWhere, 0, sNewOffice) = RECORD_NOT_FOUND Then
-            '    TranslateOfficeNumber = sOfficeNumberOld
-            'ElseIf sNewOffice <> "" Then
-            '    TranslateOfficeNumber = sNewOffice
-            'End If
+        '    If Record_FindFirst(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, "MOD_OFFICE_SQL", sWhere, 0, sNewOffice) = RECORD_NOT_FOUND Then
+        '        TranslateOfficeNumber = sOfficeNumberOld
+        '    ElseIf sNewOffice <> "" Then
+        '        TranslateOfficeNumber = sNewOffice
+        '    End If
         'End If
 
     End Function
-
-
-
     Public Function FixSQLString(ByVal ThisFieldValue As String) As String
         Dim j As Byte
         Dim i As Byte = (ThisFieldValue.IndexOf("'"c) + 1)
@@ -379,11 +419,9 @@ Module General
         Return "'" & ThisFieldValue & "'"
 
     End Function
-
     Public Function Get_FileName(ByRef ThisNegNum As String, ByRef ThisBank As String, ByRef ThisAlt As String, ByRef ThisUnits As String) As String
         Return ThisNegNum & ThisBank & ThisAlt & ThisUnits
     End Function
-
     Public Function GetDataFromOptions(ByVal sSQL As String, Optional ByVal multiple_fields As Boolean = False) As List(Of String)
         Dim dataSource As String = HAPDatabasePath & "\" & MODDATA_DATABASE_NAME
         Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
@@ -401,13 +439,10 @@ Module General
                         For i As Integer = 0 To (reader.FieldCount - 1)
                             myList.Add(reader(i).ToString)
                         Next i
-
                     Else
                         result = (reader(0).ToString)
                         myList.Add(result)
                     End If
-
-
                 End If
             End While
 
@@ -415,7 +450,6 @@ Module General
 
         Return myList
     End Function
-
     Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
         Dim Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
@@ -495,54 +529,65 @@ Module General
     End Function
     Public Function SplitUnitsForSave(ByVal CurUnits As String) As String
         Dim ReturnVal As String = String.Empty
+
         CalculateNumberOfCarsInEstimate(CurUnits)
         For iIndex As Integer = UnitsInEstimate.GetLowerBound(0) To UnitsInEstimate.GetUpperBound(0)
             ReturnVal &= UnitsInEstimate(iIndex) & ","
         Next iIndex
         ReturnVal = Strings.Left(ReturnVal, ReturnVal.Length - 1)
         Return ReturnVal
-    End Function
 
+    End Function
     Public Function Serialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim ReturnVal As Boolean = True
+
         Try
             json = JsonConvert.SerializeObject(UseDataset, Formatting.Indented)
             Using sw As StreamWriter = New StreamWriter(UseFileName)
                 sw.Write(json)
             End Using
             CurDirtyFlag = False
+
         Catch ex As Exception
             MessageBox.Show(ex.Message, ErrMsg)
             ReturnVal = False
+
         End Try
         Return ReturnVal
-    End Function
 
+    End Function
     Public Function Deserialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim dsTemp As DataSet
         Dim ReturnVal As Boolean = True
+
         Try
             If File.Exists(UseFileName) Then
                 Using sr As StreamReader = New StreamReader(UseFileName)
                     json = sr.ReadToEnd
                 End Using
+                'JsonSerializerSettings()
+                'NullValueHandling = NullValueHandling.Include
                 dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
-                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)
+                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
+                '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
                 CurDirtyFlag = False
             Else
                 ReturnVal = False
             End If
+
         Catch ex As Exception
             MessageBox.Show(ex.Message, ErrMsg)
             ReturnVal = False
+
         End Try
         Return ReturnVal
-    End Function
 
+    End Function
     Public Sub ArchiveFiles()
         Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
+
         Try
             For Each JSONFile In JSONFileLocation.GetFiles()
                 If JSONFile IsNot Nothing Then
@@ -553,13 +598,14 @@ Module General
                     End If
                 End If
             Next JSONFile
-        Finally
-        End Try
-    End Sub
 
+        Finally
+
+        End Try
+
+    End Sub
     Public Function GetSummaryTotals(ByVal columnName As String) As Single
         Dim sngValue As Double = 0
-
         For Each row As DataRow In dtSummaryGroup.Rows
             If Not IsDBNull(row.Item(columnName)) Then
                 sngValue += row.Item(columnName)
@@ -567,10 +613,8 @@ Module General
         Next row
         Return sngValue
     End Function
-
     Public Function GetSummaryTotals(ByVal column As Integer) As Single
         Dim sngValue As Double = 0
-
         For Each row As DataRow In dtSummaryGroup.Rows
             If Not IsDBNull(row.Item(column)) Then
                 sngValue += row.Item(column)
@@ -592,10 +636,12 @@ Module General
             Case Else
         End Select
         ArchiveFiles()
+
     End Sub
     Public Sub CompareFiles()
         Dim Filesystem As New Scripting.FileSystemObject()
         Dim Name As String
+
         Name = Dir(ReportsPath, FileAttribute.Directory)
         Do While Name <> ""
             If Name <> "." And Name <> ".." Then
@@ -611,10 +657,11 @@ Module General
             End If
             Name = Dir()
         Loop
+
     End Sub
     Public Sub DeleteFiles()
         For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
             File.Delete(FoundFile)
         Next
     End Sub
-   End Module
+End Module

@@ -66,11 +66,8 @@
     'Mod Related Veriables
 
     Public ENABLE_BOOKING_BTN As Boolean
-
     Public DataChangedByProgram As Boolean
-    
     Public All_LocalCodeDep As New All_LocalCodeDepTYP()
-
 
     Public TaxRate As Single = -999.99
 

@@ -390,6 +390,8 @@ Public Class frmEstimatingAlt
                 UseIndex += 1
             End If
         Next Cntrl
+        UseMaterialItemRecordSet = New ADODB.Recordset
+        UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         DisplayEST_vs_ORD()
         isInitializingComponent = False
         Me.Cursor = Cursors.Default
@@ -397,7 +399,6 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub frmEstimatingAlt_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PrepareThisForm()
-
     End Sub
     Private Sub BillOfMaterials_spr_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles BillOfMaterials_spr.ChildViewCreated
 
@@ -422,17 +423,17 @@ Public Class frmEstimatingAlt
                 SaveAll()
             End If
         End If
+        UseMaterialItemRecordSet.Close()
         EndProgram()
 
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
 
+        UseMaterialItemRecordSet.Close()
         UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
         Select Case PromptForSave()
             Case MsgBoxResult.Yes, MsgBoxResult.No, 0
-                Me.Cursor = Cursors.WaitCursor
                 Me.Cursor = Cursors.Default
-                ' CM_MAIN_frm.Show()
                 Me.Dispose()
             Case Else
         End Select
@@ -828,7 +829,7 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
-        PopulateAltData()
+        PopulateAltData(True)
         Set_Fields_Grey_EST()
         CarData_fra.Visible = True
         CarData_fra.BringToFront()
@@ -866,7 +867,7 @@ Public Class frmEstimatingAlt
         BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_SPEC_HRS, TotalSpecHours)
 
     End Sub
-    Private Sub PopulateAltData()
+    Private Sub PopulateAltData(ByVal ResetData As Boolean)
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         Dim dt As DataTable, dr As DataRow
@@ -885,15 +886,16 @@ Public Class frmEstimatingAlt
                     CurActiveChildCol = ChildSheetView1.ActiveColumnIndex()
                 End If
             End If
-            BillOfMaterials_spr.ActiveSheet.RowCount = 0
-            CreateDataSet(UseUnits)
-            model = BillOfMaterials_spr.ActiveSheet.Models.Data
-            For Each dt In AltDataset.Tables
-                dt.DefaultView.AllowNew = False
-            Next dt
-            model.DataMember = "EstimatingData"
-            model.DataSource = AltDataset
-
+            If ResetData Then
+                BillOfMaterials_spr.ActiveSheet.RowCount = 0
+                CreateDataSet(UseUnits)
+                model = BillOfMaterials_spr.ActiveSheet.Models.Data
+                For Each dt In AltDataset.Tables
+                    dt.DefaultView.AllowNew = False
+                Next dt
+                model.DataMember = "EstimatingData"
+                model.DataSource = AltDataset
+            End If
             If GeneralInfo.Rows.Count = 1 Then
                 dr = GeneralInfo.Rows(0)
                 For Each Cntrl As Control In GeneralInformation_fra.Controls
@@ -1045,12 +1047,13 @@ Public Class frmEstimatingAlt
             Me.Cursor = Cursors.Default
 
         Catch ex As Exception
+            UseMaterialItemRecordSet.Close()
             MessageBox.Show(Err.Description, "Error Populating Alt", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
 
     End Sub
-    Public Sub SaveAltData()
+    Private Sub UpdateGeneralInfoDatatable()
         Dim _row As DataRow
         Dim is_new_row As Boolean = False
 
@@ -1079,6 +1082,16 @@ Public Class frmEstimatingAlt
             If is_new_row Then
                 GeneralInfo.Rows.Add(_row)
             End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error updating General Information", "Updating General Information", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+    End Sub
+    Public Sub SaveAltData()
+
+        Try
+            UpdateGeneralInfoDatatable()
             ALT_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
                                                        FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODALT.JSON"
             If Not Serialize(ALT_Filename, AltDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
@@ -1086,7 +1099,7 @@ Public Class frmEstimatingAlt
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error saving data", "Error Saving Alt Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error saving data", "Saving Alt Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         End Try
 
@@ -1102,8 +1115,10 @@ Public Class frmEstimatingAlt
         If FormIsDirty Then
             SaveResponse = MsgBox("You must save the current Alt Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
             If SaveResponse = MsgBoxResult.Yes Then
+                Me.Cursor = Cursors.WaitCursor
                 SaveAltData()
                 ArchiveFiles()
+                Me.Cursor = Cursors.Default
             End If
         End If
         Return SaveResponse
@@ -1134,6 +1149,7 @@ Public Class frmEstimatingAlt
                                 LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
                             Case MAT_COL_MATERIAL_COST_ALT
                                 If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "RL" Or
+                                   ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "PL" Or
                                    String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text) Or
                                    ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text = "Refurbish" Then
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = False
@@ -1223,11 +1239,24 @@ Public Class frmEstimatingAlt
         GeneralInformationBase_fra.Visible = False
         GeneralInformationBase_fra.SendToBack()
     End Sub
+    Private Sub GeneralInfoValueChanged()
+
+        If Not isInitializingComponent Then
+            UpdateGeneralInfoDatatable()
+            PopulateAltData(False)
+            FormIsDirty = True
+            Set_Fields_Grey_EST()
+        End If
+
+    End Sub
     Private Sub CapacityNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.GotFocus
         ShowGeneralInfoBaseValue(CapacityNew_cmb)
     End Sub
     Private Sub CapacityNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.LostFocus
         HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub SpeedNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.GotFocus
         ShowGeneralInfoBaseValue(SpeedNew_cmb)
@@ -1235,11 +1264,17 @@ Public Class frmEstimatingAlt
     Private Sub SpeedNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.LostFocus
         HideGeneralInfoBaseValue()
     End Sub
+    Private Sub SpeedNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
     Private Sub NumberofStopsTotal_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.GotFocus
         ShowGeneralInfoBaseValue(NumberofStopsTotal_cmb)
     End Sub
     Private Sub NumberofStopsTotal_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.LostFocus
         HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub NumberofStopsFront_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.GotFocus
         ShowGeneralInfoBaseValue(NumberofStopsFront_cmb)
@@ -1247,11 +1282,17 @@ Public Class frmEstimatingAlt
     Private Sub NumberofStopsFront_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.LostFocus
         HideGeneralInfoBaseValue()
     End Sub
+    Private Sub NumberofStopsFront_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
     Private Sub NumberofStopsRear_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.GotFocus
         ShowGeneralInfoBaseValue(NumberofStopsRear_cmb)
     End Sub
     Private Sub NumberofStopsRear_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.LostFocus
         HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsRear_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub MachineType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.GotFocus
         ShowGeneralInfoBaseValue(MachineType_cmb)
@@ -1259,11 +1300,17 @@ Public Class frmEstimatingAlt
     Private Sub MachineType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.LostFocus
         HideGeneralInfoBaseValue()
     End Sub
+    Private Sub MachineType_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
     Private Sub DriveType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.GotFocus
         ShowGeneralInfoBaseValue(DriveType_cmb)
     End Sub
     Private Sub DriveType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.LostFocus
         HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub DriveType_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub RopingNew_Cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.GotFocus
         ShowGeneralInfoBaseValue(RopingNew_Cmb)
@@ -1271,11 +1318,17 @@ Public Class frmEstimatingAlt
     Private Sub RopingNew_Cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.LostFocus
         HideGeneralInfoBaseValue()
     End Sub
+    Private Sub RopingNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
     Private Sub TopFloorToOverhead_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.GotFocus
         ShowGeneralInfoBaseValue(TopFloorToOverhead_txt)
     End Sub
     Private Sub TopFloorToOverhead_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.LostFocus
         HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub TopFloorToOverhead_txt_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.TextChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub Travel_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Travel_txt.GotFocus
         ShowGeneralInfoBaseValue(Travel_txt)
@@ -1283,16 +1336,25 @@ Public Class frmEstimatingAlt
     Private Sub Travel_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Travel_txt.LostFocus
         HideGeneralInfoBaseValue()
     End Sub
+    Private Sub Travel_txt_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Travel_txt.TextChanged
+        GeneralInfoValueChanged()
+    End Sub
     Private Sub PitDepth_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.GotFocus
         ShowGeneralInfoBaseValue(PitDepth_txt)
     End Sub
     Private Sub PitDepth_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PitDepth_txt.LostFocus
         HideGeneralInfoBaseValue()
     End Sub
+    Private Sub PitDepth_txt_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.TextChanged
+        GeneralInfoValueChanged()
+    End Sub
     Private Sub Destination_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.GotFocus
         ShowGeneralInfoBaseValue(Destination_cmb)
     End Sub
     Private Sub Destination_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Destination_cmb.LostFocus
         HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub Destination_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
 End Class

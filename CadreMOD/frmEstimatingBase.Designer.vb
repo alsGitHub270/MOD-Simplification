@@ -147,7 +147,6 @@ Partial Class frmEstimatingBase
         Me.btnTorque = New System.Windows.Forms.Button()
         Me.Merge_cmd = New System.Windows.Forms.Button()
         Me.Copy_cmd = New System.Windows.Forms.Button()
-        Me.Supt_cmd = New System.Windows.Forms.Button()
         Me.FreezeSave_btn = New System.Windows.Forms.Button()
         Me.Exit_cmd = New System.Windows.Forms.Button()
         Me.Save_cmd = New System.Windows.Forms.Button()
@@ -1935,7 +1934,6 @@ Partial Class frmEstimatingBase
         Me.fraHdrIcons.Controls.Add(Me.btnTorque)
         Me.fraHdrIcons.Controls.Add(Me.Merge_cmd)
         Me.fraHdrIcons.Controls.Add(Me.Copy_cmd)
-        Me.fraHdrIcons.Controls.Add(Me.Supt_cmd)
         Me.fraHdrIcons.Controls.Add(Me.FreezeSave_btn)
         Me.fraHdrIcons.Controls.Add(Me.Exit_cmd)
         Me.fraHdrIcons.Controls.Add(Me.Save_cmd)
@@ -1953,6 +1951,9 @@ Partial Class frmEstimatingBase
         Me.fraHdrIcons.Size = New System.Drawing.Size(1598, 60)
         Me.fraHdrIcons.TabIndex = 24
         Me.fraHdrIcons.TabStop = False
+        '
+        'btnTorque
+        '
         Me.btnTorque.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnTorque.Location = New System.Drawing.Point(1039, 8)
         Me.btnTorque.Name = "btnTorque"
@@ -1987,19 +1988,6 @@ Partial Class frmEstimatingBase
         Me.Copy_cmd.Tag = "Copy Cars"
         Me.Copy_cmd.Text = "Copy"
         Me.Copy_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        '
-        'Supt_cmd
-        '
-        Me.Supt_cmd.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Supt_cmd.Image = CType(resources.GetObject("Supt_cmd.Image"), System.Drawing.Image)
-        Me.Supt_cmd.Location = New System.Drawing.Point(909, 7)
-        Me.Supt_cmd.Name = "Supt_cmd"
-        Me.Supt_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Supt_cmd.TabIndex = 40
-        Me.Supt_cmd.TabStop = False
-        Me.Supt_cmd.Tag = "Supt"
-        Me.Supt_cmd.Text = "Supt"
-        Me.Supt_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'FreezeSave_btn
         '
@@ -2109,8 +2097,10 @@ Partial Class frmEstimatingBase
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(1602, 795)
+        Me.ControlBox = False
         Me.Controls.Add(Me.MDI_pic)
         Me.Controls.Add(Me.GroupBox1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmEstimatingBase"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -2148,7 +2138,6 @@ Partial Class frmEstimatingBase
     Public WithEvents HdrGONum_lbl As System.Windows.Forms.Label
     Public WithEvents lblHdrBldgNme As System.Windows.Forms.Label
     Public WithEvents fraHdrIcons As System.Windows.Forms.GroupBox
-    Private WithEvents Supt_cmd As System.Windows.Forms.Button
     Public WithEvents FreezeSave_btn As System.Windows.Forms.Button
     Private WithEvents Exit_cmd As System.Windows.Forms.Button
     Private WithEvents Save_cmd As System.Windows.Forms.Button

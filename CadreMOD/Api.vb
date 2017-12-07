@@ -253,7 +253,7 @@ Module API
 
     Public Sub Reset_Resolution()
 
-        If SaveWidth < PreferredScreenWidth And SaveHeight < PreferredScreenHeight And Config_frm.ChangedResolution Then
+        If (SaveWidth < PreferredScreenWidth Or SaveHeight < PreferredScreenHeight) And Config_frm.ChangedResolution Then
             DevM.dmFields = DM_PELSWIDTH Or DM_PELSHEIGHT Or DM_DISPLAYFREQUENCY
             DevM.dmPelsWidth = SaveWidth
             DevM.dmPelsHeight = SaveHeight
