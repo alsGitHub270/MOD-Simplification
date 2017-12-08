@@ -103,12 +103,6 @@ Partial Friend Class CM_MAIN_frm
                                                        New DataColumn("machine_model", typeStr)
                                                         })
 
-
-        'dtBaseGroup.Rows.Add(New Object() {"Master", "A0", "A", "01-04", "Geared", 497250, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
-        'dtBaseGroup.Rows.Add(New Object() {"Base", "A1", "A", "01-04", "Geared", 500000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
-        'dtBaseGroup.Rows.Add(New Object() {"Base", "B1", "B", "01-04", "Geared", 375000, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
-        'dtBaseGroup.Rows.Add(New Object() {"Base", "F1", "F", "01,03-04", "Gearless", 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
-
         dtAltGroup = dsCadre.Tables.Add("AltGroup")
         dtAltGroup.Columns.AddRange(New DataColumn() {New DataColumn("AltGroup", typeStr), _
                                                       New DataColumn("id", typeStr), _
@@ -142,14 +136,6 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("speed", typeInt),
                                                       New DataColumn("machine_model", typeStr)
                                                      })
-
-
-        'dtAltGroup.Rows.Add(New Object() {"Alt1", "A1", "01-04", "Geared", 25000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem Ipsum is simply dummy text of the printing and typesetting industry."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt2", "A1", "01-04", "Geared", -5000, -4000, "", True, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsam voluptatem quia volupta. "})
-        'dtAltGroup.Rows.Add(New Object() {"Alt3", "A1", "01-04", "Geared", -2500, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsum dolor delectus error voluptatem neque."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt4", "A1", "01-04", "Geared", 1250, "", "", True, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt1", "B1", "01-04", "Geared", 5000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Lorem ipsum dolor sit amet, consectetur adipisicing elit."})
-        'dtAltGroup.Rows.Add(New Object() {"Alt2", "B1", "01-04", "Geared", -2000, "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""})
 
         dtContactGroup = dsCadre.Tables.Add("Contacts")
         dtContactGroup.Columns.AddRange(New DataColumn() {New DataColumn("contactType", typeStr), _
@@ -195,16 +181,9 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("ocpl", typeStr)
                                                          })
 
-        ' dtBuildingInfo.Rows.Add(New Object() {"HOT - Hotel/Motel/Inn/Dorm/Casino", "ZZZ Other", "6122", "6122", "6122", "", "", "8/1/2017", "No", "Tax Exempt", "1", "", "", "", "", "", "", "", ""})
-
-
-        'Deserialize("C:\Temp\cadre.json", dsCadre, "Error Reading Input Json file", isDirty)            'Contracts.EstimateNum & ".json"
-        'Deserialize(Contracts.EstimateNum & ".json", dsCadre, "Error Reading Input Json file", isDirty)
+        
         Deserialize(CM_file, dsCadre, "Error Reading Input json estimate file", isDirty)
         FpSpread1.ActiveSheet.SortRows(3, True, False)
-
-        ' If there are no records after deserialization, then add a blank summary and base row, initializing the bank to 'A'
-
 
         If dtContactGroup.Rows.Count = 0 And Owner_Info.Name.Length > 0 Then
             UpdateContactGroupFromNotes()
@@ -455,11 +434,15 @@ Partial Friend Class CM_MAIN_frm
             Case "Summary"
             Case "Master", "Base"
                 Me.ShowInTaskbar = False
-                frmEstimatingBase.ShowDialog()
+                Using frm As New frmEstimatingBase
+                    frm.ShowDialog()
+                End Using
                 Me.ShowInTaskbar = True
             Case "Alt"
                 Me.ShowInTaskbar = False
-                frmEstimatingAlt.ShowDialog()
+                Using frm As New frmEstimatingBase
+                    frm.ShowDialog()
+                End Using
                 Me.ShowInTaskbar = True
             Case Else
         End Select
@@ -844,7 +827,7 @@ Partial Friend Class CM_MAIN_frm
         UseCurCol = e.Column
 
         ProcessNegSummaryTotals()
-         
+
     End Sub
     Private Sub FpSpread1_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles FpSpread1.Change
         If Not initializing Then isDirty = True
@@ -1195,27 +1178,8 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(30).Width = 50
                 .Columns(30).Visible = False
 
-                'dateType.DateTimeFormat = FarPoint.Win.Spread.CellType.DateTimeFormat.ShortDate
-                '.Columns(1).CellType = dateType
                 .HorizontalGridLine = gl
                 .VerticalGridLine = gl
-
-                'Dim acell As FarPoint.Win.Spread.Cell
-                'Dim i, j, c As Integer
-                'Dim iColorR, iColorG, iColorB As Integer
-                'FpSpread1.ActiveSheet.ColumnCount = 20
-                'FpSpread1.ActiveSheet.RowCount = 20
-                'For i = 0 To FpSpread1.ActiveSheet.RowCount - 1
-                '    For j = 0 To FpSpread1.ActiveSheet.ColumnCount - 1
-                '        acell = FpSpread1.ActiveSheet.Cells(i, j)
-                '        Randomize()
-                '        iColorR = Int(255 * Rnd()) + 1
-                '        iColorG = Int(255 * Rnd()) + 1
-                '        iColorB = Int(255 * Rnd()) + 1
-                '        acell.BackColor = Color.FromArgb(iColorR, iColorG, iColorB)
-                '        acell.ForeColor = Color.FromArgb(iColorB, iColorR, iColorG)
-                '    Next j
-                'Next i
 
             End With
         End If
@@ -1306,6 +1270,9 @@ Partial Friend Class CM_MAIN_frm
                         ChildSheetView1.Cells(0, 23).Locked = False
 
                         SetBaseAltC1Colors()
+
+                        UpdateSummary(True)
+                        SetSummaryC1Colors()
 
                         Dim p As New FarPoint.Win.Picture(Image.FromFile(ImageFileLocation & "circlechecked.png"), FarPoint.Win.RenderStyle.Normal)
                         Dim t As New FarPoint.Win.Spread.CellType.TextCellType
@@ -2018,6 +1985,8 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub AddMasterRow(ByVal _id As String)
 
+        On Error GoTo AddMasterRow_Error
+
         Dim altValue As Integer = 0
         Dim baseValue As Integer = 0
         Dim criteria As String
@@ -2040,18 +2009,30 @@ Partial Friend Class CM_MAIN_frm
 
         For Each row In altRow
             If row.Item("Merge") = "True" Then
-                For i As Integer = 6 To dtAltGroup.Columns.Count - 2    ' excludes the comments col
-                    altValue = IIf(IsDBNull(row.Item(i)), 0, row.Item(i))
+                For i As Integer = 6 To dtAltGroup.Columns.Count - 1
+                    If i <> 28 Then  ' exclude comments
+                        If i > 24 Then
+                            Dim altString As String = IIf(IsDBNull(row.Item(i)), "", row.Item(i))
+                            If altString.Length > 0 Then
+                                _newRow.Item(i - 1) = altString
+                            End If
 
-                    If i <> 20 Then     ' not moving C1 value
-                        If IsDBNull(_newRow.Item(i - 1)) Then
-                            _newRow.Item(i - 1) = altValue
                         Else
-                            _newRow.Item(i - 1) += altValue
+                            altValue = IIf(IsDBNull(row.Item(i)), 0, row.Item(i))
+
+                            If i <> 21 Then     ' not moving C1 value
+                                If IsDBNull(_newRow.Item(i - 1)) Then
+                                    _newRow.Item(i - 1) = altValue
+                                Else
+                                    _newRow.Item(i - 1) += altValue
+                                End If
+                            Else
+                                ' Recalculate C1 after all values processed
+                            End If
                         End If
-                    Else
-                        ' Recaculate C1 after all values processed
+
                     End If
+
                 Next
             End If
         Next
@@ -2075,6 +2056,13 @@ Partial Friend Class CM_MAIN_frm
 
         isDirty = True
 
+        Exit Sub
+
+AddMasterRow_Error:
+        Select Case Err.Number
+            Case Else
+                MessageBox.Show(Err.Description, "Error Adding Master Row", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Select
     End Sub
 
     Private Sub DeleteMaster(ByVal activeRows() As String)
@@ -2908,32 +2896,43 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub UpdateSummary()
+    Private Sub UpdateSummary(Optional merging As Boolean = False)
         Dim _id As String = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
         Dim _level As String = String.Empty
 
-        If CurrentGOData_Typ.EstimateLevel = "Base" Then
-            _level = "Base"
-        ElseIf CurrentGOData_Typ.EstimateLevel = "Master" Then
+       
+        If CurrentGOData_Typ.EstimateLevel = "Master" Or merging Then
             _level = "Master"
+        ElseIf CurrentGOData_Typ.EstimateLevel = "Base" Then
+            _level = "Base"
         End If
 
         If _level <> String.Empty Then
-            Dim dataRow() As Data.DataRow
-            dataRow = dtBaseGroup.Select("id = '" & _id & "' and BaseGroup = '" & _level & "'")
+            Dim _dataRow() As Data.DataRow
+            _dataRow = dtBaseGroup.Select("id = '" & _id & "' and BaseGroup = '" & _level & "'")
 
+            Dim _summaryRow() As Data.DataRow
+            _summaryRow = dtSummaryGroup.Select("id = '" & _id & "'")
 
-            Dim summaryRow() As Data.DataRow
-            summaryRow = dtSummaryGroup.Select("id = '" & _id & "'")
-
-            summaryRow(0)("C1") = dataRow(0)("C1")
-            summaryRow(0)("Bank_Final_Price") = dataRow(0)("Bank_Final_Price")
-
+            If _level = "Base" Then
+                _summaryRow(0)("C1") = _dataRow(0)("C1")
+                _summaryRow(0)("Bank_Final_Price") = _dataRow(0)("Bank_Final_Price")
+            Else
+                Dim _columnName As String
+                For i As Integer = 5 To dtBaseGroup.Columns.Count - 1
+                    _columnName = dtBaseGroup.Columns(i).ColumnName
+                    If _columnName <> "Comment" Then
+                        _summaryRow(0)(_columnName) = _dataRow(0)(_columnName)
+                    End If
+                Next
+            End If
         End If
+
+        ProcessNegSummaryTotals()
+
     End Sub
 
     Private Sub CalculateAltFinalBankPrice()
-
         Dim sales_commission As Double
 
         For Each row As DataRow In dtAltGroup.Rows
@@ -3301,20 +3300,11 @@ Partial Friend Class CM_MAIN_frm
 
             clsNotes.SetValue_Readers("salesRep", gsSalesRep)
 
-            Dim Reader(0 To 8) As String
-
-            Reader(0) = "[Admin]"
-            Reader(1) = "[Approver]"
-            Reader(2) = "[Engineer]"
-            Reader(3) = "[Full Access]"
-            Reader(4) = "T_SEC_" & sOffice
-            Reader(5) = "T_SEC_SMART_" & sOffice
-            Reader(6) = "T_SEC_SMART_" & sDistrict
-            Reader(7) = "T_SEC_SMART_" & sTerritory
-            Reader(8) = "T_SEC_SMART_" & sArea
+            Dim Reader As String() = {"[Admin]", "[Approver]", "[Engineer]", "[Full Access]", "T_SEC_" & sOffice,
+                                      "T_SEC_SMART_" & sOffice, "T_SEC_SMART_" & sDistrict, "T_SEC_SMART_" & sTerritory,
+                                      "T_SEC_SMART_" & sArea}
 
             clsNotes.SetValue_Readers("Reader", Reader)
-
             clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
 
             clsNotes.DocSave()
@@ -3463,46 +3453,11 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub FilterNamesByRegion(ByRef cmb As ComboBox)
-        'Dim jIndx As Integer = 1
-        'Dim AllNames() As String = Nothing, AddNames() As String = Nothing
-
-        'If [cmb].Items.Count = 0 OrElse Contracts.RegionCode.Length = 0 OrElse Not clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) OrElse _
-        '   Not clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
-        '    Exit Sub
-        'End If
-
-        'For iIndx As Integer = 0 To [cmb].Items.Count - 1
-        '    ReDim Preserve AllNames(iIndx)
-        '    '  AllNames(iIndx) = [cmb].GetListItem(iIndx)
-        'Next iIndx
-
-        'ReDim AddNames(0)
-        'For iIndx As Integer = 0 To AllNames.GetUpperBound(0)
-        '    If clsNotes.NotesDocKey(AllNames(iIndx)) Then
-        '        If clsNotes.GetValue("RegionCode").IndexOf(Contracts.RegionCode) >= 0 Then
-        '            ReDim Preserve AddNames(jIndx)
-        '            AddNames(jIndx) = AllNames(iIndx)
-        '            jIndx += 1
-        '        End If
-        '    End If
-        'Next iIndx
-
-        'If AddNames.GetUpperBound(0) > 0 Then
-        '    [cmb].Items.Clear()
-        '    For iIndx As Integer = 0 To AddNames.GetUpperBound(0)
-        '        [cmb].Items.Add(AddNames(iIndx))
-        '    Next iIndx
-        'End If
-
-    End Sub
-
     Private Sub btnSuptReview_Click(sender As System.Object, e As System.EventArgs) Handles btnSuptReview.Click
 
         Dim sSuptReview As String
         Dim sSuptStatus As String = ""
         Dim sSUPTFileName As String = ""
-        ' Dim CriticalTitle, CriticalMsg As String
         Dim sMessage As String = ""
 
         sSuptReview = Get_SuptStatus("Decision")
