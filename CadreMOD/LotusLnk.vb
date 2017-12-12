@@ -308,25 +308,25 @@ Module Lotuslnk
     '                If (Name Like Contracts.EstimateNum & "*.*" Or Name Like "*.XLS*") And Not Name Like "*.A2B" And Not Name Like "*LETTER.DOC*" And Not Name Like "*SCRIPTS.DOC*" Then
                 If (Name Like Contracts.EstimateNum & "*.JSON") Or (Name Like Contracts.EstimateNum & "*.CM") Or
                    (Name Like Contracts.EstimateNum & "*.M*") Or (Name Like Contracts.EstimateNum & "*.DOC*") Then
-    '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
-    '                            If Name Like Get_FileName(Contracts.EstimateNum, GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, GONumbers(iIndx).Units) Then
-    '                                clsNotes.AttachFile(Name)
-    '                                Exit For
-    '                            End If
-    '                        Next iIndx
-    '                    Else
+                    '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
+                    '                            If Name Like Get_FileName(Contracts.EstimateNum, GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, GONumbers(iIndx).Units) Then
+                    '                                clsNotes.AttachFile(Name)
+                    '                                Exit For
+                    '                            End If
+                    '                        Next iIndx
+                    '                    Else
                     clsNotes.AttachFile(Name)
-    '                    End If
-    '                    If Name Like (Contracts.EstimateNum.ToString() & "*" & REPORT_LetterOfIntent & "*").ToUpper() Then
-    '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
-    '                            If Name Like (Contracts.EstimateNum.ToString() & GONumbers(iIndx).Bank & GONumbers(iIndx).Alt & REPORT_LetterOfIntent & "*").ToUpper() Then
-    '                                clsNotes.SetValue("LetterIntentDate", CDate(thisFile.DateCreated.ToString("d")))
-    '                                clsNotes.SetValue("LetterIntentVendor", GONumbers(iIndx).LetterOfIntent_Vendor)
-    '                                Exit For
-    '                            End If
-    '                        Next iIndx
-    '                    End If
-    '                End If
+                    '                    End If
+                    '                    If Name Like (Contracts.EstimateNum.ToString() & "*" & REPORT_LetterOfIntent & "*").ToUpper() Then
+                    '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
+                    '                            If Name Like (Contracts.EstimateNum.ToString() & GONumbers(iIndx).Bank & GONumbers(iIndx).Alt & REPORT_LetterOfIntent & "*").ToUpper() Then
+                    '                                clsNotes.SetValue("LetterIntentDate", CDate(thisFile.DateCreated.ToString("d")))
+                    '                                clsNotes.SetValue("LetterIntentVendor", GONumbers(iIndx).LetterOfIntent_Vendor)
+                    '                                Exit For
+                    '                            End If
+                    '                        Next iIndx
+                    '                    End If
+                    '                End If
                 End If
             Next thisFile
     '            If MDIChildDirty Or gbMDIChildDirty Or MP_CST03_Child_Dirty Or RunMDIChildDirty Then
@@ -396,16 +396,9 @@ MISSINGMESSAGE:
 
     End Sub
     Public Sub DetachFeedback()
-    '        Dim Filesystem As New Scripting.FileSystemObject()
-    '        Dim Name As String = ""
-    '        Dim bAttach_To_Feedback As Boolean = False
 
-    '        Try
-    '            bAttach_To_Feedback = Attach_To_Feedback()
         Try
             Attach_To_Feedback()
-    '                Exit Sub
-    '            End If
             Hold_Customer_ID = clsNotes.GetValue("Unique")
             Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
             If Not clsNotes.CheckAttachments() Then
@@ -414,40 +407,9 @@ MISSINGMESSAGE:
             End If
             CompareFiles()
             ArchiveFiles()
-            DeleteFiles()
+            DeleteAllFiles()
             VerifyPath(ReportsPath)
-
             clsNotes.DetachFiles()
-    '            Dim thisFolder As Scripting.Folder = Filesystem.GetFolder(ReportsPath)
-    '            Dim theseFiles As Scripting.Files = thisFolder.Files
-    '            PreBidMODActive = False
-    '            ReDim PreBidMOD_BankInfo(0)
-    '            Dim ELECopyNum As Byte = 1
-    '            Dim MECCopyNum As Byte = 1
-    '            For Each thisFile As Scripting.File In theseFiles
-    '                Name = thisFile.Name.ToUpper()
-    '                Select Case Strings.Right(Name, 6).ToUpper()
-    '                    Case "_E.XLS"
-    '                        If Microsoft.VisualBasic.FileSystem.Dir(ReportsPath & HoldUniqueActivity.ToUpper() & "ELE.XLS", FileAttribute.Normal).Length = 0 Then
-    '                            thisFile.Name = HoldUniqueActivity.ToUpper() & "ELE.XLS"
-    '                        Else
-    '                            thisFile.Name = HoldUniqueActivity.ToUpper() & "ELE_" & CStr(ELECopyNum) & ".XLS"
-    '                            ELECopyNum += 1
-    '                        End If
-    '                    Case "_M.XLS"
-    '                        If Microsoft.VisualBasic.FileSystem.Dir(ReportsPath & HoldUniqueActivity.ToUpper() & "MEC.XLS", FileAttribute.Normal).Length = 0 Then
-    '                            thisFile.Name = HoldUniqueActivity.ToUpper() & "MEC.XLS"
-    '                        Else
-    '                            thisFile.Name = HoldUniqueActivity.ToUpper() & "MEC_" & CStr(MECCopyNum) & ".XLS"
-    '                            MECCopyNum += 1
-    '                        End If
-    '                    Case Else
-    '                End Select
-    '                If Strings.Right(Name, 3).ToUpper() = "A2B" Then
-    '                    PreBidMODActive = True 'Used to determine if Probability Of Sales active
-    '                    gsPreBidBanks = ReadDataFromA2BFile(ReportsPath & Name)
-    '                End If
-    '            Next thisFile
             CompareFiles()
 
         Catch ex As Exception
@@ -1389,7 +1351,6 @@ GETNOTESDATADIR_ERROR:
         Return bNotesDocKey
 
     End Function
-
     Public Function Get_SuptStatus(ByVal sStatusDecision As String) As String
         Dim sSuptStatus As String = ""
 
@@ -1406,7 +1367,6 @@ GETNOTESDATADIR_ERROR:
         Return sSuptStatus
 
     End Function
-
     '    Public Sub CreateNewOpportunity()
 
     '        clsNotes.CreateDOC("MOD Estimate")

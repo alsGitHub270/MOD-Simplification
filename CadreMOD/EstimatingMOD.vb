@@ -1,5 +1,9 @@
 ﻿Option Strict Off
 Option Explicit On
+Imports System.Globalization
+Imports System.Collections.Generic
+Imports System.IO
+Imports Newtonsoft.Json
 
 Module EstimatingMOD
     Public FormIsDirty As Boolean
@@ -20,9 +24,14 @@ Module EstimatingMOD
     Public SubGroups As DataTable = Nothing
     Public GeneralInfo As DataTable = Nothing
     Public OrderingInfo As DataTable = Nothing
+    Public CurrentTab As String = String.Empty
 
     Public EST_Filename As String = String.Empty
     Public ALT_Filename As String = String.Empty
+    Public Const FileSuffix_MASTER As String = "MODMST"
+    Public Const FileSuffix_BASE As String = "MODEST"
+    Public Const FileSuffix_ALT As String = "MODALT"
+    Public Const FileSuffix_ORDERING As String = "MODORD"
 
     Public Const TABLENAME_MAIN As String = "EstMainGroup"
     Public Const TABLENAME_MATERIALS As String = "EstMaterials"
@@ -1397,8 +1406,12 @@ Module EstimatingMOD
             If IsNothing(Options) Then
                 ReturnCmb.Clear()
             Else
+                Dim SetAutoSizeCol As Boolean = False
                 For iIndex = Options.GetLowerBound(0) To Options.GetUpperBound(0)
                     Options(iIndex) = Options(iIndex).Trim
+                    If Options(iIndex).Length >= 15 Then
+                        SetAutoSizeCol = True
+                    End If
                 Next iIndex
                 iIndex = Options.GetUpperBound(0) + 1
                 If AddBlank Then
@@ -1409,7 +1422,9 @@ Module EstimatingMOD
                 ReturnCmb.MaxDrop = Options.Length
                 ReturnCmb.AutoSearch = FarPoint.Win.AutoSearch.SingleCharacter
                 ReturnCmb.Editable = False
-                ReturnCmb.ListWidth = 0
+                If SetAutoSizeCol Then
+                    ReturnCmb.ListWidth = 0
+                End If
             End If
 
         Catch ex As Exception
@@ -2119,4 +2134,74 @@ Module EstimatingMOD
         Return ReturnVal
 
     End Function
+    Public Sub MergeBaseWithAlts()
+        Dim MasterFiles() As String = Nothing, AltFiles() As String = Nothing
+        Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
+        Dim iIndex As Integer = 0, jIndex As Integer = 0
+        Dim NewMasterFileName As String = String.Empty
+        Dim CurUnits As String = String.Empty
+
+        Try
+            For Each JSONFile In JSONFileLocation.GetFiles()
+                If JSONFile IsNot Nothing Then
+                    If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
+                        If JSONFile.ToString.ToUpper.Contains(Contracts.EstimateNum.ToUpper & CurrentGOData_Typ.Bank) Then
+                            If JSONFile.ToString.ToUpper.Contains(FileSuffix_BASE) Then
+                                NewMasterFileName = JSONFile.ToString.ToUpper.Replace(FileSuffix_BASE, FileSuffix_MASTER)
+                                If File.Exists(EstimatePath & NewMasterFileName) Then
+                                    File.Delete(EstimatePath & NewMasterFileName)
+                                End If
+                                JSONFile.CopyTo(EstimatePath & NewMasterFileName)
+                                ReDim Preserve MasterFiles(iIndex)
+                                MasterFiles(iIndex) = NewMasterFileName
+                                iIndex += 1
+                            ElseIf JSONFile.ToString.ToUpper.Contains(FileSuffix_ALT) Then
+                                ReDim Preserve AltFiles(jIndex)
+                                AltFiles(jIndex) = JSONFile.ToString
+                                jIndex += 1
+                            End If
+                        End If
+                    End If
+                End If
+            Next JSONFile
+            If Not IsNothing(AltFiles) Then
+                For iIndex = 0 To MasterFiles.GetUpperBound(0)
+                    'CurUnits = Strings.Mid(MasterFiles(iIndex), 14, MasterFiles(iIndex).Length - 24)
+                    'frmEstimatingBase.EstFileType = FileSuffix_BASE
+                    'frmEstimatingBase.CreateEstimatingDataSet(CurUnits)
+
+
+                Next iIndex
+            End If
+
+        Finally
+
+        End Try
+    End Sub
+    Public Sub ReturnToCM(ByVal EstScreen As String)
+
+        If Not IsNothing(UseMaterialItemRecordSet) Then
+            If UseMaterialItemRecordSet.State = ADODB.ObjectStateEnum.adStateOpen Then
+                UseMaterialItemRecordSet.Close()
+            End If
+        End If
+        UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+        Select Case EstScreen
+            Case "Estimating"
+                Select Case frmEstimatingBase.PromptForSave()
+                    Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                        frmEstimatingBase.Cursor = Cursors.Default
+                        frmEstimatingBase.Dispose()
+                    Case Else
+                End Select
+            Case "Alt"
+                Select Case frmEstimatingAlt.PromptForSave()
+                    Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                        frmEstimatingAlt.Cursor = Cursors.Default
+                        frmEstimatingAlt.Dispose()
+                    Case Else
+                End Select
+        End Select
+
+    End Sub
 End Module

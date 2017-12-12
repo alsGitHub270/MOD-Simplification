@@ -17,8 +17,9 @@ Public Class frmEstimatingBase
 
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
-    Private SheetCornerColWidth As Integer = 0
+    Private SheetCornerColWidth_MAIN As Integer = 0, SheetCornerColWidth_CHILD As Integer = 0
     Private OrderingForms_spc As Object
+    Public EstFileType As String = FileSuffix_BASE
 
     Public Sub CreateEstimatingDataSet(ByVal CurUnits As String)
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer
@@ -74,7 +75,7 @@ Public Class frmEstimatingBase
             SheetHeaders(MATERIAL_GROUP, MAT_COL_SPECIAL_HOURS_EST).HeaderType = typeSingle
             SheetHeaders(MATERIAL_GROUP, MAT_COL_COMMENTS_EST).HeaderType = typeStr
 
-            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A", CurUnits) & "MODEST.JSON"
+            EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A", CurUnits) & EstFileType & ".JSON"
             If Not File.Exists(EST_Filename) Then
                 MaterialItemRecordSet = New ADODB.Recordset
                 MaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
@@ -222,7 +223,7 @@ Public Class frmEstimatingBase
             EstimatingDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
 
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In CreateEstimatingDataSet")
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In Base - CreateDataSet")
 
         End Try
 
@@ -243,10 +244,13 @@ Public Class frmEstimatingBase
         DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath & "\", MODDATA_DATABASE_NAME, True)
         Load_ListBoxes()
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
+        If CurrentGOData_Typ.EstimateLevel = "Master" Then
+            EstFileType = FileSuffix_MASTER
+        End If
         For Each JSONFile In JSONFileLocation.GetFiles()
             If JSONFile IsNot Nothing Then
                 If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
-                    If JSONFile.ToString.ToUpper.Contains("MODEST") Or JSONFile.ToString.ToUpper.Contains("MODORD") Then
+                    If JSONFile.ToString.ToUpper.Contains(EstFileType) Or JSONFile.ToString.ToUpper.Contains(FileSuffix_ORDERING) Then
                         JSONFileList.Add(JSONFile)
                     End If
                 End If
@@ -261,14 +265,14 @@ Public Class frmEstimatingBase
             Dim FoundFirstEstTab As Boolean = False, FoundFirstOrdTab As Boolean = False
             For iIndex As Integer = 0 To JSONFileList.Count - 1
                 UseTabName = FormatTabName(JSONFileList(iIndex).Name)
-                If JSONFileList(iIndex).Name.ToUpper.Contains("MODEST") Then
+                If JSONFileList(iIndex).Name.ToUpper.Contains(EstFileType) Then
                     If FoundFirstEstTab Then
                         TabControl1.TabPages.Add(UseTabName & EST_Suffix)
                     Else
                         CarTab.Text = UseTabName & EST_Suffix
                         FoundFirstEstTab = True
                     End If
-                ElseIf JSONFileList(iIndex).Name.ToUpper.Contains("MODORD") Then
+                ElseIf JSONFileList(iIndex).Name.ToUpper.Contains(FileSuffix_ORDERING) Then
                     If FoundFirstOrdTab Then
                         TabControl1.TabPages.Add(UseTabName & ORD_Suffix)
                     Else
@@ -281,6 +285,8 @@ Public Class frmEstimatingBase
                 OrderTab.Text = UseTabName & ORD_Suffix
             End If
         End If
+        Copy_cmd.Visible = False
+        Merge_cmd.Visible = False
         If CurrentGOData_Typ.EstimateLevel = "Base" Then
             For iIndex As Integer = TabControl1.TabPages.Count - 1 To 0 Step -1
                 Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
@@ -289,12 +295,12 @@ Public Class frmEstimatingBase
                 End If
             Next iIndex
             Copy_cmd.Visible = True
-            Merge_cmd.Visible = True
-        Else
-            Copy_cmd.Visible = False
-            Merge_cmd.Visible = False
+            If TabControl1.TabPages.Count > 1 Then
+                Merge_cmd.Visible = True
+            End If
         End If
         TabControl1.SelectTab(0)
+        CurrentTab = TabControl1.TabPages(0).Text.Trim
         TabControl1.Left = 3
         TabControl1.Width = GroupBox1.Width - TabControl1.Left - 5
         CurrentGenInfoFrameHeight = GeneralInformation_fra.Height
@@ -345,16 +351,7 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub CMMain_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMMain_cmd.Click
-
-        UseMaterialItemRecordSet.Close()
-        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
-        Select Case PromptForSave()
-            Case MsgBoxResult.Yes, MsgBoxResult.No, 0
-                Me.Cursor = Cursors.Default
-                Me.Dispose()
-            Case Else
-        End Select
-
+        ReturnToCM("Estimating")
     End Sub
     Private Sub ExpandAll_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandAll_cmd.Click
         ExpandCollapseAll("Expand")
@@ -529,13 +526,22 @@ Public Class frmEstimatingBase
         LayoutRequirements_cmb.Items.Add("Full")
 
         MachineType_cmb.Items.Clear()
-        MachineType_cmb.Items.Add("Reuse " & GEARED_TYPE)
-        MachineType_cmb.Items.Add("New " & GEARED_TYPE)
-        If Not IsPOHController Then
-            MachineType_cmb.Items.Add(MACHINE_FMM200)
-        End If
-        MachineType_cmb.Items.Add("Reuse " & GEARLESS_TYPE)
-        MachineType_cmb.Items.Add("New " & GEARLESS_TYPE)
+        Select Case CurrentGOData_Typ.MachineType
+            Case GEARED_TYPE
+                MachineType_cmb.Items.Add("Reuse " & GEARED_TYPE)
+                MachineType_cmb.Items.Add("New " & GEARED_TYPE)
+                If Not IsPOHController Then
+                    MachineType_cmb.Items.Add(MACHINE_FMM200)
+                End If
+                MachineType_cmb.Items.Add("New " & GEARLESS_TYPE)
+            Case GEARLESS_TYPE
+                If Not IsPOHController Then
+                    MachineType_cmb.Items.Add(MACHINE_FMM200)
+                End If
+                MachineType_cmb.Items.Add("Reuse " & GEARLESS_TYPE)
+                MachineType_cmb.Items.Add("New " & GEARLESS_TYPE)
+            Case Else
+        End Select
 
         DriveType_cmb.Items.Clear()
         DriveType_cmb.Items.Add(AC_TYPE)
@@ -700,7 +706,7 @@ Public Class frmEstimatingBase
         Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
         Dim CurRow As Integer = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
         Dim CurMAIN_ID As String = String.Empty, NewMAT_ID As String = String.Empty, NewDesc As String = String.Empty
-        Dim CurUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
+        Dim CurUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
 
         If Not isInitializingComponent Then
             FormIsDirty = EstimatingDataset.HasChanges()
@@ -741,6 +747,7 @@ Public Class frmEstimatingBase
     End Sub
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
+        CurrentTab = TabControl1.SelectedTab.Text.Trim
         If Not isInitializingComponent Then
             Select Case PromptForSave()
                 Case MsgBoxResult.Yes, MsgBoxResult.No, 0
@@ -752,16 +759,15 @@ Public Class frmEstimatingBase
     End Sub
     Private Sub DisplayEST_vs_ORD()
 
-        If TabControl1.SelectedTab.Text.IndexOf(EST_Suffix) > -1 Then
+        If CurrentTab.IndexOf(EST_Suffix) > -1 Then
             PopulateEstimating(True)
-            Set_Fields_Grey_EST()
             CarData_fra.Visible = True
             CarData_fra.BringToFront()
             If CurrentGOData_Typ.EstimateLevel = "Master" Then
                 OrderingForms_fra.Visible = False
                 OrderingForms_fra.SendToBack()
             End If
-        ElseIf TabControl1.SelectedTab.Text.IndexOf(ORD_Suffix) > -1 Then
+        ElseIf CurrentTab.IndexOf(ORD_Suffix) > -1 Then
             PopulateOrdering()
             OrderingForms_lst.Items.Clear()
             OrderingForms_lst.Items.Add("Governor")
@@ -821,7 +827,7 @@ Public Class frmEstimatingBase
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         Dim dt As DataTable, dr As DataRow
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim UseUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
+        Dim UseUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
         Dim CurActiveRow As Integer = 0, CurActiveCol As Integer = 0, CurActiveChildRow As Integer = -999, CurActiveChildCol As Integer = -999
 
         Try
@@ -835,16 +841,16 @@ Public Class frmEstimatingBase
                     CurActiveChildCol = ChildSheetView1.ActiveColumnIndex()
                 End If
             End If
+            BillOfMaterials_spr.ActiveSheet.RowCount = 0
             If ResetData Then
-                BillOfMaterials_spr.ActiveSheet.RowCount = 0
                 CreateEstimatingDataSet(UseUnits)
-                model = BillOfMaterials_spr.ActiveSheet.Models.Data
-                For Each dt In EstimatingDataset.Tables
-                    dt.DefaultView.AllowNew = False
-                Next dt
-                model.DataMember = "EstimatingData"
-                model.DataSource = EstimatingDataset
             End If
+            model = BillOfMaterials_spr.ActiveSheet.Models.Data
+            For Each dt In EstimatingDataset.Tables
+                dt.DefaultView.AllowNew = False
+            Next dt
+            model.DataMember = "EstimatingData"
+            model.DataSource = EstimatingDataset
             If GeneralInfo.Rows.Count = 1 Then
                 dr = GeneralInfo.Rows(0)
                 For Each Cntrl As Control In GeneralInformation_fra.Controls
@@ -880,12 +886,17 @@ Public Class frmEstimatingBase
             BillOfMaterials_spr.ActiveSheet.RowHeader.Cells(0, 0, BillOfMaterials_spr.ActiveSheet.RowCount - 1, 0).BackColor = Color.DarkGray
             BillOfMaterials_spr.ActiveSheet.RowHeader.Cells(0, 0, BillOfMaterials_spr.ActiveSheet.RowCount - 1, 0).ForeColor = Color.Black
             BillOfMaterials_spr.ActiveSheet.SheetCornerStyle.BackColor = Color.DarkGray
-            BillOfMaterials_spr.ActiveSheet.SetColumnWidth(MAIN_COL_MAIN_GROUP, 150)
+            BillOfMaterials_spr.ActiveSheet.SetColumnWidth(MAIN_COL_MAIN_GROUP, 220)
             BillOfMaterials_spr.ActiveSheet.SetColumnWidth(MAIN_COL_TOTAL_COST, 100)
             BillOfMaterials_spr.ActiveSheet.SetColumnWidth(MAIN_COL_TOTAL_STD_HRS, 100)
             BillOfMaterials_spr.ActiveSheet.SetColumnWidth(MAIN_COL_TOTAL_SPEC_HRS, 100)
             BillOfMaterials_spr.ActiveSheet.SetColumnVisible(1, False)
             BillOfMaterials_spr.ActiveSheet.GrayAreaBackColor = Color.White
+            If SheetCornerColWidth_MAIN = 0 Then
+                SheetCornerColWidth_MAIN = BillOfMaterials_spr.ActiveSheet.SheetCorner.Columns(0, 0).Width
+            Else
+                BillOfMaterials_spr.ActiveSheet.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth_MAIN
+            End If
             GeneralInformation_fra.Left = 6
             GeneralInformation_fra.Width = CarData_fra.Width - GeneralInformation_fra.Left - 10
             ExpensesPerDayDetails_btn.Left = ExpensesPerDay_txt.Left
@@ -898,18 +909,24 @@ Public Class frmEstimatingBase
             ExpandCollapseAll("Collapse")
             BillOfMaterials_spr.Visible = True
             For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
-                BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
                 ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
                 If Not ChildSheetView1 Is Nothing Then
-                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 200)
                     ChildSheetView1.SetColumnVisible(MAT_COL_MAIN_ID, False)
                     ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
                     ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
-
+                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 365)
                     ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_EST, 100)
                     ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_EST, 100)
                     ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_EST, 100)
-
+                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_EST, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_EST, 120)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_EST, 100)
+                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_EST, 200)
+                    If SheetCornerColWidth_CHILD = 0 Then
+                        SheetCornerColWidth_CHILD = ChildSheetView1.SheetCorner.Columns(0, 0).Width
+                    Else
+                        ChildSheetView1.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth_CHILD
+                    End If
                     For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
                         ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
@@ -926,16 +943,6 @@ Public Class frmEstimatingBase
                                          ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_EST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
                         End If
                     Next jIndex
-
-                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_EST, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_EST, 120)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_EST, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_EST, 200)
-                    If SheetCornerColWidth = 0 Then
-                        SheetCornerColWidth = ChildSheetView1.SheetCorner.Columns(0, 0).Width
-                    Else
-                        ChildSheetView1.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth
-                    End If
                 End If
                 Dim ShowGroup As Boolean = False
                 Select Case BillOfMaterials_spr.ActiveSheet.GetValue(iIndex, MAT_COL_MAIN_ID)
@@ -968,6 +975,7 @@ Public Class frmEstimatingBase
                     BillOfMaterials_spr.ActiveSheet.SetRowVisible(iIndex, False)
                 End If
             Next iIndex
+            Set_Fields_Grey_EST()
             BillOfMaterials_spr.ActiveSheet.SetActiveCell(CurActiveRow, CurActiveCol)
             If CurActiveChildRow <> -999 And CurActiveChildCol <> -999 Then
                 ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(CurActiveRow, 0)
@@ -999,7 +1007,7 @@ Public Class frmEstimatingBase
             Else
                 _row = GeneralInfo.Rows(0)
             End If
-            _row("UnitsInTab") = SplitUnitsForSave(Strings.Left(TabControl1.SelectedTab.Text, TabControl1.SelectedTab.Text.Length - 6))
+            _row("UnitsInTab") = SplitUnitsForSave(Strings.Left(CurrentTab, CurrentTab.Length - 6))
             For Each Cntrl As Control In GeneralInformation_fra.Controls
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
                     _row([Cntrl].Name) = [Cntrl].Text
@@ -1028,8 +1036,8 @@ Public Class frmEstimatingBase
         Try
             UpdateGeneralInfoDatatable()
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
-                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON"
-            If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
+                                                       FormatFileNameFromTab(CurrentTab)) & EstFileType & ".JSON"
+            If Not Serialize(EST_Filename, EstimatingDataset, "Error Saving Data - " & CurrentTab, FormIsDirty) Then
                 Throw New Exception
             End If
 
@@ -1069,8 +1077,8 @@ Public Class frmEstimatingBase
             '    GeneralInfo.Rows.Add(_row)
             'End If
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
-                                                       FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODORD.JSON"
-            If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & TabControl1.SelectedTab.Text, FormIsDirty) Then
+                                                       FormatFileNameFromTab(CurrentTab)) & "MODORD.JSON"
+            If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & CurrentTab, FormIsDirty) Then
                 Throw New Exception
             End If
 
@@ -1082,16 +1090,18 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
-        UpdateAllTotals(Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6))
+        UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
         SaveAll()
     End Sub
     Private Sub GeneralInfoValueChanged()
 
         If Not isInitializingComponent Then
             UpdateGeneralInfoDatatable()
+            Load_ListBoxes()
+            isInitializingComponent = True
             PopulateEstimating(False)
+            isInitializingComponent = False
             FormIsDirty = True
-            Set_Fields_Grey_EST()
         End If
 
     End Sub
@@ -1234,11 +1244,11 @@ Public Class frmEstimatingBase
         ShowCopyMergeDialog(Merge_cmd.Tag)
     End Sub
     Private Sub ShowCopyMergeDialog(ByVal CurButtonLabel As String)
-        Dim CurUnits As String = Strings.Left(TabControl1.SelectedTab.Text.Trim, TabControl1.SelectedTab.Text.Length - 6)
+        Dim CurUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
         Dim iIndex As Integer = 0, AryIndex As Integer = -1
 
         If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
-                                                                 FormatFileNameFromTab(TabControl1.SelectedTab.Text.Trim)) & "MODEST.JSON") Then
+                                                                 FormatFileNameFromTab(CurrentTab)) & EstFileType & ".JSON") Then
             Select Case PromptForSave()
                 Case MsgBoxResult.Yes, 0
                     ArchiveFiles()
@@ -1251,7 +1261,7 @@ Public Class frmEstimatingBase
                     ElseIf TabControl1.TabPages.Count > 1 Then
                         For iIndex = 0 To TabControl1.TabPages.Count
                             Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                            If CurTab.Text.IndexOf(EST_Suffix) > -1 And CurTab.Text <> TabControl1.SelectedTab.Text Then
+                            If CurTab.Text.IndexOf(EST_Suffix) > -1 And CurTab.Text <> CurrentTab Then
                                 AryIndex += 1
                                 ReDim Preserve UnitCopyMerge_frm.UnitOptions(AryIndex)
                                 UnitCopyMerge_frm.UnitOptions(AryIndex) = Strings.Left(CurTab.Text.Trim, CurTab.Text.Length - 6)
@@ -1279,18 +1289,18 @@ Public Class frmEstimatingBase
                     End If
                     DisplayEST_vs_ORD()
                 Case Else
-                    MsgBox("Current data for " & TabControl1.SelectedTab.Text & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
+                    MsgBox("Current data for " & CurrentTab & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
             End Select
         Else
-            MsgBox("Current data for " & TabControl1.SelectedTab.Text & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
+            MsgBox("Current data for " & CurrentTab & " has not been saved!  Cannot continue until data has been saved", vbOKOnly, "No data file")
         End If
 
     End Sub
-    Private Function PromptForSave() As DialogResult
-        Dim SaveResponse As Integer = 0
+    Public Function PromptForSave() As DialogResult
+        Dim SaveResponse As DialogResult = 0
 
         If FormIsDirty Then
-            If TabControl1.SelectedTab.Text.ToUpper.Contains(EST_Suffix) Then
+            If CurrentTab.ToUpper.Contains(EST_Suffix) Then
                 SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine &
                                       "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
                 If SaveResponse = MsgBoxResult.Yes Then
@@ -1354,7 +1364,11 @@ Public Class frmEstimatingBase
             RiserQtyRear_Cmb.Enabled = True
         End If
         For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
+            BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
             BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
+            For jIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.ColumnCount - 1
+                BillOfMaterials_spr.ActiveSheet.SetColumnSizeable(jIndex, False)
+            Next jIndex
             ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
             If Not ChildSheetView1 Is Nothing Then
                 ChildSheetView1.LockBackColor = Color.WhiteSmoke

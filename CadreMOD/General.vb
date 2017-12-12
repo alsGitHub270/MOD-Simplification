@@ -659,9 +659,30 @@ Module General
         Loop
 
     End Sub
-    Public Sub DeleteFiles()
+    Public Sub DeleteAllFiles()
         For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
             File.Delete(FoundFile)
-        Next
+        Next FoundFile
+    End Sub
+    Public Sub DeleteFiles()
+        Dim FileNameLike As String = String.Empty
+
+        Select Case CurrentGOData_Typ.EstimateLevel
+            Case "Alt"
+                FileNameLike = Contracts.EstimateNum & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & "*" & FileSuffix_ALT & ".JSON"
+            Case "Master"
+                FileNameLike = Contracts.EstimateNum & CurrentGOData_Typ.Bank & "A*" & FileSuffix_MASTER & ".JSON"
+            Case "Summary"
+                FileNameLike = Contracts.EstimateNum & CurrentGOData_Typ.Bank & "*" & ".JSON"
+            Case Else
+                Exit Sub
+        End Select
+        ArchiveFiles()
+        For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
+            If FoundFile Like ReportsPath & FileNameLike Then
+                File.Delete(FoundFile)
+            End If
+        Next FoundFile
+
     End Sub
 End Module

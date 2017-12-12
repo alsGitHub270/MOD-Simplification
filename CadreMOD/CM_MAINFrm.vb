@@ -258,7 +258,7 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub CreateOverTimeDataTable(bank As String)
+    Private Sub CreateOverTimeDataTable(ByVal bank As String)
         ' Creates one set of columns for newly added summary row
         Dim column As DataColumn
 
@@ -363,7 +363,9 @@ Partial Friend Class CM_MAIN_frm
         End If
 
         Try
-
+            If installation_office.Trim.Length = 0 Then
+                Exit Sub
+            End If
             Dim sSQL As String = "SELECT STRate, OTRate " & _
                     "FROM [Rate (MOD Labor)] " & _
                     "WHERE Office = '" & installation_office & "';"
@@ -501,14 +503,14 @@ Partial Friend Class CM_MAIN_frm
             Case "Summary"
             Case "Master", "Base"
                 Me.ShowInTaskbar = False
-                Using frm As New frmEstimatingBase
-                    frm.ShowDialog()
+                Using frmEstimatingBase
+                    frmEstimatingBase.ShowDialog()
                 End Using
                 Me.ShowInTaskbar = True
             Case "Alt"
                 Me.ShowInTaskbar = False
-                Using frm As New frmEstimatingBase
-                    frm.ShowDialog()
+                Using frmEstimatingAlt
+                    frmEstimatingAlt.ShowDialog()
                 End Using
                 Me.ShowInTaskbar = True
             Case Else
@@ -1270,6 +1272,7 @@ Partial Friend Class CM_MAIN_frm
         End Select
 
         FpSpread1.Refresh()
+        MergeBaseWithAlts()
 
     End Sub
 
@@ -1646,12 +1649,14 @@ Partial Friend Class CM_MAIN_frm
         If CurrentGOData_Typ.EstimateLevel = "Alt" Then
             If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(summary_row, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 'If MessageBox.Show("Delete Alt '" & CInt(activeRows(2)) + 1 & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                DeleteFiles()
                 DeleteAltRow(activeRows)
             End If
         ElseIf CurrentGOData_Typ.EstimateLevel = "Master" Then
             Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
             If MessageBox.Show("Delete Master for Bank '" & selected_bank & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 ' DeleteAltRow(activeRows)
+                DeleteFiles()
                 DeleteMaster(activeRows)
             End If
         ElseIf CurrentGOData_Typ.EstimateLevel = "Summary" Then
@@ -1659,6 +1664,7 @@ Partial Friend Class CM_MAIN_frm
             If MessageBox.Show("You are about to delete all data for Bank '" & selected_bank & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 DeleteBank(summary_row)
                 DeleteLaborAndOT(selected_bank)
+                DeleteFiles()
             End If
         ElseIf CurrentGOData_Typ.EstimateLevel = "Base" Then
             MessageBox.Show("You cannot delete a Base Row.  You might want to remove the 'Summary' row to delete the estimate for the entire Bank", "Try Again", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -1902,7 +1908,7 @@ Partial Friend Class CM_MAIN_frm
         End If
     End Sub
 
-    Private Sub btnContact_Click(sender As System.Object, e As System.EventArgs) Handles btnContact.Click
+    Private Sub btnContact_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnContact.Click
         Using obj As New frmContacts
             obj.ShowDialog()
         End Using
@@ -2379,7 +2385,7 @@ AddMasterRow_Error:
     Private Sub chkEngineeringSurvey_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub cboSupt_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cboSupt.SelectedIndexChanged
+    Private Sub cboSupt_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboSupt.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
 
@@ -2879,11 +2885,11 @@ AddMasterRow_Error:
 
     End Sub
 
-    Private Sub UpdateSummary(Optional merging As Boolean = False)
+    Private Sub UpdateSummary(Optional ByVal merging As Boolean = False)
         Dim _id As String = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
         Dim _level As String = String.Empty
 
-       
+
         If CurrentGOData_Typ.EstimateLevel = "Master" Or merging Then
             _level = "Master"
         ElseIf CurrentGOData_Typ.EstimateLevel = "Base" Then
@@ -2896,18 +2902,19 @@ AddMasterRow_Error:
 
             Dim _summaryRow() As Data.DataRow
             _summaryRow = dtSummaryGroup.Select("id = '" & _id & "'")
-
-            If _level = "Base" Then
-                _summaryRow(0)("C1") = _dataRow(0)("C1")
-                _summaryRow(0)("Bank_Final_Price") = _dataRow(0)("Bank_Final_Price")
-            Else
-                Dim _columnName As String
-                For i As Integer = 5 To dtBaseGroup.Columns.Count - 1
-                    _columnName = dtBaseGroup.Columns(i).ColumnName
-                    If _columnName <> "Comment" Then
-                        _summaryRow(0)(_columnName) = _dataRow(0)(_columnName)
-                    End If
-                Next
+            If _dataRow.Length > 0 Then
+                If _level = "Base" Then
+                    _summaryRow(0)("C1") = _dataRow(0)("C1")
+                    _summaryRow(0)("Bank_Final_Price") = _dataRow(0)("Bank_Final_Price")
+                Else
+                    Dim _columnName As String
+                    For i As Integer = 5 To dtBaseGroup.Columns.Count - 1
+                        _columnName = dtBaseGroup.Columns(i).ColumnName
+                        If _columnName <> "Comment" Then
+                            _summaryRow(0)(_columnName) = _dataRow(0)(_columnName)
+                        End If
+                    Next
+                End If
             End If
         End If
 
@@ -3144,7 +3151,7 @@ AddMasterRow_Error:
 
     End Function
 
-    Private Sub btnGatewayReview_Click(sender As System.Object, e As System.EventArgs) Handles btnGatewayReview.Click
+    Private Sub btnGatewayReview_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGatewayReview.Click
         Dim sMsg As String
         If Me.txtGatewayStatus.Text = "Under Review" Then
             MessageBox.Show("Engineering is already reviewing this estimate.  It must be Approved or Rejected before an additional review can be requested.", Application.ProductName)
@@ -3392,7 +3399,7 @@ AddMasterRow_Error:
         Return consultants_name
     End Function
 
-    Private Function CountCars(bank_type As String) As Integer
+    Private Function CountCars(ByVal bank_type As String) As Integer
         Dim number_of_cars As Integer = 0
 
         For Each row As DataRow In dtSummaryGroup.Rows
@@ -3436,7 +3443,7 @@ AddMasterRow_Error:
 
     End Sub
 
-    Private Sub btnSuptReview_Click(sender As System.Object, e As System.EventArgs) Handles btnSuptReview.Click
+    Private Sub btnSuptReview_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSuptReview.Click
 
         Dim sSuptReview As String
         Dim sSuptStatus As String = ""
@@ -3709,7 +3716,7 @@ AddMasterRow_Error:
         Return True
     End Function
 
-    Private Sub DeleteLaborAndOT(selected_bank As String)
+    Private Sub DeleteLaborAndOT(ByVal selected_bank As String)
 
         Try
             dtLaborRates.Columns.Remove("labor_ratio_" & selected_bank)

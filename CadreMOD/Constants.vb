@@ -1,6 +1,6 @@
 ﻿Module Constants
     ' Contract Manager
-    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 12/05/2017"
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 12/11/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
@@ -193,6 +193,7 @@
 
     Public Const EST_Suffix As String = " [EST]"
     Public Const ORD_Suffix As String = " [ORD]"
+    Public Const ALT_Suffix As String = " [ALT]"
 
     Public typeStr As System.Type = System.Type.GetType("System.String")
     Public typeInt As System.Type = System.Type.GetType("System.Int64")
