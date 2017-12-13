@@ -59,7 +59,7 @@ Partial Class frmLaborRates
         Me.dgvOverTime.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvOverTime.Location = New System.Drawing.Point(32, 338)
         Me.dgvOverTime.Name = "dgvOverTime"
-        Me.dgvOverTime.Size = New System.Drawing.Size(509, 286)
+        Me.dgvOverTime.Size = New System.Drawing.Size(509, 118)
         Me.dgvOverTime.TabIndex = 75
         '
         'btnExit
@@ -80,7 +80,7 @@ Partial Class frmLaborRates
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(566, 636)
+        Me.ClientSize = New System.Drawing.Size(566, 503)
         Me.ControlBox = False
         Me.Controls.Add(Me.btnExit)
         Me.Controls.Add(Me.dgvOverTime)

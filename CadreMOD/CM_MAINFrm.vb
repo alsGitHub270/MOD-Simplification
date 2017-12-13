@@ -21,7 +21,7 @@ Partial Friend Class CM_MAIN_frm
     Dim dsTemp As DataSet
 
     Dim copying_to_new_row As Boolean = False
-    Dim add_new_labor_ot_columns As Boolean = False
+    Dim adding_to_labor_and_overtime As Boolean = False
 
     Dim initializing As Boolean
     Dim id_to_copy As String = ""
@@ -218,83 +218,52 @@ Partial Friend Class CM_MAIN_frm
         Try
             dtOverTime = dsCadre.Tables.Add("OverTime")
 
-            dtOverTime.Columns.Add("rate_year")
-            For Each row As DataRow In dtSummaryGroup.Rows
-                column = New DataColumn
-                column.DataType = typeInt
-                column.DefaultValue = 5
-                column.ColumnName = "work_days_" & row("Bank")
-                dtOverTime.Columns.Add(column)
+            dtOverTime.Columns.Add("bank")
+            column = New DataColumn
+            column.DataType = typeInt
+            column.DefaultValue = 5
+            column.ColumnName = "work_days"
+            dtOverTime.Columns.Add(column)
 
-                column = New DataColumn
-                column.ColumnName = "work_hours_" & row("Bank")
-                column.DataType = typeInt
-                column.DefaultValue = 8
-                dtOverTime.Columns.Add(column)
+            column = New DataColumn
+            column.ColumnName = "work_hours"
+            column.DataType = typeInt
+            column.DefaultValue = 8
+            dtOverTime.Columns.Add(column)
 
-                column = New DataColumn
-                column.ColumnName = "#_teams_" & row("Bank")
-                column.DataType = typeInt
-                column.DefaultValue = 1
-                dtOverTime.Columns.Add(column)
+            column = New DataColumn
+            column.ColumnName = "#_teams"
+            column.DataType = typeInt
+            column.DefaultValue = 1
+            dtOverTime.Columns.Add(column)
 
-                column = New DataColumn
-                column.ColumnName = "ot%_" & row("Bank")
-                column.DataType = typeSingle
-                column.DefaultValue = 0
-                dtOverTime.Columns.Add(column)
+            column = New DataColumn
+            column.ColumnName = "ot_%"
+            column.DataType = typeSingle
+            column.DefaultValue = 0
+            dtOverTime.Columns.Add(column)
 
-                column = New DataColumn
-                column.ColumnName = "ot_labor_inefficiency_" & row("Bank")
-                column.DataType = typeSingle
-                column.DefaultValue = 0
-                dtOverTime.Columns.Add(column)
-            Next
+            column = New DataColumn
+            column.ColumnName = "ot_labor_inefficiency"
+            column.DataType = typeSingle
+            column.DefaultValue = 0
+            dtOverTime.Columns.Add(column)
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Creating OverTime Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(ex.Message, "Error Creating OverTime Datatable", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
         ReadInOvertime()
 
     End Sub
 
-    Private Sub CreateOverTimeDataTable(ByVal bank As String)
-        ' Creates one set of columns for newly added summary row
-        Dim column As DataColumn
+    Private Sub InsertNewOvertimeRow(ByVal pBank As String)
 
         Try
-            column = New DataColumn
-            column.DataType = typeInt
-            column.DefaultValue = 5
-            column.ColumnName = "work_days_" & bank
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "work_hours_" & bank
-            column.DataType = typeInt
-            column.DefaultValue = 8
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "#_teams_" & bank
-            column.DataType = typeInt
-            column.DefaultValue = 1
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "ot%_" & bank
-            column.DataType = typeSingle
-            column.DefaultValue = 0
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "ot_labor_inefficiency_" & bank
-            column.DataType = typeSingle
-            column.DefaultValue = 0
-            dtOverTime.Columns.Add(column)
-
+            Dim _row As DataRow = dtOverTime.NewRow
+            _row("Bank") = pBank
+            dtOverTime.Rows.Add(_row)
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Creating OverTime Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(ex.Message, "Error Adding Row to Overtime Datatable", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
@@ -456,11 +425,10 @@ Partial Friend Class CM_MAIN_frm
                                 OT_not_found = False
                                 Dim workRow As DataRow = dtOverTime.NewRow
                                 For i As Integer = 0 To dtOverTime.Columns.Count - 1
+                                    ' Column names and key from json must be the same.
                                     If Not IsNothing(ot.Item(dtOverTime.Columns(i).ColumnName)) Then
                                         workRow.Item(i) = ot.Item(dtOverTime.Columns(i).ColumnName)
                                     End If
-
-                                    ' Column names and key from json must be the same. 
                                 Next
                                 dtOverTime.Rows.Add(workRow)
                             Next
@@ -479,9 +447,9 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub InitializeOverTime()
 
-        For Each row As DataRow In dtLaborRates.Rows
+        For Each row As DataRow In dtSummaryGroup.Rows
             Dim newRow As DataRow = dtOverTime.NewRow
-            newRow("rate_year") = row.Item("rate_year")
+            newRow("bank") = row.Item("Bank")
             dtOverTime.Rows.Add(newRow)
         Next
         isDirty = True
@@ -783,9 +751,9 @@ Partial Friend Class CM_MAIN_frm
         Dim usex As FarPoint.Win.Spread.SheetView = e.View.GetSheetView
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
-
         CurrentGOData_Typ.EstimateLevel = String.Empty
         CurrentGOData_Typ.Alt = "A"
+
         If usex.TitleInfo.Text.ToUpper.IndexOf("SUMMARY") > -1 Then
             CurrentGOData_Typ.EstimateLevel = "Summary"
         Else
@@ -808,6 +776,7 @@ Partial Friend Class CM_MAIN_frm
                 End If
             End If
         End If
+
         CurrentGOData_Typ.CurrentRow = e.Row
         UseCurRow = e.Row
         UseCurCol = e.Column
@@ -1503,7 +1472,7 @@ Partial Friend Class CM_MAIN_frm
             dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", _id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0, 0, 0, ""})
             isDirty = True
 
-            add_new_labor_ot_columns = True
+            adding_to_labor_and_overtime = True
 
             SetSummaryC1Colors()
             SetBaseAltC1Colors()
@@ -1546,10 +1515,10 @@ Partial Friend Class CM_MAIN_frm
                 If _bank = "" Then
                     MessageBox.Show("Please select a bank", "Bank ?", MessageBoxButtons.OK, MessageBoxIcon.Hand)
                     e.Cancel = True
-                ElseIf add_new_labor_ot_columns Then
+                ElseIf adding_to_labor_and_overtime Then
                     dtLaborRates.Columns.Add("labor_ratio_" & _bank)
-                    CreateOverTimeDataTable(_bank)
-                    add_new_labor_ot_columns = False
+                    InsertNewOvertimeRow(_bank)
+                    adding_to_labor_and_overtime = False
                 End If
 
             Case 4
