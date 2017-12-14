@@ -3152,7 +3152,9 @@ AddMasterRow_Error:
             clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
 
             clsNotes.DocSave()
-        Catch
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error MDC_Add_Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            EndProgram()
         End Try
     End Sub
 
