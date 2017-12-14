@@ -816,14 +816,6 @@ Partial Friend Class CM_MAIN_frm
         ' ckbxcell.TextTrue = "Included In Bid"
         ckbxcell.TextFalse = ""
 
-        'Dim bttncell As New FarPoint.Win.Spread.CellType.ButtonCellType()
-        'bttncell.ButtonColor = Color.Cyan
-        'bttncell.DarkColor = Color.DarkCyan
-        'bttncell.LightColor = Color.AliceBlue
-        'bttncell.TwoState = False
-        'bttncell.Text = "Merge"
-        'bttncell.ShadowSize = 3
-
         e.SheetView.LockBackColor = Color.LightGray
 
         If e.SheetView.ParentRelationName = "Summary_Base_Relationship" Then  'Bank Row
@@ -1105,16 +1097,13 @@ Partial Friend Class CM_MAIN_frm
                 .Columns(25).CellType = currencyType
                 .Columns(25).Width = 60
 
-
                 .Columns(26).Label = "Prod Code"
                 .Columns(26).Locked = True
                 .Columns(26).Width = 40
-                '   .Columns(26).CellType = numberType
 
                 .Columns(27).Label = "Lead Time"
                 .Columns(27).Locked = True
                 .Columns(27).Width = 40
-                '  .Columns(26).CellType = numberType
 
                 .Columns(28).Label = "Comments"
                 .Columns(28).Locked = False
@@ -1207,7 +1196,6 @@ Partial Friend Class CM_MAIN_frm
                     update_message = "You are about to create a 'Master' for Bank " & _bank & ".  Are you sure?"
 
                     If MessageBox.Show(update_message, "Are You Sure?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
-                        '  dsCadre.Tables("BaseGroup").Rows.Add((New Object() {"Master", altID, bank, "01-04", "Geared", target, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ""}))
                         AddMasterRow(_id)
 
                         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
@@ -1289,25 +1277,8 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub btnPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrint.Click
 
-        'Dim printset = New FarPoint.Win.Spread.PrintInfo()
-
-        'printset.PrintToPdf = True
-
-        'printset.PdfFileName = "c:\temp\test.pdf"
-
-        'printset.PdfWriteMode = FarPoint.Win.Spread.PdfWriteMode.Append
-
-        'For Each sheet As FarPoint.Win.Spread.SheetView In FpSpread1.Sheets
-
-        '    sheet.PrintInfo = printset
-        'Next
-
-        'FpSpread1.PrintSheet(-1)
-
-
         Dim printset As New FarPoint.Win.Spread.PrintInfo()
         printset.PrintToPdf = True
-        'printset.PdfFileName = "c:\temp\results.pdf"
         printset.Orientation = FarPoint.Win.Spread.PrintOrientation.Landscape
         printset.Margin.Top = 2
         printset.Margin.Bottom = 2
@@ -1352,7 +1323,6 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub AddAlternateRow()
 
-        'MsgBox(FpSpread1.ActiveSheet.ActiveRowIndex)
         Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing, ChildSheetView2 As FarPoint.Win.Spread.SheetView = Nothing
         Dim baseID As String, thisRowDescription As String
         Dim summaryRowIndex As Integer, baseRowIndex As Integer, altCount As Integer
@@ -1365,7 +1335,7 @@ Partial Friend Class CM_MAIN_frm
             activeRows = FindActiveRows()
             activeRow = activeRows(0)
 
-            ' if FindActiveRow returns -1, it's likely that the cursor is set on a summary row.  Then use ActiveRow
+            ' if FindActiveRow returns -1, it's likely that the cursor is set on a summary row.  Then use ActiveRowIndex
             If activeRow = -1 Then
                 activeRow = FpSpread1.ActiveSheet.ActiveRowIndex
             End If
@@ -1484,6 +1454,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub FpSpread1_ComboCloseUp(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles FpSpread1.ComboCloseUp
+
         Select Case e.Column
             Case 3
                 If FpSpread1.ActiveSheet.Cells(e.Row, e.Column).Value = "" Then
@@ -1501,13 +1472,13 @@ Partial Friend Class CM_MAIN_frm
                     FpSpread1.ActiveSheet.SetActiveCell(FpSpread1.ActiveSheet.ActiveRowIndex, 5, False)
                 End If
         End Select
+
     End Sub
 
 
     Private Sub FpSpread1_LeaveCell(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.LeaveCellEventArgs) Handles FpSpread1.LeaveCell
 
         Dim textBoxType As New FarPoint.Win.Spread.CellType.TextCellType()
-
 
         Select Case e.Column
             Case 3
@@ -1604,10 +1575,6 @@ Partial Friend Class CM_MAIN_frm
         Dim activeRows As Array
         activeRows = FindActiveRows()
 
-        'MsgBox("ActiveIndexRow: " & FpSpread1.ActiveSheet.ActiveRowIndex & vbCrLf & _
-        '       "Summary Row:  " & activeRows(0) & vbCrLf & _
-        '       "Base Row: " & activeRows(1) & vbCrLf & _
-        '       "Alt row:  " & activeRows(2))
         Dim summary_row As String
         If activeRows(0) = -1 And CurrentGOData_Typ.EstimateLevel = "Summary" Then
             summary_row = FpSpread1.Sheets(0).ActiveRowIndex
@@ -1617,10 +1584,10 @@ Partial Friend Class CM_MAIN_frm
 
         If CurrentGOData_Typ.EstimateLevel = "Alt" Then
             If MessageBox.Show("You are about to delete Alternate '" & (activeRows(2) + 1).ToString & "' for Bank '" & FpSpread1.ActiveSheet.Cells(summary_row, 3).Value & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
-                'If MessageBox.Show("Delete Alt '" & CInt(activeRows(2)) + 1 & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 DeleteFiles()
                 DeleteAltRow(activeRows)
             End If
+
         ElseIf CurrentGOData_Typ.EstimateLevel = "Master" Then
             Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
             If MessageBox.Show("Delete Master for Bank '" & selected_bank & "' from the Estimate?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
@@ -1628,6 +1595,7 @@ Partial Friend Class CM_MAIN_frm
                 DeleteFiles()
                 DeleteMaster(activeRows)
             End If
+
         ElseIf CurrentGOData_Typ.EstimateLevel = "Summary" Then
             Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
             If MessageBox.Show("You are about to delete all data for Bank '" & selected_bank & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
@@ -1635,8 +1603,10 @@ Partial Friend Class CM_MAIN_frm
                 DeleteLaborAndOT(selected_bank)
                 DeleteFiles()
             End If
+
         ElseIf CurrentGOData_Typ.EstimateLevel = "Base" Then
             MessageBox.Show("You cannot delete a Base Row.  You might want to remove the 'Summary' row to delete the estimate for the entire Bank", "Try Again", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
         Else
             MessageBox.Show("Please click on the Group Column of the Row you wish to delete", "Cannot Determine Which Row Selected!")
         End If
@@ -1852,8 +1822,6 @@ Partial Friend Class CM_MAIN_frm
         txtJobState.Text = Contracts.JobState
         txtJobZip.Text = Contracts.JobZip
 
-
-
         If Contracts.NationalAccount Then
             cboNationalAccount.SelectedItem = "Yes"
         Else
@@ -1870,8 +1838,7 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub txtBidDate_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
-        If IsDate(txtBidDate.Text) Then
-        Else
+        If Not IsDate(txtBidDate.Text) Then
             e.Cancel = True
             MessageBox.Show("Please enter a valid date in the format mm/dd/yy", "Invalid Date")
         End If
@@ -1932,15 +1899,12 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
     Private Sub FpSpread1_SelectionChanging(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.SelectionChangingEventArgs) Handles FpSpread1.SelectionChanging
-
         ProcessNegSummaryTotals()
-
     End Sub
 
     Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
         SaveAll()
     End Sub
-
 
     Private Sub AddMasterRow(ByVal _id As String)
 
@@ -1989,13 +1953,10 @@ Partial Friend Class CM_MAIN_frm
                                 ' Recalculate C1 after all values processed
                             End If
                         End If
-
                     End If
-
                 Next
             End If
         Next
-
 
         ' Recalculate the C1 now
         Dim sales_commission As Integer
@@ -2007,9 +1968,6 @@ Partial Friend Class CM_MAIN_frm
         _newRow("sort_fld") = "0"
         _newRow("BaseGroup") = "Master"
         _newRow("alt_id") = ""
-
-        'TODO lock base C1
-
 
         dtBaseGroup.Rows.Add(_newRow)
 
@@ -2490,9 +2448,7 @@ AddMasterRow_Error:
         txtJobState.Text = Contracts.JobState
         txtJobZip.Text = Contracts.JobZip
 
-
     End Sub
-
 
     Private Function GetTaxRate() As Object
         Dim sql_string As String
@@ -2702,7 +2658,6 @@ AddMasterRow_Error:
         ' copies the rows in base and alt for the selected summary
         ' also enables bank_type, units, c1 etc.
 
-        '   Stop
         Dim _currentRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
         FpSpread1.ActiveSheet.Cells(_currentRow, 4).Locked = False
         FpSpread1.ActiveSheet.Cells(_currentRow, 5).Locked = False
@@ -2795,7 +2750,6 @@ AddMasterRow_Error:
 
     Private Sub btnLaborRates_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLaborRates.Click
 
-        'Dim obj As New frmLaborRates
         If Me.cboInstallingOffice.Text = "" Then
             MessageBox.Show("Please select an Installing Office to calculate Labor Rates", "Missing Installing Office", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             Exit Sub
@@ -2858,7 +2812,6 @@ AddMasterRow_Error:
         Dim _id As String = FpSpread1.ActiveSheet.Cells(CurSummaryRow, 1).Text
         Dim _level As String = String.Empty
 
-
         If CurrentGOData_Typ.EstimateLevel = "Master" Or merging Then
             _level = "Master"
         ElseIf CurrentGOData_Typ.EstimateLevel = "Base" Then
@@ -2905,72 +2858,19 @@ AddMasterRow_Error:
 
     Private Function SaveData_Contract() As Integer
         Dim result As Integer = 0
-        '   Dim TempGO As Integer = GONumbers(CurrentGOSelection).GONumbersID
 
         Me.Cursor = Cursors.WaitCursor
-        '      Fields2Type()
-        '     result = Me.Validate_Renamed()
-        'If result = MsgBoxStyle.Critical Then
-        '    Me.Cursor = Cursors.Default
-        '    Return result
-        'End If
-        'Load_Office_Dependents()
-        'Write_CM()
-        'If NewJob And GONumbers(0).Bank <> "" And GONumbers(0).Alt <> "" And GONumbers(0).Units <> "" Then
-        '    Set_CurrentAddress()
-        '    NewJob = False
-        'End If
+        
         ArchiveFiles()
-        'Set_GO_Dependents(CurrentGOSelection)
-        'gbMDIChildDirty = False
-        'System_DataBaseSetup()
+        
         Add_FeedBack_Doc()
         Me.Cursor = Cursors.Default
         StatusBar1.Items.Item(0).Text = "Contract Manager Data Has Been Saved!"
-        'SortLogic()
-        'CurrentGOSelection = Find_CurrentGoSelection(TempGO)
+       
         Return System.Windows.Forms.DialogResult.OK
 
     End Function
 
-    'Public Sub Load_Office_Dependents()
-    '    'Dim OfficeRecordset As New ADODB.Recordset
-    '    'Dim Where As String = String.Empty, IndexName As String = String.Empty
-
-    '    'Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, OPEN_RECORD, MOD_OFFICE_SQL, , , , , , ADOCatalogOptionDataBase)
-    '    'Where = "[Office] = '" & Contracts.InstallingOffice & "'"
-    '    'If Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, FIND_FIRST, MOD_OFFICE_SQL, Where) = 0 Then
-    '    '    Contracts.DistrictCode = OfficeRecordset("District").Value.ToString
-    '    'Else
-    '    '    Where = "[Office] = '" & Contracts.ServiceOffice & "'"
-    '    '    If Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, FIND_FIRST, MOD_OFFICE_SQL, Where) = 0 Then
-    '    '        Contracts.DistrictCode = OfficeRecordset("District").Value.ToString
-    '    '    End If
-    '    'End If
-    '    'Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, 1, CLOSE_RECORD)
-    '    'Select Case Conversion.Val(Contracts.DistrictCode)
-    '    '    Case 11, 16, 23, 25, 28, 29
-    '    '        IsPilotOffice = True
-    '    '    Case Else
-    '    '        IsPilotOffice = False
-    '    'End Select
-    '    'If Contracts.InstallingOffice <> "" Then
-    '    '    Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, ADODB.RecordTypeEnum.adCollectionRecord, OPEN_RECORD, "MOD Office")
-    '    '    Where = Contracts.InstallingOffice
-    '    '    IndexName = "Office"
-    '    '    Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, ADODB.RecordTypeEnum.adCollectionRecord, SEEK_ME, "MOD Office", Where, IndexName)
-    '    '    If Not Contracts.InstallingOffice.StartsWith("X") And Not Contracts.InstallingOffice.StartsWith("T") Then
-    '    '        Contracts.Area = "" & OfficeRecordset("Area").Value
-    '    '    End If
-    '    '    If Not Contracts.InstallingOffice.StartsWith("X") And Not Contracts.InstallingOffice.StartsWith("T") Then
-    '    '        If Not IsDBNull(OfficeRecordset("Pricing Territory").Value) Then
-    '    '            Contracts.PricingTerritory = OfficeRecordset("Pricing Territory").Value
-    '    '        End If
-    '    '    End If
-    '    '    Query_Execute(ADOConnectionOptionDataBase, OfficeRecordset, ADODB.RecordTypeEnum.adCollectionRecord, CLOSE_RECORD)
-    '    'End If
-
-    'End Sub
 
     Private Function GetBudgetC1(ByVal speed As Integer, ByVal machine_model As String, ByVal bank_type As String) As Decimal
         Dim sSQL As String = "SELECT C1_High_Rise, C1_Mid_Rise, C1_Low_Rise, C1_Destination FROM [MOD Office] "
@@ -3008,9 +2908,11 @@ AddMasterRow_Error:
         Return c1
 
     End Function
+
     Private Sub btn_Help_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_Help.Click
         MessageBox.Show(VERSION_STAMP, Application.ProductName)
     End Sub
+
     Private Function CreateCombinedSheet() As FarPoint.Win.Spread.SheetView
         Dim CombinedSheet As New FarPoint.Win.Spread.SheetView
         Dim iIndex As Integer = 0, jIndex As Integer = 0, kIndex As Integer = 0
@@ -3080,6 +2982,7 @@ AddMasterRow_Error:
             Throw New Exception
         End Try
     End Function
+
     Private Sub SetCombinedSheetHeaders(ByRef combinedSheet As FarPoint.Win.Spread.SheetView)
         combinedSheet.Columns(0).Label = "Group"
         combinedSheet.Columns(1).Label = " "
@@ -3233,25 +3136,7 @@ AddMasterRow_Error:
             clsNotes.SetValue("businessline", "MOD")
             clsNotes.SetValue("unique", HoldUniqueActivity)
             clsNotes.SetValue("proposal_num", HoldUniqueActivity)
-            'If CurrentGOData_Typ. <> "0" Then
-            '    clsNotes.SetValue("goNum", CurrentGOData_Typ.GONum)
-            'End If
-            'If Contracts.NegNum <> 0 Then
-            '    clsNotes.SetValue("negNum", CStr(Contracts.NegNum))
-            'End If
             clsNotes.SetValue("jobName", Contracts.JobName)
-            'Select Case CurrentGOData_Typ.Type
-            '    Case HYD_NI_PRODUCT_TYPE
-            '        clsNotes.SetValue("productType", "330A")
-            '    Case TRA_NI_PRODUCT_TYPE
-            '        clsNotes.SetValue("productType", ProductApplication)
-            '    Case ESC_NI_PRODUCT_TYPE
-            '        ' kab not listed in file
-            '        clsNotes.SetValue("productType", "9300")
-            '    Case HYD_POH_PRODUCT_TYPE
-            '        clsNotes.SetValue("productType", "POH")
-            '    Case Else
-            'End Select
 
             clsNotes.SetValue("hydroCars", CountCars(HYDRO_TYPE))
             clsNotes.SetValue("gearedCars", CountCars(GEARED_TYPE))
@@ -3307,7 +3192,6 @@ AddMasterRow_Error:
         Dim result As Boolean = False
 
         Try
-            ' Dim Bank, Alt, CarNo
             Dim b As Boolean
 
             If clsNotes.NotesDocKeyCollection(Contracts.ProposalNum) Then
@@ -3399,14 +3283,7 @@ AddMasterRow_Error:
                 FieldSup_Field = "FieldSupervisorNames"
             End If
             clsNotes.GetArray(FieldSup_Field, Me.cboSupt)
-            'If FilterNames Then
-            '    FilterNamesByRegion(MComboCntl)
-            'End If
         End If
-
-        'If AddZZZOther Then
-        '    [ComboCntl].Items.Add("ZZZ Other")
-        'End If
 
         AssignListIndex(Me.cboSupt, tempstore)
 
