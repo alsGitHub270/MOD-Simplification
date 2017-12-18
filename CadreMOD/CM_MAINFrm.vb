@@ -521,6 +521,7 @@ Partial Friend Class CM_MAIN_frm
         If dtSummaryGroup.Rows.Count = 0 Then
             AddBankRow()
         End If
+
         Load_ListBoxes()
         Text2Fields()
         LoadTopOfForm()
@@ -1687,7 +1688,7 @@ Partial Friend Class CM_MAIN_frm
             cboBuildingType.Items.Add(code)
         Next
 
-        sSQL = "SELECT DISTINCTROW [Local Code] & ' - ' & IIf([City] Is Null,'',[City] & ',') & IIf([State] Is Null,' ',[State]) AS [Local Code/ID] FROM [Local Code] WHERE [State] = '" & txtJobState.Text & "';"
+        sSQL = "SELECT DISTINCTROW [Local Code] & ' - ' & IIf([City] Is Null,'',[City] & ',') & IIf([State] Is Null,' ',[State]) AS [Local Code/ID] FROM [Local Code] WHERE [State] = '" & Contracts.JobState.ToString & "';"
 
         myList = GetDataFromOptions(sSQL)
         For Each code In myList
@@ -2904,6 +2905,7 @@ AddMasterRow_Error:
         If myList.Count > 0 Then
             c1 = myList(0)
             c1 += 0.06
+            c1 = Math.Round(c1,4)
         End If
         Return c1
 
