@@ -257,7 +257,6 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub InsertNewOvertimeRow(ByVal pBank As String)
-
         Try
             Dim _row As DataRow = dtOverTime.NewRow
             _row("Bank") = pBank
@@ -1633,7 +1632,7 @@ Partial Friend Class CM_MAIN_frm
 
 
     Private Function BuildAvailableBanks() As String()
-        ' Roll thru all the banks in the summary row. 
+        ' Roll thru all the banks in the summary row.
         ' then delete if bank already in use
 
         Dim myList As New List(Of String)()
@@ -2395,7 +2394,7 @@ AddMasterRow_Error:
     Public Sub SaveAll()
         SaveTopOfFormToDataset()
         'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
-        ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty) 
+        ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty)
         Serialize(CM_file, dsCadre, "Error Writing Cadre Json file", isDirty)
         SaveData_Contract() '
     End Sub
@@ -2678,7 +2677,7 @@ AddMasterRow_Error:
 
         For i As Integer = 0 To _foundRows.Count - 1
             Dim _newRow As DataRow = dtBaseGroup.NewRow
-            ' Add each column value from base to new row  
+            ' Add each column value from base to new row
             For j As Integer = 0 To dtBaseGroup.Columns.Count - 1
                 _newRow.Item(j) = _foundRows(i).Item(j)
             Next
@@ -2703,7 +2702,7 @@ AddMasterRow_Error:
         For i As Integer = 0 To _foundRows.Count - 1
             Dim _newRow As DataRow = dtAltGroup.NewRow
 
-            ' Add each column value from base to new row  
+            ' Add each column value from base to new row
             For j As Integer = 0 To dtAltGroup.Columns.Count - 1
                 _newRow.Item(j) = _foundRows(i).Item(j)
             Next
@@ -2860,13 +2859,13 @@ AddMasterRow_Error:
         Dim result As Integer = 0
 
         Me.Cursor = Cursors.WaitCursor
-        
+
         ArchiveFiles()
-        
+
         Add_FeedBack_Doc()
         Me.Cursor = Cursors.Default
         StatusBar1.Items.Item(0).Text = "Contract Manager Data Has Been Saved!"
-       
+
         Return System.Windows.Forms.DialogResult.OK
 
     End Function
@@ -3270,7 +3269,7 @@ AddMasterRow_Error:
     End Function
 
     Private Sub Populate_FieldSup()
-        ' Private Sub Populate_FieldSup(ByRef ComboCntl As ComboBox, ByRef FilterNames As Boolean, ByRef AddZZZOther As Boolean)   
+        ' Private Sub Populate_FieldSup(ByRef ComboCntl As ComboBox, ByRef FilterNames As Boolean, ByRef AddZZZOther As Boolean)
         ' Leaving in should user want to filter.  See Mod 1.0 for filtering
         Dim FieldSup_Field As String = ""
         Dim tempstore As String = ""
