@@ -563,7 +563,6 @@ Partial Friend Class CM_MAIN_frm
                 MessageBox.Show("Error in CM_Mainfrm.Load: & Environment.NewLine & CStr(Information.Err().Number) " & _
                                 Conversion.ErrorToString(Information.Err().Number) & Environment.NewLine & _
                                 Information.Err().Number.ToString() & Conversion.ErrorToString(), Application.ProductName)
-
             End Try
 
         End If
