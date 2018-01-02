@@ -14,6 +14,7 @@ Module Lotuslnk
 
     Private Hold_Customer_ID As String = ""
     Public Hold_Contact_ID As String = ""
+    Dim NewExistingFlag As String = ""
 
     Private HoldNotesCustomerPath As String = ""
     Private HoldNotesContactPath As String = ""
@@ -22,6 +23,7 @@ Module Lotuslnk
     Public HoldNotesPhonebookPath As String = ""
     Public HoldUniqueActivity As String = ""
     Public HoldFeedbackRecord As String = ""
+    Public HoldNotesSMARTCenterPath As String = ""
 
     Public NotesUserName As String = ""
     Public gsNotesLinkDataUserName As String = ""
@@ -95,206 +97,206 @@ Module Lotuslnk
     Public Sub Add_FeedBack_Doc()
         Dim Filesystem As New Scripting.FileSystemObject()
         Dim Name As String = ""
-    '        Dim TotalProco, TotalPrice, TotalAward, TotalBid As Single
+        '        Dim TotalProco, TotalPrice, TotalAward, TotalBid As Single
         Dim TotalProco, TotalAward As Single
-    '        Dim LastBank As String = ""
-    '        Dim CheckBank, AddDollars As Boolean
-    '        Dim UsePrice As Single
-    '        Dim SaveFlag As Boolean = False
-    '        Dim SetPlannerDate As Boolean = False
-    '        Dim totalNumDI As Integer = 0
-    '        Dim totalDollarDI As Single = 0
-    '        Dim totalNumHX As Integer = 0
-    '        Dim totalDollarHX As Single = 0
-    '        Dim totalNumTractionPOH As Integer = 0
-    '        Dim totalDollarTractionPOH As Single = 0
-    '        Dim totalNumTX As Integer = 0
-    '        Dim totalDollarTX As Single = 0
-    '        Dim totalNumTractionLocal As Integer = 0
-    '        Dim totalDollarTractionLocal As Single = 0
-    '        Dim totalNumQuantumLeap As Integer = 0
-    '        Dim totalDollarQuantumLeap As Single = 0
-    '        Dim totalNumHydroPOH As Integer = 0
-    '        Dim totalDollarHydroPOH As Single = 0
-    '        Dim totalNumHydroLocal As Integer = 0
-    '        Dim totalDollarHydroLocal As Single = 0
-    '        Dim totalNumSID_PH_MOD As Integer = 0
-    '        Dim totalDollarSID_PH_MOD As Single = 0
-    '        Dim totalNumSID_MTO As Integer = 0
-    '        Dim totalDollarSID_MTO As Single = 0
-    '        Dim totalNumSID_IO As Integer = 0
-    '        Dim totalDollarSID_IO As Single = 0
-    '        Dim totalNumReusedController As Integer = 0
-    '        Dim totalDollarReusedController As Single = 0
+        '        Dim LastBank As String = ""
+        '        Dim CheckBank, AddDollars As Boolean
+        '        Dim UsePrice As Single
+        '        Dim SaveFlag As Boolean = False
+        '        Dim SetPlannerDate As Boolean = False
+        '        Dim totalNumDI As Integer = 0
+        '        Dim totalDollarDI As Single = 0
+        '        Dim totalNumHX As Integer = 0
+        '        Dim totalDollarHX As Single = 0
+        '        Dim totalNumTractionPOH As Integer = 0
+        '        Dim totalDollarTractionPOH As Single = 0
+        '        Dim totalNumTX As Integer = 0
+        '        Dim totalDollarTX As Single = 0
+        '        Dim totalNumTractionLocal As Integer = 0
+        '        Dim totalDollarTractionLocal As Single = 0
+        '        Dim totalNumQuantumLeap As Integer = 0
+        '        Dim totalDollarQuantumLeap As Single = 0
+        '        Dim totalNumHydroPOH As Integer = 0
+        '        Dim totalDollarHydroPOH As Single = 0
+        '        Dim totalNumHydroLocal As Integer = 0
+        '        Dim totalDollarHydroLocal As Single = 0
+        '        Dim totalNumSID_PH_MOD As Integer = 0
+        '        Dim totalDollarSID_PH_MOD As Single = 0
+        '        Dim totalNumSID_MTO As Integer = 0
+        '        Dim totalDollarSID_MTO As Single = 0
+        '        Dim totalNumSID_IO As Integer = 0
+        '        Dim totalDollarSID_IO As Single = 0
+        '        Dim totalNumReusedController As Integer = 0
+        '        Dim totalDollarReusedController As Single = 0
 
         Try
-    '            If Not QueryFeedback(False) Then
-    '                If gbShape Then
-    '                    CreateNewOpportunity()
-    '                End If
-    '            End If
+            '            If Not QueryFeedback(False) Then
+            '                If gbShape Then
+            '                    CreateNewOpportunity()
+            '                End If
+            '            End If
             Attach_To_Feedback()
-    '            For iIndx As Integer = 0 To GetUBoundGONumbers()
-    '                If GONumbers(iIndx).IncludeInBid = CheckState.Checked Then
-    '                    TotalPrice += GONumbers(iIndx).TargetPrice
-    '                    TotalAward += GONumbers(iIndx).AwardPrice
-    '                    TotalProco += GONumbers(iIndx).ProcoCost
-    '                    TotalBid += GONumbers(iIndx).BidPrice
-    '                    If Contracts.Status = Status_OfferWon And GONumbers(iIndx).FileVersion_BOOK < 2012.3 Then
-    '                        SaveFlag = HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal)
-    '                    Else
-    '                        If HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal_LongForm) Or HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal_ShortForm) Or HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal_ThirdParty) Then
-    '                            SaveFlag = True
-    '                        End If
-    '                    End If
-    '                End If
-    '            Next iIndx
-    '            clsNotes.SetValue("Proposal_Price", TotalPrice)
+            '            For iIndx As Integer = 0 To GetUBoundGONumbers()
+            '                If GONumbers(iIndx).IncludeInBid = CheckState.Checked Then
+            '                    TotalPrice += GONumbers(iIndx).TargetPrice
+            '                    TotalAward += GONumbers(iIndx).AwardPrice
+            '                    TotalProco += GONumbers(iIndx).ProcoCost
+            '                    TotalBid += GONumbers(iIndx).BidPrice
+            '                    If Contracts.Status = Status_OfferWon And GONumbers(iIndx).FileVersion_BOOK < 2012.3 Then
+            '                        SaveFlag = HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal)
+            '                    Else
+            '                        If HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal_LongForm) Or HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal_ShortForm) Or HasValidProposal(GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, REPORT_Proposal_ThirdParty) Then
+            '                            SaveFlag = True
+            '                        End If
+            '                    End If
+            '                End If
+            '            Next iIndx
+            '            clsNotes.SetValue("Proposal_Price", TotalPrice)
             clsNotes.SetValue("MODFlag", "MOD")
             TotalAward = GetSummaryTotals("bank_final_price")
             clsNotes.SetValue("awardPrice", TotalAward)
             TotalProco = GetSummaryTotals("Total_Bank_Cost")
             clsNotes.SetValue("procoCost", TotalProco)
-    '            clsNotes.SetValue("salesPlannerPrice", TotalBid)
-    '            If SaveFlag Then
-    '                LastBank = String.Empty
-    '                For iIndx As Integer = 0 To GetUBoundGONumbers()
-    '                    If GONumbers(iIndx).IncludeInBid = CheckState.Checked And LastBank <> GONumbers(iIndx).Bank Then
-    '                        Select Case GONumbers(iIndx).ProductCode
-    '                            Case 600, 630
-    '                                totalNumTractionPOH += 1
-    '                                totalDollarTractionPOH += GONumbers(iIndx).BidPrice
-    '                            Case 610
-    '                                totalNumHydroPOH += 1
-    '                                totalDollarHydroPOH += GONumbers(iIndx).BidPrice
-    '                            Case 612 To 613
-    '                                totalNumHX += 1
-    '                                totalDollarHX += GONumbers(iIndx).BidPrice
-    '                            Case 615
-    '                                totalNumHydroLocal += 1
-    '                                totalDollarHydroLocal += GONumbers(iIndx).BidPrice
-    '                            Case 641 To 644, 667, 668
-    '                                totalNumSID_MTO += 1
-    '                                totalDollarSID_MTO += GONumbers(iIndx).BidPrice
-    '                            Case 646 To 649
-    '                                totalNumSID_PH_MOD += 1
-    '                                totalDollarSID_PH_MOD += GONumbers(iIndx).BidPrice
-    '                            Case 660, 661, 664, 665
-    '                                totalNumQuantumLeap += 1
-    '                                totalDollarQuantumLeap += GONumbers(iIndx).BidPrice
-    '                            Case 670
-    '                                totalNumReusedController += 1
-    '                                totalDollarReusedController += GONumbers(iIndx).BidPrice
-    '                            Case 645, 676 To 679
-    '                                totalNumDI += 1
-    '                                totalDollarDI += GONumbers(iIndx).BidPrice
-    '                            Case 680 To 683, 669
-    '                                totalNumTX += 1
-    '                                totalDollarTX += GONumbers(iIndx).BidPrice
-    '                            Case 691 To 692
-    '                                totalNumTractionLocal += 1
-    '                                totalDollarTractionLocal += GONumbers(iIndx).BidPrice
-    '                            Case Else
-    '                        End Select
-    '                        For jIndx As Integer = 0 To GetUBoundGONumbers()
-    '                            If GONumbers(iIndx).Bank = GONumbers(jIndx).Bank Then
-    '                                If GONumbers(iIndx).Alt = GONumbers(jIndx).Alt And GONumbers(iIndx).Units <> GONumbers(jIndx).Units And GONumbers(jIndx).IncludeInBid = CheckState.Checked Then
-    '                                    CheckBank = True
-    '                                    AddDollars = True
-    '                                    UsePrice = GONumbers(jIndx).BidPrice
-    '                                ElseIf GONumbers(jIndx).AltIncludeInBid = CheckState.Checked Then
-    '                                    CheckBank = True
-    '                                    AddDollars = False
-    '                                    If GONumbers(jIndx).BidPrice > 0 Then
-    '                                        UsePrice = GONumbers(jIndx).BidPrice
-    '                                    Else
-    '                                        UsePrice = GONumbers(jIndx).TargetPrice
-    '                                    End If
-    '                                Else
-    '                                    CheckBank = False
-    '                                End If
-    '                                If CheckBank Then
-    '                                    Select Case GONumbers(jIndx).ProductCode
-    '                                        Case 600, 630
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTractionPOH, totalDollarTractionPOH, UsePrice, AddDollars)
-    '                                        Case 610
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHydroPOH, totalDollarHydroPOH, UsePrice, AddDollars)
-    '                                        Case 612 To 613
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHX, totalDollarHX, UsePrice, AddDollars)
-    '                                        Case 615
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHydroLocal, totalDollarHydroLocal, UsePrice, AddDollars)
-    '                                        Case 641 To 644, 667, 668
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumSID_MTO, totalDollarSID_MTO, UsePrice, AddDollars)
-    '                                        Case 646 To 649
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumSID_PH_MOD, totalDollarSID_PH_MOD, UsePrice, AddDollars)
-    '                                        Case 660, 661, 664, 665
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumQuantumLeap, totalDollarQuantumLeap, UsePrice, AddDollars)
-    '                                        Case 670
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumReusedController, totalDollarReusedController, UsePrice, AddDollars)
-    '                                        Case 645, 676 To 679
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumDI, totalDollarDI, UsePrice, AddDollars)
-    '                                        Case 680 To 683, 669
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTX, totalDollarTX, UsePrice, AddDollars)
-    '                                        Case 691 To 692
-    '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTractionLocal, totalDollarTractionLocal, UsePrice, AddDollars)
-    '                                        Case Else
-    '                                    End Select
-    '                                End If
-    '                            End If
-    '                        Next jIndx
-    '                        LastBank = GONumbers(iIndx).Bank
-    '                    End If
-    '                Next iIndx
-    '            End If
-    '            SaveSalesPlannerData("totalNumDI", totalNumDI, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarDI", Math.Round(totalDollarDI, 2), True)
-    '            SaveSalesPlannerData("totalNumHX", totalNumHX, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarHX", Math.Round(totalDollarHX, 2), True)
-    '            SaveSalesPlannerData("totalNumTractionPOH", totalNumTractionPOH, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarTractionPOH", Math.Round(totalDollarTractionPOH, 2), True)
-    '            SaveSalesPlannerData("totalNumTX", totalNumTX, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarTX", Math.Round(totalDollarTX, 2), True)
-    '            SaveSalesPlannerData("totalNumTractionLocal", totalNumTractionLocal, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarTractionLocal", Math.Round(totalDollarTractionLocal, 2), True)
-    '            SaveSalesPlannerData("totalNumHydroPOH", totalNumHydroPOH, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarHydroPOH", Math.Round(totalDollarHydroPOH, 2), True)
-    '            SaveSalesPlannerData("totalNumHydroLocal", totalNumHydroLocal, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarHydroLocal", Math.Round(totalDollarHydroLocal, 2), True)
-    '            SaveSalesPlannerData("totalNumSID_MTO", totalNumSID_PH_MOD, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarSID_MTO", Math.Round(totalDollarSID_PH_MOD, 2), True)
-    '            SaveSalesPlannerData("totalNumSID_M10", totalNumSID_MTO, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarSID_M10", Math.Round(totalDollarSID_MTO, 2), True)
-    '            SaveSalesPlannerData("totalNumSID_IO", totalNumSID_IO, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarSID_IO", Math.Round(totalDollarSID_IO, 2), True)
-    '            SaveSalesPlannerData("totalNumReusedController", totalNumReusedController, False, SetPlannerDate)
-    '            SaveSalesPlannerData("totalDollarReusedController", Math.Round(totalDollarReusedController, 2), True)
-    '            If SetPlannerDate Then
-    '                clsNotes.SetValue("SalesPlannerDate", CDate(DateTime.Today.ToString("MM/dd/yyyy")))
-    '            End If
+            '            clsNotes.SetValue("salesPlannerPrice", TotalBid)
+            '            If SaveFlag Then
+            '                LastBank = String.Empty
+            '                For iIndx As Integer = 0 To GetUBoundGONumbers()
+            '                    If GONumbers(iIndx).IncludeInBid = CheckState.Checked And LastBank <> GONumbers(iIndx).Bank Then
+            '                        Select Case GONumbers(iIndx).ProductCode
+            '                            Case 600, 630
+            '                                totalNumTractionPOH += 1
+            '                                totalDollarTractionPOH += GONumbers(iIndx).BidPrice
+            '                            Case 610
+            '                                totalNumHydroPOH += 1
+            '                                totalDollarHydroPOH += GONumbers(iIndx).BidPrice
+            '                            Case 612 To 613
+            '                                totalNumHX += 1
+            '                                totalDollarHX += GONumbers(iIndx).BidPrice
+            '                            Case 615
+            '                                totalNumHydroLocal += 1
+            '                                totalDollarHydroLocal += GONumbers(iIndx).BidPrice
+            '                            Case 641 To 644, 667, 668
+            '                                totalNumSID_MTO += 1
+            '                                totalDollarSID_MTO += GONumbers(iIndx).BidPrice
+            '                            Case 646 To 649
+            '                                totalNumSID_PH_MOD += 1
+            '                                totalDollarSID_PH_MOD += GONumbers(iIndx).BidPrice
+            '                            Case 660, 661, 664, 665
+            '                                totalNumQuantumLeap += 1
+            '                                totalDollarQuantumLeap += GONumbers(iIndx).BidPrice
+            '                            Case 670
+            '                                totalNumReusedController += 1
+            '                                totalDollarReusedController += GONumbers(iIndx).BidPrice
+            '                            Case 645, 676 To 679
+            '                                totalNumDI += 1
+            '                                totalDollarDI += GONumbers(iIndx).BidPrice
+            '                            Case 680 To 683, 669
+            '                                totalNumTX += 1
+            '                                totalDollarTX += GONumbers(iIndx).BidPrice
+            '                            Case 691 To 692
+            '                                totalNumTractionLocal += 1
+            '                                totalDollarTractionLocal += GONumbers(iIndx).BidPrice
+            '                            Case Else
+            '                        End Select
+            '                        For jIndx As Integer = 0 To GetUBoundGONumbers()
+            '                            If GONumbers(iIndx).Bank = GONumbers(jIndx).Bank Then
+            '                                If GONumbers(iIndx).Alt = GONumbers(jIndx).Alt And GONumbers(iIndx).Units <> GONumbers(jIndx).Units And GONumbers(jIndx).IncludeInBid = CheckState.Checked Then
+            '                                    CheckBank = True
+            '                                    AddDollars = True
+            '                                    UsePrice = GONumbers(jIndx).BidPrice
+            '                                ElseIf GONumbers(jIndx).AltIncludeInBid = CheckState.Checked Then
+            '                                    CheckBank = True
+            '                                    AddDollars = False
+            '                                    If GONumbers(jIndx).BidPrice > 0 Then
+            '                                        UsePrice = GONumbers(jIndx).BidPrice
+            '                                    Else
+            '                                        UsePrice = GONumbers(jIndx).TargetPrice
+            '                                    End If
+            '                                Else
+            '                                    CheckBank = False
+            '                                End If
+            '                                If CheckBank Then
+            '                                    Select Case GONumbers(jIndx).ProductCode
+            '                                        Case 600, 630
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTractionPOH, totalDollarTractionPOH, UsePrice, AddDollars)
+            '                                        Case 610
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHydroPOH, totalDollarHydroPOH, UsePrice, AddDollars)
+            '                                        Case 612 To 613
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHX, totalDollarHX, UsePrice, AddDollars)
+            '                                        Case 615
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHydroLocal, totalDollarHydroLocal, UsePrice, AddDollars)
+            '                                        Case 641 To 644, 667, 668
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumSID_MTO, totalDollarSID_MTO, UsePrice, AddDollars)
+            '                                        Case 646 To 649
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumSID_PH_MOD, totalDollarSID_PH_MOD, UsePrice, AddDollars)
+            '                                        Case 660, 661, 664, 665
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumQuantumLeap, totalDollarQuantumLeap, UsePrice, AddDollars)
+            '                                        Case 670
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumReusedController, totalDollarReusedController, UsePrice, AddDollars)
+            '                                        Case 645, 676 To 679
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumDI, totalDollarDI, UsePrice, AddDollars)
+            '                                        Case 680 To 683, 669
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTX, totalDollarTX, UsePrice, AddDollars)
+            '                                        Case 691 To 692
+            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTractionLocal, totalDollarTractionLocal, UsePrice, AddDollars)
+            '                                        Case Else
+            '                                    End Select
+            '                                End If
+            '                            End If
+            '                        Next jIndx
+            '                        LastBank = GONumbers(iIndx).Bank
+            '                    End If
+            '                Next iIndx
+            '            End If
+            '            SaveSalesPlannerData("totalNumDI", totalNumDI, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarDI", Math.Round(totalDollarDI, 2), True)
+            '            SaveSalesPlannerData("totalNumHX", totalNumHX, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarHX", Math.Round(totalDollarHX, 2), True)
+            '            SaveSalesPlannerData("totalNumTractionPOH", totalNumTractionPOH, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarTractionPOH", Math.Round(totalDollarTractionPOH, 2), True)
+            '            SaveSalesPlannerData("totalNumTX", totalNumTX, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarTX", Math.Round(totalDollarTX, 2), True)
+            '            SaveSalesPlannerData("totalNumTractionLocal", totalNumTractionLocal, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarTractionLocal", Math.Round(totalDollarTractionLocal, 2), True)
+            '            SaveSalesPlannerData("totalNumHydroPOH", totalNumHydroPOH, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarHydroPOH", Math.Round(totalDollarHydroPOH, 2), True)
+            '            SaveSalesPlannerData("totalNumHydroLocal", totalNumHydroLocal, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarHydroLocal", Math.Round(totalDollarHydroLocal, 2), True)
+            '            SaveSalesPlannerData("totalNumSID_MTO", totalNumSID_PH_MOD, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarSID_MTO", Math.Round(totalDollarSID_PH_MOD, 2), True)
+            '            SaveSalesPlannerData("totalNumSID_M10", totalNumSID_MTO, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarSID_M10", Math.Round(totalDollarSID_MTO, 2), True)
+            '            SaveSalesPlannerData("totalNumSID_IO", totalNumSID_IO, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarSID_IO", Math.Round(totalDollarSID_IO, 2), True)
+            '            SaveSalesPlannerData("totalNumReusedController", totalNumReusedController, False, SetPlannerDate)
+            '            SaveSalesPlannerData("totalDollarReusedController", Math.Round(totalDollarReusedController, 2), True)
+            '            If SetPlannerDate Then
+            '                clsNotes.SetValue("SalesPlannerDate", CDate(DateTime.Today.ToString("MM/dd/yyyy")))
+            '            End If
             clsNotes.SetValue("Status", Contracts.Status)
-    '            If Not String.IsNullOrEmpty(Contracts.OpportunityToOfferDate.Trim) Then
-    '                clsNotes.SetValue("oppToOfferDate", CDate(CDate(Contracts.OpportunityToOfferDate).ToString("MM/dd/yyyy")))
-    '            End If
-    '            If Not String.IsNullOrEmpty(Contracts.ProposedDate.Trim) Then
-    '                clsNotes.SetValue("proposedDate", CDate(CDate(Contracts.ProposedDate).ToString("MM/dd/yyyy")))
-    '            End If
-    '            If Not String.IsNullOrEmpty(Contracts.OpportunityClosedDate.Trim) Then
-    '                clsNotes.SetValue("oppOfferClosedDate", CDate(CDate(Contracts.OpportunityClosedDate).ToString("MM/dd/yyyy")))
-    '            End If
+            '            If Not String.IsNullOrEmpty(Contracts.OpportunityToOfferDate.Trim) Then
+            '                clsNotes.SetValue("oppToOfferDate", CDate(CDate(Contracts.OpportunityToOfferDate).ToString("MM/dd/yyyy")))
+            '            End If
+            '            If Not String.IsNullOrEmpty(Contracts.ProposedDate.Trim) Then
+            '                clsNotes.SetValue("proposedDate", CDate(CDate(Contracts.ProposedDate).ToString("MM/dd/yyyy")))
+            '            End If
+            '            If Not String.IsNullOrEmpty(Contracts.OpportunityClosedDate.Trim) Then
+            '                clsNotes.SetValue("oppOfferClosedDate", CDate(CDate(Contracts.OpportunityClosedDate).ToString("MM/dd/yyyy")))
+            '            End If
             clsNotes.SetValue("prob_sale", Get_ProbabilityofSale(Contracts.ProbabilityOfSale))
             clsNotes.SetValue("prob_sale_range", Contracts.ProbabilityOfSale)
             clsNotes.SetValue("SalesRep", Contracts.SalesRepName)
             clsNotes.SetValue("Estimator", clsNotes.CN_Username)
             clsNotes.SetValue("Version", SHORT_VERSION)
-    '            clsNotes.SetValue("highRiskFlag", Contracts.JobHighRiskFactor)
-    '            Dim UseMaxPercentSpecial As Decimal = 0
-    '            For iIndx As Integer = 0 To GetUBoundGONumbers()
-    '                If (GONumbers(iIndx).MachineType = HYDRO_TYPE And GONumbers(iIndx).NewControl = MODEL_HX) Or (GONumbers(iIndx).MachineType = GEARED_TYPE And GONumbers(iIndx).NewControl = SEC) And (GONumbers(iIndx).IncludeInBid = CheckState.Checked Or GONumbers(iIndx).AltIncludeInBid = CheckState.Checked) Then
-    '                    If GONumbers(iIndx).MaxPercentSpecial > UseMaxPercentSpecial Then UseMaxPercentSpecial = GONumbers(iIndx).MaxPercentSpecial
-    '                End If
-    '            Next iIndx
-    '            UseMaxPercentSpecial = Math.Round(CDbl(UseMaxPercentSpecial * 100), 2)
-    '            clsNotes.SetValue("maxAdder", UseMaxPercentSpecial)
+            '            clsNotes.SetValue("highRiskFlag", Contracts.JobHighRiskFactor)
+            '            Dim UseMaxPercentSpecial As Decimal = 0
+            '            For iIndx As Integer = 0 To GetUBoundGONumbers()
+            '                If (GONumbers(iIndx).MachineType = HYDRO_TYPE And GONumbers(iIndx).NewControl = MODEL_HX) Or (GONumbers(iIndx).MachineType = GEARED_TYPE And GONumbers(iIndx).NewControl = SEC) And (GONumbers(iIndx).IncludeInBid = CheckState.Checked Or GONumbers(iIndx).AltIncludeInBid = CheckState.Checked) Then
+            '                    If GONumbers(iIndx).MaxPercentSpecial > UseMaxPercentSpecial Then UseMaxPercentSpecial = GONumbers(iIndx).MaxPercentSpecial
+            '                End If
+            '            Next iIndx
+            '            UseMaxPercentSpecial = Math.Round(CDbl(UseMaxPercentSpecial * 100), 2)
+            '            clsNotes.SetValue("maxAdder", UseMaxPercentSpecial)
             clsNotes.SetValue_Readers("Reader", Contracts.Reader)
             clsNotes.SetValue_Readers("reader_global", Contracts.ReaderGlobal)
             If clsNotes.CheckAttachments() Then
@@ -305,7 +307,7 @@ Module Lotuslnk
             Dim theseFiles As Scripting.Files = thisFolder.Files
             For Each thisFile As Scripting.File In theseFiles
                 Name = thisFile.Name.ToUpper()
-    '                If (Name Like Contracts.EstimateNum & "*.*" Or Name Like "*.XLS*") And Not Name Like "*.A2B" And Not Name Like "*LETTER.DOC*" And Not Name Like "*SCRIPTS.DOC*" Then
+                '                If (Name Like Contracts.EstimateNum & "*.*" Or Name Like "*.XLS*") And Not Name Like "*.A2B" And Not Name Like "*LETTER.DOC*" And Not Name Like "*SCRIPTS.DOC*" Then
                 If (Name Like Contracts.EstimateNum & "*.JSON") Or (Name Like Contracts.EstimateNum & "*.CM") Or
                    (Name Like Contracts.EstimateNum & "*.M*") Or (Name Like Contracts.EstimateNum & "*.DOC*") Then
                     '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
@@ -329,16 +331,16 @@ Module Lotuslnk
                     '                End If
                 End If
             Next thisFile
-    '            If MDIChildDirty Or gbMDIChildDirty Or MP_CST03_Child_Dirty Or RunMDIChildDirty Then
-    '                EstimateModified = True
-    '            End If
+            '            If MDIChildDirty Or gbMDIChildDirty Or MP_CST03_Child_Dirty Or RunMDIChildDirty Then
+            '                EstimateModified = True
+            '            End If
 
-    '        Finally
-    '            MemoryHelper.ReleaseAndCleanObject(Filesystem)
+            '        Finally
+            '            MemoryHelper.ReleaseAndCleanObject(Filesystem)
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Adding FeedBack Docs", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    '        End Try
+        '        End Try
 
     End Sub
     Private Sub SchindlerData_To_Fields()
@@ -397,25 +399,28 @@ MISSINGMESSAGE:
     End Sub
     Public Sub DetachFeedback()
 
-        Try
-            Attach_To_Feedback()
-            Hold_Customer_ID = clsNotes.GetValue("Unique")
-            Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
-            If Not clsNotes.CheckAttachments() Then
-                MessageBox.Show("There are no file attachments for this estimate!", Application.ProductName)
-                Exit Sub
-            End If
-            CompareFiles()
-            ArchiveFiles()
-            DeleteAllFiles()
-            VerifyPath(ReportsPath)
-            clsNotes.DetachFiles()
-            CompareFiles()
+        If NewExistingFlag = "Existing" Then
+            Try
+                Attach_To_Feedback()
+                Hold_Customer_ID = clsNotes.GetValue("Unique")
+                Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
+                If Not clsNotes.CheckAttachments() Then
+                    MessageBox.Show("There are no file attachments for this estimate!", Application.ProductName)
+                    Exit Sub
+                End If
+                CompareFiles()
+                ArchiveFiles()
+                DeleteAllFiles()
+                VerifyPath(ReportsPath)
+                clsNotes.DetachFiles()
+                CompareFiles()
 
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In DetachFeedback")
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In DetachFeedback")
 
-        End Try
+            End Try
+        End If
+
 
     End Sub
 
@@ -424,11 +429,18 @@ MISSINGMESSAGE:
         On Error Resume Next
         QueryFeedback = False
 
-        If Not Attach_To_Feedback() Then Exit Function
 
-        If clsNotes.CheckAttachments() Then
-            HoldFeedbackRecord = "Feedback"
+        If NewExistingFlag = "New" Then
+            HoldFeedbackRecord = "Smart"
+        Else
+            'Can't attach to a record if it's  new 
+            If Not Attach_To_Feedback() Then Exit Function
+
+            If clsNotes.CheckAttachments() Then
+                HoldFeedbackRecord = "Feedback"
+            End If
         End If
+
         If Not SetValues Then
             Exit Function
         End If
@@ -541,9 +553,12 @@ MISSINGMESSAGE:
     End Function
     Public Sub Query_SM2ART()
 
-        Attach_To_Feedback()
-        Hold_Customer_ID = clsNotes.GetValue("unique")
-        Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
+        'If NewExistingFlag = "Existing" Then
+        '    Attach_To_Feedback()
+        '    Hold_Customer_ID = clsNotes.GetValue("unique")
+        '    Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
+        'End If
+
         Attach_To_SmartCenter_Customer()
         Contracts.JobName = TrimFields(clsNotes.GetValue("CustName"))
         Contracts.SAPContactNumber = clsNotes.GetValue("SAPContactNumber")
@@ -552,11 +567,11 @@ MISSINGMESSAGE:
         Contracts.JobCity = TrimFields(clsNotes.GetValue("City"))
         Contracts.JobState = clsNotes.GetValue("State")
         Contracts.JobZip = clsNotes.GetValue("Zip")
-    '        OfficeFromSmart = TranslateOfficeNumber(clsNotes.GetValue("Office"))
+        OfficeFromSmart = TranslateOfficeNumber(clsNotes.GetValue("Office"), 4)
         If Contracts.SalesRepOffice = "" Then
-            Contracts.SalesRepOffice = TranslateOfficeNumber(clsNotes.GetValue("Office"))
+            Contracts.SalesRepOffice = TranslateOfficeNumber(OfficeFromSmart)
         End If
-    '        Contracts.ContractType = clsNotes.GetValue("ContractType")
+        '        Contracts.ContractType = clsNotes.GetValue("ContractType")
         Contracts.Country = clsNotes.GetValue("Country")
         RetrieveBuildingType(clsNotes.GetValue("LocationsXML"))
         Owner_Info.Name = TrimFields(clsNotes.GetValue("BillToName"))
@@ -572,10 +587,11 @@ MISSINGMESSAGE:
         Contracts.Area = clsNotes.GetValue("Area")
         Contracts.Territory = clsNotes.GetValue("Territory")
         '        Contracts.CustomerTier = clsNotes.GetValue("CUSTOMERTIER")
-    '        clsNotes.GetValue_Readers("Reader")
-    '        Contracts.Reader = ReadersValue
-    '        clsNotes.GetValue_Readers("reader_global")
-    '        Contracts.ReaderGlobal = ReadersValue
+        '        clsNotes.GetValue_Readers("Reader")
+        '        Contracts.Reader = ReadersValue
+        '        clsNotes.GetValue_Readers("reader_global")
+        '        Contracts.ReaderGlobal = ReadersValue
+
         Attach_To_SmartCenter_Contact()
         If Not MissingContactInfo Then
             JobContact.Name = TrimFields(clsNotes.GetValue("fContact"))
@@ -587,9 +603,46 @@ MISSINGMESSAGE:
             JobContact.Zip = clsNotes.GetValue("zip")
             JobContact.Tel = clsNotes.GetValue("Phone")
         End If
-
     End Sub
+
     Public Function SetUpLotusLink() As Boolean
+
+        Dim results As Boolean
+        Dim NewExistingStr As Integer = (Interaction.Command().IndexOf("~"c) + 1)
+        NewExistingFlag = Strings.Left(Interaction.Command(), NewExistingStr - 1) ' Can be "New" or "Existing"
+
+        If NewExistingFlag = "New" Then
+            results = SetUpLotusLinkNew()
+        Else
+            results = SetUpLotusLinkExisting()
+        End If
+
+        TestVersion = False
+        If HoldNotesFeedbackPath.IndexOf("_dev") >= 0 Or HoldNotesFeedbackPath.IndexOf("_train") >= 0 Then
+            TestVersion = True
+        End If
+        Dim UserName As String = clsNotes.CN_Username
+        iPos = (UserName.IndexOf("/"c) + 1)
+        NotesUserName = Strings.Mid(UserName, 4, iPos - 4)
+        gsSalesRep = clsNotes.CN_Username
+        gsNotesLinkDataUserName = ReCreatesNotesLinkDataUserName(clsNotes.CN_Username & "/")
+        SetAccessLevelsRole()
+        SchindlerData_To_Fields()
+        NotesPath = GetNotesDataDir()
+        CadreBookingUploadDB = NotesPath & "\" & NOTES_BOOKING_DATABASE
+        If TestVersion Then
+            CadreBookingUploadDB = NotesPath & "\" & NOTES_BOOKING_DATABASE_TEST
+        End If
+
+        If results = False Then
+            MessageBox.Show("Error setting up lotus link.", "Lotus Link Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+
+        Return results
+
+    End Function
+
+    Public Function SetUpLotusLinkExisting() As Boolean
         Dim result As Boolean = False
         Dim sInteractionCommand As String = gsCommand
 
@@ -612,49 +665,96 @@ MISSINGMESSAGE:
                 '        'sInteractionCommand = "USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH"
             End If
         End If
-                ' testing - USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
-                ' production - USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
-                ' training - USSECNN6~sec\train\sm2art_train.nsf~sec\train\SM2ART_Activities_train.nsf~sec\train\FeedbackMOD_train.nsf~sec\Corporate Phone Directory.nsf~TRAI-NNG001
+        ' testing - USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
+        ' production - USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
+        ' training - USSECNN6~sec\train\sm2art_train.nsf~sec\train\SM2ART_Activities_train.nsf~sec\train\FeedbackMOD_train.nsf~sec\Corporate Phone Directory.nsf~TRAI-NNG001
 
-                Dim HoldStr1 As Integer = (sInteractionCommand.IndexOf("~"c) + 1)
-                ComServer = Strings.Left(sInteractionCommand, HoldStr1 - 1)
-                If ComServer = "" Or ComServer = " " Then
-                    ComServer = ""
-                End If
-                Dim HoldStr2 As Integer = Strings.InStr(HoldStr1 + 1, sInteractionCommand, "~", CompareMethod.Text)
-                HoldNotesCustomerPath = Strings.Mid(sInteractionCommand, HoldStr1 + 1, (HoldStr2 - HoldStr1) - 1)
-                Dim HoldStr3 As Integer = Strings.InStr(HoldStr2 + 1, sInteractionCommand, "~", CompareMethod.Text)
-                HoldNotesContactPath = Strings.Mid(sInteractionCommand, HoldStr2 + 1, (HoldStr3 - HoldStr2) - 1)
-                Dim HoldStr4 As Integer = Strings.InStr(HoldStr3 + 1, sInteractionCommand, "~", CompareMethod.Text)
-                HoldNotesActivitiesPath = Strings.Mid(sInteractionCommand, HoldStr3 + 1, (HoldStr4 - HoldStr3) - 1)
-                Dim HoldStr5 As Integer = Strings.InStr(HoldStr4 + 1, sInteractionCommand, "~", CompareMethod.Text)
-                HoldNotesFeedbackPath = Strings.Mid(sInteractionCommand, HoldStr4 + 1, (HoldStr5 - HoldStr4) - 1)
-                Dim HoldStr6 As Integer = Strings.InStr(HoldStr5 + 1, sInteractionCommand, "~", CompareMethod.Text)
-                HoldNotesPhonebookPath = Strings.Mid(sInteractionCommand, HoldStr5 + 1, (HoldStr6 - HoldStr5) - 1)
-                Dim HoldStr7 As Integer = Strings.InStr(HoldStr6 + 1, sInteractionCommand, "~", CompareMethod.Text)
-                If HoldStr7 = 0 Then
-                    HoldUniqueActivity = Strings.Mid(sInteractionCommand, HoldStr6 + 1)
-                Else
-                    HoldUniqueActivity = Strings.Mid(sInteractionCommand, HoldStr6 + 1, (HoldStr7 - HoldStr6) - 1)
-                    result = False
-                End If
-                TestVersion = False
-                If HoldNotesFeedbackPath.IndexOf("_dev") >= 0 Or HoldNotesFeedbackPath.IndexOf("_train") >= 0 Then
-                    TestVersion = True
-                End If
-                Dim UserName As String = clsNotes.CN_Username
-                iPos = (UserName.IndexOf("/"c) + 1)
-                NotesUserName = Strings.Mid(UserName, 4, iPos - 4)
-                gsSalesRep = clsNotes.CN_Username
-                gsNotesLinkDataUserName = ReCreatesNotesLinkDataUserName(clsNotes.CN_Username & "/")
-                SetAccessLevelsRole()
-                SchindlerData_To_Fields()
-                NotesPath = GetNotesDataDir()
-                CadreBookingUploadDB = NotesPath & "\" & NOTES_BOOKING_DATABASE
-                If TestVersion Then
-                    CadreBookingUploadDB = NotesPath & "\" & NOTES_BOOKING_DATABASE_TEST
-                End If
-                Return result
+        Dim HoldStr1 As Integer = (sInteractionCommand.IndexOf("~"c) + 1)
+        ComServer = Strings.Left(sInteractionCommand, HoldStr1 - 1).Trim
+
+        'If ComServer = " " Then
+        '    ComServer = ""
+        'End If
+
+        Dim HoldStr2 As Integer = Strings.InStr(HoldStr1 + 1, sInteractionCommand, "~", CompareMethod.Text)
+        HoldNotesCustomerPath = Strings.Mid(sInteractionCommand, HoldStr1 + 1, (HoldStr2 - HoldStr1) - 1)
+        Dim HoldStr3 As Integer = Strings.InStr(HoldStr2 + 1, sInteractionCommand, "~", CompareMethod.Text)
+        HoldNotesContactPath = Strings.Mid(sInteractionCommand, HoldStr2 + 1, (HoldStr3 - HoldStr2) - 1)
+        Dim HoldStr4 As Integer = Strings.InStr(HoldStr3 + 1, sInteractionCommand, "~", CompareMethod.Text)
+        HoldNotesActivitiesPath = Strings.Mid(sInteractionCommand, HoldStr3 + 1, (HoldStr4 - HoldStr3) - 1)
+        Dim HoldStr5 As Integer = Strings.InStr(HoldStr4 + 1, sInteractionCommand, "~", CompareMethod.Text)
+        HoldNotesFeedbackPath = Strings.Mid(sInteractionCommand, HoldStr4 + 1, (HoldStr5 - HoldStr4) - 1)
+        Dim HoldStr6 As Integer = Strings.InStr(HoldStr5 + 1, sInteractionCommand, "~", CompareMethod.Text)
+        HoldNotesPhonebookPath = Strings.Mid(sInteractionCommand, HoldStr5 + 1, (HoldStr6 - HoldStr5) - 1)
+        Dim HoldStr7 As Integer = Strings.InStr(HoldStr6 + 1, sInteractionCommand, "~", CompareMethod.Text)
+
+        If HoldStr7 = 0 Then
+            HoldUniqueActivity = Strings.Mid(sInteractionCommand, HoldStr6 + 1)
+        Else
+            HoldUniqueActivity = Strings.Mid(sInteractionCommand, HoldStr6 + 1, (HoldStr7 - HoldStr6) - 1)
+            result = False
+        End If
+
+        Return result
+
+    End Function
+
+    Public Function SetUpLotusLinkNew() As Boolean
+        Dim HoldStr7, HoldStr6, HoldStr8 As Integer
+        Dim tempdate As String = ""
+        ' Dim NewExistingFlag As String
+        Dim SMARTCadreFlag As String
+        Dim NotesServer As String
+
+        Try
+            Dim NewExistingStr As Integer = (Interaction.Command().IndexOf("~"c) + 1)
+            'NewExistingFlag = Strings.Left(Interaction.Command(), NewExistingStr - 1) ' Can be "New" or "Existing"
+
+            Dim SMARTCadreStr As Integer = Strings.InStr(NewExistingStr + 1, Interaction.Command(), "~", CompareMethod.Text)
+            SMARTCadreFlag = Strings.Mid(Interaction.Command(), NewExistingStr + 1, (SMARTCadreStr - NewExistingStr) - 1) ' Can be "SMART", "CADRE" or "ARCHIVE"
+
+            Dim HoldStr1 As Integer = Strings.InStr(SMARTCadreStr + 1, Interaction.Command(), "~", CompareMethod.Text)
+            NotesServer = Strings.Mid(Interaction.Command(), SMARTCadreStr + 1, (HoldStr1 - SMARTCadreStr) - 1)
+
+            If NotesServer = "" Or NotesServer = " " Then NotesServer = "Local"
+
+            If NotesServer = "Local" Then
+                ComServer = ""
+            Else
+                ComServer = NotesServer
+            End If
+
+            Dim HoldStr2 As Integer = Strings.InStr(HoldStr1 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            HoldNotesSMARTCenterPath = Strings.Mid(Interaction.Command(), HoldStr1 + 1, (HoldStr2 - HoldStr1) - 1)
+
+            Dim HoldStr3 As Integer = Strings.InStr(HoldStr2 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            HoldNotesActivitiesPath = Strings.Mid(Interaction.Command(), HoldStr2 + 1, (HoldStr3 - HoldStr2) - 1)
+
+            Dim HoldStr4 As Integer = Strings.InStr(HoldStr3 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            HoldNotesFeedbackPath = Strings.Mid(Interaction.Command(), HoldStr3 + 1, (HoldStr4 - HoldStr3) - 1)
+
+            Dim HoldStr5 As Integer = Strings.InStr(HoldStr4 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            HoldNotesPhonebookPath = Strings.Mid(Interaction.Command(), HoldStr4 + 1, (HoldStr5 - HoldStr4) - 1)
+
+            HoldStr6 = Strings.InStr(HoldStr5 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            Hold_Customer_ID = Strings.Mid(Interaction.Command(), HoldStr5 + 1, (HoldStr6 - HoldStr5) - 1)
+
+            HoldStr7 = Strings.InStr(HoldStr6 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            Hold_Contact_ID = Strings.Mid(Interaction.Command(), HoldStr6 + 1, (HoldStr7 - HoldStr6) - 1)
+
+            HoldStr8 = Strings.InStr(HoldStr7 + 1, Interaction.Command(), "~", CompareMethod.Text)
+            HoldUniqueActivity = Strings.Mid(Interaction.Command(), HoldStr7 + 1)
+
+            TestVersion = Strings.Right(HoldNotesSMARTCenterPath, 8) = "_dev.nsf" Or Strings.Right(HoldNotesSMARTCenterPath, 8) = "_train.nsf"
+            Contracts.Estimator = clsNotes.CN_Username
+
+        Catch ex As Exception
+            MessageBox.Show("Error Setting Link to Lotus Notes" & vbCrLf & vbCrLf & ex.Message, "Error Linking to Lotus Notes", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Reset_Resolution()
+            Return False
+        End Try
+
+        Return True
 
     End Function
 
@@ -794,7 +894,7 @@ MISSINGMESSAGE:
                     If gbShape Then
                         Exit Function
                     Else
-                        MessageBox.Show("Estimate not found in the " & Feedback & " database!" & Environment.NewLine & "Key = " & Strings.Chr(34).ToString() & UniqueKey & Strings.Chr(34).ToString(), Application.ProductName)
+                        MessageBox.Show("Estimate not found in the " & Feedback & " database!" & Environment.NewLine & "Key = " & Strings.Chr(34).ToString() & UniqueKey & Strings.Chr(34).ToString(), "Error in LotusLnk.AttachToRecord", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
                 Case Else
             End Select
@@ -810,18 +910,31 @@ MISSINGMESSAGE:
             EndProgram()
         End If
     End Sub
+
     Public Function Attach_To_Feedback() As Boolean
         AttachToDBName(HoldNotesFeedbackPath, Feedback)
         AttachToDBView("(LU Activity Unique)")
         Attach_To_Feedback = AttachToRecord(HoldUniqueActivity, "Feedback")
     End Function
+
     Private Sub Attach_To_SmartCenter_Contact()
-        AttachToDBName(HoldNotesContactPath, SMART)
+        If NewExistingFlag = "Existing" Then
+            AttachToDBName(HoldNotesContactPath, SMART)
+        Else
+            AttachToDBName(HoldNotesSMARTCenterPath, SMART)
+        End If
+
         AttachToDBView("(LU Contact Unique)")
         AttachToRecord(Hold_Contact_ID, "Contact")
     End Sub
+
     Private Sub Attach_To_SmartCenter_Customer()
-        AttachToDBName(HoldNotesCustomerPath, SMART)
+        If NewExistingFlag = "Existing" Then
+            AttachToDBName(HoldNotesCustomerPath, SMART)
+        Else
+            AttachToDBName(HoldNotesSMARTCenterPath, SMART)
+        End If
+
         AttachToDBView("(LU Unique Company)")
         AttachToRecord(Hold_Customer_ID, "Company")
     End Sub
@@ -915,18 +1028,18 @@ MISSINGMESSAGE:
                 Contracts.BuildingType = TempStr
             Else
                 ReturnValue = "Code"
-    '                Where = "Description = " & FixSQLString(TempStr)
+                '                Where = "Description = " & FixSQLString(TempStr)
                 Dim sql As String = "SELECT code & ' - ' &  Description AS BldgCode FROM [Building Code] WHERE Description = " & FixSQLString(TempStr)
                 _myList = GetDataFromOptions(sql)
                 '                If Record_FindFirst(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, BUILDING_CODE_TABLE_QUERY_NAME, Where, 0, ReturnValue) <> RECORD_NOT_FOUND Then
                 If _myList.Count <> 0 Then
                     Contracts.BuildingType = _myList(0)
                 End If
-                End If
-                If Strings.InStr(iPos, XML, "<building_type>") > 0 Then
-                    Contracts.IsCampus = True
-    '            End If
-                End If
+            End If
+            If Strings.InStr(iPos, XML, "<building_type>") > 0 Then
+                Contracts.IsCampus = True
+                '            End If
+            End If
         End If
     End Sub
     '    Private Function ReadDataFromA2BFile(ByRef sFileName As String) As String
@@ -1272,7 +1385,10 @@ GETNOTESDATADIR_ERROR:
             Else
                 Contracts.SalesRepName = Strings.Mid(clsNotes.GetValue("SalesRep"), 4, iPos - 4)
             End If
-            Attach_To_Feedback()
+            If NewExistingFlag = "Existing" Then
+                Attach_To_Feedback()
+            End If
+
         End If
         Contracts.SalesRepPhone = String.Empty
         Contracts.SalesRepAddress1 = String.Empty
@@ -1351,6 +1467,7 @@ GETNOTESDATADIR_ERROR:
         Return bNotesDocKey
 
     End Function
+
     Public Function Get_SuptStatus(ByVal sStatusDecision As String) As String
         Dim sSuptStatus As String = ""
 
@@ -1367,48 +1484,8 @@ GETNOTESDATADIR_ERROR:
         Return sSuptStatus
 
     End Function
-    '    Public Sub CreateNewOpportunity()
 
-    '        clsNotes.CreateDOC("MOD Estimate")
-    '        clsNotes.SetValue("$ConflictAction", 1)
-    '        clsNotes.SetValue("proposal_num", OpportunityID)
-    '        clsNotes.SetValue("FeedbackUnique", OpportunityID)
-    '        clsNotes.SetValue("ActivityUnique", OpportunityID)
-    '        'clsNotes.SetValue("ContactUnique", Hold_Contact_ID)
-    '        'clsNotes.SetValue("Unique", Hold_Customer_ID)
-    '        clsNotes.SetValue("office", Contracts.InstallingOffice)
-    '        'clsNotes.SetValue("district", Contracts.District)
-    '        'clsNotes.SetValue("region", Contracts.Region)
-    '        clsNotes.SetValue("Area", Contracts.Area)
-    '        'clsNotes.SetValue("Territory", Contracts.Territory)
-    '        clsNotes.SetValue("KG", IIf(All_LocalCodeDep.CanadaJob, "TOR", "SEC"))
-    '        'clsNotes.SetValue("companyName", Contracts.ContactCompanyName)
-    '        'clsNotes.SetValue("con_name", Contracts.ContactFirstName & " " & Contracts.ContactLastName)
-    '        'clsNotes.SetValue("con_phone", Contracts.ContactTelephone)
-    '        'clsNotes.SetValue("custnumber", Contracts.CustomerNumber)
-    '        clsNotes.SetValue("custname", Contracts.JobName)
-    '        clsNotes.SetValue("bldname", Contracts.JobName) 'Customer in Lotus Notes
-    '        'clsNotes.SetValue("address", Contracts.CustomerAddress)
-    '        'clsNotes.SetValue("city", Contracts.CustomerCity)
-    '        'clsNotes.SetValue("state", Contracts.CustomerState)
-    '        'clsNotes.SetValue("zip", Contracts.CustomerZip)
-    '        'clsNotes.SetValue("bidtype", Contracts.BidType)
-    '        'clsNotes.SetValue("prob_sale", Midpoint)
-    '        'clsNotes.SetValue("prob_sale_range", Contracts.ProbabilityOfSale)
-    '        'clsNotes.SetValue("window_sale_range", Contracts.WindowOfSale)
-    '        'clsNotes.SetValue("currentProvider", Contracts.CurrentServiceProvider)
-    '        clsNotes.SetValue_Readers("creator", clsNotes.CN_Username)
-    '        clsNotes.SetValue_Readers("originalsalesrep", clsNotes.CN_Username)
-    '        clsNotes.SetValue("date", CDate(StringsHelper.Format(DateTime.Now, "MM/dd/yyyy")))
-    '        clsNotes.SetValue_Readers("Reader", Contracts.Reader)
-    '        clsNotes.SetValue_Readers("reader_global", Contracts.ReaderGlobal)
-    '        clsNotes.SetValue_Readers("Reader_Admin", "[ADMIN]")
-    '        clsNotes.SetValue_Readers("AdminReader", "[ADMIN]")
-    '        clsNotes.SetValue_Readers("Estimator", clsNotes.CN_Username)
-    '        'clsNotes.SetValue("AgentFor", Contracts.ContactAgentFor)
-    '        'clsNotes.SetValue("ContactTitle", Contracts.ContactTitle)
 
-    '    End Sub
     Private Function Get_ProbabilityofSale(ByRef Range As String) As Integer
 
         Select Case Range
@@ -1427,6 +1504,7 @@ GETNOTESDATADIR_ERROR:
         End Select
 
     End Function
+
     Public Function Map_ProbabilityofSale(ByRef ReadValue As String) As String
 
         If ReadValue.IndexOf("-") > -1 Then
@@ -1447,6 +1525,7 @@ GETNOTESDATADIR_ERROR:
         End If
 
     End Function
+
     Public Sub CreateActivity()
 
         If Not clsNotes.NotesDBName(ComServer, HoldNotesActivitiesPath) Then

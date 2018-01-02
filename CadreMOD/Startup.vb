@@ -80,35 +80,25 @@ Module Startup
             SpecAndDataPath = VerifyPath(HoldDirectory)
             gbShape = SHAPE_Recognition()
             If SetUpLotusLink() Then
-                hwnd = FindWindow(Nothing, "PreBid MOD")
-                If hwnd > 0 Then
-                    MessageBox.Show("PreBid MOD Is Already Running!" & Environment.NewLine & _
-                                    "You must close PreBid MOD first.", "PreBid MOD Already Active", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    Result = ShowWindow(hwnd, SW_RESTORE)
-                    Result = SetFocus(hwnd)
-                    Environment.Exit(0)
-                End If
+                QueryFeedback(True)
+
+                DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath, MODDATA_DATABASE_NAME, True)
+
+                '     CM_MAIN_IO.InitializeStructCRMData()
+                'If gbShape Then
+                '    Get_CRMProjectData()
+                'End If
+
+                GetSalesRepData()
+
+                DetermineTaxability()
+
+                EstimateModified = False
+
+                '  Splash.Close()
+                CM_file = ReportsPath & Contracts.EstimateNum & ".JSON"
+                Application.Run(New CM_MAIN_frm)
             End If
-
-            QueryFeedback(True)
-
-            DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath, MODDATA_DATABASE_NAME, True)
-
-            '     CM_MAIN_IO.InitializeStructCRMData()
-            'If gbShape Then
-            '    Get_CRMProjectData()
-            'End If
-
-            GetSalesRepData()
-
-            DetermineTaxability()
-
-            EstimateModified = False
-
-
-            '  Splash.Close()
-            CM_file = ReportsPath & Contracts.EstimateNum & ".JSON"
-            Application.Run(New CM_MAIN_frm)
 
         Catch
             MessageBox.Show("Error in Startup.Main: " & Environment.NewLine & CStr(Information.Err().Number) & ": " & Conversion.ErrorToString(Information.Err().Number) & Environment.NewLine & Information.Err().Number.ToString() & Conversion.ErrorToString(), Application.ProductName)

@@ -499,6 +499,7 @@ Partial Friend Class CM_MAIN_frm
 
     Private Sub CM_MAIN_frm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         FpSpread1.Hide()
+
         DetachFeedback()
 
         Dim ShiftDist As Single = (Me.Width - BuildingInformation_fra.Width) / 2
@@ -572,7 +573,6 @@ Partial Friend Class CM_MAIN_frm
         Dim numberType As New FarPoint.Win.Spread.CellType.NumberCellType()
         numberType.DecimalPlaces = 0
         numberType.ShowSeparator = True
-
 
         Dim currencyType As New FarPoint.Win.Spread.CellType.CurrencyCellType()
         currencyType.Separator = ","
@@ -743,7 +743,6 @@ Partial Friend Class CM_MAIN_frm
         initializing = False
         FpSpread1.Show()
     End Sub
-
 
     Private Sub FpSpread1_CellClick(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.CellClickEventArgs) Handles FpSpread1.CellClick
 
@@ -1829,11 +1828,12 @@ Partial Friend Class CM_MAIN_frm
 
         txtTaxRate.Text = GetTaxRate()
 
-        AssignListIndex_First(cboBuildingType, Contracts.BuildingType)
-        AssignListIndex_First(cboSalesOffice, Contracts.SalesRepOffice)
-        AssignListIndex_First(cboStatus, Contracts.Status)
-        AssignListIndex(cboSalesRep, Contracts.SalesRepName)
+        AssignListIndex(cboTaxCode, DefaultTaxCode)
+        AssignListIndex(cboBuildingType, Contracts.BuildingType)
         AssignListIndex(cboSalesOffice, Contracts.SalesRepOffice)
+        AssignListIndex(cboStatus, Contracts.Status)
+        AssignListIndex(cboSalesRep, Contracts.SalesRepName)
+        AssignListIndex(cboInstallingOffice, OfficeFromSmart)
     End Sub
 
     Private Sub txtBidDate_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles txtBidDate.Validating
