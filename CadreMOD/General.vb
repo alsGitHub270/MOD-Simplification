@@ -267,10 +267,12 @@ Module General
         Return ReturnVal
 
     End Function
+
     Public Sub EndProgram()
         Reset_Resolution()
         Environment.Exit(0)
     End Sub
+
     Public Function TranslateOfficeNumber(ByVal sOfficeNumberOld As String, Optional ByVal bSalesOffice As Boolean = False, Optional ByVal bIgnoreShape As Boolean = False) As String
         Dim sWhere As String = "[Office] = " & FixSQLString(sOfficeNumberOld)
         Dim sNewOffice As String = "New Office"
@@ -407,6 +409,7 @@ Module General
         'End If
 
     End Function
+
     Public Function FixSQLString(ByVal ThisFieldValue As String) As String
         Dim j As Byte
         Dim i As Byte = (ThisFieldValue.IndexOf("'"c) + 1)
@@ -419,9 +422,11 @@ Module General
         Return "'" & ThisFieldValue & "'"
 
     End Function
+
     Public Function Get_FileName(ByRef ThisNegNum As String, ByRef ThisBank As String, ByRef ThisAlt As String, ByRef ThisUnits As String) As String
         Return ThisNegNum & ThisBank & ThisAlt & ThisUnits
     End Function
+
     Public Function GetDataFromOptions(ByVal sSQL As String, Optional ByVal multiple_fields As Boolean = False) As List(Of String)
         Dim dataSource As String = HAPDatabasePath & "\" & MODDATA_DATABASE_NAME
         Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
@@ -450,10 +455,12 @@ Module General
 
         Return myList
     End Function
+
     Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
         Dim Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
     End Function
+
     Public Function FormatUnits(ByRef UnitsInString As String) As String
         Dim UnitsLine As String = String.Empty
         Dim TempLine As String = String.Empty
@@ -527,6 +534,7 @@ Module General
         Return UnitsLine
 
     End Function
+
     Public Function SplitUnitsForSave(ByVal CurUnits As String) As String
         Dim ReturnVal As String = String.Empty
 
@@ -538,6 +546,7 @@ Module General
         Return ReturnVal
 
     End Function
+
     Public Function Serialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim ReturnVal As Boolean = True
@@ -557,6 +566,7 @@ Module General
         Return ReturnVal
 
     End Function
+
     Public Function Deserialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim dsTemp As DataSet
@@ -570,7 +580,7 @@ Module General
                 'JsonSerializerSettings()
                 'NullValueHandling = NullValueHandling.Include
                 dsTemp = JsonConvert.DeserializeObject(Of DataSet)(json)
-                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like 
+                UseDataset.Merge(dsTemp, True, MissingSchemaAction.Ignore)   'HACK:  may want to revise this to something like
                 '     dataset.Merge(JsonConvert.DeserializeObject(Of DataSet)(json), true, MissingSchemaAction.AddWithKey)
                 CurDirtyFlag = False
             Else
@@ -585,6 +595,24 @@ Module General
         Return ReturnVal
 
     End Function
+
+    Public Function FileIsOpen(ByVal pathfile As String) As Boolean
+        Dim ff As Integer
+        If System.IO.File.Exists(pathfile) Then
+            Try
+                ff = FreeFile()
+                Microsoft.VisualBasic.FileOpen(ff, pathfile, OpenMode.Binary, OpenAccess.Read, OpenShare.LockReadWrite)
+                Return False
+            Catch
+                Return True
+            Finally
+                FileClose(ff)
+            End Try
+            Return True
+        End If
+        Return False
+    End Function
+
     Public Sub ArchiveFiles()
         Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
 
@@ -613,6 +641,7 @@ Module General
         Next row
         Return sngValue
     End Function
+
     Public Function GetSummaryTotals(ByVal column As Integer) As Single
         Dim sngValue As Double = 0
         For Each row As DataRow In dtSummaryGroup.Rows
@@ -622,6 +651,7 @@ Module General
         Next row
         Return sngValue
     End Function
+
     Public Sub SaveAll()
 
         CM_MAIN_frm.SaveAll()
@@ -638,6 +668,7 @@ Module General
         ArchiveFiles()
 
     End Sub
+
     Public Sub CompareFiles()
         Dim Filesystem As New Scripting.FileSystemObject()
         Dim Name As String
@@ -660,10 +691,12 @@ Module General
 
     End Sub
     Public Sub DeleteAllFiles()
+
         For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
             File.Delete(FoundFile)
         Next FoundFile
     End Sub
+    
     Public Sub DeleteFiles()
         Dim FileNameLike As String = String.Empty
 

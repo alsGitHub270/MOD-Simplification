@@ -421,7 +421,6 @@ MISSINGMESSAGE:
             End Try
         End If
 
-
     End Sub
 
     Public Function QueryFeedback(ByRef SetValues As Boolean) As Boolean
@@ -553,11 +552,11 @@ MISSINGMESSAGE:
     End Function
     Public Sub Query_SM2ART()
 
-        'If NewExistingFlag = "Existing" Then
-        '    Attach_To_Feedback()
-        '    Hold_Customer_ID = clsNotes.GetValue("unique")
-        '    Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
-        'End If
+        If NewExistingFlag = "Existing" Then
+            Attach_To_Feedback()
+            Hold_Customer_ID = clsNotes.GetValue("unique")
+            Hold_Contact_ID = clsNotes.GetValue("ContactUnique")
+        End If
 
         Attach_To_SmartCenter_Customer()
         Contracts.JobName = TrimFields(clsNotes.GetValue("CustName"))
@@ -609,11 +608,12 @@ MISSINGMESSAGE:
 
         Dim results As Boolean
         Dim NewExistingStr As Integer = (Interaction.Command().IndexOf("~"c) + 1)
-        NewExistingFlag = Strings.Left(Interaction.Command(), NewExistingStr - 1) ' Can be "New" or "Existing"
+        NewExistingFlag = Strings.Left(Interaction.Command(), NewExistingStr - 1) ' Can be "New" or ""
 
         If NewExistingFlag = "New" Then
             results = SetUpLotusLinkNew()
         Else
+            NewExistingFlag = "Existing"
             results = SetUpLotusLinkExisting()
         End If
 

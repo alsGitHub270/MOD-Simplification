@@ -45,8 +45,8 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
-        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer3 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer4 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.cboSupt = New System.Windows.Forms.ComboBox()
@@ -157,6 +157,9 @@ Partial Class CM_MAIN_frm
         Me.Menu_pic = New System.Windows.Forms.PictureBox()
         Me.btnSuptReview = New System.Windows.Forms.Button()
         Me.btnContact = New System.Windows.Forms.Button()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtSuptReview = New System.Windows.Forms.TextBox()
         Me.BuildingInformation_fra.SuspendLayout()
         Me.fraCode.SuspendLayout()
         Me.StatusBar1.SuspendLayout()
@@ -170,6 +173,7 @@ Partial Class CM_MAIN_frm
         Me.GroupBox2.SuspendLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Menu_pic.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'BuildingInformation_fra
@@ -1593,7 +1597,7 @@ Partial Class CM_MAIN_frm
         Me.FpSpread1.Location = New System.Drawing.Point(6, 67)
         Me.FpSpread1.Name = "FpSpread1"
         Me.FpSpread1.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.SheetView1})
-        Me.FpSpread1.Size = New System.Drawing.Size(1478, 407)
+        Me.FpSpread1.Size = New System.Drawing.Size(1478, 403)
         Me.FpSpread1.TabIndex = 11
         Me.FpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         '
@@ -1616,10 +1620,10 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.Controls.Add(Me._JobHighRiskFactor_lbl_1)
         Me.Equipment_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Equipment_fra.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Equipment_fra.Location = New System.Drawing.Point(0, 290)
+        Me.Equipment_fra.Location = New System.Drawing.Point(0, 294)
         Me.Equipment_fra.Name = "Equipment_fra"
         Me.Equipment_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Equipment_fra.Size = New System.Drawing.Size(1484, 480)
+        Me.Equipment_fra.Size = New System.Drawing.Size(1484, 476)
         Me.Equipment_fra.TabIndex = 43
         Me.Equipment_fra.TabStop = False
         Me.Equipment_fra.Text = "Equipment "
@@ -1629,18 +1633,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
         Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.HorizontalScrollBar.Name = ""
-        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
+        EnhancedScrollBarRenderer3.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer3.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer3.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer3.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer3.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer3
         Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
@@ -1653,18 +1657,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.VerticalScrollBar.Name = ""
-        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
+        EnhancedScrollBarRenderer4.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer4.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer4.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer4.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer4.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer4
         Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
@@ -1955,7 +1959,7 @@ Partial Class CM_MAIN_frm
         Me.txtNPSLaborCost.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNPSLaborCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNPSLaborCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtNPSLaborCost.Location = New System.Drawing.Point(161, 80)
+        Me.txtNPSLaborCost.Location = New System.Drawing.Point(165, 87)
         Me.txtNPSLaborCost.MaxLength = 0
         Me.txtNPSLaborCost.Name = "txtNPSLaborCost"
         Me.txtNPSLaborCost.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1969,7 +1973,7 @@ Partial Class CM_MAIN_frm
         Me.txtNPSOneTimeCost.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNPSOneTimeCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNPSOneTimeCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtNPSOneTimeCost.Location = New System.Drawing.Point(161, 104)
+        Me.txtNPSOneTimeCost.Location = New System.Drawing.Point(165, 111)
         Me.txtNPSOneTimeCost.MaxLength = 0
         Me.txtNPSOneTimeCost.Name = "txtNPSOneTimeCost"
         Me.txtNPSOneTimeCost.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1983,7 +1987,7 @@ Partial Class CM_MAIN_frm
         Me.txtNPSMaterialCost.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNPSMaterialCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNPSMaterialCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtNPSMaterialCost.Location = New System.Drawing.Point(161, 56)
+        Me.txtNPSMaterialCost.Location = New System.Drawing.Point(165, 63)
         Me.txtNPSMaterialCost.MaxLength = 0
         Me.txtNPSMaterialCost.Name = "txtNPSMaterialCost"
         Me.txtNPSMaterialCost.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1997,7 +2001,7 @@ Partial Class CM_MAIN_frm
         Me.cboDurationMonths.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboDurationMonths.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboDurationMonths.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboDurationMonths.Location = New System.Drawing.Point(161, 8)
+        Me.cboDurationMonths.Location = New System.Drawing.Point(165, 15)
         Me.cboDurationMonths.Name = "cboDurationMonths"
         Me.cboDurationMonths.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboDurationMonths.Size = New System.Drawing.Size(78, 21)
@@ -2010,7 +2014,7 @@ Partial Class CM_MAIN_frm
         Me.cboCallBackHours.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboCallBackHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboCallBackHours.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboCallBackHours.Location = New System.Drawing.Point(161, 32)
+        Me.cboCallBackHours.Location = New System.Drawing.Point(165, 39)
         Me.cboCallBackHours.Name = "cboCallBackHours"
         Me.cboCallBackHours.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboCallBackHours.Size = New System.Drawing.Size(78, 21)
@@ -2023,7 +2027,7 @@ Partial Class CM_MAIN_frm
         Me.lblNPSLaborCosts.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblNPSLaborCosts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNPSLaborCosts.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblNPSLaborCosts.Location = New System.Drawing.Point(9, 85)
+        Me.lblNPSLaborCosts.Location = New System.Drawing.Point(13, 92)
         Me.lblNPSLaborCosts.Name = "lblNPSLaborCosts"
         Me.lblNPSLaborCosts.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblNPSLaborCosts.Size = New System.Drawing.Size(141, 18)
@@ -2038,7 +2042,7 @@ Partial Class CM_MAIN_frm
         Me.lblNPSOneTimeCost_.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblNPSOneTimeCost_.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNPSOneTimeCost_.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblNPSOneTimeCost_.Location = New System.Drawing.Point(9, 109)
+        Me.lblNPSOneTimeCost_.Location = New System.Drawing.Point(13, 116)
         Me.lblNPSOneTimeCost_.Name = "lblNPSOneTimeCost_"
         Me.lblNPSOneTimeCost_.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblNPSOneTimeCost_.Size = New System.Drawing.Size(141, 18)
@@ -2053,7 +2057,7 @@ Partial Class CM_MAIN_frm
         Me.lblDuration.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblDuration.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDuration.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblDuration.Location = New System.Drawing.Point(9, 13)
+        Me.lblDuration.Location = New System.Drawing.Point(13, 20)
         Me.lblDuration.Name = "lblDuration"
         Me.lblDuration.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblDuration.Size = New System.Drawing.Size(141, 18)
@@ -2068,7 +2072,7 @@ Partial Class CM_MAIN_frm
         Me.lblNPSMaterialCost.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblNPSMaterialCost.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNPSMaterialCost.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblNPSMaterialCost.Location = New System.Drawing.Point(1, 61)
+        Me.lblNPSMaterialCost.Location = New System.Drawing.Point(5, 68)
         Me.lblNPSMaterialCost.Name = "lblNPSMaterialCost"
         Me.lblNPSMaterialCost.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblNPSMaterialCost.Size = New System.Drawing.Size(149, 18)
@@ -2083,7 +2087,7 @@ Partial Class CM_MAIN_frm
         Me.lblCallBackHours.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblCallBackHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCallBackHours.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblCallBackHours.Location = New System.Drawing.Point(9, 37)
+        Me.lblCallBackHours.Location = New System.Drawing.Point(13, 44)
         Me.lblCallBackHours.Name = "lblCallBackHours"
         Me.lblCallBackHours.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblCallBackHours.Size = New System.Drawing.Size(141, 18)
@@ -2148,7 +2152,7 @@ Partial Class CM_MAIN_frm
         '
         Me.lblGatewayStatus.AutoSize = True
         Me.lblGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGatewayStatus.Location = New System.Drawing.Point(117, 17)
+        Me.lblGatewayStatus.Location = New System.Drawing.Point(71, 17)
         Me.lblGatewayStatus.Name = "lblGatewayStatus"
         Me.lblGatewayStatus.Size = New System.Drawing.Size(47, 13)
         Me.lblGatewayStatus.TabIndex = 104
@@ -2157,9 +2161,9 @@ Partial Class CM_MAIN_frm
         'txtGatewayStatus
         '
         Me.txtGatewayStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayStatus.Location = New System.Drawing.Point(170, 12)
+        Me.txtGatewayStatus.Location = New System.Drawing.Point(124, 13)
         Me.txtGatewayStatus.Name = "txtGatewayStatus"
-        Me.txtGatewayStatus.Size = New System.Drawing.Size(134, 20)
+        Me.txtGatewayStatus.Size = New System.Drawing.Size(119, 20)
         Me.txtGatewayStatus.TabIndex = 103
         '
         'GroupBox1
@@ -2167,9 +2171,9 @@ Partial Class CM_MAIN_frm
         Me.GroupBox1.Controls.Add(Me.lblGatewayStatus)
         Me.GroupBox1.Controls.Add(Me.txtGatewayStatus)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(866, 245)
+        Me.GroupBox1.Location = New System.Drawing.Point(1188, 208)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(315, 38)
+        Me.GroupBox1.Size = New System.Drawing.Size(249, 38)
         Me.GroupBox1.TabIndex = 105
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Gateway Review"
@@ -2179,9 +2183,9 @@ Partial Class CM_MAIN_frm
         Me.GroupBox2.Controls.Add(Me.txtOCPL)
         Me.GroupBox2.Controls.Add(Me.lblOCPL)
         Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox2.Location = New System.Drawing.Point(1192, 208)
+        Me.GroupBox2.Location = New System.Drawing.Point(865, 246)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(244, 48)
+        Me.GroupBox2.Size = New System.Drawing.Size(317, 48)
         Me.GroupBox2.TabIndex = 106
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "OCPL"
@@ -2348,6 +2352,37 @@ Partial Class CM_MAIN_frm
         Me.btnContact.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.btnContact.UseVisualStyleBackColor = False
         '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.Label2)
+        Me.GroupBox3.Controls.Add(Me.txtSuptReview)
+        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Location = New System.Drawing.Point(1188, 250)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(249, 44)
+        Me.GroupBox3.TabIndex = 106
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Superintendent Review"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(71, 22)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(47, 13)
+        Me.Label2.TabIndex = 104
+        Me.Label2.Text = "Status:"
+        '
+        'txtSuptReview
+        '
+        Me.txtSuptReview.Enabled = False
+        Me.txtSuptReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSuptReview.Location = New System.Drawing.Point(124, 18)
+        Me.txtSuptReview.Name = "txtSuptReview"
+        Me.txtSuptReview.Size = New System.Drawing.Size(119, 20)
+        Me.txtSuptReview.TabIndex = 103
+        '
         'CM_MAIN_frm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -2357,6 +2392,7 @@ Partial Class CM_MAIN_frm
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(1484, 795)
+        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.btnContact)
         Me.Controls.Add(Me.btnSuptReview)
         Me.Controls.Add(Me.txtEstimateNum)
@@ -2404,6 +2440,8 @@ Partial Class CM_MAIN_frm
         Me.GroupBox2.PerformLayout()
         CType(Me.Menu_pic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Menu_pic.ResumeLayout(False)
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2545,5 +2583,8 @@ Partial Class CM_MAIN_frm
     Public WithEvents lblSupt As System.Windows.Forms.Label
     Private WithEvents btnLaborRates As System.Windows.Forms.Button
     Private WithEvents btnContact As System.Windows.Forms.Button
+    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents txtSuptReview As System.Windows.Forms.TextBox
 #End Region
 End Class

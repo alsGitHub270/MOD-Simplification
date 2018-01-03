@@ -180,7 +180,8 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("nps_material_cost", typeStr), _
                                                           New DataColumn("nps_labor_cost", typeStr), _
                                                           New DataColumn("nps_one_time_cost", typeStr), _
-                                                          New DataColumn("ocpl", typeStr)
+                                                          New DataColumn("ocpl", typeStr),
+                                                          New DataColumn("supt_review_status", typeStr)
                                                          })
 
 
@@ -739,6 +740,10 @@ Partial Friend Class CM_MAIN_frm
 
         ProcessNegSummaryTotals()
         SetSummaryC1Colors()
+
+        If Me.txtSuptReview.Text = "Under Review" Then
+            Me.btnSave.Enabled = False
+        End If
 
         initializing = False
         FpSpread1.Show()
@@ -2108,6 +2113,8 @@ AddMasterRow_Error:
                 txtNPSLaborCost.Text = row.Item("nps_labor_cost").ToString
                 txtNPSOneTimeCost.Text = row.Item("nps_one_time_cost").ToString
                 txtOCPL.Text = row.Item("ocpl").ToString
+
+                txtSuptReview.Text = row.Item("supt_review_status").ToString
             Else
                 UpdateBldgInfoFromNotes()
             End If
@@ -2155,6 +2162,7 @@ AddMasterRow_Error:
             dtBuildingInfo.Rows(0)("nps_labor_cost") = txtNPSLaborCost.Text
             dtBuildingInfo.Rows(0)("nps_one_time_cost") = txtNPSOneTimeCost.Text
             dtBuildingInfo.Rows(0)("ocpl") = txtOCPL.Text
+            dtBuildingInfo.Rows(0)("supt_review_status") = txtSuptReview.Text
         Catch ex As Exception
             MessageBox.Show("Error saving data at top of Contract Management Screen", "Error Saving to Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -3350,19 +3358,29 @@ AddMasterRow_Error:
             End If
         End If
 
+        Me.txtSuptReview.Text = "Under Review"
+
         SaveAll()
 
-        For Each row As DataRow In dtSummaryGroup.Rows
-            If Not IsDBNull(row("Include")) AndAlso row("Include") Then
+        sSUPTFileName = GenerateSuptApprovalReport()
 
-                sSUPTFileName = OutputSuptFile(row("bank"), row("units"))
+        If Not String.IsNullOrEmpty(sSUPTFileName) Then
+            SUPT_Add_Doc(sSUPTFileName)
+        End If
 
-                'SUPT_Add_Doc(sSUPTFileName)
-            End If
-        Next
+        'For Each row As DataRow In dtSummaryGroup.Rows
+        '    If Not IsDBNull(row("Include")) AndAlso row("Include") Then
+
+        '        sSUPTFileName = OutputSuptFile(row("bank"), row("units"))
+
+        '        'SUPT_Add_Doc(sSUPTFileName)
+        '    End If
+        'Next
 
 
-        MessageBox.Show("Supt Approval submitted", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        MessageBox.Show("Superintendent Approval Submitted", "Submitted", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Me.btnSave.Enabled = False
 
         Exit Sub
 
@@ -3511,7 +3529,11 @@ AddMasterRow_Error:
         '    clsNotes.SetValue("power", ME_COM01Car_typ.PowerSupply)
         '    clsNotes.SetValue("reason", SuptReviewMsg)
         '    clsNotes.SetValue("bank", GONumbers(CurrentGOSelection).Bank & " / " & GONumbers(CurrentGOSelection).Alt)
+
+
         '    bNewDocument = clsNotes.AttachSUPTFile(sSUPTFileName)
+
+
         '    If clsNotes.CADREFilePath(ReportsPath) Then
         '        If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
         '            Execute_Word_Report(REPORT_HXPressFieldData, True, True)
@@ -3578,6 +3600,136 @@ AddMasterRow_Error:
         End Try
 
     End Sub
+
+
+    Private Function GenerateSuptApprovalReport() As String
+
+        Dim filename As String = String.Empty
+        Dim newSpread As FarPoint.Win.Spread.FpSpread = New FarPoint.Win.Spread.FpSpread()
+
+        filename = ReportsPath & Contracts.EstimateNum.ToString().Trim & ".xlsx"
+        If FileIsOpen(filename) Then
+            MessageBox.Show("Superintendent Report is open.  Please close the report and try again.", "Report is Open", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Return filename
+        End If
+
+        ExpandCollapseAll("Expand")
+        ExpandCollapseAll("Collapse")
+
+        Dim combinedSheet As New FarPoint.Win.Spread.SheetView
+
+        Try
+            combinedSheet = CreateCombinedSheet()
+
+            SetSuptApprovalRptHeaders(combinedSheet)
+
+
+            newSpread.Sheets.Add(combinedSheet)
+            newSpread.SaveExcel(filename, FarPoint.Excel.ExcelSaveFlags.UseOOXMLFormat)
+
+            ModifySuptApprovalRptHeaders(filename)
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error in btnExportToExcel", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+
+        Return filename
+
+    End Function
+
+    Private Sub SetSuptApprovalRptHeaders(ByRef combinedSheet As FarPoint.Win.Spread.SheetView)
+
+        combinedSheet.Rows.Add(0, 11)
+
+        'Get data from building info
+        combinedSheet.Cells(0, 0).Text = "Building Name: "
+        combinedSheet.Cells(0, 2).Text = Me.txtJobName.Text
+        combinedSheet.Cells(0, 6).Text = "Sales Rep: "
+        combinedSheet.Cells(0, 8).Text = Me.cboSalesRep.Text
+        combinedSheet.Cells(1, 0).Text = "Building Address: "
+        combinedSheet.Cells(1, 2).Text = Me.txtJobAddress.Text
+        combinedSheet.Cells(1, 6).Text = "Sales Office :"
+        combinedSheet.Cells(1, 8).Text = Me.cboSalesOffice.Text
+        combinedSheet.Cells(2, 2).Text = Me.txtJobAddress2.Text
+        combinedSheet.Cells(2, 6).Text = "Installing Office :  "
+        combinedSheet.Cells(2, 8).Text = Me.cboInstallingOffice.Text
+        combinedSheet.Cells(3, 0).Text = "City/State:"
+        combinedSheet.Cells(3, 2).Text = Me.txtJobCity.Text.Trim & ", " & Me.txtJobState.Text.Trim & "  " & Me.txtJobZip.Text
+        combinedSheet.Cells(3, 6).Text = "Service Office: "
+        combinedSheet.Cells(3, 8).Text = Me.cboServiceOffice.Text
+        combinedSheet.Cells(4, 0).Text = "Consultant: "
+        combinedSheet.Cells(4, 2).Text = Me.txtConsultant.Text
+        combinedSheet.Cells(4, 6).Text = "Status: "
+        combinedSheet.Cells(4, 8).Text = Me.cboStatus.Text
+        combinedSheet.Cells(5, 0).Text = "Superintendent: "
+        combinedSheet.Cells(5, 2).Text = Me.cboSupt.Text
+        combinedSheet.Cells(5, 6).Text = "Bid Date : "
+        combinedSheet.Cells(5, 8).Text = Me.txtBidDate.Text.ToString
+        combinedSheet.Cells(6, 0).Text = "Building Type: "
+        combinedSheet.Cells(6, 2).Text = Me.cboBuildingType.Text
+        combinedSheet.Cells(6, 6).Text = "Probability Of Sale: "
+        combinedSheet.Cells(6, 8).Text = Me.cboProbabilityOfSale.Text
+        combinedSheet.Cells(6, 9).Text = "Tax Rate: "
+        combinedSheet.Cells(6, 10).Text = Me.txtTaxRate.Text
+        combinedSheet.Cells(7, 6).Text = "National Acct: "
+        combinedSheet.Cells(7, 8).Text = Me.cboNationalAccount.Text
+        combinedSheet.Cells(7, 9).Text = "Tax Code: "
+        combinedSheet.Cells(7, 10).Text = Me.cboTaxCode.Text
+
+        combinedSheet.Cells(10, 0).Text = "Group"
+
+        combinedSheet.Cells(10, 5).Text = "HQ $"
+        combinedSheet.Cells(10, 6).Text = "RL $"
+        combinedSheet.Cells(10, 7).Text = "Tax $"
+        combinedSheet.Cells(10, 8).Text = "BDP Hrs"
+        combinedSheet.Cells(10, 9).Text = "Spec'l Hrs"
+        combinedSheet.Cells(10, 10).Text = "Labor Hrs"
+        combinedSheet.Cells(10, 11).Text = "OT Hrs"
+        combinedSheet.Cells(10, 12).Text = "Labor $"
+        combinedSheet.Cells(10, 13).Text = "SbCnrt $"
+        combinedSheet.Cells(10, 14).Text = "Exp $"
+        combinedSheet.Cells(10, 15).Text = "Eng $"
+        combinedSheet.Cells(10, 16).Text = "P/O/B $"
+        combinedSheet.Cells(10, 17).Text = "Freight $"
+        combinedSheet.Cells(10, 18).Text = "NPS $"
+        combinedSheet.Cells(10, 19).Text = "Bank Cost"
+
+        combinedSheet.Protect = False
+        Dim generalType As New FarPoint.Win.Spread.CellType.GeneralCellType
+        generalType.ReadOnly = False
+
+        combinedSheet.Cells(10, 20).CellType = generalType
+        combinedSheet.Cells(10, 20).Text = "C1 %"
+        generalType.ReadOnly = True
+        combinedSheet.Protect = True
+
+        combinedSheet.Cells(10, 21).Text = "Sales Comm"
+        combinedSheet.Cells(10, 22).Text = "Sell Price"
+        combinedSheet.Cells(10, 23).Text = "Labor Rate"
+        combinedSheet.Cells(10, 24).Text = "Prod Code"
+        combinedSheet.Cells(10, 25).Text = "Lead Time"
+
+        combinedSheet.Rows(10).BackColor = Color.LightGray
+    End Sub
+   
+
+    Function FileIsOpen(ByVal pathfile As String) As Boolean
+        Dim ff As Integer
+        If System.IO.File.Exists(pathfile) Then
+            Try
+                ff = FreeFile()
+                Microsoft.VisualBasic.FileOpen(ff, pathfile, OpenMode.Binary, OpenAccess.Read, OpenShare.LockReadWrite)
+                Return False
+            Catch
+                Return True
+            Finally
+                FileClose(ff)
+            End Try
+            Return True
+        End If
+        Return False
+    End Function
 
 
 End Class
