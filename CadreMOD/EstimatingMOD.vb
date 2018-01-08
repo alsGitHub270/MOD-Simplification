@@ -2204,4 +2204,30 @@ Module EstimatingMOD
         End Select
 
     End Sub
+    Public Function AllowedToSave() As Boolean
+        Dim ReturnVal As Boolean = True
+        Dim sMsg As String = String.Empty
+
+        If Not ENABLE_BOOKING_BTN And Not ENG_ACCESS Then
+            If CurrentGOData_Typ.EstimateStatus = STATUS_BOOK_SUCCEEDED Then
+                ReturnVal = False
+                sMsg = "Estimate has successfully Booked, saving changes now is not allowed."
+            ElseIf CurrentGOData_Typ.EstimateStatus = STATUS_FROZEN Then
+                ReturnVal = False
+                sMsg = "Estimate has been frozen, saving changes now is not allowed."
+            End If
+        End If
+        'If String.IsNullOrEmpty(sMsg) Then
+        '    If ME_OCS01Car_typ.SuptReview = "Under Review" Then
+        '        ReturnVal = False
+        '        sMsg = "Estimate is under Supt Review - changes cannot be made to the estimate."
+        '    End If
+        'End If
+        If Not String.IsNullOrEmpty(sMsg) Then
+            MessageBox.Show(sMsg, "Cadre Save Restriction")
+        End If
+        Return ReturnVal
+
+    End Function
+
 End Module

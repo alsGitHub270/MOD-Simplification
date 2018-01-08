@@ -246,6 +246,9 @@ Public Class frmEstimatingBase
         ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
         If CurrentGOData_Typ.EstimateLevel = "Master" Then
             EstFileType = FileSuffix_MASTER
+            FreezeSave_btn.Visible = True
+        Else
+            FreezeSave_btn.Visible = False
         End If
         For Each JSONFile In JSONFileLocation.GetFiles()
             If JSONFile IsNot Nothing Then
@@ -1299,7 +1302,7 @@ Public Class frmEstimatingBase
     Public Function PromptForSave() As DialogResult
         Dim SaveResponse As DialogResult = 0
 
-        If FormIsDirty Then
+        If FormIsDirty And AllowedToSave() Then
             If CurrentTab.ToUpper.Contains(EST_Suffix) Then
                 SaveResponse = MsgBox("You must save the current Estimating Data before continuing!" & Environment.NewLine &
                                       "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
@@ -1457,6 +1460,19 @@ Public Class frmEstimatingBase
                 End If
             Case Else
         End Select
+
+    End Sub
+    Private Sub FreezeSave_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FreezeSave_btn.Click
+
+        If CurrentGOData_Typ.EstimateStatus = STATUS_BOOK_SUCCEEDED Then
+            FreezeSave_btn.Text = "Frozen"
+        ElseIf CurrentGOData_Typ.EstimateStatus = STATUS_FROZEN Then
+            CurrentGOData_Typ.EstimateStatus = String.Empty
+            FreezeSave_btn.Text = "Freeze"
+        Else
+            CurrentGOData_Typ.EstimateStatus = STATUS_FROZEN
+            FreezeSave_btn.Text = "Frozen"
+        End If
 
     End Sub
 End Class

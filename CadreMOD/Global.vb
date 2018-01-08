@@ -64,9 +64,8 @@
     Public HYDRO_ONLY_ACCESS As Boolean
 
     'Mod Related Veriables
-
     Public ENABLE_BOOKING_BTN As Boolean
-    Public DataChangedByProgram As Boolean
+    Public DataChangedByProgram As Boolean   
     Public All_LocalCodeDep As New All_LocalCodeDepTYP()
 
     Public TaxRate As Single = -999.99
@@ -88,9 +87,7 @@
     Public CalledToRunReconfig As Boolean
     Public CarProductCode As Integer
 
-    'Public GONumbers() As CM_MAIN_IO.GONumbers_TypeDec = Nothing
     Public CurrentGOSelection As Byte
-    '  Public CM_GridStatus As New CM_MAIN_IO.CM_GridStatus_TypeDec()
 
     Public Structure tagCostGridType_Data
         Dim MenuIndex As Byte
@@ -173,6 +170,7 @@
         Dim CurrentUnits As String
         Dim EstimateLevel As String
         Dim CurrentRow As Integer
+        Dim EstimateStatus As String
         Public Shared Function CreateInstance() As CurrentGOData_Type
             Dim result As New CurrentGOData_Type()
             result.Type = String.Empty
@@ -182,9 +180,11 @@
             result.MachineType = String.Empty
             result.CurrentUnits = String.Empty
             result.EstimateLevel = String.Empty
+            result.EstimateStatus = String.Empty
             Return result
         End Function
     End Structure
     Public CurrentGOData_Typ As CurrentGOData_Type = CurrentGOData_Type.CreateInstance()
+
     Public UnitsInEstimate() As String = Nothing
 End Module

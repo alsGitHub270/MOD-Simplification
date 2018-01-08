@@ -1,6 +1,6 @@
 ﻿Module Constants
     ' Contract Manager
-    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 12/11/2017"
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 12/12/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
@@ -202,4 +202,8 @@
 
     Public Const FREIGHT_RATE As Single = 1.032
     Public Const ENGINEERING_RATE As Single = 1.032
+
+    'Estimate Statuses
+    Public Const STATUS_BOOK_SUCCEEDED As String = "BOOK SUCCEEDED"
+    Public Const STATUS_FROZEN As String = "FROZEN"
 End Module
