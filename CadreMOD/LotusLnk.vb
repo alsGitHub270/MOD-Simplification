@@ -443,23 +443,27 @@ MISSINGMESSAGE:
         If Not SetValues Then
             Exit Function
         End If
+
         iPos = (clsNotes.GetValue("SalesRep").IndexOf("/"c) + 1)
         If iPos = 0 Then
             Contracts.SalesRepName = clsNotes.GetValue("SalesRep")
         Else
             Contracts.SalesRepName = Strings.Mid(clsNotes.GetValue("SalesRep"), 4, iPos - 4)
         End If
+
         iPos = (clsNotes.CN_Username.IndexOf("/"c) + 1)
         If iPos = 0 Then
             Contracts.Estimator = clsNotes.CN_Username
         Else
             Contracts.Estimator = Strings.Mid(clsNotes.CN_Username, 4, iPos - 4)
         End If
+
         If Convert.IsDBNull(clsNotes.GetValue("prob_sale_range")) OrElse clsNotes.GetValue("prob_sale_range").Length = 0 Then
             Contracts.ProbabilityOfSale = "100%"
         Else
             Contracts.ProbabilityOfSale = Map_ProbabilityofSale(clsNotes.GetValue("prob_sale_range"))
         End If
+
         'Contracts.ProposalNum = clsNotes.GetValue("Proposal_num")
         'If clsNotes.GetValue("HqRLMod") = "RL" Then
         '    RegionLocalMOD_OLD = CheckState.Checked
@@ -570,8 +574,10 @@ MISSINGMESSAGE:
         If Contracts.SalesRepOffice = "" Then
             Contracts.SalesRepOffice = TranslateOfficeNumber(OfficeFromSmart)
         End If
+
         '        Contracts.ContractType = clsNotes.GetValue("ContractType")
         Contracts.Country = clsNotes.GetValue("Country")
+
         RetrieveBuildingType(clsNotes.GetValue("LocationsXML"))
         Owner_Info.Name = TrimFields(clsNotes.GetValue("BillToName"))
         Owner_Info.Address = TrimFields(clsNotes.GetValue("BillToAddress"))
@@ -1438,7 +1444,7 @@ GETNOTESDATADIR_ERROR:
         Dim DataBaseError As String = ""
         Dim SUPT As String = ""
         Dim ComServerSupt As String = ""
-        Dim bNotesDocKey As Boolean = False
+        Dim bNotesDocKey As Boolean = True
 
         Try
             If TestVersion Then
@@ -1449,18 +1455,17 @@ GETNOTESDATADIR_ERROR:
                 SUPT = "sec\ApprovalCenter.nsf"
             End If
             If Not clsNotes.NotesDBName(ComServerSupt, SUPT) Then
-                DataBaseError = DataBaseError & "Missing - Supt Review Approval Center_dev.nsf"
-                Throw New Exception()
+                MessageBox.Show("Missing - Supt Review Approval Center_dev.nsf", "SetUp Supt Review Link", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                bNotesDocKey = False
             End If
             If Not clsNotes.NotesDBView("(LU review key)") Then
-                MessageBox.Show("Could not find (LU review key) View", Application.ProductName)
-                EndProgram()
+                MessageBox.Show("Could not find (LU review key) View", "SetUp Supt Review Link", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                bNotesDocKey = False
             End If
-            bNotesDocKey = True
 
         Catch
-            MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes Supt database." & Environment.NewLine & "Closing Cadre!", "Error")
-            EndProgram()
+            MessageBox.Show("Error in Lotus Link, missing or corrupt local Notes Supt database.", "SetUp Supt Review Link", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            bNotesDocKey = False
 
         End Try
 

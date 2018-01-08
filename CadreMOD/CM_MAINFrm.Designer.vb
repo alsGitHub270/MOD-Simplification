@@ -45,8 +45,8 @@ Partial Class CM_MAIN_frm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CM_MAIN_frm))
-        Dim EnhancedScrollBarRenderer3 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
-        Dim EnhancedScrollBarRenderer4 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer1 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
+        Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
         Me.cboSupt = New System.Windows.Forms.ComboBox()
@@ -90,7 +90,6 @@ Partial Class CM_MAIN_frm
         Me._label_9 = New System.Windows.Forms.Label()
         Me._label_8 = New System.Windows.Forms.Label()
         Me.fraCode = New System.Windows.Forms.GroupBox()
-        Me.chkEngineeringSurvey = New System.Windows.Forms.CheckBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.chkHeadDetection = New System.Windows.Forms.CheckBox()
         Me.cboNFPA13CodeYear = New System.Windows.Forms.ComboBox()
@@ -224,7 +223,7 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.Location = New System.Drawing.Point(0, 57)
         Me.BuildingInformation_fra.Name = "BuildingInformation_fra"
         Me.BuildingInformation_fra.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BuildingInformation_fra.Size = New System.Drawing.Size(859, 227)
+        Me.BuildingInformation_fra.Size = New System.Drawing.Size(859, 231)
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
@@ -740,7 +739,6 @@ Partial Class CM_MAIN_frm
         'fraCode
         '
         Me.fraCode.BackColor = System.Drawing.SystemColors.Window
-        Me.fraCode.Controls.Add(Me.chkEngineeringSurvey)
         Me.fraCode.Controls.Add(Me.Label5)
         Me.fraCode.Controls.Add(Me.chkHeadDetection)
         Me.fraCode.Controls.Add(Me.cboNFPA13CodeYear)
@@ -763,22 +761,6 @@ Partial Class CM_MAIN_frm
         Me.fraCode.TabIndex = 97
         Me.fraCode.TabStop = False
         Me.fraCode.Text = "Codes"
-        '
-        'chkEngineeringSurvey
-        '
-        Me.chkEngineeringSurvey.BackColor = System.Drawing.Color.White
-        Me.chkEngineeringSurvey.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkEngineeringSurvey.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkEngineeringSurvey.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.chkEngineeringSurvey.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkEngineeringSurvey.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkEngineeringSurvey.Location = New System.Drawing.Point(50, 158)
-        Me.chkEngineeringSurvey.Name = "chkEngineeringSurvey"
-        Me.chkEngineeringSurvey.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkEngineeringSurvey.Size = New System.Drawing.Size(137, 15)
-        Me.chkEngineeringSurvey.TabIndex = 72
-        Me.chkEngineeringSurvey.Text = "Engineering Survey:"
-        Me.chkEngineeringSurvey.UseVisualStyleBackColor = False
         '
         'Label5
         '
@@ -1633,18 +1615,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.AccessibleDescription = "sprTotals, Sheet1, Row 0, Column 0, "
         Me.sprTotals.HorizontalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.HorizontalScrollBar.Name = ""
-        EnhancedScrollBarRenderer3.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer3.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer3.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer3.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer3.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer3.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer3.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer3.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer3.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer3.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer3.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer3
+        EnhancedScrollBarRenderer1.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer1.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer1.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer1.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer1.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer1.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer1.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer1.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer1.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.HorizontalScrollBar.Renderer = EnhancedScrollBarRenderer1
         Me.sprTotals.HorizontalScrollBar.TabIndex = 44
         Me.sprTotals.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         Me.sprTotals.Location = New System.Drawing.Point(6, 49)
@@ -1657,18 +1639,18 @@ Partial Class CM_MAIN_frm
         Me.sprTotals.TabIndex = 87
         Me.sprTotals.VerticalScrollBar.Buttons = New FarPoint.Win.Spread.FpScrollBarButtonCollection("BackwardLineButton,ThumbTrack,ForwardLineButton")
         Me.sprTotals.VerticalScrollBar.Name = ""
-        EnhancedScrollBarRenderer4.ArrowColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer4.ArrowHoveredColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer4.ArrowSelectedColor = System.Drawing.Color.Navy
-        EnhancedScrollBarRenderer4.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer4.ButtonBorderColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer4.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer4.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
-        EnhancedScrollBarRenderer4.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        EnhancedScrollBarRenderer4.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
-        EnhancedScrollBarRenderer4.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
-        EnhancedScrollBarRenderer4.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
-        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer4
+        EnhancedScrollBarRenderer2.ArrowColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ArrowHoveredColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ArrowSelectedColor = System.Drawing.Color.Navy
+        EnhancedScrollBarRenderer2.ButtonBackgroundColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer2.ButtonBorderColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer2.ButtonHoveredBackgroundColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer2.ButtonHoveredBorderColor = System.Drawing.Color.DeepSkyBlue
+        EnhancedScrollBarRenderer2.ButtonSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        EnhancedScrollBarRenderer2.ButtonSelectedBorderColor = System.Drawing.Color.LightSteelBlue
+        EnhancedScrollBarRenderer2.TrackBarBackgroundColor = System.Drawing.Color.LightSkyBlue
+        EnhancedScrollBarRenderer2.TrackBarSelectedBackgroundColor = System.Drawing.Color.SteelBlue
+        Me.sprTotals.VerticalScrollBar.Renderer = EnhancedScrollBarRenderer2
         Me.sprTotals.VerticalScrollBar.TabIndex = 45
         Me.sprTotals.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never
         '
@@ -2171,7 +2153,7 @@ Partial Class CM_MAIN_frm
         Me.GroupBox1.Controls.Add(Me.lblGatewayStatus)
         Me.GroupBox1.Controls.Add(Me.txtGatewayStatus)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(1188, 208)
+        Me.GroupBox1.Location = New System.Drawing.Point(1188, 202)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(249, 38)
         Me.GroupBox1.TabIndex = 105
@@ -2183,7 +2165,7 @@ Partial Class CM_MAIN_frm
         Me.GroupBox2.Controls.Add(Me.txtOCPL)
         Me.GroupBox2.Controls.Add(Me.lblOCPL)
         Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox2.Location = New System.Drawing.Point(865, 246)
+        Me.GroupBox2.Location = New System.Drawing.Point(865, 240)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(317, 48)
         Me.GroupBox2.TabIndex = 106
@@ -2357,9 +2339,9 @@ Partial Class CM_MAIN_frm
         Me.GroupBox3.Controls.Add(Me.Label2)
         Me.GroupBox3.Controls.Add(Me.txtSuptReview)
         Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox3.Location = New System.Drawing.Point(1188, 250)
+        Me.GroupBox3.Location = New System.Drawing.Point(1188, 240)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(249, 44)
+        Me.GroupBox3.Size = New System.Drawing.Size(249, 48)
         Me.GroupBox3.TabIndex = 106
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Superintendent Review"
@@ -2542,7 +2524,6 @@ Partial Class CM_MAIN_frm
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents cboTaxCode As System.Windows.Forms.ComboBox
     Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
-    Public WithEvents chkEngineeringSurvey As System.Windows.Forms.CheckBox
     Private WithEvents btnAdd As System.Windows.Forms.Button
     Public WithEvents NewProductService_fra As System.Windows.Forms.GroupBox
     Public WithEvents txtNPSLaborCost As System.Windows.Forms.TextBox

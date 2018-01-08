@@ -118,19 +118,21 @@ DetachFilesError:
         Return False
 
     End Function
-    '    Public Function AttachSUPTFile(ByRef sFileName As String) As Boolean
-    '        Dim result As Boolean = True
-    '        Dim oAttachedFile As Object
-    '        Dim oAttachedSUPTFile As Object
 
-    '        oAttachedFile = doc.GetFirstItem("additionalAttachments")
-    '        If oAttachedFile Is Nothing Then
-    '            oAttachedFile = doc.CreateRichTextItem("additionalAttachments")
-    '        End If
-    '        oAttachedSUPTFile = oAttachedFile.EmbedObject(Domino.EMBED_TYPE.EMBED_ATTACHMENT, "", sFileName, "$FILE")
-    '        Return result
+    Public Function AttachSUPTFile(ByRef sFileName As String) As Boolean
+        Dim result As Boolean = True
+        Dim oAttachedFile As Object
+        Dim oAttachedSUPTFile As Object
 
-    '    End Function
+        oAttachedFile = doc.GetFirstItem("additionalAttachments")
+        If oAttachedFile Is Nothing Then
+            oAttachedFile = doc.CreateRichTextItem("additionalAttachments")
+        End If
+        oAttachedSUPTFile = oAttachedFile.EmbedObject(Domino.EMBED_TYPE.EMBED_ATTACHMENT, "", sFileName, "$FILE")
+        Return result
+
+    End Function
+
     Public Function AttachFile(ByRef FileName As String) As Boolean
         Dim result As Boolean = False
         Dim RTI_Name As String = ""
@@ -475,14 +477,13 @@ DetachFilesError:
     Public Function FindSUPTDocument() As Boolean
         Dim result As Boolean = False
 
-
         Try
             Dim b As Boolean
            
-            If NotesDocKeyCollection(Contracts.ProposalNum) Then
+            If NotesDocKeyCollection(Contracts.EstimateNum) Then
                 b = True
                 Do While b
-                    If Contracts.ProposalNum = GetValue("proposal_num") Then
+                    If Contracts.EstimateNum = GetValue("proposal_num") Then
                         Return True
                     End If
                     b = GetNextDocumentFromCollection()
@@ -491,7 +492,7 @@ DetachFilesError:
             Return result
 
         Catch
-            MessageBox.Show(Conversion.ErrorToString(), "FindDocumentBy4Fields", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(Conversion.ErrorToString(), "Find SUPT Document", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Return result
 
         End Try
@@ -511,19 +512,17 @@ DetachFilesError:
     End Function
     Public ReadOnly Property NotesDocKeyCollection(ByVal KeyName As String) As Boolean
         Get
-            Dim result As Boolean = False
-
             View.Refresh()
             NotesDocumentCollection = View.GetAllDocumentsByKey(KeyName, True)
             If (NotesDocumentCollection Is Nothing) Then
-                Return result
+                Return False
             End If
             If NotesDocumentCollection.Count = 0 Then
-                Return result
+                Return False
             End If
             doc = NotesDocumentCollection.GetFirstDocument
             If (doc Is Nothing) Then
-                Return result
+                Return False
             End If
             Return True
 

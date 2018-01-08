@@ -174,7 +174,6 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("oshpd", typeBool), _
                                                           New DataColumn("dsa", typeBool), _
                                                           New DataColumn("head_detection", typeBool), _
-                                                          New DataColumn("engineering_survey", typeBool), _
                                                           New DataColumn("nps_duration", typeStr), _
                                                           New DataColumn("nps_call_back", typeStr), _
                                                           New DataColumn("nps_material_cost", typeStr), _
@@ -2100,12 +2099,6 @@ AddMasterRow_Error:
                     chkHeadDetection.CheckState = IIf(row.Item("head_detection"), CheckState.Checked, CheckState.Unchecked)
                 End If
 
-                If IsDBNull(row.Item("engineering_survey")) Then
-                    chkEngineeringSurvey.CheckState = CheckState.Unchecked
-                Else
-                    chkEngineeringSurvey.CheckState = IIf(row.Item("engineering_survey"), CheckState.Checked, CheckState.Unchecked)
-                End If
-
                 cboDurationMonths.SelectedItem = row.Item("nps_duration").ToString
                 cboCallBackHours.SelectedItem = row.Item("nps_call_back").ToString
                 txtNPSMaterialCost.Text = row.Item("nps_material_cost").ToString
@@ -2155,7 +2148,6 @@ AddMasterRow_Error:
             dtBuildingInfo.Rows(0)("oshpd") = chkOSHPD.CheckState
             dtBuildingInfo.Rows(0)("dsa") = chkDSA.CheckState
             dtBuildingInfo.Rows(0)("head_detection") = chkHeadDetection.CheckState
-            dtBuildingInfo.Rows(0)("engineering_survey") = chkEngineeringSurvey.CheckState
             dtBuildingInfo.Rows(0)("nps_duration") = cboDurationMonths.Text
             dtBuildingInfo.Rows(0)("nps_call_back") = cboCallBackHours.Text
             dtBuildingInfo.Rows(0)("nps_material_cost") = txtNPSMaterialCost.Text
@@ -2316,9 +2308,7 @@ AddMasterRow_Error:
     Private Sub chkHeadDetection_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkHeadDetection.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-    Private Sub chkEngineeringSurvey_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEngineeringSurvey.CheckedChanged
-        If Not initializing Then isDirty = True
-    End Sub
+   
     Private Sub cboSupt_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboSupt.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
@@ -2400,6 +2390,10 @@ AddMasterRow_Error:
     End Sub
 
     Public Sub SaveAll()
+        If isDirty And txtSuptReview.Text = "Under Review" Then
+            MessageBox.Show("This estimate is under Superintendent Review.  Changes cannot be accepted at this time.", "Under Supt Review", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            Exit Sub
+        End If
         SaveTopOfFormToDataset()
         'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
         ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty)
@@ -3306,6 +3300,11 @@ AddMasterRow_Error:
         Dim sSUPTFileName As String = ""
         Dim sMessage As String = ""
 
+        If Me.cboSupt.Text = "" Then
+            MessageBox.Show("Please select a Superintendent before moving on to review", "Missing Superintendent", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+
         sSuptReview = Get_SuptStatus("Decision")
         If sSuptStatus <> "" Then
             If sSuptStatus = "Rejected" Then
@@ -3389,17 +3388,17 @@ AddMasterRow_Error:
     Public Sub SUPT_Add_Doc(ByVal sSUPTFileName As String)
 
         'Dim sRequestorNameKey As String = ""
-        'Dim sRequestorName As String = ""
-        'Dim sFieldSuperintendentName As String = ""
-        'Dim sPhone As String = ""
-        'Dim sPhone_mobile As String = ""
-        'Dim sFax_requestor As String = ""
-        'Dim bNewDocument As Boolean = False
-        'Dim sOffice As String = ""
-        'Dim sDistrict As String = ""
-        'Dim sTerritory As String = ""
-        'Dim sArea As String = ""
-        'Dim skg As String = ""
+        Dim sRequestorName As String = ""
+        Dim sFieldSuperintendentName As String = ""
+        Dim sPhone As String = ""
+        Dim sPhone_mobile As String = ""
+        Dim sFax_requestor As String = ""
+        Dim bNewDocument As Boolean = False
+        Dim sOffice As String = ""
+        Dim sDistrict As String = ""
+        Dim sTerritory As String = ""
+        Dim sArea As String = ""
+        Dim skg As String = ""
         'Dim sDueDate As String = ""
         'Dim Name As String = ""
         'Dim PowerUnitType As String = String.Empty
@@ -3408,168 +3407,169 @@ AddMasterRow_Error:
         'Dim MeasuredPressure As String = String.Empty
         'Dim MeasuredPressureType As String = String.Empty
         'Dim Filesystem As New Scripting.FileSystemObject()
-        'Dim thisFolder As Scripting.Folder = Nothing
+        'Dim thisFolder As Scripting.Folder = Nothingc nyh
         'Dim theseFiles As Scripting.Files
 
-        'Try
-        '    If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
-        '        If clsNotes.NotesDBView("(>LU Offices \ By Office Number No Sat)") Then
-        '            sOffice = Contracts.SalesOffice
-        '            If clsNotes.NotesDocKey(sOffice) Then
-        '                sPhone = clsNotes.GetValue("Phone")
-        '                sFax_requestor = clsNotes.GetValue("Fax")
-        '                sPhone_mobile = clsNotes.GetValue("Phone_2")
-        '                sDistrict = clsNotes.GetValue("DistrictNum")
-        '                sTerritory = clsNotes.GetValue("Territory")
-        '                sArea = clsNotes.GetValue("area")
-        '                skg = clsNotes.GetValue("KG")
-        '            End If
-        '        End If
-        '    End If
+        Try
+            If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
+                If clsNotes.NotesDBView("(>LU Offices \ By Office Number No Sat)") Then
+                    sOffice = Me.cboSalesOffice.Text
+                    If clsNotes.NotesDocKey(sOffice) Then
+                        sPhone = clsNotes.GetValue("Phone")
+                        sFax_requestor = clsNotes.GetValue("Fax")
+                        sPhone_mobile = clsNotes.GetValue("Phone_2")
+                        sDistrict = clsNotes.GetValue("DistrictNum")
+                        sTerritory = clsNotes.GetValue("Territory")
+                        sArea = clsNotes.GetValue("area")
+                        skg = clsNotes.GetValue("KG")
+                    End If
+                End If
+            End If
 
-        '    If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
-        '        If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
-        '            sRequestorNameKey = Left$(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
-        '            sRequestorName = clsNotes.CN_Username
-        '        End If
-        '    End If
+            If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
+                If clsNotes.NotesDBView("(>LU Employees \ By Notes Name)") Then
+                    'sRequestorNameKey = Left(gsNotesLinkDataUserName, InStr(1, gsNotesLinkDataUserName, "/") - 1)
+                    sRequestorName = clsNotes.CN_Username
+                End If
+            End If
 
-        '    sFieldSuperintendentName = Screen_BOOK.SuperintendentName
-        '    sFieldSuperintendentName = clsNotes.GetNotesCanonicalName(sFieldSuperintendentName)
-        '    SetupSuptReviewLink()
-        '    If Not clsNotes.FindSUPTDocument() Then
-        '        clsNotes.CreateDOC("Booking Approval Review MOD")
-        '        bNewDocument = True
-        '    End If
+            sFieldSuperintendentName = Me.cboSupt.Text
+            'sFieldSuperintendentName = clsNotes.GetNotesCanonicalName(sFieldSuperintendentName)
 
-        '    If bNewDocument Then
-        '        '  Splash.Splash_lbl.Text = "Creating Superintendent Form for Approval"
-        '        clsNotes.SetValue("reviewKey", Contracts.ProposalNum)
-        '        clsNotes.SetValue("createdDate", CDate(Now))
-        '        clsNotes.SetValue_Readers("creator", sRequestorName)
-        '        clsNotes.SetValue("Status", "New")
-        '    Else
-        '        ' Splash.Splash_lbl.Text = "Updating Superintendent Form for Approval"
-        '        clsNotes.SetValue("Status", "Resubmitted")
-        '    End If
+            SetupSuptReviewLink()
+            If Not clsNotes.FindSUPTDocument() Then
+                clsNotes.CreateDOC("Booking Approval Review MOD")
+                bNewDocument = True
+            End If
 
-        '    clsNotes.SetValue_Readers("Estimator", sRequestorName)
-        '    clsNotes.SetValue_Readers("SalesRep", gsSalesRep)
-        '    clsNotes.SetValue_Readers("Superintendent", sFieldSuperintendentName)
-        '    clsNotes.SetValue("office", sOffice)
-        '    clsNotes.SetValue("district", sDistrict)
-        '    clsNotes.SetValue("territory", sTerritory)
-        '    clsNotes.SetValue("area", sArea)
-        '    clsNotes.SetValue("kg", skg)
-        '    clsNotes.SetValue("proposal_num", Contracts.ProposalNum)
-        '    clsNotes.SetValue("jobName", Contracts.JobName)
-        '    ' clsNotes.SetValue("units_bank", UnitsInBankFormat)
-        '    clsNotes.SetValue("units_estimate", UnitsInEstimate)
-        '    clsNotes.SetValue("product_line", GONumbers(CurrentGOSelection).Type)
-        '    clsNotes.SetValue("product_code", GONumbers(CurrentGOSelection).ProductCode)
-        '    clsNotes.SetValue("capacity", GONumbers(CurrentGOSelection).Capacity)
-        '    clsNotes.SetValue("speed", GONumbers(CurrentGOSelection).Speed)
-        '    clsNotes.SetValue("travel_rise", GONumbers(CurrentGOSelection).TravelFt + RoundToNextHigherOrEqualInteger(GONumbers(CurrentGOSelection).TravelIn / 12))
-        '    clsNotes.SetValue("landings", GONumbers(CurrentGOSelection).TotalStops)
-        '    clsNotes.SetValue("openings_front", GONumbers(CurrentGOSelection).FrontOpenings)
-        '    clsNotes.SetValue("openings_rear", GONumbers(CurrentGOSelection).RearOpenings)
-        '    clsNotes.SetValue("date_delivery", CDate(ME_ADM01Bnk_typ.DeliveryDate))
-        '    clsNotes.SetValue("date_completion", CDate(ME_ADM01Bnk_typ.BankCompleteDate))
-        '    clsNotes.SetValue("hours_standard", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs, HOUR_MASK)))
-        '    clsNotes.SetValue("hours_labor", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs + MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
-        '    clsNotes.SetValue("hours_special", Val(Strings.Format(MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
-        '    clsNotes.SetValue("hours_overtime", Val(Strings.Format(MOD_Cost_typ.Overtime_Hrs, HOUR_MASK)))
-        '    clsNotes.SetValue("unionLocalNumber", ME_ADM01Bnk_typ.UnionLocal)
-        '    clsNotes.SetValue("seismicZone", ME_ADM01Bnk_typ.SeismicZone.ToString)
-        '    clsNotes.SetValue("localCode", ME_ADM01Bnk_typ.LocalCode)
-        '    clsNotes.SetValue("cost_foremanBonus", IIf(ME_ADM02Bnk_typ.ForemansBonus = CheckState.Checked, "Yes", "No"))
-        '    clsNotes.SetValue("cost_regionLocal", MOD_Cost_typ.RLMaterial_Cost)
-        '    clsNotes.SetValue("cost_expenses", MOD_Cost_typ.Expenses_Cost)
-        '    clsNotes.SetValue("cost_subcontractor", MOD_Cost_typ.OtherSubcontract_Cost)
-        '    clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
-        '    clsNotes.SetValue("cost_bonds", MOD_Cost_typ.Bonds_Cost)
-        '    clsNotes.SetValue("cost_projectManager", MOD_Cost_typ.ProjectManager_Cost)
-        '    clsNotes.SetValue("ansiCode", ME_ADM01Bnk_typ.ANSICode)
-        '    clsNotes.SetValue("blendedLaborRate", Math.Round(RATES.FieldLabor_Rate, 2))
-        '    clsNotes.SetValue("businessLine", "MOD")
-        '    clsNotes.SetValue("Form", "Booking Approval Review MOD")
-        '    If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
-        '        PowerUnitType = ME_HYDMRM01Car_typ.PowerUnit
-        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage) Then
-        '            Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage
-        '        End If
-        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage) Then
-        '            If String.IsNullOrEmpty(Diameters.Trim) Then
-        '                Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage
-        '            Else
-        '                Diameters = Diameters & Environment.NewLine & ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage
-        '            End If
-        '        End If
-        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage) Then
-        '            If String.IsNullOrEmpty(Diameters.Trim) Then
-        '                Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage
-        '            Else
-        '                Diameters = Diameters & Environment.NewLine & ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage
-        '            End If
-        '        End If
-        '        If ME_HYDHSTPITCar_typ.MeasuredPressure > 0 Then
-        '            MeasuredPressure = ME_HYDHSTPITCar_typ.MeasuredPressure.ToString
-        '        End If
-        '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.MeasuredPressureType) Then
-        '            MeasuredPressureType = ME_HYDHSTPITCar_typ.MeasuredPressureType
-        '        End If
-        '    Else
-        '        MachineType = ME_MRM01Car_typ.Machine
-        '    End If
-        '    clsNotes.SetValue("powerUnitType", PowerUnitType)
-        '    clsNotes.SetValue("machine_type", MachineType)
-        '    clsNotes.SetValue("existingPistonsDiameters", Diameters)
-        '    clsNotes.SetValue("measuredPressure", MeasuredPressure)
-        '    clsNotes.SetValue("measurePressureType", MeasuredPressureType)
-        '    clsNotes.SetValue("power", ME_COM01Car_typ.PowerSupply)
-        '    clsNotes.SetValue("reason", SuptReviewMsg)
-        '    clsNotes.SetValue("bank", GONumbers(CurrentGOSelection).Bank & " / " & GONumbers(CurrentGOSelection).Alt)
+            If bNewDocument Then
+                '  Splash.Splash_lbl.Text = "Creating Superintendent Form for Approval"
+                clsNotes.SetValue("reviewKey", Contracts.ProposalNum)
+                clsNotes.SetValue("createdDate", CDate(Now))
+                clsNotes.SetValue_Readers("creator", sRequestorName)
+                clsNotes.SetValue("Status", "New")
+            Else
+                ' Splash.Splash_lbl.Text = "Updating Superintendent Form for Approval"
+                clsNotes.SetValue("Status", "Resubmitted")
+            End If
 
-
-        '    bNewDocument = clsNotes.AttachSUPTFile(sSUPTFileName)
+            clsNotes.SetValue_Readers("Estimator", sRequestorName)
+            clsNotes.SetValue_Readers("SalesRep", gsSalesRep)
+            clsNotes.SetValue_Readers("Superintendent", sFieldSuperintendentName)
+            clsNotes.SetValue("office", sOffice)
+            '    clsNotes.SetValue("district", sDistrict)
+            '    clsNotes.SetValue("territory", sTerritory)
+            '    clsNotes.SetValue("area", sArea)
+            '    clsNotes.SetValue("kg", skg)
+            clsNotes.SetValue("proposal_num", Contracts.EstimateNum)
+            clsNotes.SetValue("jobName", Contracts.JobName)
+            '    ' clsNotes.SetValue("units_bank", UnitsInBankFormat)
+            '    clsNotes.SetValue("units_estimate", UnitsInEstimate)
+            '    clsNotes.SetValue("product_line", GONumbers(CurrentGOSelection).Type)
+            '    clsNotes.SetValue("product_code", GONumbers(CurrentGOSelection).ProductCode)
+            '    clsNotes.SetValue("capacity", GONumbers(CurrentGOSelection).Capacity)
+            '    clsNotes.SetValue("speed", GONumbers(CurrentGOSelection).Speed)
+            '    clsNotes.SetValue("travel_rise", GONumbers(CurrentGOSelection).TravelFt + RoundToNextHigherOrEqualInteger(GONumbers(CurrentGOSelection).TravelIn / 12))
+            '    clsNotes.SetValue("landings", GONumbers(CurrentGOSelection).TotalStops)
+            '    clsNotes.SetValue("openings_front", GONumbers(CurrentGOSelection).FrontOpenings)
+            '    clsNotes.SetValue("openings_rear", GONumbers(CurrentGOSelection).RearOpenings)
+            '    clsNotes.SetValue("date_delivery", CDate(ME_ADM01Bnk_typ.DeliveryDate))
+            '    clsNotes.SetValue("date_completion", CDate(ME_ADM01Bnk_typ.BankCompleteDate))
+            '    clsNotes.SetValue("hours_standard", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs, HOUR_MASK)))
+            '    clsNotes.SetValue("hours_labor", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs + MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
+            '    clsNotes.SetValue("hours_special", Val(Strings.Format(MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
+            '    clsNotes.SetValue("hours_overtime", Val(Strings.Format(MOD_Cost_typ.Overtime_Hrs, HOUR_MASK)))
+            '    clsNotes.SetValue("unionLocalNumber", ME_ADM01Bnk_typ.UnionLocal)
+            '    clsNotes.SetValue("seismicZone", ME_ADM01Bnk_typ.SeismicZone.ToString)
+            '    clsNotes.SetValue("localCode", ME_ADM01Bnk_typ.LocalCode)
+            '    clsNotes.SetValue("cost_foremanBonus", IIf(ME_ADM02Bnk_typ.ForemansBonus = CheckState.Checked, "Yes", "No"))
+            '    clsNotes.SetValue("cost_regionLocal", MOD_Cost_typ.RLMaterial_Cost)
+            '    clsNotes.SetValue("cost_expenses", MOD_Cost_typ.Expenses_Cost)
+            '    clsNotes.SetValue("cost_subcontractor", MOD_Cost_typ.OtherSubcontract_Cost)
+            '    clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
+            '    clsNotes.SetValue("cost_bonds", MOD_Cost_typ.Bonds_Cost)
+            '    clsNotes.SetValue("cost_projectManager", MOD_Cost_typ.ProjectManager_Cost)
+            '    clsNotes.SetValue("ansiCode", ME_ADM01Bnk_typ.ANSICode)
+            '    clsNotes.SetValue("blendedLaborRate", Math.Round(RATES.FieldLabor_Rate, 2))
+            '    clsNotes.SetValue("businessLine", "MOD")
+            '    clsNotes.SetValue("Form", "Booking Approval Review MOD")
+            '    If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
+            '        PowerUnitType = ME_HYDMRM01Car_typ.PowerUnit
+            '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage) Then
+            '            Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage
+            '        End If
+            '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage) Then
+            '            If String.IsNullOrEmpty(Diameters.Trim) Then
+            '                Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage
+            '            Else
+            '                Diameters = Diameters & Environment.NewLine & ME_HYDHSTPITCar_typ.ExistingPistonDiameterSecondStage
+            '            End If
+            '        End If
+            '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage) Then
+            '            If String.IsNullOrEmpty(Diameters.Trim) Then
+            '                Diameters = ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage
+            '            Else
+            '                Diameters = Diameters & Environment.NewLine & ME_HYDHSTPITCar_typ.ExistingPistonDiameterThirdStage
+            '            End If
+            '        End If
+            '        If ME_HYDHSTPITCar_typ.MeasuredPressure > 0 Then
+            '            MeasuredPressure = ME_HYDHSTPITCar_typ.MeasuredPressure.ToString
+            '        End If
+            '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.MeasuredPressureType) Then
+            '            MeasuredPressureType = ME_HYDHSTPITCar_typ.MeasuredPressureType
+            '        End If
+            '    Else
+            '        MachineType = ME_MRM01Car_typ.Machine
+            '    End If
+            '    clsNotes.SetValue("powerUnitType", PowerUnitType)
+            '    clsNotes.SetValue("machine_type", MachineType)
+            '    clsNotes.SetValue("existingPistonsDiameters", Diameters)
+            '    clsNotes.SetValue("measuredPressure", MeasuredPressure)
+            '    clsNotes.SetValue("measurePressureType", MeasuredPressureType)
+            '    clsNotes.SetValue("power", ME_COM01Car_typ.PowerSupply)
+            '    clsNotes.SetValue("reason", SuptReviewMsg)
+            '    clsNotes.SetValue("bank", GONumbers(CurrentGOSelection).Bank & " / " & GONumbers(CurrentGOSelection).Alt)
 
 
-        '    If clsNotes.CADREFilePath(ReportsPath) Then
-        '        If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
-        '            Execute_Word_Report(REPORT_HXPressFieldData, True, True)
-        '        Else
-        '            Execute_Word_Report(REPORT_QUANTUMLEAP_FIELDSURVEY_DATAFORM, True, True)
-        '        End If
-        '        Execute_Excel_Report(REPORT_BDP_PERCENTCOMPLETE, True)
-        '        thisFolder = MemoryHelper.ReleaseAndCleanObject(Of Scripting.Folder)(thisFolder, Filesystem.GetFolder(ReportsPath))
-        '        theseFiles = thisFolder.Files
-        '        For Each thisFile As Scripting.File In theseFiles
-        '            Name = thisFile.Name.ToUpper()
-        '            If (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & REPORT_HXPressFieldData.ToUpper & "*") Or
-        '               (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & REPORT_QUANTUMLEAP_FIELDSURVEY_DATAFORM.ToUpper & "*") Or
-        '               (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & GONumbers(CurrentGOSelection).Units & REPORT_BDP_PERCENTCOMPLETE.ToUpper & "*") Then
-        '                bNewDocument = clsNotes.AttachSUPTFile(ReportsPath & Name)
-        '                thisFile.Delete(True)
-        '            End If
-        '        Next thisFile
-        '    End If
-        '    Dim Reader(0 To 8) As String
-        '    Reader(0) = "[Admin]"
-        '    Reader(1) = "[Approver]"
-        '    Reader(2) = "[Engineer]"
-        '    Reader(3) = "[Full Access]"
-        '    Reader(4) = "T_SEC_" & sOffice
-        '    Reader(5) = "T_SEC_SMART_" & sOffice
-        '    Reader(6) = "T_SEC_SMART_" & sDistrict
-        '    Reader(7) = "T_SEC_SMART_" & sTerritory
-        '    Reader(8) = "T_SEC_SMART_" & sArea
-        '    clsNotes.SetValue_Readers("Reader", Reader)
-        '    clsNotes.DocSave()
+            bNewDocument = clsNotes.AttachSUPTFile(sSUPTFileName)
 
-        'Catch
-        '    MessageBox.Show(Err.Description, "Error in creating Supt Approval Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
-        'End Try
+            '    If clsNotes.CADREFilePath(ReportsPath) Then
+            '        If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
+            '            Execute_Word_Report(REPORT_HXPressFieldData, True, True)
+            '        Else
+            '            Execute_Word_Report(REPORT_QUANTUMLEAP_FIELDSURVEY_DATAFORM, True, True)
+            '        End If
+            '        Execute_Excel_Report(REPORT_BDP_PERCENTCOMPLETE, True)
+            '        thisFolder = MemoryHelper.ReleaseAndCleanObject(Of Scripting.Folder)(thisFolder, Filesystem.GetFolder(ReportsPath))
+            '        theseFiles = thisFolder.Files
+            '        For Each thisFile As Scripting.File In theseFiles
+            '            Name = thisFile.Name.ToUpper()
+            '            If (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & REPORT_HXPressFieldData.ToUpper & "*") Or
+            '               (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & REPORT_QUANTUMLEAP_FIELDSURVEY_DATAFORM.ToUpper & "*") Or
+            '               (Name Like Contracts.EstimateNum.ToString() & GONumbers(CurrentGOSelection).Bank & GONumbers(CurrentGOSelection).Alt & GONumbers(CurrentGOSelection).Units & REPORT_BDP_PERCENTCOMPLETE.ToUpper & "*") Then
+            '                bNewDocument = clsNotes.AttachSUPTFile(ReportsPath & Name)
+            '                thisFile.Delete(True)
+            '            End If
+            '        Next thisFile
+            '    End If
+            '    Dim Reader(0 To 8) As String
+            '    Reader(0) = "[Admin]"
+            '    Reader(1) = "[Approver]"
+            '    Reader(2) = "[Engineer]"
+            '    Reader(3) = "[Full Access]"
+            '    Reader(4) = "T_SEC_" & sOffice
+            '    Reader(5) = "T_SEC_SMART_" & sOffice
+            '    Reader(6) = "T_SEC_SMART_" & sDistrict
+            '    Reader(7) = "T_SEC_SMART_" & sTerritory
+            '    Reader(8) = "T_SEC_SMART_" & sArea
+            '    clsNotes.SetValue_Readers("Reader", Reader)
+            clsNotes.DocSave()
+
+        Catch
+            MessageBox.Show(Err.Description, "Error in creating Supt Approval Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
 
     End Sub
 
