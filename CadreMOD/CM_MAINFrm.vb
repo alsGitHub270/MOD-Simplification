@@ -3343,7 +3343,7 @@ AddMasterRow_Error:
             Exit Sub
         End If
 
-        sMessage = "Please note that when Supt Approval is requested, you will not be able to make any further changes to the estimate."
+        sMessage = "Please note that when a Superintendent Approval is requested, you will not be able to make any further changes to the estimate."
         Cursor.Current = Cursors.Default
         If MessageBox.Show(sMessage, "Continue?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
             Exit Sub
@@ -3357,35 +3357,26 @@ AddMasterRow_Error:
             End If
         End If
 
-        Me.txtSuptReview.Text = "Under Review"
-
         SaveAll()
 
         sSUPTFileName = GenerateSuptApprovalReport()
 
         If Not String.IsNullOrEmpty(sSUPTFileName) Then
-            SUPT_Add_Doc(sSUPTFileName)
+            If SUPT_Add_Doc(sSUPTFileName) Then
+                Me.txtSuptReview.Text = "Under Review"
+                SaveAll()
+
+                MessageBox.Show("Superintendent Approval Submitted", "Submitted", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                Me.btnSave.Enabled = False
+            End If
         End If
-
-        'For Each row As DataRow In dtSummaryGroup.Rows
-        '    If Not IsDBNull(row("Include")) AndAlso row("Include") Then
-
-        '        sSUPTFileName = OutputSuptFile(row("bank"), row("units"))
-
-        '        'SUPT_Add_Doc(sSUPTFileName)
-        '    End If
-        'Next
-
-
-        MessageBox.Show("Superintendent Approval Submitted", "Submitted", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-        Me.btnSave.Enabled = False
-
-        Exit Sub
 
     End Sub
 
-    Public Sub SUPT_Add_Doc(ByVal sSUPTFileName As String)
+    Public Function SUPT_Add_Doc(ByVal sSUPTFileName As String) As Boolean
+
+        Dim results As Boolean = True
 
         'Dim sRequestorNameKey As String = ""
         Dim sRequestorName As String = ""
@@ -3409,6 +3400,36 @@ AddMasterRow_Error:
         'Dim Filesystem As New Scripting.FileSystemObject()
         'Dim thisFolder As Scripting.Folder = Nothingc nyh
         'Dim theseFiles As Scripting.Files
+
+        Dim bdp_hrs As Integer = 0
+        Dim special_hrs As Integer = 0
+        Dim labor_hrs As Integer = 0
+        Dim ot_hrs As Integer = 0
+        Dim material_rl As Integer = 0
+        Dim expenses As Integer = 0
+        Dim subcontractor_cost As Integer = 0
+
+        Try
+            ' Sum the required costs for each included bank
+            For Each row As DataRow In dtSummaryGroup.Rows
+                If row("Include") = True Then
+                    bdp_hrs += row("BDP_Hours")
+                    special_hrs += row("Special_Hours")
+                    labor_hrs += row("Labor_Hours")
+                    ot_hrs += row("OT_Hours_Included")
+                    material_rl += row("Material_RL")
+                    expenses += row("Expenses")
+                    subcontractor_cost += row("SubContract_Work")
+                End If
+            Next
+
+        Catch ex As Exception
+            Dim msg As String = "An error occurred while summing the expenses and hours for the superintendent review" & vbCrLf & vbCrLf & ex.Message & vbCrLf & vbCrLf & "Process Terminated"
+            MessageBox.Show(msg, "Error in Supt_ADD_Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            results = False
+            Return results
+        End Try
+
 
         Try
             If clsNotes.NotesDBName(ComServer, HoldNotesPhonebookPath) Then
@@ -3475,18 +3496,18 @@ AddMasterRow_Error:
             '    clsNotes.SetValue("openings_rear", GONumbers(CurrentGOSelection).RearOpenings)
             '    clsNotes.SetValue("date_delivery", CDate(ME_ADM01Bnk_typ.DeliveryDate))
             '    clsNotes.SetValue("date_completion", CDate(ME_ADM01Bnk_typ.BankCompleteDate))
-            '    clsNotes.SetValue("hours_standard", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs, HOUR_MASK)))
-            '    clsNotes.SetValue("hours_labor", Val(Strings.Format(MOD_Cost_typ.BDP_Hrs + MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
-            '    clsNotes.SetValue("hours_special", Val(Strings.Format(MOD_Cost_typ.NonBDP_Hrs, HOUR_MASK)))
-            '    clsNotes.SetValue("hours_overtime", Val(Strings.Format(MOD_Cost_typ.Overtime_Hrs, HOUR_MASK)))
+            clsNotes.SetValue("hours_standard", bdp_hrs)
+            clsNotes.SetValue("hours_labor", labor_hrs)
+            clsNotes.SetValue("hours_special", special_hrs)
+            clsNotes.SetValue("hours_overtime", ot_hrs)
             '    clsNotes.SetValue("unionLocalNumber", ME_ADM01Bnk_typ.UnionLocal)
-            '    clsNotes.SetValue("seismicZone", ME_ADM01Bnk_typ.SeismicZone.ToString)
-            '    clsNotes.SetValue("localCode", ME_ADM01Bnk_typ.LocalCode)
+            clsNotes.SetValue("seismicZone", Me.cboSeismicZone.Text)
+            clsNotes.SetValue("localCode", Me.cboLocalCode.Text)
             '    clsNotes.SetValue("cost_foremanBonus", IIf(ME_ADM02Bnk_typ.ForemansBonus = CheckState.Checked, "Yes", "No"))
-            '    clsNotes.SetValue("cost_regionLocal", MOD_Cost_typ.RLMaterial_Cost)
-            '    clsNotes.SetValue("cost_expenses", MOD_Cost_typ.Expenses_Cost)
-            '    clsNotes.SetValue("cost_subcontractor", MOD_Cost_typ.OtherSubcontract_Cost)
-            '    clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
+            clsNotes.SetValue("cost_regionLocal", material_rl)
+            clsNotes.SetValue("cost_expenses", expenses)
+            clsNotes.SetValue("cost_subcontractor", subcontractor_cost)
+            'clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
             '    clsNotes.SetValue("cost_bonds", MOD_Cost_typ.Bonds_Cost)
             '    clsNotes.SetValue("cost_projectManager", MOD_Cost_typ.ProjectManager_Cost)
             '    clsNotes.SetValue("ansiCode", ME_ADM01Bnk_typ.ANSICode)
@@ -3522,7 +3543,7 @@ AddMasterRow_Error:
             '        MachineType = ME_MRM01Car_typ.Machine
             '    End If
             '    clsNotes.SetValue("powerUnitType", PowerUnitType)
-            '    clsNotes.SetValue("machine_type", MachineType)
+            'clsNotes.SetValue("machine_type", MachineType)
             '    clsNotes.SetValue("existingPistonsDiameters", Diameters)
             '    clsNotes.SetValue("measuredPressure", MeasuredPressure)
             '    clsNotes.SetValue("measurePressureType", MeasuredPressureType)
@@ -3568,10 +3589,12 @@ AddMasterRow_Error:
 
         Catch
             MessageBox.Show(Err.Description, "Error in creating Supt Approval Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
+            results = False
         End Try
 
-    End Sub
+        Return results
+
+    End Function
 
     Private Function NoBanksIncluded() As Boolean
         'Scroll through the dataset to determine if any summary items are included (include = true)
