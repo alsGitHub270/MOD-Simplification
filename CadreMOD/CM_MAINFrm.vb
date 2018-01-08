@@ -3465,7 +3465,7 @@ AddMasterRow_Error:
 
             If bNewDocument Then
                 '  Splash.Splash_lbl.Text = "Creating Superintendent Form for Approval"
-                clsNotes.SetValue("reviewKey", Contracts.ProposalNum)
+                clsNotes.SetValue("reviewKey", Contracts.EstimateNum)
                 clsNotes.SetValue("createdDate", CDate(Now))
                 clsNotes.SetValue_Readers("creator", sRequestorName)
                 clsNotes.SetValue("Status", "New")
