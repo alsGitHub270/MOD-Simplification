@@ -740,6 +740,13 @@ Partial Friend Class CM_MAIN_frm
         ProcessNegSummaryTotals()
         SetSummaryC1Colors()
 
+        Dim suptStatus As String = ""
+        suptStatus = Get_SuptStatus("Decision")
+        If suptStatus <> "" Then
+            Me.txtSuptReview.Text = suptStatus
+            isDirty = True
+        End If
+
         If Me.txtSuptReview.Text = "Under Review" Then
             Me.btnSave.Enabled = False
         End If
@@ -3374,7 +3381,7 @@ AddMasterRow_Error:
 
     End Sub
 
-    Public Function SUPT_Add_Doc(ByVal sSUPTFileName As String) As Boolean
+    Private Function SUPT_Add_Doc(ByVal sSUPTFileName As String) As Boolean
 
         Dim results As Boolean = True
 
@@ -3401,6 +3408,8 @@ AddMasterRow_Error:
         'Dim thisFolder As Scripting.Folder = Nothingc nyh
         'Dim theseFiles As Scripting.Files
 
+        Dim banks As String = String.Empty
+        Dim units As String = String.Empty
         Dim bdp_hrs As Integer = 0
         Dim special_hrs As Integer = 0
         Dim labor_hrs As Integer = 0
@@ -3413,6 +3422,9 @@ AddMasterRow_Error:
             ' Sum the required costs for each included bank
             For Each row As DataRow In dtSummaryGroup.Rows
                 If row("Include") = True Then
+                    banks += IIf(banks.Length = 0, row("Bank"), ", " & row("Bank"))
+                    If units.Length > 0 Then units += "; "
+                    units += row("Bank") & ":" & row("Units")
                     bdp_hrs += row("BDP_Hours")
                     special_hrs += row("Special_Hours")
                     labor_hrs += row("Labor_Hours")
@@ -3426,8 +3438,7 @@ AddMasterRow_Error:
         Catch ex As Exception
             Dim msg As String = "An error occurred while summing the expenses and hours for the superintendent review" & vbCrLf & vbCrLf & ex.Message & vbCrLf & vbCrLf & "Process Terminated"
             MessageBox.Show(msg, "Error in Supt_ADD_Doc", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            results = False
-            Return results
+            Return False
         End Try
 
 
@@ -3457,7 +3468,10 @@ AddMasterRow_Error:
             sFieldSuperintendentName = Me.cboSupt.Text
             'sFieldSuperintendentName = clsNotes.GetNotesCanonicalName(sFieldSuperintendentName)
 
-            SetupSuptReviewLink()
+            If Not SetupSuptReviewLink() Then
+                Return False
+            End If
+
             If Not clsNotes.FindSUPTDocument() Then
                 clsNotes.CreateDOC("Booking Approval Review MOD")
                 bNewDocument = True
@@ -3484,9 +3498,9 @@ AddMasterRow_Error:
             '    clsNotes.SetValue("kg", skg)
             clsNotes.SetValue("proposal_num", Contracts.EstimateNum)
             clsNotes.SetValue("jobName", Contracts.JobName)
-            '    ' clsNotes.SetValue("units_bank", UnitsInBankFormat)
-            '    clsNotes.SetValue("units_estimate", UnitsInEstimate)
-            '    clsNotes.SetValue("product_line", GONumbers(CurrentGOSelection).Type)
+            clsNotes.SetValue("units_bank", banks)
+            clsNotes.SetValue("units_estimate", units)
+            clsNotes.SetValue("product_line", "MOD")
             '    clsNotes.SetValue("product_code", GONumbers(CurrentGOSelection).ProductCode)
             '    clsNotes.SetValue("capacity", GONumbers(CurrentGOSelection).Capacity)
             '    clsNotes.SetValue("speed", GONumbers(CurrentGOSelection).Speed)
@@ -3630,7 +3644,10 @@ AddMasterRow_Error:
         Dim filename As String = String.Empty
         Dim newSpread As FarPoint.Win.Spread.FpSpread = New FarPoint.Win.Spread.FpSpread()
 
-        filename = ReportsPath & Contracts.EstimateNum.ToString().Trim & ".xlsx"
+        filename = ReportsPath & Contracts.EstimateNum.ToString().Trim
+
+        filename = String.Format(filename & "_{0}.xlsx", Now.ToString("yyyyMMdd-HHmm"))
+
         If FileIsOpen(filename) Then
             MessageBox.Show("Superintendent Report is open.  Please close the report and try again.", "Report is Open", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Return filename

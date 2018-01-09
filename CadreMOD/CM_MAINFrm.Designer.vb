@@ -2108,8 +2108,10 @@ Partial Class CM_MAIN_frm
         '
         'btnLaborRates
         '
-        Me.btnLaborRates.BackColor = System.Drawing.SystemColors.Control
+        Me.btnLaborRates.BackColor = System.Drawing.SystemColors.Window
         Me.btnLaborRates.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
+        Me.btnLaborRates.Image = CType(resources.GetObject("btnLaborRates.Image"), System.Drawing.Image)
+        Me.btnLaborRates.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.btnLaborRates.Location = New System.Drawing.Point(474, 5)
         Me.btnLaborRates.Name = "btnLaborRates"
         Me.btnLaborRates.Size = New System.Drawing.Size(51, 46)
@@ -2121,6 +2123,8 @@ Partial Class CM_MAIN_frm
         'btnGatewayReview
         '
         Me.btnGatewayReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGatewayReview.Image = CType(resources.GetObject("btnGatewayReview.Image"), System.Drawing.Image)
+        Me.btnGatewayReview.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.btnGatewayReview.Location = New System.Drawing.Point(301, 5)
         Me.btnGatewayReview.Name = "btnGatewayReview"
         Me.btnGatewayReview.Size = New System.Drawing.Size(51, 46)
@@ -2174,8 +2178,10 @@ Partial Class CM_MAIN_frm
         '
         'btnProposal
         '
-        Me.btnProposal.BackColor = System.Drawing.SystemColors.Control
+        Me.btnProposal.BackColor = System.Drawing.SystemColors.Window
         Me.btnProposal.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnProposal.Image = CType(resources.GetObject("btnProposal.Image"), System.Drawing.Image)
+        Me.btnProposal.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.btnProposal.Location = New System.Drawing.Point(358, 5)
         Me.btnProposal.Name = "btnProposal"
         Me.btnProposal.Size = New System.Drawing.Size(51, 46)
@@ -2219,6 +2225,7 @@ Partial Class CM_MAIN_frm
         '
         '_Menu_tlb_3
         '
+        Me._Menu_tlb_3.BackColor = System.Drawing.SystemColors.Window
         Me._Menu_tlb_3.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._Menu_tlb_3.Image = CType(resources.GetObject("_Menu_tlb_3.Image"), System.Drawing.Image)
         Me._Menu_tlb_3.Location = New System.Drawing.Point(164, 1)
@@ -2229,9 +2236,11 @@ Partial Class CM_MAIN_frm
         Me._Menu_tlb_3.Tag = "Print Screen"
         Me._Menu_tlb_3.Text = "Screen"
         Me._Menu_tlb_3.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me._Menu_tlb_3.UseVisualStyleBackColor = False
         '
         'btnSave
         '
+        Me.btnSave.BackColor = System.Drawing.SystemColors.Window
         Me.btnSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSave.Image = CType(resources.GetObject("btnSave.Image"), System.Drawing.Image)
         Me.btnSave.Location = New System.Drawing.Point(60, 1)
@@ -2242,9 +2251,11 @@ Partial Class CM_MAIN_frm
         Me.btnSave.Tag = "Save Data"
         Me.btnSave.Text = "Save"
         Me.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnSave.UseVisualStyleBackColor = False
         '
         'btnExit
         '
+        Me.btnExit.BackColor = System.Drawing.SystemColors.Window
         Me.btnExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnExit.Image = CType(resources.GetObject("btnExit.Image"), System.Drawing.Image)
         Me.btnExit.Location = New System.Drawing.Point(8, 1)
@@ -2255,6 +2266,7 @@ Partial Class CM_MAIN_frm
         Me.btnExit.Tag = "Exit System"
         Me.btnExit.Text = "Exit"
         Me.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnExit.UseVisualStyleBackColor = False
         '
         'txtEstimator
         '
@@ -2280,6 +2292,7 @@ Partial Class CM_MAIN_frm
         '
         'btnCopy
         '
+        Me.btnCopy.BackColor = System.Drawing.SystemColors.Window
         Me.btnCopy.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCopy.Image = CType(resources.GetObject("btnCopy.Image"), System.Drawing.Image)
         Me.btnCopy.Location = New System.Drawing.Point(112, 1)
@@ -2290,6 +2303,7 @@ Partial Class CM_MAIN_frm
         Me.btnCopy.Tag = "Copy Equipment"
         Me.btnCopy.Text = "Copy"
         Me.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnCopy.UseVisualStyleBackColor = False
         '
         'Menu_pic
         '
@@ -2309,7 +2323,7 @@ Partial Class CM_MAIN_frm
         '
         'btnSuptReview
         '
-        Me.btnSuptReview.BackColor = System.Drawing.SystemColors.Control
+        Me.btnSuptReview.BackColor = System.Drawing.SystemColors.Window
         Me.btnSuptReview.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSuptReview.Image = CType(resources.GetObject("btnSuptReview.Image"), System.Drawing.Image)
         Me.btnSuptReview.Location = New System.Drawing.Point(528, 6)
@@ -2324,8 +2338,10 @@ Partial Class CM_MAIN_frm
         '
         'btnContact
         '
-        Me.btnContact.BackColor = System.Drawing.SystemColors.Control
+        Me.btnContact.BackColor = System.Drawing.SystemColors.Window
         Me.btnContact.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
+        Me.btnContact.Image = CType(resources.GetObject("btnContact.Image"), System.Drawing.Image)
+        Me.btnContact.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.btnContact.Location = New System.Drawing.Point(417, 5)
         Me.btnContact.Name = "btnContact"
         Me.btnContact.Size = New System.Drawing.Size(51, 46)
