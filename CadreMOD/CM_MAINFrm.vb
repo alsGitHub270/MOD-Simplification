@@ -468,6 +468,7 @@ Partial Friend Class CM_MAIN_frm
         CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
+                MessageBox.Show("Please set your curson on a 'Base' or 'Alt' row")
             Case "Master", "Base"
                 Me.ShowInTaskbar = False
                 Using frmEstimatingBase
@@ -481,6 +482,7 @@ Partial Friend Class CM_MAIN_frm
                 End Using
                 Me.ShowInTaskbar = True
             Case Else
+                MessageBox.Show("Please set your curson on a 'Base' or 'Alt' row")
         End Select
 
     End Sub
