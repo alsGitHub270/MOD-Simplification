@@ -155,6 +155,8 @@ Partial Class frmEstimatingBase
         Me.Forms_cmd = New System.Windows.Forms.Button()
         Me.Book_cmd = New System.Windows.Forms.Button()
         Me.Config_cmd = New System.Windows.Forms.Button()
+        Me.NegNum_txt = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.CarTab.SuspendLayout()
@@ -173,8 +175,8 @@ Partial Class frmEstimatingBase
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.Color.White
         Me.GroupBox1.Controls.Add(Me.TabControl1)
         Me.GroupBox1.Controls.Add(Me.OrderingForms_fra)
@@ -188,8 +190,8 @@ Partial Class frmEstimatingBase
         'TabControl1
         '
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.CarTab)
         Me.TabControl1.Controls.Add(Me.OrderTab)
         Me.TabControl1.Location = New System.Drawing.Point(6, 21)
@@ -211,8 +213,8 @@ Partial Class frmEstimatingBase
         'CarData_fra
         '
         Me.CarData_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CarData_fra.Controls.Add(Me.GeneralInformation_fra)
         Me.CarData_fra.Controls.Add(Me.BillofMaterialsandTaskList_fra)
         Me.CarData_fra.Location = New System.Drawing.Point(1, -6)
@@ -224,7 +226,7 @@ Partial Class frmEstimatingBase
         'GeneralInformation_fra
         '
         Me.GeneralInformation_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GeneralInformation_fra.BackColor = System.Drawing.SystemColors.Window
         Me.GeneralInformation_fra.Controls.Add(Me.Destination_cmb)
         Me.GeneralInformation_fra.Controls.Add(Me.Destination_lbl)
@@ -1631,8 +1633,8 @@ Partial Class frmEstimatingBase
         'BillofMaterialsandTaskList_fra
         '
         Me.BillofMaterialsandTaskList_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.ExpandAll_cmd)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.BillOfMaterials_spr)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.CollapseAll_cmd)
@@ -1657,8 +1659,8 @@ Partial Class frmEstimatingBase
         '
         Me.BillOfMaterials_spr.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
         Me.BillOfMaterials_spr.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BillOfMaterials_spr.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BillOfMaterials_spr.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         Me.BillOfMaterials_spr.Location = New System.Drawing.Point(6, 43)
@@ -1695,8 +1697,8 @@ Partial Class frmEstimatingBase
         'OrderingForms_fra
         '
         Me.OrderingForms_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.OrderingForms_fra.Controls.Add(Me.OrderingForms_lst)
         Me.OrderingForms_fra.Controls.Add(Me.OrderingForms_con)
         Me.OrderingForms_fra.Location = New System.Drawing.Point(11, 48)
@@ -1709,7 +1711,7 @@ Partial Class frmEstimatingBase
         'OrderingForms_lst
         '
         Me.OrderingForms_lst.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.OrderingForms_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OrderingForms_lst.FormattingEnabled = True
         Me.OrderingForms_lst.Location = New System.Drawing.Point(2, 12)
@@ -1720,7 +1722,7 @@ Partial Class frmEstimatingBase
         'OrderingForms_con
         '
         Me.OrderingForms_con.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.OrderingForms_con.AutoScroll = True
         Me.OrderingForms_con.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.OrderingForms_con.Location = New System.Drawing.Point(120, 12)
@@ -1745,6 +1747,8 @@ Partial Class frmEstimatingBase
         'fraHdrJobInfo
         '
         Me.fraHdrJobInfo.BackColor = System.Drawing.SystemColors.Control
+        Me.fraHdrJobInfo.Controls.Add(Me.NegNum_txt)
+        Me.fraHdrJobInfo.Controls.Add(Me.Label3)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrBnkLetter)
         Me.fraHdrJobInfo.Controls.Add(Me.Units_txt)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrGONegNum)
@@ -2091,6 +2095,36 @@ Partial Class frmEstimatingBase
         Me.Config_cmd.Text = "Config"
         Me.Config_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
+        'NegNum_txt
+        '
+        Me.NegNum_txt.AcceptsReturn = True
+        Me.NegNum_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.NegNum_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.NegNum_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NegNum_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NegNum_txt.Location = New System.Drawing.Point(871, 5)
+        Me.NegNum_txt.MaxLength = 0
+        Me.NegNum_txt.Name = "NegNum_txt"
+        Me.NegNum_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NegNum_txt.Size = New System.Drawing.Size(51, 20)
+        Me.NegNum_txt.TabIndex = 56
+        Me.NegNum_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label3
+        '
+        Me.Label3.BackColor = System.Drawing.SystemColors.Control
+        Me.Label3.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label3.Location = New System.Drawing.Point(786, 9)
+        Me.Label3.Name = "Label3"
+        Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label3.Size = New System.Drawing.Size(70, 19)
+        Me.Label3.TabIndex = 57
+        Me.Label3.Text = "Neg Num"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'frmEstimatingBase
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
@@ -2255,6 +2289,8 @@ Partial Class frmEstimatingBase
     Public WithEvents Destination_cmb As System.Windows.Forms.ComboBox
     Public WithEvents Destination_lbl As System.Windows.Forms.Label
     Public WithEvents btnTorque As System.Windows.Forms.Button
+    Public WithEvents NegNum_txt As System.Windows.Forms.TextBox
+    Public WithEvents Label3 As System.Windows.Forms.Label
 
 #End Region
 End Class
