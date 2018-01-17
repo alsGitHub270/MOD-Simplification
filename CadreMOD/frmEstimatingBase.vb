@@ -217,8 +217,7 @@ Public Class frmEstimatingBase
                                          New DataColumn("ExpensesPerDayTotal_txt", typeStr),
                                          New DataColumn("ExpensesPerDay_txt", typeStr),
                                          New DataColumn("GatewayReviewRequired_chk", typeInt),
-                                         New DataColumn("Destination_cmb", typeStr),
-                                         New DataColumn("NegNum_txt", typeStr)})
+                                         New DataColumn("Destination_cmb", typeStr)})
 
             Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             EstimatingDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
@@ -871,7 +870,6 @@ Public Class frmEstimatingBase
                 For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
                     SubcontractedLaborCost.LaborCost(iIndex).Cost = dr(SubcontractedLaborCost.LaborCost(iIndex).Description)
                 Next iIndex
-                Me.NegNum_txt.Text = FindValueInDataRow("NegNum_txt", dr)
             End If
 
             BillOfMaterials_spr.ActiveSheet.GetDataView(False).AllowNew = False
@@ -1027,7 +1025,6 @@ Public Class frmEstimatingBase
             For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
                 _row(SubcontractedLaborCost.LaborCost(iIndex).Description) = SubcontractedLaborCost.LaborCost(iIndex).Cost
             Next iIndex
-            _row("NegNum_txt") = Me.NegNum_txt.Text
             If is_new_row Then
                 GeneralInfo.Rows.Add(_row)
             End If
@@ -1477,21 +1474,35 @@ Public Class frmEstimatingBase
             FreezeSave_btn.Text = "Frozen"
         End If
 
+        CloneSummaryTable("RTE Values")
+
     End Sub
 
-    Private Sub NegNum_txt_KeyPress(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles NegNum_txt.KeyPress
-        ' make sure only numbers are added into negnum
-        If Asc(e.KeyChar) <> 8 Then
-            If Asc(e.KeyChar) < 48 Or Asc(e.KeyChar) > 57 Then
-                e.Handled = True
-            End If
-        End If
+
+    Private Sub CloneSummaryTable(summaryType As String)
+
+        Dim _row() As DataRow
+
+        Try
+
+            For Each row As DataRow In dtSummaryClone.Select("Bank = '" & Me.txtHdrBnkLetter.Text & "'")
+                If row("Bank") = Me.txtHdrBnkLetter.Text And row("Summary_type") = summaryType Then
+                    row.Delete()
+                End If
+            Next
+
+            _row = dtSummaryGroup.Select("Bank = '" & Me.txtHdrBnkLetter.Text & "'")
+
+            dtSummaryClone.ImportRow(_row(0))   ' Always adds to end of the datatable
+            dtSummaryClone.Rows(dtSummaryClone.Rows.Count - 1).Item("Summary_Type") = summaryType
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Cloning Summary Table", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
     End Sub
 
-    Private Sub NegNum_txt_Validating(sender As System.Object, e As System.ComponentModel.CancelEventArgs) Handles NegNum_txt.Validating
-        If Me.NegNum_txt.TextLength <> 6 Then
-            e.Cancel = True
-            MessageBox.Show("Neg Number must be 6 digits in length.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End If
+    Private Sub Book_cmd_Click(sender As System.Object, e As System.EventArgs) Handles Book_cmd.Click
+        CloneSummaryTable("Orig At Book")
     End Sub
 End Class

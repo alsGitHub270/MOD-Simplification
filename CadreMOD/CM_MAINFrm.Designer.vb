@@ -49,6 +49,8 @@ Partial Class CM_MAIN_frm
         Dim EnhancedScrollBarRenderer2 As FarPoint.Win.Spread.EnhancedScrollBarRenderer = New FarPoint.Win.Spread.EnhancedScrollBarRenderer()
         Me.ToolTipMain = New System.Windows.Forms.ToolTip(Me.components)
         Me.BuildingInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.lblNegNum = New System.Windows.Forms.Label()
+        Me.txtNegNum = New System.Windows.Forms.TextBox()
         Me.cboSupt = New System.Windows.Forms.ComboBox()
         Me.lblSupt = New System.Windows.Forms.Label()
         Me.txtContractNumber = New System.Windows.Forms.TextBox()
@@ -115,6 +117,7 @@ Partial Class CM_MAIN_frm
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
         Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
         Me.Equipment_fra = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.sprTotals = New FarPoint.Win.Spread.FpSpread()
         Me.sprTotals_Sheet1 = New FarPoint.Win.Spread.SheetView()
         Me.btnAdd = New System.Windows.Forms.Button()
@@ -178,6 +181,8 @@ Partial Class CM_MAIN_frm
         'BuildingInformation_fra
         '
         Me.BuildingInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.BuildingInformation_fra.Controls.Add(Me.lblNegNum)
+        Me.BuildingInformation_fra.Controls.Add(Me.txtNegNum)
         Me.BuildingInformation_fra.Controls.Add(Me.cboSupt)
         Me.BuildingInformation_fra.Controls.Add(Me.lblSupt)
         Me.BuildingInformation_fra.Controls.Add(Me.txtContractNumber)
@@ -227,6 +232,24 @@ Partial Class CM_MAIN_frm
         Me.BuildingInformation_fra.TabIndex = 50
         Me.BuildingInformation_fra.TabStop = False
         Me.BuildingInformation_fra.Text = "    Building/Job Information"
+        '
+        'lblNegNum
+        '
+        Me.lblNegNum.AutoSize = True
+        Me.lblNegNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNegNum.Location = New System.Drawing.Point(311, 165)
+        Me.lblNegNum.Name = "lblNegNum"
+        Me.lblNegNum.Size = New System.Drawing.Size(46, 13)
+        Me.lblNegNum.TabIndex = 107
+        Me.lblNegNum.Text = "Neg #:"
+        '
+        'txtNegNum
+        '
+        Me.txtNegNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNegNum.Location = New System.Drawing.Point(358, 162)
+        Me.txtNegNum.Name = "txtNegNum"
+        Me.txtNegNum.Size = New System.Drawing.Size(100, 20)
+        Me.txtNegNum.TabIndex = 106
         '
         'cboSupt
         '
@@ -392,7 +415,7 @@ Partial Class CM_MAIN_frm
         Me.cboBuildingType.DropDownWidth = 222
         Me.cboBuildingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboBuildingType.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboBuildingType.Location = New System.Drawing.Point(121, 193)
+        Me.cboBuildingType.Location = New System.Drawing.Point(121, 200)
         Me.cboBuildingType.Name = "cboBuildingType"
         Me.cboBuildingType.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboBuildingType.Size = New System.Drawing.Size(336, 21)
@@ -404,7 +427,7 @@ Partial Class CM_MAIN_frm
         Me.lblBuildingType.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblBuildingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblBuildingType.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblBuildingType.Location = New System.Drawing.Point(18, 196)
+        Me.lblBuildingType.Location = New System.Drawing.Point(18, 203)
         Me.lblBuildingType.Name = "lblBuildingType"
         Me.lblBuildingType.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblBuildingType.Size = New System.Drawing.Size(100, 13)
@@ -1589,6 +1612,7 @@ Partial Class CM_MAIN_frm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.Equipment_fra.Controls.Add(Me.Button1)
         Me.Equipment_fra.Controls.Add(Me.sprTotals)
         Me.Equipment_fra.Controls.Add(Me.btnAdd)
         Me.Equipment_fra.Controls.Add(Me.btnPrint)
@@ -1609,6 +1633,15 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.TabIndex = 43
         Me.Equipment_fra.TabStop = False
         Me.Equipment_fra.Text = "Equipment "
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(13, 21)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 88
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'sprTotals
         '
@@ -2583,5 +2616,8 @@ Partial Class CM_MAIN_frm
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents txtSuptReview As System.Windows.Forms.TextBox
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents lblNegNum As System.Windows.Forms.Label
+    Friend WithEvents txtNegNum As System.Windows.Forms.TextBox
 #End Region
 End Class

@@ -690,13 +690,21 @@ Module General
         Loop
 
     End Sub
+
     Public Sub DeleteAllFiles()
 
         For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
-            File.Delete(FoundFile)
+            Dim count As Integer
+            Try
+                File.Delete(FoundFile)
+            Catch ex As Exception
+                ' To prevent system crash when FoundFile cannot be deleted 
+                count += 1
+            End Try
         Next FoundFile
+
     End Sub
-    
+
     Public Sub DeleteFiles()
         Dim FileNameLike As String = String.Empty
 
@@ -718,4 +726,27 @@ Module General
         Next FoundFile
 
     End Sub
+
+    Private Sub KillExcelProcess()
+        Try
+            Dim Xcel() As Process = Process.GetProcessesByName("EXCEL")
+            For Each Process As Process In Xcel
+                Process.Kill()
+            Next
+        Catch ex As Exception
+        End Try
+    End Sub
+
+
+    Public Function GetLaborRates(_installation_office) As List(Of String)
+        Dim sSQL As String = "SELECT STRate, OTRate " & _
+                    "FROM [Rate (MOD Labor)] " & _
+                    "WHERE Office = '" & _installation_office & "';"
+        Dim myList As New List(Of String)()
+
+
+        myList = GetDataFromOptions(sSQL, True)
+        Return myList
+
+    End Function
 End Module

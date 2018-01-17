@@ -27,6 +27,7 @@
     Public dtBuildingInfo As DataTable
     Public dtLaborRates As DataTable
     Public dtOverTime As DataTable
+    Public dtSummaryClone As DataTable
 
     Public BookingType As Integer
     Public DefaultTaxCode As String = ""
@@ -45,6 +46,7 @@
     Public EPCOPath As String = ""
     Public SpecAndDataPath As String = ""
     Public SuptPath As String = ""
+    Public TemplatePath As String = ""
     Public ImageFileLocation As String = My.Application.Info.DirectoryPath & "\images\"
 
     Public EstimateModified As Boolean

@@ -155,8 +155,6 @@ Partial Class frmEstimatingBase
         Me.Forms_cmd = New System.Windows.Forms.Button()
         Me.Book_cmd = New System.Windows.Forms.Button()
         Me.Config_cmd = New System.Windows.Forms.Button()
-        Me.NegNum_txt = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.CarTab.SuspendLayout()
@@ -1747,8 +1745,6 @@ Partial Class frmEstimatingBase
         'fraHdrJobInfo
         '
         Me.fraHdrJobInfo.BackColor = System.Drawing.SystemColors.Control
-        Me.fraHdrJobInfo.Controls.Add(Me.NegNum_txt)
-        Me.fraHdrJobInfo.Controls.Add(Me.Label3)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrBnkLetter)
         Me.fraHdrJobInfo.Controls.Add(Me.Units_txt)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrGONegNum)
@@ -2095,36 +2091,6 @@ Partial Class frmEstimatingBase
         Me.Config_cmd.Text = "Config"
         Me.Config_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        'NegNum_txt
-        '
-        Me.NegNum_txt.AcceptsReturn = True
-        Me.NegNum_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.NegNum_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.NegNum_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NegNum_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NegNum_txt.Location = New System.Drawing.Point(871, 5)
-        Me.NegNum_txt.MaxLength = 0
-        Me.NegNum_txt.Name = "NegNum_txt"
-        Me.NegNum_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.NegNum_txt.Size = New System.Drawing.Size(51, 20)
-        Me.NegNum_txt.TabIndex = 56
-        Me.NegNum_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'Label3
-        '
-        Me.Label3.BackColor = System.Drawing.SystemColors.Control
-        Me.Label3.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(786, 9)
-        Me.Label3.Name = "Label3"
-        Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label3.Size = New System.Drawing.Size(70, 19)
-        Me.Label3.TabIndex = 57
-        Me.Label3.Text = "Neg Num"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
         'frmEstimatingBase
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
@@ -2289,8 +2255,6 @@ Partial Class frmEstimatingBase
     Public WithEvents Destination_cmb As System.Windows.Forms.ComboBox
     Public WithEvents Destination_lbl As System.Windows.Forms.Label
     Public WithEvents btnTorque As System.Windows.Forms.Button
-    Public WithEvents NegNum_txt As System.Windows.Forms.TextBox
-    Public WithEvents Label3 As System.Windows.Forms.Label
 
 #End Region
 End Class

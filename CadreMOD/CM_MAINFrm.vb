@@ -180,9 +180,11 @@ Partial Friend Class CM_MAIN_frm
                                                           New DataColumn("nps_labor_cost", typeStr), _
                                                           New DataColumn("nps_one_time_cost", typeStr), _
                                                           New DataColumn("ocpl", typeStr),
-                                                          New DataColumn("supt_review_status", typeStr)
+                                                          New DataColumn("supt_review_status", typeStr),
+                                                          New DataColumn("negnum", typeStr)
                                                          })
 
+        CreateSummaryCloneDataTable()
 
         Deserialize(CM_file, dsCadre, "Error Reading Input json estimate file", isDirty)
         FpSpread1.ActiveSheet.SortRows(3, True, False)
@@ -195,9 +197,27 @@ Partial Friend Class CM_MAIN_frm
 
         CreateOverTimeDataTable()
 
+
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("id"), dsCadre.Tables("BaseGroup").Columns("id"))
         dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("alt_id"), dsCadre.Tables("AltGroup").Columns("id"))
+
+    End Sub
+
+
+    Private Sub CreateSummaryCloneDataTable()
+
+        Try
+            If dsCadre.Tables.Contains("Summary_Clone") = False Then
+                dtSummaryClone = New DataTable
+                dtSummaryClone = dtSummaryGroup.Clone
+                dtSummaryClone.TableName = "Summary_Clone"
+                dtSummaryClone.Columns(0).ColumnName = "Summary_Type"
+                dsCadre.Tables.Add(dtSummaryClone)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Creating Summary Clone Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
 
     End Sub
 
@@ -383,6 +403,7 @@ Partial Friend Class CM_MAIN_frm
             myList = GetDataFromOptions(sSQL, True)
             st_rate = myList(0)
             ot_rate = myList(1)
+
             For i As Integer = 0 To 9
                 Dim workRow As DataRow = dtLaborRates.NewRow
                 workRow("rate_year") = rate_year
@@ -468,7 +489,7 @@ Partial Friend Class CM_MAIN_frm
         CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
-                MessageBox.Show("Please set your curson on a 'Base' or 'Alt' row")
+                MessageBox.Show("Please set your curson on the 'Base' or 'Alt' row")
             Case "Master", "Base"
                 Me.ShowInTaskbar = False
                 Using frmEstimatingBase
@@ -482,7 +503,7 @@ Partial Friend Class CM_MAIN_frm
                 End Using
                 Me.ShowInTaskbar = True
             Case Else
-                MessageBox.Show("Please set your curson on a 'Base' or 'Alt' row")
+                MessageBox.Show("Please set your curson on the 'Base' or 'Alt' row")
         End Select
 
     End Sub
@@ -2117,6 +2138,7 @@ AddMasterRow_Error:
                 txtOCPL.Text = row.Item("ocpl").ToString
 
                 txtSuptReview.Text = row.Item("supt_review_status").ToString
+                txtNegNum.Text = row.Item("negnum").ToString
             Else
                 UpdateBldgInfoFromNotes()
             End If
@@ -2164,6 +2186,7 @@ AddMasterRow_Error:
             dtBuildingInfo.Rows(0)("nps_one_time_cost") = txtNPSOneTimeCost.Text
             dtBuildingInfo.Rows(0)("ocpl") = txtOCPL.Text
             dtBuildingInfo.Rows(0)("supt_review_status") = txtSuptReview.Text
+            dtBuildingInfo.Rows(0)("negnum") = txtNegNum.Text
         Catch ex As Exception
             MessageBox.Show("Error saving data at top of Contract Management Screen", "Error Saving to Dataset", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -2317,7 +2340,7 @@ AddMasterRow_Error:
     Private Sub chkHeadDetection_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkHeadDetection.CheckedChanged
         If Not initializing Then isDirty = True
     End Sub
-   
+
     Private Sub cboSupt_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboSupt.SelectedIndexChanged
         If Not initializing Then isDirty = True
     End Sub
@@ -2914,7 +2937,7 @@ AddMasterRow_Error:
         If myList.Count > 0 Then
             c1 = myList(0)
             c1 += 0.06
-            c1 = Math.Round(c1,4)
+            c1 = Math.Round(c1, 4)
         End If
         Return c1
 
@@ -3665,7 +3688,6 @@ AddMasterRow_Error:
 
             SetSuptApprovalRptHeaders(combinedSheet)
 
-
             newSpread.Sheets.Add(combinedSheet)
             newSpread.SaveExcel(filename, FarPoint.Excel.ExcelSaveFlags.UseOOXMLFormat)
 
@@ -3754,24 +3776,43 @@ AddMasterRow_Error:
 
         combinedSheet.Rows(10).BackColor = Color.LightGray
     End Sub
-   
 
-    Function FileIsOpen(ByVal pathfile As String) As Boolean
-        Dim ff As Integer
-        If System.IO.File.Exists(pathfile) Then
-            Try
-                ff = FreeFile()
-                Microsoft.VisualBasic.FileOpen(ff, pathfile, OpenMode.Binary, OpenAccess.Read, OpenShare.LockReadWrite)
-                Return False
-            Catch
-                Return True
-            Finally
-                FileClose(ff)
-            End Try
-            Return True
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+        Dim _bank As String = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
+        Dim _units As String = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
+
+        If CurrentGOData_Typ.EstimateLevel = "Summary" Or CurrentGOData_Typ.EstimateLevel = "" Then
+            GenerateCN1Report(_bank, _units, Me.cboInstallingOffice.Text, Me.txtNegNum.Text)
+        Else
+            MessageBox.Show("Please set the cursor on the summary level row to identify which bank to process", "Cannot Identify Bank", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
-        Return False
-    End Function
+
+    End Sub
+
+    Private Sub txtNegNum_KeyPress(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles txtNegNum.KeyPress
+        ' make sure only numbers are added into negnum
+        If Asc(e.KeyChar) <> 8 Then
+            If Asc(e.KeyChar) < 48 Or Asc(e.KeyChar) > 57 Then
+                e.Handled = True
+            End If
+        End If
+    End Sub
+
+    Private Sub txtNegNum_Validating(sender As System.Object, e As System.ComponentModel.CancelEventArgs) Handles txtNegNum.Validating
+        If Me.txtNegNum.TextLength <> 6 And Me.txtNegNum.TextLength <> 0 Then
+            e.Cancel = True
+            MessageBox.Show("Neg Number must be 6 digits in length.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
+
+    Private Sub txtNegNum_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtNegNum.TextChanged
+        isDirty = True
+    End Sub
+
+    Private Sub txtOCPL_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtOCPL.TextChanged
+        isDirty = True
+    End Sub
 
 
 End Class
