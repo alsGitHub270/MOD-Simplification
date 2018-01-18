@@ -117,14 +117,13 @@ Partial Class CM_MAIN_frm
         Me.SheetView1 = New FarPoint.Win.Spread.SheetView()
         Me.FpSpread1 = New FarPoint.Win.Spread.FpSpread()
         Me.Equipment_fra = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.sprTotals = New FarPoint.Win.Spread.FpSpread()
         Me.sprTotals_Sheet1 = New FarPoint.Win.Spread.SheetView()
         Me.btnAdd = New System.Windows.Forms.Button()
         Me.btnPrint = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.btnCollapse = New System.Windows.Forms.Button()
         Me.btnDelete = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.btnExpand = New System.Windows.Forms.Button()
         Me.btnForms = New System.Windows.Forms.Button()
         Me.btnEstimate = New System.Windows.Forms.Button()
         Me.btnMerge = New System.Windows.Forms.Button()
@@ -1612,13 +1611,12 @@ Partial Class CM_MAIN_frm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Equipment_fra.BackColor = System.Drawing.SystemColors.Window
-        Me.Equipment_fra.Controls.Add(Me.Button1)
         Me.Equipment_fra.Controls.Add(Me.sprTotals)
         Me.Equipment_fra.Controls.Add(Me.btnAdd)
         Me.Equipment_fra.Controls.Add(Me.btnPrint)
-        Me.Equipment_fra.Controls.Add(Me.Button3)
+        Me.Equipment_fra.Controls.Add(Me.btnCollapse)
         Me.Equipment_fra.Controls.Add(Me.btnDelete)
-        Me.Equipment_fra.Controls.Add(Me.Button2)
+        Me.Equipment_fra.Controls.Add(Me.btnExpand)
         Me.Equipment_fra.Controls.Add(Me.btnForms)
         Me.Equipment_fra.Controls.Add(Me.btnEstimate)
         Me.Equipment_fra.Controls.Add(Me.btnMerge)
@@ -1633,15 +1631,6 @@ Partial Class CM_MAIN_frm
         Me.Equipment_fra.TabIndex = 43
         Me.Equipment_fra.TabStop = False
         Me.Equipment_fra.Text = "Equipment "
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(13, 21)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 88
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'sprTotals
         '
@@ -1860,15 +1849,15 @@ Partial Class CM_MAIN_frm
         Me.btnPrint.Text = "Print to PDF"
         Me.btnPrint.UseVisualStyleBackColor = True
         '
-        'Button3
+        'btnCollapse
         '
-        Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button3.Location = New System.Drawing.Point(1001, 21)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(113, 22)
-        Me.Button3.TabIndex = 74
-        Me.Button3.Text = "Collapse All"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.btnCollapse.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnCollapse.Location = New System.Drawing.Point(1001, 21)
+        Me.btnCollapse.Name = "btnCollapse"
+        Me.btnCollapse.Size = New System.Drawing.Size(113, 22)
+        Me.btnCollapse.TabIndex = 74
+        Me.btnCollapse.Text = "Collapse All"
+        Me.btnCollapse.UseVisualStyleBackColor = True
         '
         'btnDelete
         '
@@ -1886,15 +1875,15 @@ Partial Class CM_MAIN_frm
         Me.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnDelete.UseVisualStyleBackColor = False
         '
-        'Button2
+        'btnExpand
         '
-        Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Button2.Location = New System.Drawing.Point(211, 21)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(113, 22)
-        Me.Button2.TabIndex = 73
-        Me.Button2.Text = "Expand All"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.btnExpand.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btnExpand.Location = New System.Drawing.Point(211, 21)
+        Me.btnExpand.Name = "btnExpand"
+        Me.btnExpand.Size = New System.Drawing.Size(113, 22)
+        Me.btnExpand.TabIndex = 73
+        Me.btnExpand.Text = "Expand All"
+        Me.btnExpand.UseVisualStyleBackColor = True
         '
         'btnForms
         '
@@ -2540,9 +2529,9 @@ Partial Class CM_MAIN_frm
     Friend WithEvents SheetView1 As FarPoint.Win.Spread.SheetView
     Friend WithEvents FpSpread1 As FarPoint.Win.Spread.FpSpread
     Public WithEvents Equipment_fra As System.Windows.Forms.GroupBox
-    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents btnCollapse As System.Windows.Forms.Button
     Private WithEvents btnDelete As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents btnExpand As System.Windows.Forms.Button
     Private WithEvents btnForms As System.Windows.Forms.Button
     Private WithEvents btnEstimate As System.Windows.Forms.Button
     Private WithEvents btnMerge As System.Windows.Forms.Button
@@ -2616,7 +2605,6 @@ Partial Class CM_MAIN_frm
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents txtSuptReview As System.Windows.Forms.TextBox
-    Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents lblNegNum As System.Windows.Forms.Label
     Friend WithEvents txtNegNum As System.Windows.Forms.TextBox
 #End Region

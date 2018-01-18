@@ -354,11 +354,9 @@ Partial Friend Class CM_MAIN_frm
             If installation_office.Trim.Length = 0 Then
                 Exit Sub
             End If
-            Dim sSQL As String = "SELECT STRate, OTRate " & _
-                    "FROM [Rate (MOD Labor)] " & _
-                    "WHERE Office = '" & installation_office & "';"
+           
+            myList = GetLaborRates(installation_office)
 
-            myList = GetDataFromOptions(sSQL, True)
             x = CInt(dtLaborRates(0).Item("rate_year")) - rate_year
 
             For i As Integer = 0 To dtLaborRates.Rows.Count - 1
@@ -476,17 +474,14 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
     Private Sub btnEstimate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEstimate.Click
-        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
+
 
         If isDirty Then
             If PromptForSave() <> DialogResult.Yes Then
                 Exit Sub
             End If
         End If
-        CurrentGOData_Typ.Units = FpSpread1.ActiveSheet.Cells(CurRow, 2).Text
-        CurrentGOData_Typ.Bank = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
-        CurrentGOData_Typ.MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
-        CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
+       
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
                 MessageBox.Show("Please set your curson on the 'Base' or 'Alt' row")
@@ -770,21 +765,23 @@ Partial Friend Class CM_MAIN_frm
             isDirty = True
         End If
 
-        If Me.txtSuptReview.Text = "Under Review" Then
-            Me.btnSave.Enabled = False
-        End If
-
         initializing = False
         FpSpread1.Show()
+
     End Sub
 
     Private Sub FpSpread1_CellClick(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.CellClickEventArgs) Handles FpSpread1.CellClick
 
         Dim usex As FarPoint.Win.Spread.SheetView = e.View.GetSheetView
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
 
         CurrentGOData_Typ.EstimateLevel = String.Empty
         CurrentGOData_Typ.Alt = "A"
+
+        CurrentGOData_Typ.Bank = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
+        CurrentGOData_Typ.MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
+        CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
 
         If usex.TitleInfo.Text.ToUpper.IndexOf("SUMMARY") > -1 Then
             CurrentGOData_Typ.EstimateLevel = "Summary"
@@ -1163,12 +1160,12 @@ Partial Friend Class CM_MAIN_frm
     End Sub
 
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub btnExpand_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExpand.Click
         ExpandCollapseAll("Expand")
     End Sub
 
 
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+    Private Sub btnCollapse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCollapse.Click
         ExpandCollapseAll("Collapse")
     End Sub
 
@@ -2421,12 +2418,14 @@ AddMasterRow_Error:
         FpSpread1.Refresh()
     End Sub
 
-    Public Sub SaveAll()
+    Public Sub SaveAll(Optional ByVal FromCM As Boolean = True)
         If isDirty And txtSuptReview.Text = "Under Review" Then
             MessageBox.Show("This estimate is under Superintendent Review.  Changes cannot be accepted at this time.", "Under Supt Review", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             Exit Sub
         End If
+        If FromCM Then
         SaveTopOfFormToDataset()
+        End If
         'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
         ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty)
         Serialize(CM_file, dsCadre, "Error Writing Cadre Json file", isDirty)
@@ -3183,7 +3182,7 @@ AddMasterRow_Error:
                                       "T_SEC_SMART_" & sArea}
 
             clsNotes.SetValue_Readers("Reader", Reader)
-            clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.Units)
+            clsNotes.SetValue("bank", CurrentGOData_Typ.Type & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentGOData_Typ.CurrentUnits)
 
             clsNotes.DocSave()
         Catch ex As Exception
@@ -3237,7 +3236,7 @@ AddMasterRow_Error:
                         If clsNotes.GetValue("bank").ToString.Substring(0, 3) = CurrentGOData_Typ.Type Then
                             If clsNotes.GetValue("bank").ToString.Substring(3, 1) = CurrentGOData_Typ.Bank Then
                                 If clsNotes.GetValue("bank").ToString.Substring(4, 1) = CurrentGOData_Typ.Alt Then
-                                    If clsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.Units Then
+                                    If clsNotes.GetValue("bank").ToString.Substring(5) = CurrentGOData_Typ.CurrentUnits Then
                                         Return True
                                     End If
                                 End If
@@ -3337,23 +3336,29 @@ AddMasterRow_Error:
             Exit Sub
         End If
 
-        sSuptReview = Get_SuptStatus("Decision")
-        If sSuptStatus <> "" Then
-            If sSuptStatus = "Rejected" Then
-                sSuptReview = "Required"
-            Else
-                sSuptReview = sSuptStatus
-            End If
-        End If
-
-        If sSuptReview = "Under Review" Then
-            MessageBox.Show("Estimate is Under Supt Review - Cannot resend for Approval", "Supt Review Status ", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        If NoBanksIncluded() Then
+            sMessage = "No Summary Items have been 'Included'.  Please check 'Included' for the bank(s) to process the Superintendent Review.  " & vbCrLf & vbCrLf & "Supt. Review Processing Terminated."
+            MessageBox.Show(sMessage, "No Banks Included", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
-        Select Case sSuptReview
+        If Me.txtSuptReview.Text = "Under Review" Then
+            sSuptReview = Get_SuptStatus("Decision")
+            If sSuptStatus <> "" Then
+                If sSuptStatus = "Rejected" Then
+                    sSuptReview = "Required"
+                Else
+                    sSuptReview = sSuptStatus
+                
+                End If
+                Me.txtSuptReview.Text = sSuptReview
+            End If
+
+        End If
+
+        Select Case Me.txtSuptReview.Text
             Case "Approved"
-                sMessage = "Estimate has already been " & sSuptReview & ". There is no need for further review.  "
+                sMessage = "Estimate has already been " & Me.txtSuptReview.Text & ". There is no need for further review.  "
                 If MessageBox.Show(sMessage, "Superintendent Review", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
                     Exit Sub
                 End If
@@ -3362,19 +3367,12 @@ AddMasterRow_Error:
                 If MessageBox.Show(sMessage, "Superintendent Review", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
                     Exit Sub
                 End If
+            Case "Under Review"
+                MessageBox.Show("Estimate is Currently Under Superintendent Review - Cannot resend for Approval", "Superintendent Review Status ", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
         End Select
 
-        If Me.cboSupt.Text = "ZZZ Other" Or Me.cboSupt.Text = "" Then
-            MessageBox.Show("The Superintendent Name is required.", "Supt Review", MessageBoxButtons.OK, MessageBoxIcon.Hand)
-            Exit Sub
-        End If
-
-        If NoBanksIncluded() Then
-            sMessage = "No Summary Items have been 'Included'.  Please check 'Included' for the bank(s) to process the Superintendent Review.  " & vbCrLf & vbCrLf & "Supt. Review Processing Terminated."
-            MessageBox.Show(sMessage, "No Banks Included", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-
+        
         sMessage = "Please note that when a Superintendent Approval is requested, you will not be able to make any further changes to the estimate."
         Cursor.Current = Cursors.Default
         If MessageBox.Show(sMessage, "Continue?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
@@ -3776,19 +3774,7 @@ AddMasterRow_Error:
 
         combinedSheet.Rows(10).BackColor = Color.LightGray
     End Sub
-
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        Dim CurRow As Integer = FpSpread1.ActiveSheet.ActiveRowIndex
-        Dim _bank As String = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
-        Dim _units As String = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
-
-        If CurrentGOData_Typ.EstimateLevel = "Summary" Or CurrentGOData_Typ.EstimateLevel = "" Then
-            GenerateCN1Report(_bank, _units, Me.cboInstallingOffice.Text, Me.txtNegNum.Text)
-        Else
-            MessageBox.Show("Please set the cursor on the summary level row to identify which bank to process", "Cannot Identify Bank", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-
-    End Sub
+   
 
     Private Sub txtNegNum_KeyPress(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles txtNegNum.KeyPress
         ' make sure only numbers are added into negnum

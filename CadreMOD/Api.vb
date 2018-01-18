@@ -1,8 +1,5 @@
 Option Strict Off
 Option Explicit On
-'Imports UpgradeHelpers.VB6.Gui
-'Imports UpgradeHelpers.VB6.Utils
-'Imports UpgradeHelpers.VB6.VB
 Imports System
 Imports System.Drawing
 Imports System.Runtime.InteropServices
@@ -85,6 +82,7 @@ Module API
     Public Const SW_RESTORE As Integer = 9
     Public Const SW_MAXIMIZE As Integer = 3
     Public Const CB_FINDSTRINGEXACT As Integer = &H158S
+    Public Const LB_FINDSTRINGEXACT As Integer = &H1A2S
 
     ' API Declarations  ------------------------------------------------------------------------------------------------------------------------
     Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Integer, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As String) As Integer
@@ -223,34 +221,10 @@ Module API
         Return img
 
     End Function
-
-    'Public Sub SetHScroll(ByRef Frm As Warn_msg_frm, ByRef Ctrl As ListBox)
-    '    Dim nTextWidth As Integer
-    '    Dim StrText As String = ""
-    '    Dim LongestStringSize As Integer
-
-    '    For i As Integer = 0 To Ctrl.Items.Count - 1
-    '        If Ctrl.GetListItem(i).Length > LongestStringSize Then
-    '            LongestStringSize = Ctrl.GetListItem(i).Length
-    '            StrText = Ctrl.GetListItem(i)
-    '        End If
-    '    Next
-
-    '    If StrText <> "" Then
-    '        nTextWidth = ConvertPixelsToTwips(Frm.CreateGraphics().MeasureString(StrText & " ", Frm.Font).Width)
-    '        SendMessage(Ctrl.Handle.ToInt32(), LB_SETHORIZONTALEXTENT, nTextWidth, 0)
-    '    End If
-
-    'End Sub
     Public Sub Set_Resolution()
-
-
-
         Config_frm.Show()
         Config_frm.Close()
-
     End Sub
-
     Public Sub Reset_Resolution()
 
         If (SaveWidth < PreferredScreenWidth Or SaveHeight < PreferredScreenHeight) And Config_frm.ChangedResolution Then
@@ -262,7 +236,6 @@ Module API
         End If
 
     End Sub
-
     Public Function ChangeDisplayResolution(ByVal NewWidth As Integer, ByVal NewHeight As Integer) As Boolean
         Dim typDM As DEVMODE = New DEVMODE
         Dim lRet As Integer = EnumDisplaySettings(0, 0, typDM)

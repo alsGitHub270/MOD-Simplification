@@ -35,11 +35,6 @@ Module Lotuslnk
     Const SMART As String = "SM2ART Center"
     Const Activities As String = "SM2ART Activities"
 
-    Public ChangingSpeed_OLD As Byte
-    Public ChangingCapacity_OLD As Byte
-    Public ChangingTravel_OLD As Byte
-    Public RegionLocalMOD_OLD As Byte
-
     Private IsValid As Boolean
 
     Private Structure UserName_typ
@@ -97,37 +92,7 @@ Module Lotuslnk
     Public Sub Add_FeedBack_Doc()
         Dim Filesystem As New Scripting.FileSystemObject()
         Dim Name As String = ""
-        '        Dim TotalProco, TotalPrice, TotalAward, TotalBid As Single
         Dim TotalProco, TotalAward As Single
-        '        Dim LastBank As String = ""
-        '        Dim CheckBank, AddDollars As Boolean
-        '        Dim UsePrice As Single
-        '        Dim SaveFlag As Boolean = False
-        '        Dim SetPlannerDate As Boolean = False
-        '        Dim totalNumDI As Integer = 0
-        '        Dim totalDollarDI As Single = 0
-        '        Dim totalNumHX As Integer = 0
-        '        Dim totalDollarHX As Single = 0
-        '        Dim totalNumTractionPOH As Integer = 0
-        '        Dim totalDollarTractionPOH As Single = 0
-        '        Dim totalNumTX As Integer = 0
-        '        Dim totalDollarTX As Single = 0
-        '        Dim totalNumTractionLocal As Integer = 0
-        '        Dim totalDollarTractionLocal As Single = 0
-        '        Dim totalNumQuantumLeap As Integer = 0
-        '        Dim totalDollarQuantumLeap As Single = 0
-        '        Dim totalNumHydroPOH As Integer = 0
-        '        Dim totalDollarHydroPOH As Single = 0
-        '        Dim totalNumHydroLocal As Integer = 0
-        '        Dim totalDollarHydroLocal As Single = 0
-        '        Dim totalNumSID_PH_MOD As Integer = 0
-        '        Dim totalDollarSID_PH_MOD As Single = 0
-        '        Dim totalNumSID_MTO As Integer = 0
-        '        Dim totalDollarSID_MTO As Single = 0
-        '        Dim totalNumSID_IO As Integer = 0
-        '        Dim totalDollarSID_IO As Single = 0
-        '        Dim totalNumReusedController As Integer = 0
-        '        Dim totalDollarReusedController As Single = 0
 
         Try
             '            If Not QueryFeedback(False) Then
@@ -135,7 +100,14 @@ Module Lotuslnk
             '                    CreateNewOpportunity()
             '                End If
             '            End If
-            Attach_To_Feedback()
+            QueryFeedback(False)
+            If HoldFeedbackRecord = "Smart" Then
+                CreateActivity()
+                AttachToDBName(HoldNotesFeedbackPath, Feedback)
+                clsNotes.CreateDOC("MOD Estimate")
+                Dim EditHistoryText = "Created: " & Strings.Format(DateTime.Now, DATETIMENOTESFORMAT) & " by " & Contracts.Estimator
+                clsNotes.SetValue("EditHistory", EditHistoryText)
+            End If
             '            For iIndx As Integer = 0 To GetUBoundGONumbers()
             '                If GONumbers(iIndx).IncludeInBid = CheckState.Checked Then
             '                    TotalPrice += GONumbers(iIndx).TargetPrice
@@ -157,122 +129,6 @@ Module Lotuslnk
             clsNotes.SetValue("awardPrice", TotalAward)
             TotalProco = GetSummaryTotals("Total_Bank_Cost")
             clsNotes.SetValue("procoCost", TotalProco)
-            '            clsNotes.SetValue("salesPlannerPrice", TotalBid)
-            '            If SaveFlag Then
-            '                LastBank = String.Empty
-            '                For iIndx As Integer = 0 To GetUBoundGONumbers()
-            '                    If GONumbers(iIndx).IncludeInBid = CheckState.Checked And LastBank <> GONumbers(iIndx).Bank Then
-            '                        Select Case GONumbers(iIndx).ProductCode
-            '                            Case 600, 630
-            '                                totalNumTractionPOH += 1
-            '                                totalDollarTractionPOH += GONumbers(iIndx).BidPrice
-            '                            Case 610
-            '                                totalNumHydroPOH += 1
-            '                                totalDollarHydroPOH += GONumbers(iIndx).BidPrice
-            '                            Case 612 To 613
-            '                                totalNumHX += 1
-            '                                totalDollarHX += GONumbers(iIndx).BidPrice
-            '                            Case 615
-            '                                totalNumHydroLocal += 1
-            '                                totalDollarHydroLocal += GONumbers(iIndx).BidPrice
-            '                            Case 641 To 644, 667, 668
-            '                                totalNumSID_MTO += 1
-            '                                totalDollarSID_MTO += GONumbers(iIndx).BidPrice
-            '                            Case 646 To 649
-            '                                totalNumSID_PH_MOD += 1
-            '                                totalDollarSID_PH_MOD += GONumbers(iIndx).BidPrice
-            '                            Case 660, 661, 664, 665
-            '                                totalNumQuantumLeap += 1
-            '                                totalDollarQuantumLeap += GONumbers(iIndx).BidPrice
-            '                            Case 670
-            '                                totalNumReusedController += 1
-            '                                totalDollarReusedController += GONumbers(iIndx).BidPrice
-            '                            Case 645, 676 To 679
-            '                                totalNumDI += 1
-            '                                totalDollarDI += GONumbers(iIndx).BidPrice
-            '                            Case 680 To 683, 669
-            '                                totalNumTX += 1
-            '                                totalDollarTX += GONumbers(iIndx).BidPrice
-            '                            Case 691 To 692
-            '                                totalNumTractionLocal += 1
-            '                                totalDollarTractionLocal += GONumbers(iIndx).BidPrice
-            '                            Case Else
-            '                        End Select
-            '                        For jIndx As Integer = 0 To GetUBoundGONumbers()
-            '                            If GONumbers(iIndx).Bank = GONumbers(jIndx).Bank Then
-            '                                If GONumbers(iIndx).Alt = GONumbers(jIndx).Alt And GONumbers(iIndx).Units <> GONumbers(jIndx).Units And GONumbers(jIndx).IncludeInBid = CheckState.Checked Then
-            '                                    CheckBank = True
-            '                                    AddDollars = True
-            '                                    UsePrice = GONumbers(jIndx).BidPrice
-            '                                ElseIf GONumbers(jIndx).AltIncludeInBid = CheckState.Checked Then
-            '                                    CheckBank = True
-            '                                    AddDollars = False
-            '                                    If GONumbers(jIndx).BidPrice > 0 Then
-            '                                        UsePrice = GONumbers(jIndx).BidPrice
-            '                                    Else
-            '                                        UsePrice = GONumbers(jIndx).TargetPrice
-            '                                    End If
-            '                                Else
-            '                                    CheckBank = False
-            '                                End If
-            '                                If CheckBank Then
-            '                                    Select Case GONumbers(jIndx).ProductCode
-            '                                        Case 600, 630
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTractionPOH, totalDollarTractionPOH, UsePrice, AddDollars)
-            '                                        Case 610
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHydroPOH, totalDollarHydroPOH, UsePrice, AddDollars)
-            '                                        Case 612 To 613
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHX, totalDollarHX, UsePrice, AddDollars)
-            '                                        Case 615
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumHydroLocal, totalDollarHydroLocal, UsePrice, AddDollars)
-            '                                        Case 641 To 644, 667, 668
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumSID_MTO, totalDollarSID_MTO, UsePrice, AddDollars)
-            '                                        Case 646 To 649
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumSID_PH_MOD, totalDollarSID_PH_MOD, UsePrice, AddDollars)
-            '                                        Case 660, 661, 664, 665
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumQuantumLeap, totalDollarQuantumLeap, UsePrice, AddDollars)
-            '                                        Case 670
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumReusedController, totalDollarReusedController, UsePrice, AddDollars)
-            '                                        Case 645, 676 To 679
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumDI, totalDollarDI, UsePrice, AddDollars)
-            '                                        Case 680 To 683, 669
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTX, totalDollarTX, UsePrice, AddDollars)
-            '                                        Case 691 To 692
-            '                                            CompareProductCodesByBank(GONumbers(jIndx).ProductCode, GONumbers(iIndx).ProductCode, totalNumTractionLocal, totalDollarTractionLocal, UsePrice, AddDollars)
-            '                                        Case Else
-            '                                    End Select
-            '                                End If
-            '                            End If
-            '                        Next jIndx
-            '                        LastBank = GONumbers(iIndx).Bank
-            '                    End If
-            '                Next iIndx
-            '            End If
-            '            SaveSalesPlannerData("totalNumDI", totalNumDI, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarDI", Math.Round(totalDollarDI, 2), True)
-            '            SaveSalesPlannerData("totalNumHX", totalNumHX, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarHX", Math.Round(totalDollarHX, 2), True)
-            '            SaveSalesPlannerData("totalNumTractionPOH", totalNumTractionPOH, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarTractionPOH", Math.Round(totalDollarTractionPOH, 2), True)
-            '            SaveSalesPlannerData("totalNumTX", totalNumTX, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarTX", Math.Round(totalDollarTX, 2), True)
-            '            SaveSalesPlannerData("totalNumTractionLocal", totalNumTractionLocal, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarTractionLocal", Math.Round(totalDollarTractionLocal, 2), True)
-            '            SaveSalesPlannerData("totalNumHydroPOH", totalNumHydroPOH, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarHydroPOH", Math.Round(totalDollarHydroPOH, 2), True)
-            '            SaveSalesPlannerData("totalNumHydroLocal", totalNumHydroLocal, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarHydroLocal", Math.Round(totalDollarHydroLocal, 2), True)
-            '            SaveSalesPlannerData("totalNumSID_MTO", totalNumSID_PH_MOD, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarSID_MTO", Math.Round(totalDollarSID_PH_MOD, 2), True)
-            '            SaveSalesPlannerData("totalNumSID_M10", totalNumSID_MTO, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarSID_M10", Math.Round(totalDollarSID_MTO, 2), True)
-            '            SaveSalesPlannerData("totalNumSID_IO", totalNumSID_IO, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarSID_IO", Math.Round(totalDollarSID_IO, 2), True)
-            '            SaveSalesPlannerData("totalNumReusedController", totalNumReusedController, False, SetPlannerDate)
-            '            SaveSalesPlannerData("totalDollarReusedController", Math.Round(totalDollarReusedController, 2), True)
-            '            If SetPlannerDate Then
-            '                clsNotes.SetValue("SalesPlannerDate", CDate(DateTime.Today.ToString("MM/dd/yyyy")))
-            '            End If
             clsNotes.SetValue("Status", Contracts.Status)
             '            If Not String.IsNullOrEmpty(Contracts.OpportunityToOfferDate.Trim) Then
             '                clsNotes.SetValue("oppToOfferDate", CDate(CDate(Contracts.OpportunityToOfferDate).ToString("MM/dd/yyyy")))
@@ -288,15 +144,6 @@ Module Lotuslnk
             clsNotes.SetValue("SalesRep", Contracts.SalesRepName)
             clsNotes.SetValue("Estimator", clsNotes.CN_Username)
             clsNotes.SetValue("Version", SHORT_VERSION)
-            '            clsNotes.SetValue("highRiskFlag", Contracts.JobHighRiskFactor)
-            '            Dim UseMaxPercentSpecial As Decimal = 0
-            '            For iIndx As Integer = 0 To GetUBoundGONumbers()
-            '                If (GONumbers(iIndx).MachineType = HYDRO_TYPE And GONumbers(iIndx).NewControl = MODEL_HX) Or (GONumbers(iIndx).MachineType = GEARED_TYPE And GONumbers(iIndx).NewControl = SEC) And (GONumbers(iIndx).IncludeInBid = CheckState.Checked Or GONumbers(iIndx).AltIncludeInBid = CheckState.Checked) Then
-            '                    If GONumbers(iIndx).MaxPercentSpecial > UseMaxPercentSpecial Then UseMaxPercentSpecial = GONumbers(iIndx).MaxPercentSpecial
-            '                End If
-            '            Next iIndx
-            '            UseMaxPercentSpecial = Math.Round(CDbl(UseMaxPercentSpecial * 100), 2)
-            '            clsNotes.SetValue("maxAdder", UseMaxPercentSpecial)
             clsNotes.SetValue_Readers("Reader", Contracts.Reader)
             clsNotes.SetValue_Readers("reader_global", Contracts.ReaderGlobal)
             If clsNotes.CheckAttachments() Then
@@ -307,40 +154,18 @@ Module Lotuslnk
             Dim theseFiles As Scripting.Files = thisFolder.Files
             For Each thisFile As Scripting.File In theseFiles
                 Name = thisFile.Name.ToUpper()
-                '                If (Name Like Contracts.EstimateNum & "*.*" Or Name Like "*.XLS*") And Not Name Like "*.A2B" And Not Name Like "*LETTER.DOC*" And Not Name Like "*SCRIPTS.DOC*" Then
                 If (Name Like Contracts.EstimateNum & "*.JSON") Or (Name Like Contracts.EstimateNum & "*.CM") Or
-                   (Name Like Contracts.EstimateNum & "*.M*") Or (Name Like Contracts.EstimateNum & "*.DOC*") Then
-                    '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
-                    '                            If Name Like Get_FileName(Contracts.EstimateNum, GONumbers(iIndx).Bank, GONumbers(iIndx).Alt, GONumbers(iIndx).Units) Then
-                    '                                clsNotes.AttachFile(Name)
-                    '                                Exit For
-                    '                            End If
-                    '                        Next iIndx
-                    '                    Else
+                   (Name Like Contracts.EstimateNum & "*.M*") Or (Name Like Contracts.EstimateNum & "*.DOC*") Or
+                   (Name Like Contracts.EstimateNum & "*.XLSX*") Then
                     clsNotes.AttachFile(Name)
-                    '                    End If
-                    '                    If Name Like (Contracts.EstimateNum.ToString() & "*" & REPORT_LetterOfIntent & "*").ToUpper() Then
-                    '                        For iIndx As Integer = 0 To GetUBoundGONumbers()
-                    '                            If Name Like (Contracts.EstimateNum.ToString() & GONumbers(iIndx).Bank & GONumbers(iIndx).Alt & REPORT_LetterOfIntent & "*").ToUpper() Then
-                    '                                clsNotes.SetValue("LetterIntentDate", CDate(thisFile.DateCreated.ToString("d")))
-                    '                                clsNotes.SetValue("LetterIntentVendor", GONumbers(iIndx).LetterOfIntent_Vendor)
-                    '                                Exit For
-                    '                            End If
-                    '                        Next iIndx
-                    '                    End If
-                    '                End If
                 End If
             Next thisFile
-            '            If MDIChildDirty Or gbMDIChildDirty Or MP_CST03_Child_Dirty Or RunMDIChildDirty Then
-            '                EstimateModified = True
-            '            End If
-
-            '        Finally
-            '            MemoryHelper.ReleaseAndCleanObject(Filesystem)
+            'If MDIChildDirty Or gbMDIChildDirty Or MP_CST03_Child_Dirty Or RunMDIChildDirty Then
+            '    EstimateModified = True
+            'End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Adding FeedBack Docs", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-        '        End Try
 
     End Sub
     Private Sub SchindlerData_To_Fields()
@@ -426,93 +251,41 @@ MISSINGMESSAGE:
     Public Function QueryFeedback(ByRef SetValues As Boolean) As Boolean
 
         On Error Resume Next
+
         QueryFeedback = False
-
-
         If NewExistingFlag = "New" Then
             HoldFeedbackRecord = "Smart"
         Else
-            'Can't attach to a record if it's  new 
-            If Not Attach_To_Feedback() Then Exit Function
-
+            If Not Attach_To_Feedback() Then
+                Exit Function
+            End If
             If clsNotes.CheckAttachments() Then
                 HoldFeedbackRecord = "Feedback"
             End If
         End If
-
         If Not SetValues Then
             Exit Function
         End If
-
         iPos = (clsNotes.GetValue("SalesRep").IndexOf("/"c) + 1)
         If iPos = 0 Then
             Contracts.SalesRepName = clsNotes.GetValue("SalesRep")
         Else
             Contracts.SalesRepName = Strings.Mid(clsNotes.GetValue("SalesRep"), 4, iPos - 4)
         End If
-
         iPos = (clsNotes.CN_Username.IndexOf("/"c) + 1)
         If iPos = 0 Then
             Contracts.Estimator = clsNotes.CN_Username
         Else
             Contracts.Estimator = Strings.Mid(clsNotes.CN_Username, 4, iPos - 4)
         End If
-
         If Convert.IsDBNull(clsNotes.GetValue("prob_sale_range")) OrElse clsNotes.GetValue("prob_sale_range").Length = 0 Then
             Contracts.ProbabilityOfSale = "100%"
         Else
             Contracts.ProbabilityOfSale = Map_ProbabilityofSale(clsNotes.GetValue("prob_sale_range"))
         End If
-
-        'Contracts.ProposalNum = clsNotes.GetValue("Proposal_num")
-        'If clsNotes.GetValue("HqRLMod") = "RL" Then
-        '    RegionLocalMOD_OLD = CheckState.Checked
-        'Else
-        '    RegionLocalMOD_OLD = CheckState.Unchecked
-        'End If
-        'If clsNotes.GetValue("travelIncreaseYN").ToUpper() = "YES" Then
-        '    ChangingTravel_OLD = CheckState.Checked
-        'Else
-        '    ChangingTravel_OLD = CheckState.Unchecked
-        'End If
-        'If clsNotes.GetValue("changecapacity").ToUpper() = "YES" Then
-        '    ChangingCapacity_OLD = CheckState.Checked
-        'Else
-        '    ChangingCapacity_OLD = CheckState.Unchecked
-        'End If
-        'If clsNotes.GetValue("changespeed").ToUpper() = "YES" Then
-        '    ChangingSpeed_OLD = CheckState.Checked
-        'Else
-        '    ChangingSpeed_OLD = CheckState.Unchecked
-        'End If
         Contracts.EstimateDate = CDate(clsNotes.GetValue("date")).ToString("d")
         Contracts.ContractNumber = clsNotes.GetValue("custnumber")
-        'If PreBidMODActive Then
-        '    If clsNotes.GetValue("bidtype") = "Budget Price" Then
-        '        MessageBox.Show("Cadre MOD estimates cannot be created for a 'Budget Price'!" & Environment.NewLine & _
-        '              "Please modify PreBid to a 'Firm Price' in order to run Cadre MOD.", "Closing Cadre MOD", MessageBoxButtons.OK)
-        '        EndProgram()
-        '    End If
-        'Else
-        '    If Contracts.ContractNumber.Length > 0 And Contracts.ContractNumber <> "" Then
-        '        Contracts.CurrentMaintenance = "Yes"
-        '    Else
-        '        Contracts.CurrentMaintenance = "No"
-        '    End If
-        '    If clsNotes.GetValue("pricingType") = "Firm" Then
-        '        Contracts.Pricing_Type = "FIRM"
-        '    Else
-        '        Contracts.Pricing_Type = "BUDGET"
-        '    End If
-        'End If
-        'If clsNotes.GetValue("specification") = "Yes" Then
-        '    Contracts.SpecificationExists = CheckState.Checked
-        'Else
-        '    Contracts.SpecificationExists = CheckState.Unchecked
-        'End If
         'Contracts.RegionCode = clsNotes.GetValue("area")
-        'Contracts.MaxPercentSpecialStatus = ""
-        'Contracts.SystemStatus = clsNotes.GetValue("systemStatus")
         'Contracts.OpportunityToOfferDate = clsNotes.GetValue("oppToOfferDate").ToString
         'Contracts.ProposedDate = clsNotes.GetValue("proposedDate").ToString
         'Contracts.OpportunityClosedDate = clsNotes.GetValue("oppOfferClosedDate").ToString
@@ -535,21 +308,7 @@ MISSINGMESSAGE:
             Case Else
                 Contracts.Status = clsNotes.GetValue("Status")
         End Select
-        'SHELL_ACCESS = Not (Contracts.SystemStatus = "Approved" And Contracts.Status <> Status_OfferLost And Contracts.Status <> Status_OfferOnHold)
-        'Contracts.OfficeRating = clsNotes.GetValue("officeRating")
-        'Contracts.PreBidPrice = Convert.ToSingle(clsNotes.GetValue("proposal_price_prebid"))
-        'Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(clsNotes.GetValue("approvedMaxAdder")) / 100), 4)
-        'If Contracts.MaxPercentSpecial = 0 Then
-        '    Contracts.MaxPercentSpecial = 0.1
-        '    If clsNotes.NotesDBName(ComServer, HoldNotesFeedbackPath) Then
-        '        If clsNotes.NotesDocProfile("Cadre Access Control Profile") Then
-        '            If clsNotes.GetValue_Readers("maxAdderLimit_level_1") Then
-        '                Contracts.MaxPercentSpecial = Math.Round(CDbl(Conversion.Val(ReadersValue(0)) / 100), 4)
-        '    End If
-        'End If
-
         Query_SM2ART()
-
         Contracts.EngReviewStatus = clsNotes.GetValue("engineeringReqStatus")
         QueryFeedback = True
 
@@ -574,10 +333,8 @@ MISSINGMESSAGE:
         If Contracts.SalesRepOffice = "" Then
             Contracts.SalesRepOffice = TranslateOfficeNumber(OfficeFromSmart)
         End If
-
         '        Contracts.ContractType = clsNotes.GetValue("ContractType")
         Contracts.Country = clsNotes.GetValue("Country")
-
         RetrieveBuildingType(clsNotes.GetValue("LocationsXML"))
         Owner_Info.Name = TrimFields(clsNotes.GetValue("BillToName"))
         Owner_Info.Address = TrimFields(clsNotes.GetValue("BillToAddress"))
@@ -649,39 +406,31 @@ MISSINGMESSAGE:
     End Function
 
     Public Function SetUpLotusLinkExisting() As Boolean
-        Dim result As Boolean = False
+        Dim result As Boolean = True
         Dim sInteractionCommand As String = gsCommand
 
-        result = True
-        'Splash.Splash_lbl.Text = "Establishing Link To Lotus Notes...."
-        'Splash.Refresh()
+        'Example command lines
+        ' New Estimate 
+        '   testing (local)  - New~SMART~~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\sm2art_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\SM2ART_Activities_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\feedbackMOD_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\Corporate Phone Directory.nsf~USSE-4W6NG5~CDUM-5C6FBV~AAAA-BBBBBB
+        '   testing (server) - New~SMART~USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~JAIN-8C8RQT~JAIN-8C8RSF~JAIN-8F9999
+        '   production (local)  - New~SMART~~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\sm2art.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\SM2ART_Activities.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\feedbackMOD.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\Corporate Phone Directory.nsf~USSE-4W6NG5~CDUM-5C6FBV~AAAA-BBBBBB
+        '   production (server) - New~SMART~USSECNN6~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~~JAIN-8C8RQT~JAIN-8C8RSF~JAIN-8F9999
+        ' Existing Estimates
+        '   testing (local)  - ~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\sm2art_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\sm2art_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\SM2ART_Activities_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\feedbackMOD_dev.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\Corporate Phone Directory.nsf~WDWS-AKBQYP
+        '   testing (server) - USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
+        '   production (local)  - ~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\sm2art.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\sm2art.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\SM2ART_Activities.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\feedbackMOD.nsf~C:\Users\jaymech\AppData\Local\IBM\Notes\Data\Corporate Phone Directory.nsf~GPAR-6WAS9S
+        '   production (server) - USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~FVIL-ASHT9S
 
-        'Local command lines
-        ' testing - ~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\sm2art_dev.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\sm2art_dev.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\SM2ART_Activities_dev.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\feedbackMOD_dev.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\Corporate Phone Directory.nsf~CMJE-8CZMKL
-        ' production - ~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\sm2art.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\sm2art.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\SM2ART_Activities.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\feedbackMOD.nsf~C:\Users\jaymech\AppData\Local\Lotus\Notes\Data\Corporate Phone Directory.nsf~GPAR-6WAS9S
-
-        'Server command lines
         If gbShape Then
             If TestVersion Then
                 sInteractionCommand = "USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~" & OpportunityID
-                '        'sInteractionCommand = "USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH"
-                '        'sInteractionCommand = "USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~KSON-9L52HG"
             Else
                 sInteractionCommand = "USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~" & OpportunityID
-                '        'sInteractionCommand = "USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH"
             End If
         End If
-        ' testing - USSECNE1~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\sm2art_dev.nsf~sec\develop\larry\SM2ART_Activities_dev.nsf~sec\develop\larry\feedbackMOD_dev.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
-        ' production - USSECNN6~sec\sm2art.nsf~sec\sm2art.nsf~sec\SM2ART_Activities.nsf~sec\feedbackMOD.nsf~sec\Corporate Phone Directory.nsf~JMOA-6S4USH
-        ' training - USSECNN6~sec\train\sm2art_train.nsf~sec\train\SM2ART_Activities_train.nsf~sec\train\FeedbackMOD_train.nsf~sec\Corporate Phone Directory.nsf~TRAI-NNG001
 
         Dim HoldStr1 As Integer = (sInteractionCommand.IndexOf("~"c) + 1)
         ComServer = Strings.Left(sInteractionCommand, HoldStr1 - 1).Trim
-
-        'If ComServer = " " Then
-        '    ComServer = ""
-        'End If
-
         Dim HoldStr2 As Integer = Strings.InStr(HoldStr1 + 1, sInteractionCommand, "~", CompareMethod.Text)
         HoldNotesCustomerPath = Strings.Mid(sInteractionCommand, HoldStr1 + 1, (HoldStr2 - HoldStr1) - 1)
         Dim HoldStr3 As Integer = Strings.InStr(HoldStr2 + 1, sInteractionCommand, "~", CompareMethod.Text)

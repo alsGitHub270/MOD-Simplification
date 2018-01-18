@@ -12,8 +12,8 @@ Public Class frmEstimatingAlt
     Private SheetHeaders(,) As a_SheetHeaders_typ
     Private Const TotalMaterialColumns As Integer = 15
 
-    Private CurrentGenInfoFrameHeight As Integer = 0, CurrentBillofMaterialsandTaskListFrameHeight As Integer = 0
-    Private MaterialItemRecordSet As New ADODB.Recordset
+    Private CurrentGenInfoFrameHeight As Integer = 0, CurrentTorqueFrameHeight As Integer = 0, CurrentBillofMaterialsandTaskListFrameHeight As Integer = 0
+    Private CurrentGenInfoFrameColor As System.Drawing.Color = Color.White, CurrentTorqueFrameColor As System.Drawing.Color = Color.White
 
     Private CurParentRow As Integer = 0
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
@@ -34,6 +34,7 @@ Public Class frmEstimatingAlt
             MainGroups = Nothing
             SubGroups = Nothing
             GeneralInfo = Nothing
+            TorqueData = Nothing
             Erase a_MainGroup
             Erase a_MaterialGroup
 
@@ -86,40 +87,40 @@ Public Class frmEstimatingAlt
 
             ALT_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt, CurUnits) & FileSuffix_ALT & ".JSON"
             If Not File.Exists(ALT_Filename) Then
-                MaterialItemRecordSet = New ADODB.Recordset
-                MaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
-                If MaterialItemRecordSet.RecordCount > 0 Then
-                    MaterialItemRecordSet.MoveFirst()
+                ResetADODBRecordset(UseMaterialItemRecordSet)
+                UseMaterialItemRecordSet.Open(MAIN_GROUP_QRY, ADOConnectionMODDataDataBase)
+                If UseMaterialItemRecordSet.RecordCount > 0 Then
+                    UseMaterialItemRecordSet.MoveFirst()
                     iIndex = 0
-                    Do Until MaterialItemRecordSet.EOF
+                    Do Until UseMaterialItemRecordSet.EOF
                         Array.Resize(a_MainGroup, iIndex + 1)
-                        a_MainGroup(iIndex).MainID = MaterialItemRecordSet.Fields("Main ID").Value.ToString.Trim
-                        a_MainGroup(iIndex).Description = MaterialItemRecordSet.Fields("Main").Value.ToString.Trim
+                        a_MainGroup(iIndex).MainID = UseMaterialItemRecordSet.Fields("Main ID").Value.ToString.Trim
+                        a_MainGroup(iIndex).Description = UseMaterialItemRecordSet.Fields("Main").Value.ToString.Trim
                         a_MainGroup(iIndex).Units = CurUnits
-                        MaterialItemRecordSet.MoveNext()
+                        UseMaterialItemRecordSet.MoveNext()
                         iIndex += 1
                     Loop
                 End If
-                MaterialItemRecordSet.Close()
+                UseMaterialItemRecordSet.Close()
                 jIndex = 0
-                MaterialItemRecordSet = New ADODB.Recordset
-                MaterialItemRecordSet.Open(SUB_GROUP_QRY, ADOConnectionMODDataDataBase)
-                If MaterialItemRecordSet.RecordCount > 0 Then
-                    MaterialItemRecordSet.MoveFirst()
-                    Do Until MaterialItemRecordSet.EOF
+                ResetADODBRecordset(UseMaterialItemRecordSet)
+                UseMaterialItemRecordSet.Open(SUB_GROUP_QRY, ADOConnectionMODDataDataBase)
+                If UseMaterialItemRecordSet.RecordCount > 0 Then
+                    UseMaterialItemRecordSet.MoveFirst()
+                    Do Until UseMaterialItemRecordSet.EOF
                         AddMaterial = False
-                        If IsDBNull(MaterialItemRecordSet.Fields("Usage").Value) Then
+                        If IsDBNull(UseMaterialItemRecordSet.Fields("Usage").Value) Then
                             AddMaterial = True
-                        ElseIf MaterialItemRecordSet.Fields("Usage").Value.ToString = "PORT" Then
+                        ElseIf UseMaterialItemRecordSet.Fields("Usage").Value.ToString = "PORT" Then
                             If Destination_cmb.Text = "Phased MOD" Or Destination_cmb.Text = "DI" Then
                                 AddMaterial = True
                             End If
                         End If
                         If AddMaterial Then
                             Array.Resize(a_MaterialGroup, jIndex + 1)
-                            a_MaterialGroup(jIndex).MainID = MaterialItemRecordSet.Fields("Main ID").Value.ToString.Trim
-                            a_MaterialGroup(jIndex).MaterialID = MaterialItemRecordSet.Fields("Sub ID").Value.ToString.Trim
-                            a_MaterialGroup(jIndex).Description = MaterialItemRecordSet.Fields("Sub").Value.ToString.Trim
+                            a_MaterialGroup(jIndex).MainID = UseMaterialItemRecordSet.Fields("Main ID").Value.ToString.Trim
+                            a_MaterialGroup(jIndex).MaterialID = UseMaterialItemRecordSet.Fields("Sub ID").Value.ToString.Trim
+                            a_MaterialGroup(jIndex).Description = UseMaterialItemRecordSet.Fields("Sub").Value.ToString.Trim
                             a_MaterialGroup(jIndex).Units = CurUnits
                             a_MaterialGroup(jIndex).OptionStrBase = Nothing
                             a_MaterialGroup(jIndex).OptionStr = Nothing
@@ -134,10 +135,10 @@ Public Class frmEstimatingAlt
                             a_MaterialGroup(jIndex).SpecialHours = 0
                             jIndex += 1
                         End If
-                        MaterialItemRecordSet.MoveNext()
+                        UseMaterialItemRecordSet.MoveNext()
                     Loop
                 End If
-                MaterialItemRecordSet.Close()
+                UseMaterialItemRecordSet.Close()
             End If
             For iIndex = SheetHeaders.GetLowerBound(0) To SheetHeaders.GetUpperBound(0)
                 Erase HeaderSetup
@@ -185,56 +186,80 @@ Public Class frmEstimatingAlt
             Next iIndex
             GeneralInfo = AltDataset.Tables.Add(TABLENAME_GENERALINFO)
             GeneralInfo.Columns.AddRange(New DataColumn() {New DataColumn("UnitsInTab", typeStr),
-                                         New DataColumn("CapacityNew_cmb", typeStr),
-                                         New DataColumn("SpeedNew_cmb", typeStr),
-                                         New DataColumn("NumberofStopsTotal_cmb", typeStr),
-                                         New DataColumn("NumberofStopsFront_cmb", typeStr),
-                                         New DataColumn("NumberofStopsRear_cmb", typeStr),
-                                         New DataColumn("PowerSupply_cmb", typeStr),
-                                         New DataColumn("Application_cmb", typeStr),
-                                         New DataColumn("LayoutRequirements_cmb", typeStr),
-                                         New DataColumn("DoorOperatorTypeFront_cmb", typeStr),
-                                         New DataColumn("CarDoorOpeningWidthFtFront_txt", typeStr),
-                                         New DataColumn("CarDoorOpeningWidthInFront_txt", typeStr),
-                                         New DataColumn("CarDoorOpeningHeightFtFront_txt", typeStr),
-                                         New DataColumn("CarDoorOpeningHeightInFront_txt", typeStr),
-                                         New DataColumn("DoorOperatorTypeRear_cmb", typeStr),
-                                         New DataColumn("CarDoorOpeningWidthFtRear_txt", typeStr),
-                                         New DataColumn("CarDoorOpeningWidthInRear_txt", typeStr),
-                                         New DataColumn("CarDoorOpeningHeightFtRear_txt", typeStr),
-                                         New DataColumn("CarDoorOpeningHeightInRear_txt", typeStr),
-                                         New DataColumn("MachineType_cmb", typeStr),
-                                         New DataColumn("DriveType_cmb", typeStr),
-                                         New DataColumn("CarWeight_txt", typeStr),
-                                         New DataColumn("HoistMotorHP_txt", typeStr),
-                                         New DataColumn("HoistMotorRpm_txt", typeStr),
-                                         New DataColumn("MachineLocation_Cmb", typeStr),
-                                         New DataColumn("RopingNew_Cmb", typeStr),
-                                         New DataColumn("TopFloorToOverhead_txt", typeStr),
-                                         New DataColumn("Travel_txt", typeStr),
-                                         New DataColumn("PitDepth_txt", typeStr),
-                                         New DataColumn("RiserQtyFront_Cmb", typeStr),
-                                         New DataColumn("RiserQtyRear_Cmb", typeStr),
-                                         New DataColumn("FixtureFinish_cmb", typeStr),
-                                         New DataColumn("DTRequestedShipDate", typeStr),
-                                         New DataColumn("BankCompleteDate_txt", typeStr),
-                                         New DataColumn("ExistingControlVendor_lst", typeStr),
-                                         New DataColumn("ExistingControlModel_lst", typeStr),
-                                         New DataColumn("OriginalGONumberAvailable_cmb", typeStr),
-                                         New DataColumn("OriginalGOnumber_txt", typeStr),
-                                         New DataColumn("PEStampRequired_cmb", typeStr),
-                                         New DataColumn("ShortFloorOperation_chk", typeInt),
-                                         New DataColumn("Permits_txt", typeStr),
-                                         New DataColumn("Bonds_txt", typeStr),
-                                         New DataColumn("ExpensesPerDayZone_txt", typeStr),
-                                         New DataColumn("ExpensesPerDayParking_txt", typeStr),
-                                         New DataColumn("ExpensesPerDayOutOfTownExpenses_txt", typeStr),
-                                         New DataColumn("ExpensesPerDayTravelTime_txt", typeStr),
-                                         New DataColumn("ExpensesPerDayMiscellaneous_txt", typeStr),
-                                         New DataColumn("ExpensesPerDayTotal_txt", typeStr),
-                                         New DataColumn("ExpensesPerDay_txt", typeStr),
-                                         New DataColumn("GatewayReviewRequired_chk", typeInt),
-                                         New DataColumn("Destination_cmb", typeStr)})
+                                                           New DataColumn("CapacityNew_cmb", typeStr),
+                                                           New DataColumn("SpeedNew_cmb", typeStr),
+                                                           New DataColumn("NumberofStopsTotal_cmb", typeStr),
+                                                           New DataColumn("NumberofStopsFront_cmb", typeStr),
+                                                           New DataColumn("NumberofStopsRear_cmb", typeStr),
+                                                           New DataColumn("PowerSupply_cmb", typeStr),
+                                                           New DataColumn("Application_cmb", typeStr),
+                                                           New DataColumn("LayoutRequirements_cmb", typeStr),
+                                                           New DataColumn("DoorOperatorTypeFront_cmb", typeStr),
+                                                           New DataColumn("CarDoorOpeningWidthFtFront_txt", typeStr),
+                                                           New DataColumn("CarDoorOpeningWidthInFront_txt", typeStr),
+                                                           New DataColumn("CarDoorOpeningHeightFtFront_txt", typeStr),
+                                                           New DataColumn("CarDoorOpeningHeightInFront_txt", typeStr),
+                                                           New DataColumn("DoorOperatorTypeRear_cmb", typeStr),
+                                                           New DataColumn("CarDoorOpeningWidthFtRear_txt", typeStr),
+                                                           New DataColumn("CarDoorOpeningWidthInRear_txt", typeStr),
+                                                           New DataColumn("CarDoorOpeningHeightFtRear_txt", typeStr),
+                                                           New DataColumn("CarDoorOpeningHeightInRear_txt", typeStr),
+                                                           New DataColumn("MachineType_cmb", typeStr),
+                                                           New DataColumn("DriveType_cmb", typeStr),
+                                                           New DataColumn("CarWeight_txt", typeStr),
+                                                           New DataColumn("HoistMotorHP_txt", typeStr),
+                                                           New DataColumn("HoistMotorRpm_txt", typeStr),
+                                                           New DataColumn("MachineLocation_Cmb", typeStr),
+                                                           New DataColumn("RopingNew_Cmb", typeStr),
+                                                           New DataColumn("TopFloorToOverhead_txt", typeStr),
+                                                           New DataColumn("TravelNew_txt", typeStr),
+                                                           New DataColumn("PitDepth_txt", typeStr),
+                                                           New DataColumn("RiserQtyFront_Cmb", typeStr),
+                                                           New DataColumn("RiserQtyRear_Cmb", typeStr),
+                                                           New DataColumn("FixtureFinish_cmb", typeStr),
+                                                           New DataColumn("DTRequestedShipDate", typeStr),
+                                                           New DataColumn("BankCompleteDate_txt", typeStr),
+                                                           New DataColumn("ExistingControlVendor_lst", typeStr),
+                                                           New DataColumn("ExistingControlModel_lst", typeStr),
+                                                           New DataColumn("OriginalGONumberAvailable_cmb", typeStr),
+                                                           New DataColumn("OriginalGOnumber_txt", typeStr),
+                                                           New DataColumn("PEStampRequired_cmb", typeStr),
+                                                           New DataColumn("ShortFloorOperation_chk", typeInt),
+                                                           New DataColumn("Permits_txt", typeStr),
+                                                           New DataColumn("Bonds_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDayZone_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDayParking_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDayOutOfTownExpenses_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDayTravelTime_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDayMiscellaneous_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDayTotal_txt", typeStr),
+                                                           New DataColumn("ExpensesPerDay_txt", typeStr),
+                                                           New DataColumn("GatewayReviewRequired_chk", typeInt),
+                                                           New DataColumn("Destination_cmb", typeStr),
+                                                           New DataColumn("ChangeInCapacity_chk", typeInt),
+                                                           New DataColumn("CapacityExisting_cmb", typeStr),
+                                                           New DataColumn("ChangeInSpeed_chk", typeInt),
+                                                           New DataColumn("SpeedExisting_cmb", typeStr),
+                                                           New DataColumn("ChangeInTravel_chk", typeInt),
+                                                           New DataColumn("TravelExisting_txt", typeStr)})
+
+            TorqueData = EstimatingDataset.Tables.Add(TABLENAME_TORQUEDATA)
+            TorqueData.Columns.AddRange(New DataColumn() {New DataColumn("UnitsInTab", typeStr),
+                                                          New DataColumn("MachineVendorExisting_Cmb", typeStr),
+                                                          New DataColumn("MachineModelExisting_Cmb", typeStr),
+                                                          New DataColumn("ExistingMachineSheaveDia_cmb", typeStr),
+                                                          New DataColumn("NominalMotorRPM_txt", typeStr),
+                                                          New DataColumn("BrakeType_cmb", typeStr),
+                                                          New DataColumn("HoistRopeQty_Cmb", typeStr),
+                                                          New DataColumn("HoistRopeSize_Cmb", typeStr),
+                                                          New DataColumn("CarToCwtRopeDrop_txt", typeStr),
+                                                          New DataColumn("Compensation_cmb", typeStr),
+                                                          New DataColumn("CarSheaveQty_Cmb", typeStr),
+                                                          New DataColumn("CwtSheaveQty_Cmb", typeStr),
+                                                          New DataColumn("FullLoadCurrentIDC1_txt", typeStr),
+                                                          New DataColumn("ArmatureFullLoadVoltageVFLU_txt", typeStr),
+                                                          New DataColumn("MachineVendorNew_Cmb", typeStr),
+                                                          New DataColumn("MachineModelNew_Cmb", typeStr)})
 
             Deserialize(ALT_Filename, AltDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             AltDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
@@ -328,6 +353,12 @@ Public Class frmEstimatingAlt
                             If IsDBNull(UseAltDataRow("Destination_cmb")) OrElse String.IsNullOrEmpty(UseAltDataRow("Destination_cmb")) Then
                                 UseAltDataRow("Destination_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Destination_cmb")
                             End If
+                            UseAltDataRow("ChangeInCapacity_chk") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ChangeInCapacity_chk")
+                            UseAltDataRow("CapacityExisting_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CapacityExisting_cmb")
+                            UseAltDataRow("ChangeInSpeed_chk") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ChangeInSpeed_chk")
+                            UseAltDataRow("SpeedExisting_cmb") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedExisting_cmb")
+                            UseAltDataRow("ChangeInTravel_chk") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ChangeInTravel_chk")
+                            UseAltDataRow("TravelExisting_txt") = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TravelExisting_txt")
                         Case Else
                             Exit For
                     End Select
@@ -346,16 +377,17 @@ Public Class frmEstimatingAlt
         Dim UseTabName As String = String.Empty
 
         Me.Cursor = Cursors.WaitCursor
-        UseMaterialItemRecordSet = New ADODB.Recordset
+        ResetADODBRecordset(UseMaterialItemRecordSet)
         SetAssociatedFieldNames()
         txtHdrBldgName.Text = Contracts.JobName
-        txtHdrGONegNum.Text = HoldUniqueActivity
+        txtHdrEstimateNum.Text = HoldUniqueActivity
         txtHdrBnkLetter.Text = CurrentGOData_Typ.Bank
         Units_txt.Text = CurrentGOData_Typ.CurrentUnits
         isInitializingComponent = True
         DAO2ADO(ADOConnectionMODDataDataBase, ADOCatalogMODDataDataBase, HAPDatabasePath & "\", MODDATA_DATABASE_NAME, True)
-        Load_ListBoxes()
-        ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
+        DAO2ADO(ADOConnection, ADOCatalogTorqueDataBase, HAPDatabasePath & "\", TORQUE_DATABASE_NAME, True)
+        ExpandCollapseGeneralInfoFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
+        ExpandCollapseTorqueFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
         For Each JSONFile In JSONFileLocation.GetFiles()
             If JSONFile IsNot Nothing Then
                 If Path.GetExtension(JSONFile.ToString.ToUpper) = ".JSON" Then
@@ -386,6 +418,9 @@ Public Class frmEstimatingAlt
         TabControl1.Left = 3
         TabControl1.Width = GroupBox1.Width - TabControl1.Left - 5
         CurrentGenInfoFrameHeight = GeneralInformation_fra.Height
+        CurrentGenInfoFrameColor = GeneralInformation_fra.BackColor
+        CurrentTorqueFrameHeight = Torque_fra.Height
+        CurrentTorqueFrameColor = Torque_fra.BackColor
         CurrentBillofMaterialsandTaskListFrameHeight = BillofMaterialsandTaskList_fra.Height
         Dim UseIndex As Integer = 0
         For Each Cntrl As Control In ExpensesPerDay_frm.Controls
@@ -395,7 +430,7 @@ Public Class frmEstimatingAlt
                 UseIndex += 1
             End If
         Next Cntrl
-        UseMaterialItemRecordSet = New ADODB.Recordset
+        ResetADODBRecordset(UseMaterialItemRecordSet)
         UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         DisplayALT()
         isInitializingComponent = False
@@ -484,38 +519,55 @@ Public Class frmEstimatingAlt
         End If
 
     End Sub
-    Private Sub ExpandCollapseFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseFrame_btn.Click
+    Private Sub ExpandCollapseGeneralInfoFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseGeneralInfoFrame_btn.Click
 
-        If GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
+        If GeneralInformation_fra.Height = ExpandCollapseGeneralInfoFrame_btn.Height + 2 Then
             GeneralInformation_fra.Height = CurrentGenInfoFrameHeight
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
+            ExpandCollapseGeneralInfoFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
             For Each CurControl As Control In GeneralInformation_fra.Controls
                 CurControl.Visible = True
             Next CurControl
         Else
-            GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
-            ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
+            GeneralInformation_fra.Height = ExpandCollapseGeneralInfoFrame_btn.Height + 2
+            ExpandCollapseGeneralInfoFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
             For Each CurControl As Control In GeneralInformation_fra.Controls
-                If CurControl.Name <> "ExpandCollapseFrame_btn" Then
+                If CurControl.Name <> "ExpandCollapseGeneralInfoFrame_btn" Then
                     CurControl.Visible = False
                 End If
             Next CurControl
         End If
-        Relocate_BillofMaterialsandTaskList_Frame()
+        RelocateAndResizeAllFrames()
 
     End Sub
-    Private Sub Relocate_BillofMaterialsandTaskList_Frame()
+    Private Sub RelocateAndResizeAllFrames()
 
-        BillofMaterialsandTaskList_fra.Top = GeneralInformation_fra.Top + GeneralInformation_fra.Height + 6
-        If GeneralInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2 Then
-            BillofMaterialsandTaskList_fra.Height += CurrentGenInfoFrameHeight - 20
+        Torque_fra.Top = GeneralInformation_fra.Top + GeneralInformation_fra.Height + 6
+        BillofMaterialsandTaskList_fra.Top = Torque_fra.Top + Torque_fra.Height + 6
+        If GeneralInformation_fra.Height = ExpandCollapseGeneralInfoFrame_btn.Height + 2 And
+           Torque_fra.Height = ExpandCollapseTorqueFrame_btn.Height + 2 Then
+            BillofMaterialsandTaskList_fra.Height = CurrentBillofMaterialsandTaskListFrameHeight + CurrentGenInfoFrameHeight + CurrentTorqueFrameHeight - 40
+        ElseIf GeneralInformation_fra.Height = ExpandCollapseGeneralInfoFrame_btn.Height + 2 Then
+            BillofMaterialsandTaskList_fra.Height = CurrentBillofMaterialsandTaskListFrameHeight + CurrentGenInfoFrameHeight - 20
+        ElseIf Torque_fra.Height = ExpandCollapseTorqueFrame_btn.Height + 2 Then
+            BillofMaterialsandTaskList_fra.Height = CurrentBillofMaterialsandTaskListFrameHeight + CurrentTorqueFrameHeight - 20
         Else
             BillofMaterialsandTaskList_fra.Height = CurrentBillofMaterialsandTaskListFrameHeight
         End If
 
     End Sub
     Private Sub Load_ListBoxes()
+        Dim i As Integer = 0, jIndx As Integer = 0
+        Dim sSQL As String = "", UseTable As String = "SuperTable"
+        Dim AddValToArray As Boolean = True
+        Dim CurrentMachineType As String = GetValue(AltDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
+        Dim ExistingMachineVendor As String = GetValue(AltDataset.Tables(TABLENAME_TORQUEDATA), "MachineVendorExisting_Cmb")
+        Dim ExistingMachineModel As String = GetValue(AltDataset.Tables(TABLENAME_TORQUEDATA), "MachineModelExisting_cmb")
+        Dim NewMachineVendor As String = GetValue(AltDataset.Tables(TABLENAME_TORQUEDATA), "MachineVendorNew_Cmb")
+        Dim NewMachineModel As String = GetValue(AltDataset.Tables(TABLENAME_TORQUEDATA), "MachineModelNew_Cmb")
+        Dim UseMachineVendor As String = String.Empty, UseMachineModel As String = String.Empty
+        Dim HoistRopeSize As String = GetValue(AltDataset.Tables(TABLENAME_TORQUEDATA), "HoistRopeSize_Cmb")
 
+        'General info
         CapacityNew_cmb.Items.Clear()
         CapacityNew_cmb.Items.Add("1200")
         CapacityNew_cmb.Items.Add("1500")
@@ -528,10 +580,22 @@ Public Class frmEstimatingAlt
         CapacityNew_cmb.Items.Add("5000")
         CapacityNew_cmb.Items.Add("6000")
 
+        CapacityExisting_cmb.Items.Clear()
+        CapacityExisting_cmb.Items.Add("1200")
+        CapacityExisting_cmb.Items.Add("1500")
+        CapacityExisting_cmb.Items.Add("2000")
+        CapacityExisting_cmb.Items.Add("2500")
+        CapacityExisting_cmb.Items.Add("3000")
+        CapacityExisting_cmb.Items.Add("3500")
+        CapacityExisting_cmb.Items.Add("4000")
+        CapacityExisting_cmb.Items.Add("4500")
+        CapacityExisting_cmb.Items.Add("5000")
+        CapacityExisting_cmb.Items.Add("6000")
+
         SpeedNew_cmb.Items.Clear()
         Select Case CurrentGOData_Typ.MachineType
             Case HYDRO_TYPE
-                For i As Integer = 50 To 200 Step 25
+                For i = 50 To 200 Step 25
                     SpeedNew_cmb.Items.Add(CStr(i))
                 Next i
             Case GEARED_TYPE
@@ -557,18 +621,47 @@ Public Class frmEstimatingAlt
                 SpeedNew_cmb.Items.Add("1400")
         End Select
 
+        SpeedExisting_cmb.Items.Clear()
+        Select Case CurrentGOData_Typ.MachineType
+            Case HYDRO_TYPE
+                For i = 50 To 200 Step 25
+                    SpeedExisting_cmb.Items.Add(CStr(i))
+                Next i
+            Case GEARED_TYPE
+                SpeedExisting_cmb.Items.Add("100")
+                SpeedExisting_cmb.Items.Add("150")
+                SpeedExisting_cmb.Items.Add("200")
+                SpeedExisting_cmb.Items.Add("250")
+                SpeedExisting_cmb.Items.Add("300")
+                SpeedExisting_cmb.Items.Add("350")
+                SpeedExisting_cmb.Items.Add("400")
+                SpeedExisting_cmb.Items.Add("450")
+                SpeedExisting_cmb.Items.Add("500")
+            Case GEARLESS_TYPE
+                SpeedExisting_cmb.Items.Add("500")
+                SpeedExisting_cmb.Items.Add("600")
+                SpeedExisting_cmb.Items.Add("700")
+                SpeedExisting_cmb.Items.Add("800")
+                SpeedExisting_cmb.Items.Add("900")
+                SpeedExisting_cmb.Items.Add("1000")
+                SpeedExisting_cmb.Items.Add("1100")
+                SpeedExisting_cmb.Items.Add("1200")
+                SpeedExisting_cmb.Items.Add("1300")
+                SpeedExisting_cmb.Items.Add("1400")
+        End Select
+
         NumberofStopsTotal_cmb.Items.Clear()
-        For i As Integer = MIN_BLDG_FLRS To MAX_BLDG_FLRS
+        For i = MIN_BLDG_FLRS To MAX_BLDG_FLRS
             NumberofStopsTotal_cmb.Items.Add(i)
         Next i
 
         NumberofStopsFront_cmb.Items.Clear()
-        For i As Integer = MIN_BLDG_FLRS To MAX_BLDG_FLRS
+        For i = MIN_BLDG_FLRS To MAX_BLDG_FLRS
             NumberofStopsFront_cmb.Items.Add(i)
         Next i
 
         NumberofStopsRear_cmb.Items.Clear()
-        For i As Integer = 0 To MAX_BLDG_FLRS
+        For i = 0 To MAX_BLDG_FLRS
             NumberofStopsRear_cmb.Items.Add(i)
         Next i
 
@@ -664,15 +757,16 @@ Public Class frmEstimatingAlt
         FixtureFinish_cmb.Items.Add(FINISH_8BZ)
 
         ExistingControlVendor_lst.Items.Clear()
-        MaterialItemRecordSet.Open("OEM_SQL", ADOConnectionMODDataDataBase)
-        While Not MaterialItemRecordSet.EOF
-            ExistingControlVendor_lst.Items.Add(MaterialItemRecordSet("Manufacturer").Value.ToString)
-            MaterialItemRecordSet.MoveNext()
+        ResetADODBRecordset(UseMaterialItemRecordSet)
+        UseMaterialItemRecordSet.Open("OEM_SQL", ADOConnectionMODDataDataBase)
+        While Not UseMaterialItemRecordSet.EOF
+            ExistingControlVendor_lst.Items.Add(UseMaterialItemRecordSet("Manufacturer").Value.ToString)
+            UseMaterialItemRecordSet.MoveNext()
         End While
-        MaterialItemRecordSet.Close()
+        UseMaterialItemRecordSet.Close()
 
         ExistingControlModel_lst.Items.Clear()
-        Select Case ExistingControlVendor_lst.Text
+        Select Case GetValue(AltDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst")
             Case SEC, WESTINGHOUSE
                 ExistingControlModel_lst.Items.Add("DMR")
                 ExistingControlModel_lst.Items.Add("EPCOH/EP2")
@@ -777,6 +871,306 @@ Public Class frmEstimatingAlt
         Destination_cmb.Items.Add("Phased MOD")
         Destination_cmb.Items.Add("DI")
 
+        'Torque data
+        ResetADODBRecordset(TorqueRecordset)
+        MachineVendorExisting_Cmb.Items.Clear()
+        TorqueRecordset.Open("SELECT DISTINCT Manufacturer FROM SuperTable WHERE MachineType='" & CurrentGOData_Typ.MachineType & "'", ADOConnection)
+        Do While Not TorqueRecordset.EOF
+            MachineVendorExisting_Cmb.Items.Add(TorqueRecordset("Manufacturer").Value)
+            TorqueRecordset.MoveNext()
+        Loop
+        TorqueRecordset.Close()
+        TorqueRecordset = Nothing
+        MachineVendorExisting_Cmb.Items.Add(OTHER)
+
+        MachineModelExisting_cmb.Items.Clear()
+        If ExistingMachineVendor <> OTHER Then
+            ResetADODBRecordset(TorqueRecordset)
+            TorqueRecordset.Open("SELECT DISTINCT MachineModel From SuperTable WHERE MachineType='" & CurrentGOData_Typ.MachineType &
+                                 "' AND Manufacturer='" & ExistingMachineVendor & "' ORDER BY MachineModel", ADOConnection)
+            Do While Not TorqueRecordset.EOF
+                MachineModelExisting_cmb.Items.Add(TorqueRecordset("MachineModel").Value)
+                TorqueRecordset.MoveNext()
+            Loop
+            TorqueRecordset.Close()
+            TorqueRecordset = Nothing
+        End If
+        If FindString(MachineModelExisting_cmb, OTHER) = -1 Then
+            MachineModelExisting_cmb.Items.Add(OTHER)
+        End If
+
+        If CurrentMachineType.IndexOf("Reuse") > -1 Then
+            If OtherOther(False) Then
+                UseMachineVendor = OTHER
+                UseMachineModel = OTHER
+            Else
+                UseMachineVendor = ExistingMachineVendor
+                UseMachineModel = ExistingMachineModel
+            End If
+        Else
+            UseMachineVendor = NewMachineVendor
+            UseMachineModel = NewMachineModel
+        End If
+        ReDim aMachineSheaveDiameter(0)
+        aMachineSheaveDiameter(0) = ""
+        If CurrentGOData_Typ.MachineType = GEARLESS_TYPE Then
+            Select Case CurrentMachineType
+                Case MACHINE_FMM200, "New " & GEARLESS_TYPE
+                    UseTable = "SuperTable_Gearless"
+                Case Else
+            End Select
+        End If
+        If UseMachineModel = OTHER Or UseMachineModel = "" Then
+            sSQL = "SELECT DISTINCT " & UseTable & ".[Sheave Dia] FROM " & UseTable
+            If UseMachineVendor <> OTHER And UseMachineVendor <> "" Then
+                sSQL &= " WHERE Manufacturer='" & UseMachineVendor & "' AND MachineType='" & CurrentGOData_Typ.MachineType & "'"
+            Else
+                sSQL &= " WHERE MachineType='" & CurrentGOData_Typ.MachineType & "'"
+            End If
+        Else
+            sSQL = "SELECT DISTINCT " & UseTable & ".[Sheave Dia] FROM " & UseTable & " WHERE " & UseTable & ".MachineModel='" & UseMachineModel & "'"
+        End If
+        sSQL &= " ORDER BY " & UseTable & ".[Sheave Dia]"
+        ResetADODBRecordset(TorqueRecordset)
+        TorqueRecordset.Open(sSQL, ADOConnection)
+        If Not TorqueRecordset.EOF Then
+            Do While Not TorqueRecordset.EOF
+                ReDim Preserve aMachineSheaveDiameter(i)
+                If TorqueRecordset("Sheave Dia").Value.ToString = "5.91" Then
+                    If UseMachineModel = MACHINE_FMM200 Then
+                        AddValToArray = True
+                    Else
+                        AddValToArray = False
+                    End If
+                Else
+                    AddValToArray = True
+                End If
+                If AddValToArray Then
+                    aMachineSheaveDiameter(i) = TorqueRecordset("Sheave Dia").Value.ToString
+                    i += 1
+                End If
+                TorqueRecordset.MoveNext()
+            Loop
+        End If
+        TorqueRecordset.Close()
+        TorqueRecordset = Nothing
+        ExistingMachineSheaveDia_cmb.Items.Clear()
+        For jIndx = 0 To aMachineSheaveDiameter.GetUpperBound(0)
+            If Not IsNothing(aMachineSheaveDiameter(jIndx)) Then
+                If FindString(ExistingMachineSheaveDia_cmb, aMachineSheaveDiameter(jIndx)) = -1 Then
+                    ExistingMachineSheaveDia_cmb.Items.Add(aMachineSheaveDiameter(jIndx))
+                End If
+            End If
+        Next jIndx
+
+        ReDim aBrakeType(0)
+        aBrakeType(0) = "Disk"
+        i = 0
+        Select Case CurrentMachineType
+            Case "New " & GEARED_TYPE
+                If NewMachineModel = "HW74" Then
+                    aBrakeType(0) = "Drum"
+                End If
+            Case "Reuse " & GEARED_TYPE
+                Select Case ExistingMachineModel
+                    Case OTHER, String.Empty
+                        Select Case ExistingMachineVendor
+                            Case OTHER, String.Empty
+                                sSQL = "SELECT DISTINCT BrakeTypes.BrakeType FROM BrakeTypes"
+                            Case Else
+                                sSQL = "SELECT DISTINCT BrakeTypes.BrakeType FROM SuperTable INNER JOIN BrakeTypes " &
+                                       "ON SuperTable.[Brake Drum/Disk] = BrakeTypes.NewBrakeTypeID " &
+                                       "WHERE SuperTable.Manufacturer='" & ExistingMachineVendor & "';"
+                        End Select
+                    Case Else
+                        sSQL = "SELECT DISTINCT BrakeTypes.BrakeType FROM SuperTable INNER JOIN BrakeTypes " &
+                               "ON SuperTable.[Brake Drum/Disk] = BrakeTypes.NewBrakeTypeID " &
+                               "WHERE SuperTable.MachineModel='" & ExistingMachineModel & "';"
+                End Select
+                ResetADODBRecordset(TorqueRecordset)
+                TorqueRecordset.Open(sSQL, ADOConnection)
+                Do While Not TorqueRecordset.EOF
+                    ReDim Preserve aBrakeType(i)
+                    aBrakeType(i) = TorqueRecordset("BrakeType").Value.ToString
+                    TorqueRecordset.MoveNext()
+                    i += 1
+                Loop
+                TorqueRecordset.Close()
+                TorqueRecordset = Nothing
+            Case MACHINE_FMM200, "New " & GEARLESS_TYPE, "Reuse " & GEARLESS_TYPE
+                If NewMachineVendor <> SEC Then
+                    aBrakeType(0) = "Drum"
+                End If
+            Case Else
+                aBrakeType(0) = "Drum"
+        End Select
+        BrakeType_cmb.Items.Clear()
+        For jIndx = 0 To aBrakeType.GetUpperBound(0)
+            If FindString(BrakeType_cmb, LB_FINDSTRINGEXACT) = -1 Then
+                BrakeType_cmb.Items.Add(aBrakeType(jIndx))
+            End If
+        Next jIndx
+
+        If CurrentMachineType.IndexOf("Reuse") > -1 Then
+            UseMachineVendor = ExistingMachineVendor
+            UseMachineModel = ExistingMachineModel
+        Else
+            UseMachineVendor = NewMachineVendor
+            UseMachineModel = NewMachineModel
+        End If
+        sSQL = "SELECT RopeSizes.RopeSize, RopeSizes.MaxNumberRopes AS RopesMaximum " & "FROM RopeSizes " & "WHERE (((RopeSizes.MachineType)='" &
+               UseMachineModel & "'));"
+        Select Case UseMachineModel
+            Case MACHINE_FMR355, MACHINE_PMR355, MACHINE_PMR490
+                MaxNumberRopes = 8
+            Case MACHINE_FM560
+                MaxNumberRopes = 6
+            Case MACHINE_FM630
+                If HoistRopeSize = "19 mm" Then
+                    MaxNumberRopes = 7
+                Else
+                    MaxNumberRopes = 9
+                End If
+            Case MACHINE_525LS
+                Select Case HoistRopeSize
+                    Case "1/2"
+                        MaxNumberRopes = 7
+                    Case "5/8"
+                        MaxNumberRopes = 6
+                    Case Else
+                        MaxNumberRopes = 11
+                End Select
+            Case Else
+                If UseMachineModel = OTHER Or UseMachineModel = "" Then
+                    sSQL = "SELECT RopeSizes.RopeSize, Max(RopeSizes.MaxNumberRopes) AS RopesMaximum " &
+                           "FROM SuperTable INNER JOIN RopeSizes ON SuperTable.MachineModel = RopeSizes.MachineType " & "GROUP BY RopeSizes.RopeSize;"
+                End If
+                ResetADODBRecordset(TorqueRecordset)
+                TorqueRecordset.Open(sSQL, ADOConnection)
+                MaxNumberRopes = 2
+                Do While Not TorqueRecordset.EOF
+                    If TranslateRopeSize(HoistRopeSize, True) = "" & TorqueRecordset("RopeSize").Value Then
+                        If Conversion.Val("" & TorqueRecordset("RopesMaximum").Value) = 0 Then
+                            If CurrentMachineType.IndexOf(GEARLESS_TYPE) > -1 Then
+                                MaxNumberRopes = 11
+                            Else
+                                MaxNumberRopes = 8
+                            End If
+                            Exit Sub
+                        Else
+                            MaxNumberRopes = Conversion.Val("" & TorqueRecordset("RopesMaximum").Value)
+                        End If
+                        Exit Do
+                    End If
+                    TorqueRecordset.MoveNext()
+                Loop
+                TorqueRecordset.Close()
+                TorqueRecordset = Nothing
+                If MaxNumberRopes < 3 Then
+                    If CurrentMachineType.IndexOf(GEARLESS_TYPE) > -1 Then
+                        MaxNumberRopes = 11
+                    Else
+                        MaxNumberRopes = 8
+                    End If
+                End If
+        End Select
+        HoistRopeQty_Cmb.Items.Clear()
+        For i = 3 To MaxNumberRopes
+            HoistRopeQty_Cmb.Items.Add(i)
+        Next i
+
+        ReDim aHoistCableSize(0)
+        Select Case UseMachineModel
+            Case MACHINE_FMR355, MACHINE_PMR355
+                aHoistCableSize(0) = "11 mm"
+            Case MACHINE_PMR490
+                aHoistCableSize(0) = "13 mm"
+            Case MACHINE_FM560
+                aHoistCableSize(0) = "16 mm"
+            Case MACHINE_FM630
+                ReDim aHoistCableSize(1)
+                aHoistCableSize(0) = "16 mm"
+                aHoistCableSize(1) = "19 mm"
+            Case Else
+                Select Case CurrentMachineType
+                    Case "New" & GEARLESS_TYPE, MACHINE_FMM200
+                        sSQL = "SELECT DISTINCT RopeSizes.RopeSize FROM RopeSizes "
+                    Case Else
+                        sSQL = "SELECT DISTINCT RopeSizes.RopeSize FROM SuperTable INNER JOIN RopeSizes ON SuperTable.MachineModel = RopeSizes.MachineType " &
+                               "WHERE RopeSize Is Not Null AND SuperTable.MachineType='"
+                        If CurrentMachineType.IndexOf(GEARED_TYPE) > -1 Then
+                            sSQL &= GEARED_TYPE & "'"
+                        Else
+                            sSQL &= GEARLESS_TYPE & "'"
+                        End If
+                        If UseMachineVendor <> "" And UseMachineVendor <> OTHER Then
+                            sSQL &= " AND SuperTable.Manufacturer = '" & UseMachineVendor & "'"
+                        End If
+                        If UseMachineModel <> "" And UseMachineModel <> OTHER Then
+                            sSQL &= " AND RopeSizes.MachineType = '" & UseMachineModel & "'"
+                        End If
+                End Select
+                ResetADODBRecordset(TorqueRecordset)
+                TorqueRecordset.Open(sSQL, ADOConnection)
+                If TorqueRecordset.EOF Then
+                    TorqueRecordset.Close()
+                    TorqueRecordset = Nothing
+                    ResetADODBRecordset(TorqueRecordset)
+                    TorqueRecordset.Open("SELECT DISTINCT RopeSizes.RopeSize", ADOConnection)
+                End If
+                Do While Not TorqueRecordset.EOF
+                    ReDim Preserve aHoistCableSize(i)
+                    aHoistCableSize(i) = TranslateRopeSize(TorqueRecordset("RopeSize").Value.ToString, False)
+                    TorqueRecordset.MoveNext()
+                    i += 1
+                Loop
+                TorqueRecordset.Close()
+                TorqueRecordset = Nothing
+        End Select
+        HoistRopeSize_Cmb.Items.Clear()
+        For jIndx = 0 To aHoistCableSize.GetUpperBound(0)
+            If Not IsNothing(aHoistCableSize(jIndx)) Then
+                HoistRopeSize_Cmb.Items.Add(aHoistCableSize(jIndx))
+            End If
+        Next jIndx
+
+        Compensation_cmb.Items.Clear()
+        Compensation_cmb.Items.Add("New")
+        Compensation_cmb.Items.Add("Reuse")
+        Compensation_cmb.Items.Add("None")
+
+        CarSheaveQty_Cmb.Items.Clear()
+        If CurrentGOData_Typ.MachineType = HYDRO_TYPE Then
+            CarSheaveQty_Cmb.Items.Add(0)
+        End If
+        CarSheaveQty_Cmb.Items.Add(1)
+        CarSheaveQty_Cmb.Items.Add(2)
+
+        CwtSheaveQty_Cmb.Items.Clear()
+        If CurrentGOData_Typ.MachineType = HYDRO_TYPE Then
+            CwtSheaveQty_Cmb.Items.Add(0)
+        End If
+        CwtSheaveQty_Cmb.Items.Add(1)
+        CwtSheaveQty_Cmb.Items.Add(2)
+
+    End Sub
+    Private Sub MachineType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.GotFocus
+        ShowGeneralInfoBaseValue(MachineType_cmb)
+    End Sub
+    Private Sub MachineType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub MachineType_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub DriveType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.GotFocus
+        ShowGeneralInfoBaseValue(DriveType_cmb)
+    End Sub
+    Private Sub DriveType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub DriveType_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
     End Sub
     Private Sub BillOfMaterials_spr_Change(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChangeEventArgs) Handles BillOfMaterials_spr.Change
         Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
@@ -834,15 +1228,18 @@ Public Class frmEstimatingAlt
 
     End Sub
     Private Sub DisplayALT()
-
         PopulateAltData(True)
         CarData_fra.Visible = True
         CarData_fra.BringToFront()
-
     End Sub
     Private Sub ExpensesPerDayDetails_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDayDetails_btn.Click
-        ExpensesPerDay_frm.ShowDialog()
+
+        ExpensesPerDay_frm.ShowDialog(Me)
         ExpensesPerDay_txt.Text = FormatNumber(SubcontractedLaborCost.TotalCost, 2)
+        If ExpensesPerDay_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDay_txt") Then
+            GeneralInfoValueChanged(False)
+        End If
+
     End Sub
     Private Sub BillOfMaterials_spr_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles BillOfMaterials_spr.Click
         CurParentRow = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
@@ -875,7 +1272,7 @@ Public Class frmEstimatingAlt
     Private Sub PopulateAltData(ByVal ResetData As Boolean)
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
-        Dim dt As DataTable, dr As DataRow
+        Dim dt As DataTable
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
         Dim UseUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
         Dim CurActiveRow As Integer = 0, CurActiveCol As Integer = 0, CurActiveChildRow As Integer = -999, CurActiveChildCol As Integer = -999
@@ -895,29 +1292,15 @@ Public Class frmEstimatingAlt
             If ResetData Then
                 CreateDataSet(UseUnits)
             End If
+            Load_ListBoxes()
             model = BillOfMaterials_spr.ActiveSheet.Models.Data
             For Each dt In AltDataset.Tables
                 dt.DefaultView.AllowNew = False
             Next dt
             model.DataMember = "EstimatingData"
             model.DataSource = AltDataset
-            If GeneralInfo.Rows.Count = 1 Then
-                dr = GeneralInfo.Rows(0)
-                For Each Cntrl As Control In GeneralInformation_fra.Controls
-                    If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
-                        [Cntrl].Text = FindValueInDataRow([Cntrl].Name, dr)
-                    ElseIf TypeOf [Cntrl] Is DateTimePicker Then
-                        Dim UseDTPicker As DateTimePicker = [Cntrl]
-                        UseDTPicker.Value = CDate(FindValueInDataRow([Cntrl].Name, dr))
-                    ElseIf TypeOf [Cntrl] Is CheckBox Then
-                        Dim UseCheckbox As CheckBox = [Cntrl]
-                        UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
-                    End If
-                Next Cntrl
-                For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
-                    SubcontractedLaborCost.LaborCost(iIndex).Cost = dr(SubcontractedLaborCost.LaborCost(iIndex).Description)
-                Next iIndex
-            End If
+            PopulateGeneralInfo()
+            PopulateTorqueData()
             CapacityNewBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CapacityNew_cmb")
             SpeedNewBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")
             NumberofStopsTotalBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsTotal_cmb")
@@ -930,7 +1313,6 @@ Public Class frmEstimatingAlt
             TravelBase_txt.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")
             PitDepthBase_txt.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt")
             DestinationBase_cmb.Text = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Destination_cmb")
-
             BillOfMaterials_spr.ActiveSheet.GetDataView(False).AllowNew = False
             BillOfMaterials_spr.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
             BillOfMaterials_spr.ActiveSheet.RowHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.RowHeaderRenderer
@@ -960,97 +1342,100 @@ Public Class frmEstimatingAlt
                 BillOfMaterials_spr.ActiveSheet.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth_MAIN
             End If
             GeneralInformation_fra.Left = 6
-            GeneralInformation_fra.Width = CarData_fra.Width - GeneralInformation_fra.Left - 10
             ExpensesPerDayDetails_btn.Left = ExpensesPerDay_txt.Left
+            Torque_fra.Left = 6
+            Torque_fra.Width = GeneralInformation_fra.Width
             BillofMaterialsandTaskList_fra.Left = 6
-            BillofMaterialsandTaskList_fra.Width = CarData_fra.Width - BillofMaterialsandTaskList_fra.Left - 10
-            Relocate_BillofMaterialsandTaskList_Frame()
+            BillofMaterialsandTaskList_fra.Width = GeneralInformation_fra.Width
+            RelocateAndResizeAllFrames()
             BillOfMaterials_spr.Left = 6
             BillOfMaterials_spr.Visible = False
             ExpandCollapseAll("Expand")
             ExpandCollapseAll("Collapse")
-            BillOfMaterials_spr.Visible = True
-            For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
-                ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
-                If Not ChildSheetView1 Is Nothing Then
-                    ChildSheetView1.SetColumnVisible(MAT_COL_MAIN_ID, False)
-                    ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
-                    ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 365)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_BASE, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_ALT, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_BASE, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_ALT, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_BASE, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_ALT, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_QTY_BASE, 90)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_QTY_ALT, 90)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_ALT, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_ALT, 120)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_ALT, 100)
-                    ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_ALT, 200)
-                    If SheetCornerColWidth_CHILD = 0 Then
-                        SheetCornerColWidth_CHILD = ChildSheetView1.SheetCorner.Columns(0, 0).Width
-                    Else
-                        ChildSheetView1.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth_CHILD
+            If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
+                BillOfMaterials_spr.Visible = True
+                For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
+                    ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
+                    If Not ChildSheetView1 Is Nothing Then
+                        ChildSheetView1.SetColumnVisible(MAT_COL_MAIN_ID, False)
+                        ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
+                        ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 365)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_BASE, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_ALT, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_BASE, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_ALT, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_BASE, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_ALT, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_QTY_BASE, 90)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_QTY_ALT, 90)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_ALT, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_ALT, 120)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_ALT, 100)
+                        ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_ALT, 200)
+                        If SheetCornerColWidth_CHILD = 0 Then
+                            SheetCornerColWidth_CHILD = ChildSheetView1.SheetCorner.Columns(0, 0).Width
+                        Else
+                            ChildSheetView1.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth_CHILD
+                        End If
+                        For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                            ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
+                            ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
+                            ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
+                            If ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value = -999 Then
+                                ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
+                            End If
+                            If Not isInitializingComponent Then
+                                GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text,
+                                             ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text, "Cost",
+                                             ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_ALT).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value)
+                                GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text,
+                                             ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text, "Hours",
+                                             ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_ALT).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value)
+                            End If
+                        Next jIndex
                     End If
-                    For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).CellType = SetSPRCombo("Options", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).CellType = SetSPRCombo("Types", ChildSheetView1, jIndex)
-                        ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
-                        If ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value = -999 Then
-                            ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
-                        End If
-                        If Not isInitializingComponent Then
-                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text,
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text, "Cost",
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_ALT).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value)
-                            GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text,
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_ALT).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text, "Hours",
-                                         ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_ALT).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_ALT).Value)
-                        End If
-                    Next jIndex
-                End If
-                Dim ShowGroup As Boolean = False
-                Select Case BillOfMaterials_spr.ActiveSheet.GetValue(iIndex, MAT_COL_MAIN_ID)
-                    Case MAIN_ID_ReuseGearedMachineACMotorOnly
-                        If MachineType_cmb.Text = "Reuse " & GEARED_TYPE Then
+                    Dim ShowGroup As Boolean = False
+                    Select Case BillOfMaterials_spr.ActiveSheet.GetValue(iIndex, MAT_COL_MAIN_ID)
+                        Case MAIN_ID_ReuseGearedMachineACMotorOnly
+                            If MachineType_cmb.Text = "Reuse " & GEARED_TYPE Then
+                                ShowGroup = True
+                            End If
+                        Case MAIN_ID_NewGearedMachine
+                            If MachineType_cmb.Text = "New " & GEARED_TYPE Then
+                                ShowGroup = True
+                            End If
+                        Case MAIN_ID_FMM200
+                            If MachineType_cmb.Text = MACHINE_FMM200 Then
+                                ShowGroup = True
+                            End If
+                        Case MAIN_ID_ReuseGearlessMachine
+                            If MachineType_cmb.Text = "Reuse " & GEARLESS_TYPE Then
+                                ShowGroup = True
+                            End If
+                        Case MAIN_ID_NewGearlessMachine
+                            If MachineType_cmb.Text = "New " & GEARLESS_TYPE Then
+                                ShowGroup = True
+                            End If
+                        Case Else
                             ShowGroup = True
-                        End If
-                    Case MAIN_ID_NewGearedMachine
-                        If MachineType_cmb.Text = "New " & GEARED_TYPE Then
-                            ShowGroup = True
-                        End If
-                    Case MAIN_ID_FMM200
-                        If MachineType_cmb.Text = MACHINE_FMM200 Then
-                            ShowGroup = True
-                        End If
-                    Case MAIN_ID_ReuseGearlessMachine
-                        If MachineType_cmb.Text = "Reuse " & GEARLESS_TYPE Then
-                            ShowGroup = True
-                        End If
-                    Case MAIN_ID_NewGearlessMachine
-                        If MachineType_cmb.Text = "New " & GEARLESS_TYPE Then
-                            ShowGroup = True
-                        End If
-                    Case Else
-                        ShowGroup = True
-                End Select
-                If ShowGroup Then
-                    BillOfMaterials_spr.ActiveSheet.SetRowVisible(iIndex, True)
-                Else
-                    BillOfMaterials_spr.ActiveSheet.SetRowVisible(iIndex, False)
-                End If
-            Next iIndex
-            Set_Fields_Grey_ALT()
-            BillOfMaterials_spr.ActiveSheet.SetActiveCell(CurActiveRow, CurActiveCol)
-            If CurActiveChildRow <> -999 And CurActiveChildCol <> -999 Then
-                ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(CurActiveRow, 0)
-                If Not ChildSheetView1 Is Nothing Then
-                    ChildSheetView1.ExpandRow(CurActiveChildRow, True)
-                    ChildSheetView1.SetActiveCell(CurActiveChildRow, CurActiveChildCol)
+                    End Select
+                    If ShowGroup Then
+                        BillOfMaterials_spr.ActiveSheet.SetRowVisible(iIndex, True)
+                    Else
+                        BillOfMaterials_spr.ActiveSheet.SetRowVisible(iIndex, False)
+                    End If
+                Next iIndex
+                BillOfMaterials_spr.ActiveSheet.SetActiveCell(CurActiveRow, CurActiveCol)
+                If CurActiveChildRow <> -999 And CurActiveChildCol <> -999 Then
+                    ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(CurActiveRow, 0)
+                    If Not ChildSheetView1 Is Nothing Then
+                        ChildSheetView1.ExpandRow(CurActiveChildRow, True)
+                        ChildSheetView1.SetActiveCell(CurActiveChildRow, CurActiveChildCol)
+                    End If
                 End If
             End If
+            Set_Fields_Grey_ALT()
             Me.Cursor = Cursors.Default
 
         Catch ex As Exception
@@ -1095,6 +1480,38 @@ Public Class frmEstimatingAlt
 
         End Try
     End Sub
+    Private Sub UpdateTorqueDataDatatable()
+        Dim _row As DataRow
+        Dim is_new_row As Boolean = False
+
+        Try
+            If TorqueData.Rows.Count = 0 Then
+                _row = TorqueData.NewRow
+                is_new_row = True
+            Else
+                _row = TorqueData.Rows(0)
+            End If
+            _row("UnitsInTab") = SplitUnitsForSave(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+            For Each Cntrl As Control In Torque_fra.Controls
+                If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+                    _row([Cntrl].Name) = [Cntrl].Text
+                ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+                    Dim UseDTPicker As DateTimePicker = [Cntrl]
+                    _row([Cntrl].Name) = UseDTPicker.Value.ToString("d")
+                ElseIf TypeOf [Cntrl] Is CheckBox Then
+                    Dim UseCheckbox As CheckBox = [Cntrl]
+                    _row([Cntrl].Name) = UseCheckbox.CheckState
+                End If
+            Next Cntrl
+            If is_new_row Then
+                TorqueData.Rows.Add(_row)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error updating Torque Data", "Updating Torque Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+    End Sub
     Public Sub SaveAltData()
 
         Try
@@ -1116,11 +1533,251 @@ Public Class frmEstimatingAlt
         UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
         SaveAll()
     End Sub
+    Private Sub GeneralInfoValueChanged(Optional ByVal UpdateComponents As Boolean = True)
+
+        If Not isInitializingComponent Then
+            UpdateGeneralInfoDatatable()
+            Load_ListBoxes()
+            isInitializingComponent = True
+            If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed And UpdateComponents Then
+                PopulateAltData(False)
+            Else
+                PopulateGeneralInfo()
+                PopulateTorqueData()
+                Set_Fields_Grey_ALT()
+            End If
+            EnableBillOfMaterials()
+            isInitializingComponent = False
+            FormIsDirty = True
+        End If
+
+    End Sub
+    Private Sub CapacityNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.GotFocus
+        ShowGeneralInfoBaseValue(CapacityNew_cmb)
+    End Sub
+    Private Sub CapacityNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub SpeedNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.GotFocus
+        ShowGeneralInfoBaseValue(SpeedNew_cmb)
+    End Sub
+    Private Sub SpeedNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub SpeedNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.GotFocus
+        ShowGeneralInfoBaseValue(NumberofStopsTotal_cmb)
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsTotal_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub NumberofStopsFront_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.GotFocus
+        ShowGeneralInfoBaseValue(NumberofStopsFront_cmb)
+    End Sub
+    Private Sub NumberofStopsFront_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsFront_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub NumberofStopsRear_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.GotFocus
+        ShowGeneralInfoBaseValue(NumberofStopsRear_cmb)
+    End Sub
+    Private Sub NumberofStopsRear_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub NumberofStopsRear_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub PowerSupply_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PowerSupply_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub Application_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Application_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub LayoutRequirements_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LayoutRequirements_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub DoorOperatorTypeFront_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeFront_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub CarDoorOpeningWidthFtFront_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtFront_txt.LostFocus
+        If CarDoorOpeningWidthFtFront_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthFtFront_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarDoorOpeningWidthInFront_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInFront_txt.LostFocus
+        If CarDoorOpeningWidthInFront_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthInFront_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightFtFront_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtFront_txt.LostFocus
+        If CarDoorOpeningHeightFtFront_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightFtFront_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightInFront_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInFront_txt.LostFocus
+        If CarDoorOpeningHeightInFront_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightInFront_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub DoorOperatorTypeRear_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DoorOperatorTypeRear_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub CarDoorOpeningWidthFtRear_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthFtRear_txt.LostFocus
+        If CarDoorOpeningWidthFtRear_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthFtRear_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarDoorOpeningWidthInRear_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningWidthInRear_txt.LostFocus
+        If CarDoorOpeningWidthInRear_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningWidthInRear_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightFtRear_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightFtRear_txt.LostFocus
+        If CarDoorOpeningHeightFtRear_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightFtRear_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarDoorOpeningHeightInRear_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarDoorOpeningHeightInRear_txt.LostFocus
+        If CarDoorOpeningHeightInRear_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarDoorOpeningHeightInRear_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub CarWeight_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarWeight_txt.LostFocus
+        If CarWeight_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "CarWeight_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub HoistMotorHP_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles HoistMotorHP_txt.LostFocus
+        If HoistMotorHP_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "HoistMotorHP_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub HoistMotorRpm_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistMotorRpm_txt.LostFocus
+        If HoistMotorRpm_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "HoistMotorRpm_txt") Then
+            GeneralInfoValueChanged()
+        End If
+    End Sub
+    Private Sub MachineLocation_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineLocation_Cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub RopingNew_Cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.GotFocus
+        ShowGeneralInfoBaseValue(RopingNew_Cmb)
+    End Sub
+    Private Sub RopingNew_Cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub RopingNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub TopFloorToOverhead_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.GotFocus
+        ShowGeneralInfoBaseValue(TopFloorToOverhead_txt)
+    End Sub
+    Private Sub TopFloorToOverhead_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.LostFocus
+        If TopFloorToOverhead_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt") Then
+            GeneralInfoValueChanged()
+        End If
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub TravelNew_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TravelNew_txt.GotFocus
+        ShowGeneralInfoBaseValue(TravelNew_txt)
+    End Sub
+    Private Sub TravelNew_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TravelNew_txt.LostFocus
+        If TravelNew_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TravelNew_txt") Then
+            GeneralInfoValueChanged()
+        End If
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub PitDepth_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.GotFocus
+        ShowGeneralInfoBaseValue(PitDepth_txt)
+    End Sub
+    Private Sub PitDepth_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.LostFocus
+        If PitDepth_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt") Then
+            GeneralInfoValueChanged()
+        End If
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub RiserQtyFront_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyFront_Cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub RiserQtyRear_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RiserQtyRear_Cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub FixtureFinish_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FixtureFinish_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub DTRequestedShipDate_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DTRequestedShipDate.ValueChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub BankCompleteDate_txt_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BankCompleteDate_txt.ValueChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ExistingControlVendor_lst_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ExistingControlVendor_lst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlVendor_lst.TextChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ExistingControlModel_lst_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ExistingControlModel_lst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExistingControlModel_lst.TextChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub OriginalGONumberAvailable_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OriginalGONumberAvailable_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub OriginalGOnumber_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles OriginalGOnumber_txt.LostFocus
+        If OriginalGOnumber_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "OriginalGOnumber_txt") Then
+            GeneralInfoValueChanged(False)
+        End If
+    End Sub
+    Private Sub PEStampRequired_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PEStampRequired_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ShortFloorOperation_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShortFloorOperation_chk.CheckedChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub Permits_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Permits_txt.LostFocus
+        If Permits_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Permits_txt") Then
+            GeneralInfoValueChanged(False)
+        End If
+    End Sub
+    Private Sub Bonds_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Bonds_txt.LostFocus
+        If Bonds_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Bonds_txt") Then
+            GeneralInfoValueChanged(False)
+        End If
+    End Sub
+    Private Sub ExpensesPerDay_txt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpensesPerDay_txt.TextChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub GatewayReviewRequired_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GatewayReviewRequired_chk.CheckedChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub Destination_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.GotFocus
+        ShowGeneralInfoBaseValue(Destination_cmb)
+    End Sub
+    Private Sub Destination_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Destination_cmb.LostFocus
+        HideGeneralInfoBaseValue()
+    End Sub
+    Private Sub Destination_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.SelectedIndexChanged
+        GeneralInfoValueChanged()
+    End Sub
     Public Function PromptForSave() As DialogResult
         Dim SaveResponse As DialogResult = 0
 
-        If FormIsDirty Then
-            SaveResponse = MsgBox("You must save the current Alt Data before continuing!" & Environment.NewLine & "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
+        If FormIsDirty And AllowedToSave() Then
+            SaveResponse = MsgBox("You must save the current Alt Data before continuing!" & Environment.NewLine &
+                                 "Do you wish to save now?", MsgBoxStyle.YesNoCancel, "Save Required")
             If SaveResponse = MsgBoxResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 SaveAltData()
@@ -1134,6 +1791,9 @@ Public Class frmEstimatingAlt
     Private Sub Set_Fields_Grey_ALT()
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
+        ValidateChangeInCapacitySpeedTravel(ChangeInCapacity_chk.CheckState, CapacityExisting_lbl, CapacityExisting_cmb)
+        ValidateChangeInCapacitySpeedTravel(ChangeInSpeed_chk.CheckState, SpeedExisting_lbl, SpeedExisting_cmb)
+        ValidateChangeInCapacitySpeedTravel(ChangeInTravel_chk.CheckState, TravelExisting_lbl, TravelExisting_txt)
         If Conversion.Val(NumberofStopsRear_cmb.Text) = 0 Then
             DoorOperatorTypeRear_cmb.SelectedIndex = -1
             CarDoorOpeningWidthFtRear_txt.Text = String.Empty
@@ -1142,48 +1802,140 @@ Public Class frmEstimatingAlt
             CarDoorOpeningHeightInRear_txt.Text = String.Empty
             RiserQtyRear_Cmb.SelectedIndex = -1
         End If
-        For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
-            BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
-            BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
-            For jIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.ColumnCount - 1
-                BillOfMaterials_spr.ActiveSheet.SetColumnSizeable(jIndex, False)
-            Next jIndex
-            ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
-            If Not ChildSheetView1 Is Nothing Then
-                ChildSheetView1.LockBackColor = Color.WhiteSmoke
-                For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                    ChildSheetView1.SetRowSizeable(jIndex, False)
-                    For kIndex As Integer = 0 To ChildSheetView1.ColumnCount - 1
-                        ChildSheetView1.SetColumnSizeable(kIndex, False)
-                        Select Case kIndex
-                            Case MAT_COL_MATERIAL_DESC
-                                If Math.Round(Conversion.Val(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text)) >= 900 Then
-                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = False
-                                Else
-                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                                End If
-                            Case MAT_COL_STANDARD_HOURS_ALT
-                                ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                            Case MAT_COL_OPTION_ALT, MAT_COL_TYPE_ALT, MAT_COL_ORDER_BY_ALT
-                                LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
-                            Case MAT_COL_MATERIAL_COST_ALT
-                                If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "RL" Or
-                                   ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "PL" Or
-                                   String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text) Or
-                                   ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text = "Refurbish" Then
-                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = False
-                                Else
-                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                                End If
-                            Case MAT_COL_OPTION_BASE, MAT_COL_TYPE_BASE, MAT_COL_ORDER_BY_BASE, MAT_COL_QTY_BASE
-                                ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                            Case Else
-                                ChildSheetView1.Cells(jIndex, kIndex).Locked = False
-                        End Select
-                    Next kIndex
-                Next jIndex
+        For Each Cntrl As Control In Torque_fra.Controls
+            If Not (TypeOf [Cntrl] Is Button) Then
+                [Cntrl].Enabled = False
             End If
-        Next iIndex
+        Next Cntrl
+        Select Case MachineType_cmb.Text
+            Case "Reuse " & GEARED_TYPE
+                MachineVendorExisting_lbl.Enabled = True
+                MachineVendorExisting_Cmb.Enabled = True
+                MachineModelExisting_lbl.Enabled = True
+                MachineModelExisting_cmb.Enabled = True
+                ExistingMachineSheaveDia_lbl.Enabled = True
+                ExistingMachineSheaveDia_cmb.Enabled = True
+                ExistingMachineSheaveDiaIn_lbl.Enabled = True
+                BrakeType_lbl.Enabled = True
+                BrakeType_cmb.Enabled = True
+                HoistRopeQty_lbl.Enabled = True
+                HoistRopeQty_Cmb.Enabled = True
+                HoistRopeSize_lbl.Enabled = True
+                HoistRopeSize_Cmb.Enabled = True
+                HoistRopeSizeIn_lbl.Enabled = True
+                Compensation_lbl.Enabled = True
+                Compensation_cmb.Enabled = True
+                If MachineLocation_Cmb.Text = "Basement" Or MachineLocation_Cmb.Text = "Semi-Basement" Then
+                    CarSheaveQty_lbl.Enabled = True
+                    CarSheaveQty_Cmb.Enabled = True
+                    CwtSheaveQty_lbl.Enabled = True
+                    CwtSheaveQty_Cmb.Enabled = True
+                End If
+            Case "New " & GEARED_TYPE
+                NominalMotorRPM_lbl.Enabled = True
+                NominalMotorRPM_txt.Enabled = True
+                HoistRopeQty_lbl.Enabled = True
+                HoistRopeQty_Cmb.Enabled = True
+                HoistRopeSize_lbl.Enabled = True
+                HoistRopeSize_Cmb.Enabled = True
+                HoistRopeSizeIn_lbl.Enabled = True
+                CarToCwtRopeDrop_lbl.Enabled = True
+                CarToCwtRopeDrop_txt.Enabled = True
+                CarToCwtRopeDropIn_lbl.Enabled = True
+                Compensation_lbl.Enabled = True
+                Compensation_cmb.Enabled = True
+                If MachineLocation_Cmb.Text = "Basement" Or MachineLocation_Cmb.Text = "Semi-Basement" Then
+                    CarSheaveQty_lbl.Enabled = True
+                    CarSheaveQty_Cmb.Enabled = True
+                    CwtSheaveQty_lbl.Enabled = True
+                    CwtSheaveQty_Cmb.Enabled = True
+                End If
+            Case MACHINE_FMM200, "New " & GEARLESS_TYPE
+                HoistRopeQty_lbl.Enabled = True
+                HoistRopeQty_Cmb.Enabled = True
+                HoistRopeSize_lbl.Enabled = True
+                HoistRopeSize_Cmb.Enabled = True
+                HoistRopeSizeIn_lbl.Enabled = True
+                CarToCwtRopeDrop_lbl.Enabled = True
+                CarToCwtRopeDrop_txt.Enabled = True
+                CarToCwtRopeDropIn_lbl.Enabled = True
+                Compensation_lbl.Enabled = True
+                Compensation_cmb.Enabled = True
+            Case "Reuse " & GEARLESS_TYPE
+                MachineVendorExisting_lbl.Enabled = True
+                MachineVendorExisting_Cmb.Enabled = True
+                MachineModelExisting_lbl.Enabled = True
+                MachineModelExisting_cmb.Enabled = True
+                ExistingMachineSheaveDia_lbl.Enabled = True
+                ExistingMachineSheaveDia_cmb.Enabled = True
+                ExistingMachineSheaveDiaIn_lbl.Enabled = True
+                BrakeType_lbl.Enabled = True
+                BrakeType_cmb.Enabled = True
+                HoistRopeQty_lbl.Enabled = True
+                HoistRopeQty_Cmb.Enabled = True
+                HoistRopeSize_lbl.Enabled = True
+                HoistRopeSize_Cmb.Enabled = True
+                HoistRopeSizeIn_lbl.Enabled = True
+                Compensation_lbl.Enabled = True
+                Compensation_cmb.Enabled = True
+                If MachineLocation_Cmb.Text = "Basement" Or MachineLocation_Cmb.Text = "Semi-Basement" Then
+                    CarSheaveQty_lbl.Enabled = True
+                    CarSheaveQty_Cmb.Enabled = True
+                    CwtSheaveQty_lbl.Enabled = True
+                    CwtSheaveQty_Cmb.Enabled = True
+                End If
+                FullLoadCurrentIDC1_lbl.Enabled = True
+                FullLoadCurrentIDC1_txt.Enabled = True
+                FullLoadCurrentIDC1Amps_lbl.Enabled = True
+                ArmatureFullLoadVoltageVFLU_lbl.Enabled = True
+                ArmatureFullLoadVoltageVFLU_txt.Enabled = True
+                ArmatureFullLoadVoltageVFLUVolts_lbl.Enabled = True
+            Case Else
+        End Select
+        If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
+            For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
+                BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
+                BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
+                For jIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.ColumnCount - 1
+                    BillOfMaterials_spr.ActiveSheet.SetColumnSizeable(jIndex, False)
+                Next jIndex
+                ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
+                If Not ChildSheetView1 Is Nothing Then
+                    ChildSheetView1.LockBackColor = Color.WhiteSmoke
+                    For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                        ChildSheetView1.SetRowSizeable(jIndex, False)
+                        For kIndex As Integer = 0 To ChildSheetView1.ColumnCount - 1
+                            ChildSheetView1.SetColumnSizeable(kIndex, False)
+                            Select Case kIndex
+                                Case MAT_COL_MATERIAL_DESC
+                                    If Math.Round(Conversion.Val(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text)) >= 900 Then
+                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = False
+                                    Else
+                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                                    End If
+                                Case MAT_COL_STANDARD_HOURS_ALT
+                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                                Case MAT_COL_OPTION_ALT, MAT_COL_TYPE_ALT, MAT_COL_ORDER_BY_ALT
+                                    LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
+                                Case MAT_COL_MATERIAL_COST_ALT
+                                    If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "RL" Or
+                                       ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "PL" Or
+                                       String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text) Or
+                                       ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_ALT).Text = "Refurbish" Then
+                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = False
+                                    Else
+                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                                    End If
+                                Case MAT_COL_OPTION_BASE, MAT_COL_TYPE_BASE, MAT_COL_ORDER_BY_BASE, MAT_COL_QTY_BASE
+                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                                Case Else
+                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = False
+                            End Select
+                        Next kIndex
+                    Next jIndex
+                End If
+            Next iIndex
+        End If
 
     End Sub
     Private Sub LockSPRComboIfMissingOptionsORSingleOption(ByRef CurCell As FarPoint.Win.Spread.Cell)
@@ -1200,6 +1952,9 @@ Public Class frmEstimatingAlt
             CurCell.Locked = False
         End If
 
+    End Sub
+    Private Sub btnTorque_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTorque.Click
+        TorqueFrm.ShowDialog()
     End Sub
     Private Sub BillOfMaterials_spr_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles BillOfMaterials_spr.KeyDown
         Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
@@ -1258,124 +2013,203 @@ Public Class frmEstimatingAlt
         GeneralInformationBase_fra.Visible = False
         GeneralInformationBase_fra.SendToBack()
     End Sub
-    Private Sub GeneralInfoValueChanged()
+    Private Sub ExpandCollapseTorqueFrame_btn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandCollapseTorqueFrame_btn.Click
+
+        If Torque_fra.Height = ExpandCollapseTorqueFrame_btn.Height + 2 Then
+            Torque_fra.Height = CurrentTorqueFrameHeight
+            ExpandCollapseTorqueFrame_btn.Image = Image.FromFile(ImageFileLocation & "delete.png")
+            For Each CurControl As Control In Torque_fra.Controls
+                CurControl.Visible = True
+            Next CurControl
+        Else
+            Torque_fra.Height = ExpandCollapseTorqueFrame_btn.Height + 2
+            ExpandCollapseTorqueFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
+            For Each CurControl As Control In Torque_fra.Controls
+                If CurControl.Name <> "ExpandCollapseTorqueFrame_btn" Then
+                    CurControl.Visible = False
+                End If
+            Next CurControl
+        End If
+        RelocateAndResizeAllFrames()
+
+    End Sub
+    Private Sub EnableBillOfMaterials()
+        Dim UseBackColor As System.Drawing.Color = FrameColorToProceed
+
+        For Each Cntrl As Control In GeneralInformation_fra.Controls
+            If [Cntrl].Enabled = True Then
+                If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+                    If [Cntrl].Text.Trim.Length = 0 Then
+                        UseBackColor = CurrentGenInfoFrameColor
+                        Exit For
+                    End If
+                ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+                    Dim UseDTPicker As DateTimePicker = [Cntrl]
+                    If UseDTPicker.Value.ToString("d").Trim.Length = 0 Then
+                        UseBackColor = CurrentGenInfoFrameColor
+                        Exit For
+                    End If
+                End If
+            End If
+        Next Cntrl
+        GeneralInformation_fra.BackColor = UseBackColor
+        For Each Cntrl As Control In GeneralInformation_fra.Controls
+            If Not (TypeOf [Cntrl] Is Button) Then
+                [Cntrl].BackColor = UseBackColor
+            End If
+        Next Cntrl
+        UseBackColor = FrameColorToProceed
+        For Each Cntrl As Control In Torque_fra.Controls
+            If [Cntrl].Enabled = True Then
+                If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+                    If [Cntrl].Text.Trim.Length = 0 Then
+                        UseBackColor = CurrentGenInfoFrameColor
+                        Exit For
+                    End If
+                ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+                    Dim UseDTPicker As DateTimePicker = [Cntrl]
+                    If UseDTPicker.Value.ToString("d").Trim.Length = 0 Then
+                        UseBackColor = CurrentGenInfoFrameColor
+                        Exit For
+                    End If
+                End If
+            End If
+        Next Cntrl
+        Torque_fra.BackColor = UseBackColor
+        For Each Cntrl As Control In Torque_fra.Controls
+            If Not (TypeOf [Cntrl] Is Button) Then
+                [Cntrl].BackColor = UseBackColor
+            End If
+        Next Cntrl
+        If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
+            PopulateAltData(False)
+            BillofMaterialsandTaskList_fra.Enabled = True
+            BillOfMaterials_spr.Visible = True
+        Else
+            BillofMaterialsandTaskList_fra.Enabled = False
+            BillOfMaterials_spr.Visible = False
+        End If
+
+    End Sub
+    Private Sub ChangeInCapacity_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChangeInCapacity_chk.CheckedChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ChangeInSpeed_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChangeInSpeed_chk.CheckedChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub ChangeInTravel_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChangeInTravel_chk.CheckedChanged
+        GeneralInfoValueChanged()
+    End Sub
+    Private Sub TorqueValueChanged()
 
         If Not isInitializingComponent Then
-            UpdateGeneralInfoDatatable()
+            UpdateTorqueDataDatatable()
             Load_ListBoxes()
             isInitializingComponent = True
-            PopulateAltData(False)
+            If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
+                PopulateAltData(False)
+            Else
+                PopulateGeneralInfo()
+                PopulateTorqueData()
+                Set_Fields_Grey_ALT()
+            End If
+            EnableBillOfMaterials()
             isInitializingComponent = False
             FormIsDirty = True
         End If
 
     End Sub
-    Private Sub CapacityNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.GotFocus
-        ShowGeneralInfoBaseValue(CapacityNew_cmb)
+    Private Sub MachineVendorExisting_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineVendorExisting_Cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub CapacityNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.LostFocus
-        HideGeneralInfoBaseValue()
+    Private Sub MachineModelExisting_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineModelExisting_cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub CapacityNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CapacityNew_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
+    Private Sub ExistingMachineSheaveDia_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExistingMachineSheaveDia_cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub SpeedNew_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.GotFocus
-        ShowGeneralInfoBaseValue(SpeedNew_cmb)
+    Private Sub NominalMotorRPM_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NominalMotorRPM_txt.LostFocus
+        If NominalMotorRPM_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "NominalMotorRPM_txt") Then
+            TorqueValueChanged()
+        End If
     End Sub
-    Private Sub SpeedNew_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.LostFocus
-        HideGeneralInfoBaseValue()
+    Private Sub BrakeType_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BrakeType_cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub SpeedNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles SpeedNew_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
+    Private Sub HoistRopeQty_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistRopeQty_Cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub NumberofStopsTotal_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.GotFocus
-        ShowGeneralInfoBaseValue(NumberofStopsTotal_cmb)
+    Private Sub HoistRopeSize_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HoistRopeSize_Cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub NumberofStopsTotal_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.LostFocus
-        HideGeneralInfoBaseValue()
+    Private Sub CarToCwtRopeDrop_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles CarToCwtRopeDrop_txt.LostFocus
+        If CarToCwtRopeDrop_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "CarToCwtRopeDrop_txt") Then
+            TorqueValueChanged()
+        End If
     End Sub
-    Private Sub NumberofStopsTotal_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsTotal_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
+    Private Sub Compensation_cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Compensation_cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub NumberofStopsFront_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.GotFocus
-        ShowGeneralInfoBaseValue(NumberofStopsFront_cmb)
+    Private Sub CarSheaveQty_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CarSheaveQty_Cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub NumberofStopsFront_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.LostFocus
-        HideGeneralInfoBaseValue()
+    Private Sub CwtSheaveQty_Cmb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CwtSheaveQty_Cmb.SelectedIndexChanged
+        TorqueValueChanged()
     End Sub
-    Private Sub NumberofStopsFront_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsFront_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
+    Private Sub FullLoadCurrentIDC1_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles FullLoadCurrentIDC1_txt.LostFocus
+        If FullLoadCurrentIDC1_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "FullLoadCurrentIDC1_txt") Then
+            TorqueValueChanged()
+        End If
     End Sub
-    Private Sub NumberofStopsRear_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.GotFocus
-        ShowGeneralInfoBaseValue(NumberofStopsRear_cmb)
+    Private Sub ArmatureFullLoadVoltageVFLU_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles ArmatureFullLoadVoltageVFLU_txt.LostFocus
+        If ArmatureFullLoadVoltageVFLU_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "ArmatureFullLoadVoltageVFLU_txt") Then
+            TorqueValueChanged()
+        End If
     End Sub
-    Private Sub NumberofStopsRear_cmb_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.LostFocus
-        HideGeneralInfoBaseValue()
+    Private Sub TravelExisting_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TravelExisting_txt.LostFocus
+        If TravelExisting_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TravelExisting_txt") Then
+            GeneralInfoValueChanged()
+        End If
     End Sub
-    Private Sub NumberofStopsRear_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NumberofStopsRear_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
+    Private Sub PopulateGeneralInfo()
+        Dim dr As DataRow
+
+        If GeneralInfo.Rows.Count = 1 Then
+            dr = GeneralInfo.Rows(0)
+            For Each Cntrl As Control In GeneralInformation_fra.Controls
+                If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+                    [Cntrl].Text = FindValueInDataRow([Cntrl].Name, dr)
+                ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+                    Dim UseDTPicker As DateTimePicker = [Cntrl]
+                    UseDTPicker.Value = CDate(FindValueInDataRow([Cntrl].Name, dr))
+                ElseIf TypeOf [Cntrl] Is CheckBox Then
+                    Dim UseCheckbox As CheckBox = [Cntrl]
+                    UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
+                End If
+            Next Cntrl
+            For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
+                SubcontractedLaborCost.LaborCost(iIndex).Cost = dr(SubcontractedLaborCost.LaborCost(iIndex).Description)
+            Next iIndex
+        End If
+
     End Sub
-    Private Sub MachineType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.GotFocus
-        ShowGeneralInfoBaseValue(MachineType_cmb)
-    End Sub
-    Private Sub MachineType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MachineType_cmb.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub MachineType_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MachineType_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
-    End Sub
-    Private Sub DriveType_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.GotFocus
-        ShowGeneralInfoBaseValue(DriveType_cmb)
-    End Sub
-    Private Sub DriveType_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriveType_cmb.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub DriveType_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DriveType_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
-    End Sub
-    Private Sub RopingNew_Cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.GotFocus
-        ShowGeneralInfoBaseValue(RopingNew_Cmb)
-    End Sub
-    Private Sub RopingNew_Cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub RopingNew_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles RopingNew_Cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
-    End Sub
-    Private Sub TopFloorToOverhead_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.GotFocus
-        ShowGeneralInfoBaseValue(TopFloorToOverhead_txt)
-    End Sub
-    Private Sub TopFloorToOverhead_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub TopFloorToOverhead_txt_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TopFloorToOverhead_txt.TextChanged
-        GeneralInfoValueChanged()
-    End Sub
-    Private Sub Travel_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Travel_txt.GotFocus
-        ShowGeneralInfoBaseValue(Travel_txt)
-    End Sub
-    Private Sub Travel_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Travel_txt.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub Travel_txt_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Travel_txt.TextChanged
-        GeneralInfoValueChanged()
-    End Sub
-    Private Sub PitDepth_txt_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.GotFocus
-        ShowGeneralInfoBaseValue(PitDepth_txt)
-    End Sub
-    Private Sub PitDepth_txt_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PitDepth_txt.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub PitDepth_txt_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles PitDepth_txt.TextChanged
-        GeneralInfoValueChanged()
-    End Sub
-    Private Sub Destination_cmb_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.GotFocus
-        ShowGeneralInfoBaseValue(Destination_cmb)
-    End Sub
-    Private Sub Destination_cmb_LostFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Destination_cmb.LostFocus
-        HideGeneralInfoBaseValue()
-    End Sub
-    Private Sub Destination_cmb_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Destination_cmb.SelectedIndexChanged
-        GeneralInfoValueChanged()
+    Private Sub PopulateTorqueData()
+        Dim dr As DataRow
+
+        If TorqueData.Rows.Count = 1 Then
+            dr = TorqueData.Rows(0)
+            For Each Cntrl As Control In Torque_fra.Controls
+                If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
+                    [Cntrl].Text = FindValueInDataRow([Cntrl].Name, dr)
+                ElseIf TypeOf [Cntrl] Is DateTimePicker Then
+                    Dim UseDTPicker As DateTimePicker = [Cntrl]
+                    UseDTPicker.Value = CDate(FindValueInDataRow([Cntrl].Name, dr))
+                ElseIf TypeOf [Cntrl] Is CheckBox Then
+                    Dim UseCheckbox As CheckBox = [Cntrl]
+                    UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
+                End If
+            Next Cntrl
+        End If
+
     End Sub
 End Class

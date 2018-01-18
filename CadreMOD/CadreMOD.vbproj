@@ -184,6 +184,7 @@
     <Compile Include="ORD_Governor_frm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TorqueCalc.vb" />
     <Compile Include="TorqueFrm.Designer.vb">
       <DependentUpon>TorqueFrm.vb</DependentUpon>
     </Compile>

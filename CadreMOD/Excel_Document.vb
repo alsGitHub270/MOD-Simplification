@@ -105,19 +105,57 @@ Module Excel_Document
         End Try
     End Sub
 
-    Public Sub GenerateCN1Report(_bank As String, _units As String, _installation_office As String, _negnum As String)
+
+
+
+
+
+    
+    Public Sub GenerateCN1Report()
+        '    Public Sub GenerateCN1Report(_bank As String, _units As String, _installation_office As String, _negnum As String)
+
+        Dim _bank As String = CurrentGOData_Typ.Bank
+        Dim _units As String = CurrentGOData_Typ.CurrentUnits
         Dim excelSheet As Excel.Worksheet = Nothing
         Dim cn1_rows() As DataRow
         Dim template_file As String = HAPDatabasePath & "Templates\CN1_Report.xlsx"
-        Dim excel_file As String = ReportsPath & Contracts.EstimateNum & "_CN1.xlsx"
+        Dim excel_file As String = ReportsPath & Contracts.EstimateNum & "-" & _bank & "_CN1.xlsx"
         Dim excel_app As Excel.Application = Nothing
         Dim workbook As Excel.Workbook = Nothing
         Dim sheet As Excel.Worksheet = Nothing
         Dim xls_column As Char
         Dim std_rate As Decimal
         Dim ot_rate As Decimal
-        Dim my_list As List(Of String)
 
+        Dim create_new_file As Boolean = True
+
+        Dim _installation_office = CM_MAIN_frm.cboInstallingOffice.Text
+        Dim _negnum = CM_MAIN_frm.txtNegNum.Text
+
+
+        'THIS FUNCTIONALITY MUST BE ADDRESSED WHEN ADDED TO THE REPORT FORM!!!!!!!!!
+
+        MessageBox.Show("This function does not currently work as values for installation office and negnum(controls on CM_MAIN) cannot be read.  This issue must be addressed during construction of the Reports form")
+        Exit Sub
+
+        If CurrentGOData_Typ.EstimateLevel <> "Summary" Then
+            MessageBox.Show("Please set the cursor on the summary level row to identify which bank to process", "Cannot Identify Bank", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+
+        If System.IO.File.Exists(excel_file) Then
+            Dim dialog_result As DialogResult
+            Dim message = "The CN1 Report already exists.  Do you want to open the existing file?" & Environment.NewLine & _
+                        "Selecting No will create a new file and overwrite the existing one."
+            dialog_result = MessageBox.Show(message, "Open Current File", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            If dialog_result = vbCancel Then
+                Exit Sub
+            End If
+            If dialog_result = vbYes Then
+                create_new_file = False
+            End If
+
+        End If
 
         Try
             ' Validate data exists
@@ -129,12 +167,16 @@ Module Excel_Document
             End If
 
             ' Copy  template to workspace
-            IO.File.Copy(template_file, excel_file, True)
+            If create_new_file Then
+                IO.File.Copy(template_file, excel_file, True)
 
-            ' Get the Labor Rates and calculate Installation $'s
-            my_list = GetLaborRates(_installation_office)
-            std_rate = my_list(0)
-            ot_rate = my_list(1)
+                ' Get the Labor Rates and calculate Installation $'s
+                Dim my_list As List(Of String)
+                my_list = GetLaborRates(_installation_office)
+                std_rate = my_list(0)
+                ot_rate = my_list(1)
+
+            End If
 
             ' Get the Excel application object.
             Try
@@ -146,6 +188,12 @@ Module Excel_Document
             ' Open the workbook.
             workbook = excel_app.Workbooks.Open(Filename:=excel_file)
             sheet = workbook.Worksheets("Sheet1")
+
+            If Not create_new_file Then
+                excel_app.Visible = True
+                Exit Sub
+            End If
+
             sheet.Unprotect()
 
             ' Populate headers
@@ -176,7 +224,7 @@ Module Excel_Document
                 End If
                 With _row
                     sheet.Range(xls_column & "12").Value = .Item("Bank_Final_Price")
-                    sheet.Range(xls_column & "13").Value = .Item("N/A")
+                    sheet.Range(xls_column & "13").Value = "N/A"
                     sheet.Range(xls_column & "16").Value = .Item("Material_HQ")
                     sheet.Range(xls_column & "17").Value = .Item("Material_RL")
                     sheet.Range(xls_column & "18").Value = .Item("Tax")
@@ -191,9 +239,9 @@ Module Excel_Document
                     sheet.Range(xls_column & "34").Value = .Item("Expenses")
                     sheet.Range(xls_column & "36").Value = .Item("Subcontract_Work")
                     sheet.Range(xls_column & "37").Value = .Item("Misc_Costs")
-                    sheet.Range(xls_column & "38").Value = "N/A"
-                    sheet.Range(xls_column & "39").Value = "N/A"
-                    sheet.Range(xls_column & "41").Value = "N/A"
+                    sheet.Range(xls_column & "38").Value = .Item("Sales_Commission")
+                    'sheet.Range(xls_column & "39").Value = "N/A"
+                    sheet.Range(xls_column & "41").Value = .Item("NPS_Cost")
                 End With
 
             Next
@@ -205,17 +253,12 @@ Module Excel_Document
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Generating CN1 Report", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            Try
-                clsNotes.DocSave(excel_file)
-            Catch ex As Exception
-                MessageBox.Show("Error saving file to Lotus Notes", "Error Saving to Notes", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
             'workbook.Close()
             'excel_app.Quit()
             ReleaseObject(sheet)
             ReleaseObject(workbook)
             'ReleaseObject(excel_app)
-            End Try
+        End Try
 
     End Sub
 End Module

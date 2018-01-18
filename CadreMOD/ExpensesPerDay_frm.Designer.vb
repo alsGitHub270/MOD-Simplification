@@ -284,7 +284,7 @@ Partial Class ExpensesPerDay_frm
         Me.Name = "ExpensesPerDay_frm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Expenses per Day Details"
         Me.ResumeLayout(False)
         Me.PerformLayout()

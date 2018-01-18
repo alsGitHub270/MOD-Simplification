@@ -654,11 +654,13 @@ Module General
 
     Public Sub SaveAll()
 
-        CM_MAIN_frm.SaveAll()
-        Select CurrentGOData_Typ.EstimateLevel
+        CM_MAIN_frm.SaveAll(False)
+        Select Case CurrentGOData_Typ.EstimateLevel
             Case "Master"
+                If AllowedToSave() Then
                 frmEstimatingBase.SaveEstimatingData()
                 frmEstimatingBase.SaveOrderingData()
+                End If
             Case "Base"
                 frmEstimatingBase.SaveEstimatingData()
             Case "Alt"
@@ -696,10 +698,17 @@ Module General
         For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
             Dim count As Integer
             Try
+                If FileIsOpen(FoundFile) Then
+                    Dim file_name As String = Path.GetFileName(FoundFile)
+                    Dim message As String = "'" & file_name & "' is currently open. Please close the file first, then press ok"
+                    message += vbCrLf & vbCrLf & "If you wish to retain the file, save it to another folder."
+                    MessageBox.Show(message, "Cannot initialize Estimate Folder", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                End If
                 File.Delete(FoundFile)
             Catch ex As Exception
                 ' To prevent system crash when FoundFile cannot be deleted 
                 count += 1
+                MessageBox.Show("Cannot delete '" & FoundFile & ".", "Caannot delete file", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End Try
         Next FoundFile
 
@@ -727,15 +736,6 @@ Module General
 
     End Sub
 
-    Private Sub KillExcelProcess()
-        Try
-            Dim Xcel() As Process = Process.GetProcessesByName("EXCEL")
-            For Each Process As Process In Xcel
-                Process.Kill()
-            Next
-        Catch ex As Exception
-        End Try
-    End Sub
 
 
     Public Function GetLaborRates(_installation_office) As List(Of String)
@@ -743,10 +743,39 @@ Module General
                     "FROM [Rate (MOD Labor)] " & _
                     "WHERE Office = '" & _installation_office & "';"
         Dim myList As New List(Of String)()
-
-
         myList = GetDataFromOptions(sSQL, True)
         Return myList
 
     End Function
+    
+    Public Sub PauseSystem(ByRef TimeAmt As Single)
+        Dim PauseTime As Single = TimeAmt
+        Dim StartTime As Single = DateTime.Now.TimeOfDay.TotalSeconds
+
+        Do While DateTime.Now.TimeOfDay.TotalSeconds < (StartTime + PauseTime)
+            Application.DoEvents()
+        Loop
+
+    End Sub
+    Public Function FindString(ByRef Ctrl As Control, ByVal Search As String) As Integer
+        Dim uMsg As Integer
+
+        If TypeOf Ctrl Is ListBox Then
+            uMsg = LB_FINDSTRINGEXACT
+        ElseIf TypeOf Ctrl Is ComboBox Then
+            uMsg = CB_FINDSTRINGEXACT
+        End If
+        Return SendMessage(Ctrl.Handle, CB_FINDSTRINGEXACT, -1, Search)
+
+    End Function
+    Public Sub ResetADODBRecordset(ByRef UseRecordset As ADODB.Recordset)
+
+        If Not IsNothing(UseRecordset) Then
+            If UseRecordset.State = ADODB.ObjectStateEnum.adStateOpen Then
+                UseRecordset.Close()
+            End If
+        End If
+        UseRecordset = New ADODB.Recordset
+
+    End Sub
 End Module

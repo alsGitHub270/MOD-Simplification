@@ -23,6 +23,7 @@ Module EstimatingMOD
     Public MainGroups As DataTable = Nothing
     Public SubGroups As DataTable = Nothing
     Public GeneralInfo As DataTable = Nothing
+    Public TorqueData As DataTable = Nothing
     Public OrderingInfo As DataTable = Nothing
     Public CurrentTab As String = String.Empty
 
@@ -36,6 +37,7 @@ Module EstimatingMOD
     Public Const TABLENAME_MAIN As String = "EstMainGroup"
     Public Const TABLENAME_MATERIALS As String = "EstMaterials"
     Public Const TABLENAME_GENERALINFO As String = "GeneralInfo"
+    Public Const TABLENAME_TORQUEDATA As String = "TorqueData"
     Public Const TABLENAME_ORDERINFO As String = "OrderInfo"
 
     Public Const TABLECOL_MATERIALDESC As String = "Material Description"
@@ -197,6 +199,7 @@ Module EstimatingMOD
     Public Const MAT_ID_ACMotorCouplerandAdapterKit As String = "010RGD"
     Public Const MAT_ID_DriveSheave As String = "020RGD"
     Public Const MAT_ID_BrakePads As String = "025RGD"
+    Public Const MAT_ID_BrakePins As String = "026RGD"
     Public Const MAT_ID_BrakeSwitchRGD As String = "030RGD"
     Public Const MAT_ID_DrainFlushSeals As String = "035RGD"
     Public Const MAT_ID_MachineBearings As String = "040RGD"
@@ -406,6 +409,9 @@ Module EstimatingMOD
     Public UseTypeCol As String = TABLECOL_TYPE_EST, UseOptionCol As String = TABLECOL_OPTION_EST, UseOrderByCol As String = TABLECOL_ORDERBY_EST
     Public UseUnitQtyCol As String = TABLECOL_UNITQTY_EST
     Public UseMaterialItemRecordSet As New ADODB.Recordset
+    Public TorqueRecordset As New ADODB.Recordset
+
+    Public FrameColorToProceed As System.Drawing.Color = Color.Green
 
     Public Sub GetCostHours(ByVal MaterialID As String, ByVal CurOption As String, ByVal CurType As String, ByVal CurOrderBy As String,
                             ByVal CostOrHours As String, ByRef CurField As Single, ByVal CurQty As Integer)
@@ -427,7 +433,7 @@ Module EstimatingMOD
                 Exit Sub
             End If
             CurDataset = SetCurrentDataset()
-            TotalTravel = Conversion.Val(GetValue_GeneralInfo(CurDataset, "Travel_txt")) +
+            TotalTravel = Conversion.Val(GetValue_GeneralInfo(CurDataset, "TravelNew_txt")) +
                           Conversion.Val(GetValue_GeneralInfo(CurDataset, "TopFloorToOverhead_txt")) +
                           Conversion.Val(GetValue_GeneralInfo(CurDataset, "PitDepth_txt"))
             FrontOpenings = Conversion.Val(GetValue_GeneralInfo(CurDataset, "NumberofStopsFront_cmb"))
@@ -559,7 +565,7 @@ Module EstimatingMOD
                             End If
                         End If
                     End If
-                Case MAT_ID_Drive, MAT_ID_Transformer, MAT_ID_ChokeforDCApplications, MAT_ID_ConfigurationStation, MAT_ID_PORTSecurityType, MAT_ID_ACMotorRGD,
+                Case MAT_ID_Drive, MAT_ID_Transformer, MAT_ID_ChokeforDCApplications, MAT_ID_ConfigurationStation, MAT_ID_PORTSecurityType,
                      MAT_ID_ACMotorCouplerandAdapterKit, MAT_ID_BrakeSwitchRGD, MAT_ID_GearedMachineBedplateBrakeSwitch,
                      MAT_ID_ACMotorNGD, MAT_ID_MachineIsolation, MAT_ID_DeflectorSheaves, MAT_ID_BlockingAssemblyNGD,
                      MAT_ID_MachineFrameandMechancialParts, MAT_ID_KSSLMSKitandContacts,
@@ -872,7 +878,38 @@ Module EstimatingMOD
                             End If
                         End If
                     End If
+                Case MAT_ID_ACMotorRGD
+                    UseMaterialItemRecordSet.Filter = UseWhere & " AND Types = '" & CurType & "'"
+                    If UseMaterialItemRecordSet.RecordCount > 0 Then
+                        UseMaterialItemRecordSet.MoveFirst()
+                        If CostOrHours = "Cost" Then
+                            Select Case CurOption
+                                Case "New"
+                                    CurField = UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                Case "Reuse", "Included"
+                                    CurField = 0
+                                Case Else
+                            End Select
+                            If GetValue(CurDataset.Tables(TABLENAME_TORQUEDATA), "MachineVendorExisting_Cmb") = OTIS Then
+                                UseMaterialItemRecordSet.Filter = UseWhere & " AND Usage = 'Adder'"
+                                If UseMaterialItemRecordSet.RecordCount > 0 Then
+                                    UseMaterialItemRecordSet.MoveFirst()
+                                    Do Until UseMaterialItemRecordSet.EOF
+                                        If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(GetValue(CurDataset.Tables(TABLENAME_TORQUEDATA), "MachineModelExisting_Cmb")) > -1 Then
+                                            CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
+                                            Exit Do
+                                        End If
+                                        UseMaterialItemRecordSet.MoveNext()
+                                    Loop
+                                End If
+                            End If
 
+                        ElseIf CostOrHours = "Hours" And Not String.IsNullOrEmpty(UseField) Then
+                            If Not IsDBNull(UseMaterialItemRecordSet.Fields(UseField).Value) Then
+                                CurField = UseMaterialItemRecordSet.Fields(UseField).Value
+                            End If
+                        End If
+                    End If
                 Case Else
             End Select
             CurField = Math.Round(CurField, 2)
@@ -1336,6 +1373,15 @@ Module EstimatingMOD
                                         ElseIf Not IsPOHController Then
                                             AddToOptions = True
                                         End If
+                                    Case MAT_ID_BrakeSwitchRGD
+                                        CurValue = "Non-HW"
+                                        'CJ - 1/10/18 - Uncomment when Existing Machine Vendor/Model
+                                        'If = HW Then
+                                        '   CurValue = "Hollister-Whitney"
+                                        'End If
+                                        If UseMaterialItemRecordSet.Fields("Type").Value.ToString.IndexOf(CurValue) > -1 Then
+                                            AddToOptions = True
+                                        End If
                                     Case Else
                                         AddToOptions = True
                                 End Select
@@ -1444,7 +1490,7 @@ Module EstimatingMOD
 
         Try
             CurDataset = SetCurrentDataset()
-            CurTravel = Conversion.Val(GetValue_GeneralInfo(CurDataset, "Travel_txt"))
+            CurTravel = Conversion.Val(GetValue_GeneralInfo(CurDataset, "TravelNew_txt"))
             CurPitDepth = Conversion.Val(GetValue_GeneralInfo(CurDataset, "PitDepth_txt"))
             TotalTravel = CurTravel + Conversion.Val(GetValue_GeneralInfo(CurDataset, "TopFloorToOverhead_txt")) + CurPitDepth
             If Math.Round(Conversion.Val(CurMATID)) > 900.0 Then
@@ -1525,13 +1571,13 @@ Module EstimatingMOD
         Return ReturnVal
 
     End Function
-    Public Function GetValue(ByVal CurMaterialTable As DataTable, ByVal UseField As String, Optional ByVal UseMainID As String = "", Optional ByVal UseMaterialID As String = "") As String
+    Public Function GetValue(ByVal CurTable As DataTable, ByVal UseField As String, Optional ByVal UseMainID As String = "", Optional ByVal UseMaterialID As String = "") As String
         Dim ReturnVal As String = String.Empty
         Dim CurRow As Integer = 0, iIndex As Integer = 0
         Dim CurDataRow As DataRow = Nothing
 
-        For iIndex = 0 To CurMaterialTable.Rows.Count - 1
-            CurDataRow = CurMaterialTable.Rows(iIndex)
+        For iIndex = 0 To CurTable.Rows.Count - 1
+            CurDataRow = CurTable.Rows(iIndex)
             If String.IsNullOrEmpty(UseMainID) Or String.IsNullOrEmpty(UseMaterialID) Then
                 If Not IsDBNull(CurDataRow(UseField)) Then
                     ReturnVal = CurDataRow(UseField)
@@ -1588,12 +1634,12 @@ Module EstimatingMOD
             For iIndex = 0 To SubGroups.Rows.Count - 1
                 CurDataRow = SubGroups.Rows(iIndex)
                 If Not IsDBNull(CurDataRow(UseOptionCol)) Then
-                    UseMaterialItemRecordSet = New ADODB.Recordset
+                    ResetADODBRecordset(UseMaterialItemRecordSet)
                     UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
                     If UseMaterialItemRecordSet.RecordCount > 0 Then
                         'Base Cost/Hours
                         If CurrentGOData_Typ.EstimateLevel = "Alt" Then
-                            TotalTravel = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
+                            TotalTravel = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TravelNew_txt")) +
                                           Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
                                           Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
                             FrontOpenings = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
@@ -1700,7 +1746,7 @@ Module EstimatingMOD
                             End If
                         End If
                         'Cost/Hours
-                        TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Travel_txt")) +
+                        TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TravelNew_txt")) +
                                       Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
                                       Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
                         FrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
@@ -2229,5 +2275,26 @@ Module EstimatingMOD
         Return ReturnVal
 
     End Function
+    Public Sub ValidateChangeInCapacitySpeedTravel(ByVal CurCheckState As CheckState, ByRef UseLabel As Label, ByRef UseControl As Windows.Forms.Control)
+        Dim EnableStatus As Boolean = False
+        Dim UseCombo As ComboBox = Nothing
+        Dim UseText As TextBox = Nothing
 
+        If CurCheckState = CheckState.Checked Then
+            EnableStatus = True
+        Else
+            If Not IsNothing(UseControl) Then
+                If TypeOf UseControl Is ComboBox Then
+                    UseCombo = UseControl
+                    UseCombo.SelectedIndex = -1
+                ElseIf TypeOf UseControl Is TextBox Then
+                    UseText = UseControl
+                    UseText.Text = String.Empty
+                End If
+            End If
+        End If
+        UseLabel.Enabled = EnableStatus
+        UseControl.Enabled = EnableStatus
+
+    End Sub
 End Module

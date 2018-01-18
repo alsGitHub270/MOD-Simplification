@@ -17,7 +17,29 @@
     Public ADOCatalogRPTdata As ADOX.Catalog = Nothing
     Public ADOCatalogHapDatabase As ADOX.Catalog = Nothing
     Public _ADOCatalogMODDataDataBase As ADOX.Catalog = Nothing
-    Public ADOCatalogMessageDataBase As ADOX.Catalog = Nothing
+    Public Property ADOCatalogMODDataDataBase() As ADOX.Catalog
+        Get
+            If _ADOCatalogMODDataDataBase Is Nothing Then
+                _ADOCatalogMODDataDataBase = New ADOX.Catalog()
+            End If
+            Return _ADOCatalogMODDataDataBase
+        End Get
+        Set(ByVal Value As ADOX.Catalog)
+            _ADOCatalogMODDataDataBase = Value
+        End Set
+    End Property
+    Public _ADOCatalogTorqueDataBase As ADOX.Catalog = Nothing
+    Public Property ADOCatalogTorqueDataBase() As ADOX.Catalog
+        Get
+            If _ADOCatalogTorqueDataBase Is Nothing Then
+                _ADOCatalogTorqueDataBase = New ADOX.Catalog()
+            End If
+            Return _ADOCatalogTorqueDataBase
+        End Get
+        Set(ByVal Value As ADOX.Catalog)
+            _ADOCatalogTorqueDataBase = Value
+        End Set
+    End Property
 
     Public dsCadre As DataSet
     Public dtSummaryGroup As DataTable
@@ -73,17 +95,6 @@
     Public TaxRate As Single = -999.99
 
 
-    Public Property ADOCatalogMODDataDataBase() As ADOX.Catalog
-        Get
-            If _ADOCatalogMODDataDataBase Is Nothing Then
-                _ADOCatalogMODDataDataBase = New ADOX.Catalog()
-            End If
-            Return _ADOCatalogMODDataDataBase
-        End Get
-        Set(ByVal Value As ADOX.Catalog)
-            _ADOCatalogMODDataDataBase = Value
-        End Set
-    End Property
 
 
     Public CalledToRunReconfig As Boolean

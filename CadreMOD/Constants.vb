@@ -1,12 +1,19 @@
 ﻿Module Constants
     ' Contract Manager
-    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 12/12/2017"
+    Public Const VERSION_STAMP As String = "CADRE MOD 2.0 V 2018.0 - 01/16/2017"
     Public Const tCM_TITLE As String = "MOD Estimating"
     Public Const SHORT_VERSION As String = "2018.0"
     Public Const tCM_ADDRESS_TITLE As String = "Address"
     ' Public DEFAULT_C1 As Single = 0.2
 
+    'New Machines
     Public Const MACHINE_FMM200 As String = "FMM200"
+    Public Const MACHINE_FM560 As String = "FM 560"
+    Public Const MACHINE_FM630 As String = "FM 630"
+    Public Const MACHINE_525LS As String = "525 LS"
+    Public Const MACHINE_FMR355 As String = "FMR 355"
+    Public Const MACHINE_PMR355 As String = "PMR 355"
+    Public Const MACHINE_PMR490 As String = "PMR 490"
 
     ' dB Operations
     Public Const MOVE_FIRST As Integer = 0
@@ -34,6 +41,7 @@
     Public Const CRITICAL_ERROR As Integer = 22
 
     Public Const MODDATA_DATABASE_NAME As String = "MODData.accdb"
+    Public Const TORQUE_DATABASE_NAME As String = "TORQUE.accdb"
 
     ' Building Codes
     Public Const BUILDING_CODE_TABLE_QUERY_NAME As String = "BUILDING_CODE_TABLE_SQL"
@@ -206,4 +214,7 @@
     'Estimate Statuses
     Public Const STATUS_BOOK_SUCCEEDED As String = "BOOK SUCCEEDED"
     Public Const STATUS_FROZEN As String = "FROZEN"
+
+    Public Const DATETIMENOTESFORMAT As String = "MM/dd/yyyy hh:mm:ss AMPM"
+
 End Module
