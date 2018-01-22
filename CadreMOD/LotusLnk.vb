@@ -124,6 +124,11 @@ Module Lotuslnk
             '                End If
             '            Next iIndx
             '            clsNotes.SetValue("Proposal_Price", TotalPrice)
+            clsNotes.SetValue("proposal_num", HoldUniqueActivity)
+            clsNotes.SetValue("FeedbackUnique", HoldUniqueActivity)
+            clsNotes.SetValue("ActivityUnique", HoldUniqueActivity)
+            clsNotes.SetValue("ContactUnique", Hold_Contact_ID)
+            clsNotes.SetValue("Unique", Hold_Customer_ID)
             clsNotes.SetValue("MODFlag", "MOD")
             TotalAward = GetSummaryTotals("bank_final_price")
             clsNotes.SetValue("awardPrice", TotalAward)
