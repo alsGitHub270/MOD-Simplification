@@ -28,7 +28,49 @@ Partial Class frmEstimatingBase
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.CarTab = New System.Windows.Forms.TabPage()
         Me.CarData_fra = New System.Windows.Forms.GroupBox()
+        Me.Torque_fra = New System.Windows.Forms.GroupBox()
+        Me.NominalMotorRPM_txt = New System.Windows.Forms.TextBox()
+        Me.ArmatureFullLoadVoltageVFLU_txt = New System.Windows.Forms.TextBox()
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl = New System.Windows.Forms.Label()
+        Me.ArmatureFullLoadVoltageVFLU_lbl = New System.Windows.Forms.Label()
+        Me.FullLoadCurrentIDC1_txt = New System.Windows.Forms.TextBox()
+        Me.FullLoadCurrentIDC1Amps_lbl = New System.Windows.Forms.Label()
+        Me.FullLoadCurrentIDC1_lbl = New System.Windows.Forms.Label()
+        Me.CwtSheaveQty_Cmb = New System.Windows.Forms.ComboBox()
+        Me.CwtSheaveQty_lbl = New System.Windows.Forms.Label()
+        Me.CarSheaveQty_Cmb = New System.Windows.Forms.ComboBox()
+        Me.CarSheaveQty_lbl = New System.Windows.Forms.Label()
+        Me.Compensation_cmb = New System.Windows.Forms.ComboBox()
+        Me.Compensation_lbl = New System.Windows.Forms.Label()
+        Me.HoistRopeSizeIn_lbl = New System.Windows.Forms.Label()
+        Me.CarToCwtRopeDrop_txt = New System.Windows.Forms.TextBox()
+        Me.CarToCwtRopeDrop_lbl = New System.Windows.Forms.Label()
+        Me.CarToCwtRopeDropIn_lbl = New System.Windows.Forms.Label()
+        Me.HoistRopeQty_Cmb = New System.Windows.Forms.ComboBox()
+        Me.HoistRopeSize_Cmb = New System.Windows.Forms.ComboBox()
+        Me.HoistRopeQty_lbl = New System.Windows.Forms.Label()
+        Me.HoistRopeSize_lbl = New System.Windows.Forms.Label()
+        Me.BrakeType_cmb = New System.Windows.Forms.ComboBox()
+        Me.BrakeType_lbl = New System.Windows.Forms.Label()
+        Me.NominalMotorRPM_lbl = New System.Windows.Forms.Label()
+        Me.ExistingMachineSheaveDia_cmb = New System.Windows.Forms.ComboBox()
+        Me.ExistingMachineSheaveDia_lbl = New System.Windows.Forms.Label()
+        Me.ExistingMachineSheaveDiaIn_lbl = New System.Windows.Forms.Label()
+        Me.ExpandCollapseTorqueFrame_btn = New System.Windows.Forms.Button()
+        Me.MachineModelExisting_cmb = New System.Windows.Forms.ComboBox()
+        Me.MachineVendorExisting_Cmb = New System.Windows.Forms.ComboBox()
+        Me.MachineModelExisting_lbl = New System.Windows.Forms.Label()
+        Me.MachineVendorExisting_lbl = New System.Windows.Forms.Label()
         Me.GeneralInformation_fra = New System.Windows.Forms.GroupBox()
+        Me.SpeedExisting_cmb = New System.Windows.Forms.ComboBox()
+        Me.SpeedExisting_lbl = New System.Windows.Forms.Label()
+        Me.CapacityExisting_cmb = New System.Windows.Forms.ComboBox()
+        Me.CapacityExisting_lbl = New System.Windows.Forms.Label()
+        Me.ChangeInSpeed_chk = New System.Windows.Forms.CheckBox()
+        Me.ChangeInCapacity_chk = New System.Windows.Forms.CheckBox()
+        Me.TravelExisting_txt = New System.Windows.Forms.TextBox()
+        Me.TravelExisting_lbl = New System.Windows.Forms.Label()
+        Me.ChangeInTravel_chk = New System.Windows.Forms.CheckBox()
         Me.Destination_cmb = New System.Windows.Forms.ComboBox()
         Me.Destination_lbl = New System.Windows.Forms.Label()
         Me.GatewayReviewRequired_chk = New System.Windows.Forms.CheckBox()
@@ -63,8 +105,8 @@ Partial Class frmEstimatingBase
         Me.RiserQtyRear_lbl = New System.Windows.Forms.Label()
         Me.PitDepth_txt = New System.Windows.Forms.TextBox()
         Me.PitDepth_lbl = New System.Windows.Forms.Label()
-        Me.Travel_txt = New System.Windows.Forms.TextBox()
-        Me.Travel_lbl = New System.Windows.Forms.Label()
+        Me.TravelNew_txt = New System.Windows.Forms.TextBox()
+        Me.TravelNew_lbl = New System.Windows.Forms.Label()
         Me.TopFloorToOverhead_txt = New System.Windows.Forms.TextBox()
         Me.TopFloorToOverhead_lbl = New System.Windows.Forms.Label()
         Me.RopingNew_Cmb = New System.Windows.Forms.ComboBox()
@@ -121,7 +163,7 @@ Partial Class frmEstimatingBase
         Me.CapacityNew_cmb = New System.Windows.Forms.ComboBox()
         Me.SpeedLabel_lbl = New System.Windows.Forms.Label()
         Me.CapacityLabel_lbl = New System.Windows.Forms.Label()
-        Me.ExpandCollapseFrame_btn = New System.Windows.Forms.Button()
+        Me.ExpandCollapseGeneralInfoFrame_btn = New System.Windows.Forms.Button()
         Me.BillofMaterialsandTaskList_fra = New System.Windows.Forms.GroupBox()
         Me.ExpandAll_cmd = New System.Windows.Forms.Button()
         Me.BillOfMaterials_spr = New FarPoint.Win.Spread.FpSpread()
@@ -135,12 +177,12 @@ Partial Class frmEstimatingBase
         Me.fraHdrJobInfo = New System.Windows.Forms.GroupBox()
         Me.txtHdrBnkLetter = New System.Windows.Forms.TextBox()
         Me.Units_txt = New System.Windows.Forms.TextBox()
-        Me.txtHdrGONegNum = New System.Windows.Forms.TextBox()
+        Me.txtHdrEstimateNum = New System.Windows.Forms.TextBox()
         Me.HdrGONum_txt = New System.Windows.Forms.TextBox()
         Me.txtHdrBldgName = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.lblHdrGONegNum = New System.Windows.Forms.Label()
+        Me.lblHdrEstimateNum = New System.Windows.Forms.Label()
         Me.HdrGONum_lbl = New System.Windows.Forms.Label()
         Me.lblHdrBldgNme = New System.Windows.Forms.Label()
         Me.fraHdrIcons = New System.Windows.Forms.GroupBox()
@@ -159,6 +201,7 @@ Partial Class frmEstimatingBase
         Me.TabControl1.SuspendLayout()
         Me.CarTab.SuspendLayout()
         Me.CarData_fra.SuspendLayout()
+        Me.Torque_fra.SuspendLayout()
         Me.GeneralInformation_fra.SuspendLayout()
         Me.BillofMaterialsandTaskList_fra.SuspendLayout()
         CType(Me.BillOfMaterials_spr, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -172,30 +215,29 @@ Partial Class frmEstimatingBase
         '
         'GroupBox1
         '
-        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.BackColor = System.Drawing.Color.White
         Me.GroupBox1.Controls.Add(Me.TabControl1)
         Me.GroupBox1.Controls.Add(Me.OrderingForms_fra)
         Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 105)
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 92)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1602, 690)
+        Me.GroupBox1.Size = New System.Drawing.Size(1593, 700)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
         '
         'TabControl1
         '
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.CarTab)
         Me.TabControl1.Controls.Add(Me.OrderTab)
-        Me.TabControl1.Location = New System.Drawing.Point(6, 21)
+        Me.TabControl1.Location = New System.Drawing.Point(6, 11)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1590, 663)
+        Me.TabControl1.Size = New System.Drawing.Size(1581, 673)
         Me.TabControl1.TabIndex = 11
         '
         'CarTab
@@ -204,28 +246,523 @@ Partial Class frmEstimatingBase
         Me.CarTab.Location = New System.Drawing.Point(4, 25)
         Me.CarTab.Name = "CarTab"
         Me.CarTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.CarTab.Size = New System.Drawing.Size(1582, 634)
+        Me.CarTab.Size = New System.Drawing.Size(1573, 644)
         Me.CarTab.TabIndex = 2
         Me.CarTab.UseVisualStyleBackColor = True
         '
         'CarData_fra
         '
         Me.CarData_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CarData_fra.Controls.Add(Me.Torque_fra)
         Me.CarData_fra.Controls.Add(Me.GeneralInformation_fra)
         Me.CarData_fra.Controls.Add(Me.BillofMaterialsandTaskList_fra)
         Me.CarData_fra.Location = New System.Drawing.Point(1, -6)
         Me.CarData_fra.Name = "CarData_fra"
-        Me.CarData_fra.Size = New System.Drawing.Size(1575, 624)
+        Me.CarData_fra.Size = New System.Drawing.Size(1566, 646)
         Me.CarData_fra.TabIndex = 0
         Me.CarData_fra.TabStop = False
+        '
+        'Torque_fra
+        '
+        Me.Torque_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Torque_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.Torque_fra.Controls.Add(Me.NominalMotorRPM_txt)
+        Me.Torque_fra.Controls.Add(Me.ArmatureFullLoadVoltageVFLU_txt)
+        Me.Torque_fra.Controls.Add(Me.ArmatureFullLoadVoltageVFLUVolts_lbl)
+        Me.Torque_fra.Controls.Add(Me.ArmatureFullLoadVoltageVFLU_lbl)
+        Me.Torque_fra.Controls.Add(Me.FullLoadCurrentIDC1_txt)
+        Me.Torque_fra.Controls.Add(Me.FullLoadCurrentIDC1Amps_lbl)
+        Me.Torque_fra.Controls.Add(Me.FullLoadCurrentIDC1_lbl)
+        Me.Torque_fra.Controls.Add(Me.CwtSheaveQty_Cmb)
+        Me.Torque_fra.Controls.Add(Me.CwtSheaveQty_lbl)
+        Me.Torque_fra.Controls.Add(Me.CarSheaveQty_Cmb)
+        Me.Torque_fra.Controls.Add(Me.CarSheaveQty_lbl)
+        Me.Torque_fra.Controls.Add(Me.Compensation_cmb)
+        Me.Torque_fra.Controls.Add(Me.Compensation_lbl)
+        Me.Torque_fra.Controls.Add(Me.HoistRopeSizeIn_lbl)
+        Me.Torque_fra.Controls.Add(Me.CarToCwtRopeDrop_txt)
+        Me.Torque_fra.Controls.Add(Me.CarToCwtRopeDrop_lbl)
+        Me.Torque_fra.Controls.Add(Me.CarToCwtRopeDropIn_lbl)
+        Me.Torque_fra.Controls.Add(Me.HoistRopeQty_Cmb)
+        Me.Torque_fra.Controls.Add(Me.HoistRopeSize_Cmb)
+        Me.Torque_fra.Controls.Add(Me.HoistRopeQty_lbl)
+        Me.Torque_fra.Controls.Add(Me.HoistRopeSize_lbl)
+        Me.Torque_fra.Controls.Add(Me.BrakeType_cmb)
+        Me.Torque_fra.Controls.Add(Me.BrakeType_lbl)
+        Me.Torque_fra.Controls.Add(Me.NominalMotorRPM_lbl)
+        Me.Torque_fra.Controls.Add(Me.ExistingMachineSheaveDia_cmb)
+        Me.Torque_fra.Controls.Add(Me.ExistingMachineSheaveDia_lbl)
+        Me.Torque_fra.Controls.Add(Me.ExistingMachineSheaveDiaIn_lbl)
+        Me.Torque_fra.Controls.Add(Me.ExpandCollapseTorqueFrame_btn)
+        Me.Torque_fra.Controls.Add(Me.MachineModelExisting_cmb)
+        Me.Torque_fra.Controls.Add(Me.MachineVendorExisting_Cmb)
+        Me.Torque_fra.Controls.Add(Me.MachineModelExisting_lbl)
+        Me.Torque_fra.Controls.Add(Me.MachineVendorExisting_lbl)
+        Me.Torque_fra.Location = New System.Drawing.Point(5, 229)
+        Me.Torque_fra.Name = "Torque_fra"
+        Me.Torque_fra.Size = New System.Drawing.Size(1561, 91)
+        Me.Torque_fra.TabIndex = 81
+        Me.Torque_fra.TabStop = False
+        Me.Torque_fra.Text = "   Torque Data"
+        '
+        'NominalMotorRPM_txt
+        '
+        Me.NominalMotorRPM_txt.AcceptsReturn = True
+        Me.NominalMotorRPM_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.NominalMotorRPM_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.NominalMotorRPM_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NominalMotorRPM_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NominalMotorRPM_txt.Location = New System.Drawing.Point(412, 14)
+        Me.NominalMotorRPM_txt.MaxLength = 0
+        Me.NominalMotorRPM_txt.Name = "NominalMotorRPM_txt"
+        Me.NominalMotorRPM_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NominalMotorRPM_txt.Size = New System.Drawing.Size(92, 20)
+        Me.NominalMotorRPM_txt.TabIndex = 55
+        '
+        'ArmatureFullLoadVoltageVFLU_txt
+        '
+        Me.ArmatureFullLoadVoltageVFLU_txt.AcceptsReturn = True
+        Me.ArmatureFullLoadVoltageVFLU_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.ArmatureFullLoadVoltageVFLU_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.ArmatureFullLoadVoltageVFLU_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ArmatureFullLoadVoltageVFLU_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.ArmatureFullLoadVoltageVFLU_txt.Location = New System.Drawing.Point(1191, 40)
+        Me.ArmatureFullLoadVoltageVFLU_txt.MaxLength = 0
+        Me.ArmatureFullLoadVoltageVFLU_txt.Name = "ArmatureFullLoadVoltageVFLU_txt"
+        Me.ArmatureFullLoadVoltageVFLU_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ArmatureFullLoadVoltageVFLU_txt.Size = New System.Drawing.Size(58, 20)
+        Me.ArmatureFullLoadVoltageVFLU_txt.TabIndex = 64
+        '
+        'ArmatureFullLoadVoltageVFLUVolts_lbl
+        '
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.Location = New System.Drawing.Point(1254, 43)
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.Name = "ArmatureFullLoadVoltageVFLUVolts_lbl"
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.Size = New System.Drawing.Size(42, 19)
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.TabIndex = 126
+        Me.ArmatureFullLoadVoltageVFLUVolts_lbl.Text = "VOLTS"
+        '
+        'ArmatureFullLoadVoltageVFLU_lbl
+        '
+        Me.ArmatureFullLoadVoltageVFLU_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.ArmatureFullLoadVoltageVFLU_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ArmatureFullLoadVoltageVFLU_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ArmatureFullLoadVoltageVFLU_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ArmatureFullLoadVoltageVFLU_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.ArmatureFullLoadVoltageVFLU_lbl.Location = New System.Drawing.Point(1048, 43)
+        Me.ArmatureFullLoadVoltageVFLU_lbl.Name = "ArmatureFullLoadVoltageVFLU_lbl"
+        Me.ArmatureFullLoadVoltageVFLU_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ArmatureFullLoadVoltageVFLU_lbl.Size = New System.Drawing.Size(145, 19)
+        Me.ArmatureFullLoadVoltageVFLU_lbl.TabIndex = 125
+        Me.ArmatureFullLoadVoltageVFLU_lbl.Text = "Armature Voltage (VFLU)"
+        '
+        'FullLoadCurrentIDC1_txt
+        '
+        Me.FullLoadCurrentIDC1_txt.AcceptsReturn = True
+        Me.FullLoadCurrentIDC1_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.FullLoadCurrentIDC1_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.FullLoadCurrentIDC1_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FullLoadCurrentIDC1_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.FullLoadCurrentIDC1_txt.Location = New System.Drawing.Point(1191, 14)
+        Me.FullLoadCurrentIDC1_txt.MaxLength = 0
+        Me.FullLoadCurrentIDC1_txt.Name = "FullLoadCurrentIDC1_txt"
+        Me.FullLoadCurrentIDC1_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.FullLoadCurrentIDC1_txt.Size = New System.Drawing.Size(58, 20)
+        Me.FullLoadCurrentIDC1_txt.TabIndex = 63
+        '
+        'FullLoadCurrentIDC1Amps_lbl
+        '
+        Me.FullLoadCurrentIDC1Amps_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.FullLoadCurrentIDC1Amps_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.FullLoadCurrentIDC1Amps_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.FullLoadCurrentIDC1Amps_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FullLoadCurrentIDC1Amps_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.FullLoadCurrentIDC1Amps_lbl.Location = New System.Drawing.Point(1254, 17)
+        Me.FullLoadCurrentIDC1Amps_lbl.Name = "FullLoadCurrentIDC1Amps_lbl"
+        Me.FullLoadCurrentIDC1Amps_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.FullLoadCurrentIDC1Amps_lbl.Size = New System.Drawing.Size(36, 19)
+        Me.FullLoadCurrentIDC1Amps_lbl.TabIndex = 123
+        Me.FullLoadCurrentIDC1Amps_lbl.Text = "AMPS"
+        '
+        'FullLoadCurrentIDC1_lbl
+        '
+        Me.FullLoadCurrentIDC1_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.FullLoadCurrentIDC1_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.FullLoadCurrentIDC1_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.FullLoadCurrentIDC1_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FullLoadCurrentIDC1_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.FullLoadCurrentIDC1_lbl.Location = New System.Drawing.Point(1048, 17)
+        Me.FullLoadCurrentIDC1_lbl.Name = "FullLoadCurrentIDC1_lbl"
+        Me.FullLoadCurrentIDC1_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.FullLoadCurrentIDC1_lbl.Size = New System.Drawing.Size(145, 19)
+        Me.FullLoadCurrentIDC1_lbl.TabIndex = 122
+        Me.FullLoadCurrentIDC1_lbl.Text = "Full Load Current (IDC1)"
+        '
+        'CwtSheaveQty_Cmb
+        '
+        Me.CwtSheaveQty_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtSheaveQty_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtSheaveQty_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CwtSheaveQty_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtSheaveQty_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CwtSheaveQty_Cmb.Location = New System.Drawing.Point(966, 66)
+        Me.CwtSheaveQty_Cmb.Name = "CwtSheaveQty_Cmb"
+        Me.CwtSheaveQty_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtSheaveQty_Cmb.Size = New System.Drawing.Size(58, 21)
+        Me.CwtSheaveQty_Cmb.TabIndex = 62
+        '
+        'CwtSheaveQty_lbl
+        '
+        Me.CwtSheaveQty_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CwtSheaveQty_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CwtSheaveQty_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CwtSheaveQty_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CwtSheaveQty_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CwtSheaveQty_lbl.Location = New System.Drawing.Point(796, 69)
+        Me.CwtSheaveQty_lbl.Name = "CwtSheaveQty_lbl"
+        Me.CwtSheaveQty_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CwtSheaveQty_lbl.Size = New System.Drawing.Size(168, 15)
+        Me.CwtSheaveQty_lbl.TabIndex = 120
+        Me.CwtSheaveQty_lbl.Text = "Cwt Overhead Sheave Qty"
+        '
+        'CarSheaveQty_Cmb
+        '
+        Me.CarSheaveQty_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CarSheaveQty_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarSheaveQty_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CarSheaveQty_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarSheaveQty_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarSheaveQty_Cmb.Location = New System.Drawing.Point(966, 40)
+        Me.CarSheaveQty_Cmb.Name = "CarSheaveQty_Cmb"
+        Me.CarSheaveQty_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarSheaveQty_Cmb.Size = New System.Drawing.Size(58, 21)
+        Me.CarSheaveQty_Cmb.TabIndex = 61
+        '
+        'CarSheaveQty_lbl
+        '
+        Me.CarSheaveQty_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarSheaveQty_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarSheaveQty_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarSheaveQty_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarSheaveQty_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarSheaveQty_lbl.Location = New System.Drawing.Point(796, 43)
+        Me.CarSheaveQty_lbl.Name = "CarSheaveQty_lbl"
+        Me.CarSheaveQty_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarSheaveQty_lbl.Size = New System.Drawing.Size(168, 15)
+        Me.CarSheaveQty_lbl.TabIndex = 118
+        Me.CarSheaveQty_lbl.Text = "Car Overhead Sheave Qty"
+        '
+        'Compensation_cmb
+        '
+        Me.Compensation_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.Compensation_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Compensation_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.Compensation_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Compensation_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Compensation_cmb.Location = New System.Drawing.Point(932, 14)
+        Me.Compensation_cmb.Name = "Compensation_cmb"
+        Me.Compensation_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Compensation_cmb.Size = New System.Drawing.Size(92, 21)
+        Me.Compensation_cmb.TabIndex = 60
+        '
+        'Compensation_lbl
+        '
+        Me.Compensation_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.Compensation_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Compensation_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Compensation_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Compensation_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Compensation_lbl.Location = New System.Drawing.Point(796, 17)
+        Me.Compensation_lbl.Name = "Compensation_lbl"
+        Me.Compensation_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Compensation_lbl.Size = New System.Drawing.Size(134, 17)
+        Me.Compensation_lbl.TabIndex = 116
+        Me.Compensation_lbl.Text = "Compensation"
+        '
+        'HoistRopeSizeIn_lbl
+        '
+        Me.HoistRopeSizeIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.HoistRopeSizeIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.HoistRopeSizeIn_lbl.Enabled = False
+        Me.HoistRopeSizeIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.HoistRopeSizeIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.HoistRopeSizeIn_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.HoistRopeSizeIn_lbl.Location = New System.Drawing.Point(757, 43)
+        Me.HoistRopeSizeIn_lbl.Name = "HoistRopeSizeIn_lbl"
+        Me.HoistRopeSizeIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.HoistRopeSizeIn_lbl.Size = New System.Drawing.Size(17, 19)
+        Me.HoistRopeSizeIn_lbl.TabIndex = 102
+        Me.HoistRopeSizeIn_lbl.Text = "In"
+        '
+        'CarToCwtRopeDrop_txt
+        '
+        Me.CarToCwtRopeDrop_txt.AcceptsReturn = True
+        Me.CarToCwtRopeDrop_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.CarToCwtRopeDrop_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CarToCwtRopeDrop_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarToCwtRopeDrop_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CarToCwtRopeDrop_txt.Location = New System.Drawing.Point(662, 66)
+        Me.CarToCwtRopeDrop_txt.MaxLength = 0
+        Me.CarToCwtRopeDrop_txt.Name = "CarToCwtRopeDrop_txt"
+        Me.CarToCwtRopeDrop_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarToCwtRopeDrop_txt.Size = New System.Drawing.Size(92, 20)
+        Me.CarToCwtRopeDrop_txt.TabIndex = 59
+        '
+        'CarToCwtRopeDrop_lbl
+        '
+        Me.CarToCwtRopeDrop_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarToCwtRopeDrop_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarToCwtRopeDrop_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarToCwtRopeDrop_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarToCwtRopeDrop_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarToCwtRopeDrop_lbl.Location = New System.Drawing.Point(526, 69)
+        Me.CarToCwtRopeDrop_lbl.Name = "CarToCwtRopeDrop_lbl"
+        Me.CarToCwtRopeDrop_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarToCwtRopeDrop_lbl.Size = New System.Drawing.Size(134, 19)
+        Me.CarToCwtRopeDrop_lbl.TabIndex = 101
+        Me.CarToCwtRopeDrop_lbl.Text = "Car to Cwt Rope Drop"
+        '
+        'CarToCwtRopeDropIn_lbl
+        '
+        Me.CarToCwtRopeDropIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CarToCwtRopeDropIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CarToCwtRopeDropIn_lbl.Enabled = False
+        Me.CarToCwtRopeDropIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CarToCwtRopeDropIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CarToCwtRopeDropIn_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.CarToCwtRopeDropIn_lbl.Location = New System.Drawing.Point(757, 69)
+        Me.CarToCwtRopeDropIn_lbl.Name = "CarToCwtRopeDropIn_lbl"
+        Me.CarToCwtRopeDropIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CarToCwtRopeDropIn_lbl.Size = New System.Drawing.Size(17, 19)
+        Me.CarToCwtRopeDropIn_lbl.TabIndex = 100
+        Me.CarToCwtRopeDropIn_lbl.Text = "In"
+        '
+        'HoistRopeQty_Cmb
+        '
+        Me.HoistRopeQty_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.HoistRopeQty_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.HoistRopeQty_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.HoistRopeQty_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.HoistRopeQty_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.HoistRopeQty_Cmb.Location = New System.Drawing.Point(662, 14)
+        Me.HoistRopeQty_Cmb.Name = "HoistRopeQty_Cmb"
+        Me.HoistRopeQty_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.HoistRopeQty_Cmb.Size = New System.Drawing.Size(92, 21)
+        Me.HoistRopeQty_Cmb.TabIndex = 57
+        '
+        'HoistRopeSize_Cmb
+        '
+        Me.HoistRopeSize_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.HoistRopeSize_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.HoistRopeSize_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.HoistRopeSize_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.HoistRopeSize_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.HoistRopeSize_Cmb.Location = New System.Drawing.Point(662, 40)
+        Me.HoistRopeSize_Cmb.Name = "HoistRopeSize_Cmb"
+        Me.HoistRopeSize_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.HoistRopeSize_Cmb.Size = New System.Drawing.Size(92, 21)
+        Me.HoistRopeSize_Cmb.TabIndex = 58
+        '
+        'HoistRopeQty_lbl
+        '
+        Me.HoistRopeQty_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.HoistRopeQty_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.HoistRopeQty_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.HoistRopeQty_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.HoistRopeQty_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.HoistRopeQty_lbl.Location = New System.Drawing.Point(526, 17)
+        Me.HoistRopeQty_lbl.Name = "HoistRopeQty_lbl"
+        Me.HoistRopeQty_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.HoistRopeQty_lbl.Size = New System.Drawing.Size(134, 17)
+        Me.HoistRopeQty_lbl.TabIndex = 98
+        Me.HoistRopeQty_lbl.Text = "Hoist Rope Qty"
+        '
+        'HoistRopeSize_lbl
+        '
+        Me.HoistRopeSize_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.HoistRopeSize_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.HoistRopeSize_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.HoistRopeSize_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.HoistRopeSize_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.HoistRopeSize_lbl.Location = New System.Drawing.Point(526, 43)
+        Me.HoistRopeSize_lbl.Name = "HoistRopeSize_lbl"
+        Me.HoistRopeSize_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.HoistRopeSize_lbl.Size = New System.Drawing.Size(134, 15)
+        Me.HoistRopeSize_lbl.TabIndex = 97
+        Me.HoistRopeSize_lbl.Text = "Hoist Rope Size"
+        '
+        'BrakeType_cmb
+        '
+        Me.BrakeType_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.BrakeType_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BrakeType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.BrakeType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BrakeType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.BrakeType_cmb.Location = New System.Drawing.Point(412, 40)
+        Me.BrakeType_cmb.Name = "BrakeType_cmb"
+        Me.BrakeType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BrakeType_cmb.Size = New System.Drawing.Size(92, 21)
+        Me.BrakeType_cmb.TabIndex = 56
+        '
+        'BrakeType_lbl
+        '
+        Me.BrakeType_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.BrakeType_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.BrakeType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.BrakeType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BrakeType_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BrakeType_lbl.Location = New System.Drawing.Point(276, 43)
+        Me.BrakeType_lbl.Name = "BrakeType_lbl"
+        Me.BrakeType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BrakeType_lbl.Size = New System.Drawing.Size(134, 15)
+        Me.BrakeType_lbl.TabIndex = 87
+        Me.BrakeType_lbl.Text = "Brake Type"
+        '
+        'NominalMotorRPM_lbl
+        '
+        Me.NominalMotorRPM_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.NominalMotorRPM_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.NominalMotorRPM_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.NominalMotorRPM_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NominalMotorRPM_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.NominalMotorRPM_lbl.Location = New System.Drawing.Point(276, 17)
+        Me.NominalMotorRPM_lbl.Name = "NominalMotorRPM_lbl"
+        Me.NominalMotorRPM_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.NominalMotorRPM_lbl.Size = New System.Drawing.Size(134, 18)
+        Me.NominalMotorRPM_lbl.TabIndex = 77
+        Me.NominalMotorRPM_lbl.Text = "Nominal Motor RPM"
+        '
+        'ExistingMachineSheaveDia_cmb
+        '
+        Me.ExistingMachineSheaveDia_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.ExistingMachineSheaveDia_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ExistingMachineSheaveDia_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ExistingMachineSheaveDia_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.ExistingMachineSheaveDia_cmb.Location = New System.Drawing.Point(169, 66)
+        Me.ExistingMachineSheaveDia_cmb.Name = "ExistingMachineSheaveDia_cmb"
+        Me.ExistingMachineSheaveDia_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ExistingMachineSheaveDia_cmb.Size = New System.Drawing.Size(81, 21)
+        Me.ExistingMachineSheaveDia_cmb.TabIndex = 53
+        Me.ExistingMachineSheaveDia_cmb.Tag = "1"
+        '
+        'ExistingMachineSheaveDia_lbl
+        '
+        Me.ExistingMachineSheaveDia_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.ExistingMachineSheaveDia_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ExistingMachineSheaveDia_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ExistingMachineSheaveDia_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ExistingMachineSheaveDia_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ExistingMachineSheaveDia_lbl.Location = New System.Drawing.Point(8, 69)
+        Me.ExistingMachineSheaveDia_lbl.Name = "ExistingMachineSheaveDia_lbl"
+        Me.ExistingMachineSheaveDia_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ExistingMachineSheaveDia_lbl.Size = New System.Drawing.Size(158, 19)
+        Me.ExistingMachineSheaveDia_lbl.TabIndex = 73
+        Me.ExistingMachineSheaveDia_lbl.Text = "Existing Mach. Sheave Dia."
+        '
+        'ExistingMachineSheaveDiaIn_lbl
+        '
+        Me.ExistingMachineSheaveDiaIn_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.ExistingMachineSheaveDiaIn_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ExistingMachineSheaveDiaIn_lbl.Enabled = False
+        Me.ExistingMachineSheaveDiaIn_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ExistingMachineSheaveDiaIn_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ExistingMachineSheaveDiaIn_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ExistingMachineSheaveDiaIn_lbl.Location = New System.Drawing.Point(252, 69)
+        Me.ExistingMachineSheaveDiaIn_lbl.Name = "ExistingMachineSheaveDiaIn_lbl"
+        Me.ExistingMachineSheaveDiaIn_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ExistingMachineSheaveDiaIn_lbl.Size = New System.Drawing.Size(12, 15)
+        Me.ExistingMachineSheaveDiaIn_lbl.TabIndex = 72
+        Me.ExistingMachineSheaveDiaIn_lbl.Text = "In"
+        Me.ExistingMachineSheaveDiaIn_lbl.Visible = False
+        '
+        'ExpandCollapseTorqueFrame_btn
+        '
+        Me.ExpandCollapseTorqueFrame_btn.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ExpandCollapseTorqueFrame_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ExpandCollapseTorqueFrame_btn.Location = New System.Drawing.Point(1, -1)
+        Me.ExpandCollapseTorqueFrame_btn.Name = "ExpandCollapseTorqueFrame_btn"
+        Me.ExpandCollapseTorqueFrame_btn.Size = New System.Drawing.Size(20, 19)
+        Me.ExpandCollapseTorqueFrame_btn.TabIndex = 69
+        Me.ExpandCollapseTorqueFrame_btn.UseVisualStyleBackColor = True
+        '
+        'MachineModelExisting_cmb
+        '
+        Me.MachineModelExisting_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.MachineModelExisting_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.MachineModelExisting_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.MachineModelExisting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MachineModelExisting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.MachineModelExisting_cmb.Location = New System.Drawing.Point(144, 40)
+        Me.MachineModelExisting_cmb.Name = "MachineModelExisting_cmb"
+        Me.MachineModelExisting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.MachineModelExisting_cmb.Size = New System.Drawing.Size(119, 21)
+        Me.MachineModelExisting_cmb.Sorted = True
+        Me.MachineModelExisting_cmb.TabIndex = 52
+        '
+        'MachineVendorExisting_Cmb
+        '
+        Me.MachineVendorExisting_Cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.MachineVendorExisting_Cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.MachineVendorExisting_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.MachineVendorExisting_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MachineVendorExisting_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.MachineVendorExisting_Cmb.Location = New System.Drawing.Point(144, 14)
+        Me.MachineVendorExisting_Cmb.Name = "MachineVendorExisting_Cmb"
+        Me.MachineVendorExisting_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.MachineVendorExisting_Cmb.Size = New System.Drawing.Size(119, 21)
+        Me.MachineVendorExisting_Cmb.Sorted = True
+        Me.MachineVendorExisting_Cmb.TabIndex = 51
+        '
+        'MachineModelExisting_lbl
+        '
+        Me.MachineModelExisting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.MachineModelExisting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.MachineModelExisting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.MachineModelExisting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MachineModelExisting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.MachineModelExisting_lbl.Location = New System.Drawing.Point(8, 43)
+        Me.MachineModelExisting_lbl.Name = "MachineModelExisting_lbl"
+        Me.MachineModelExisting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.MachineModelExisting_lbl.Size = New System.Drawing.Size(134, 16)
+        Me.MachineModelExisting_lbl.TabIndex = 68
+        Me.MachineModelExisting_lbl.Text = "Existing Mach. Model"
+        '
+        'MachineVendorExisting_lbl
+        '
+        Me.MachineVendorExisting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.MachineVendorExisting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.MachineVendorExisting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.MachineVendorExisting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MachineVendorExisting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.MachineVendorExisting_lbl.Location = New System.Drawing.Point(8, 17)
+        Me.MachineVendorExisting_lbl.Name = "MachineVendorExisting_lbl"
+        Me.MachineVendorExisting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.MachineVendorExisting_lbl.Size = New System.Drawing.Size(134, 16)
+        Me.MachineVendorExisting_lbl.TabIndex = 67
+        Me.MachineVendorExisting_lbl.Text = "Existing Mach. Vendor"
         '
         'GeneralInformation_fra
         '
         Me.GeneralInformation_fra.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GeneralInformation_fra.BackColor = System.Drawing.SystemColors.Window
+        Me.GeneralInformation_fra.Controls.Add(Me.SpeedExisting_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.SpeedExisting_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.CapacityExisting_cmb)
+        Me.GeneralInformation_fra.Controls.Add(Me.CapacityExisting_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.ChangeInSpeed_chk)
+        Me.GeneralInformation_fra.Controls.Add(Me.ChangeInCapacity_chk)
+        Me.GeneralInformation_fra.Controls.Add(Me.TravelExisting_txt)
+        Me.GeneralInformation_fra.Controls.Add(Me.TravelExisting_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.ChangeInTravel_chk)
         Me.GeneralInformation_fra.Controls.Add(Me.Destination_cmb)
         Me.GeneralInformation_fra.Controls.Add(Me.Destination_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.GatewayReviewRequired_chk)
@@ -260,8 +797,8 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.Controls.Add(Me.RiserQtyRear_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.PitDepth_txt)
         Me.GeneralInformation_fra.Controls.Add(Me.PitDepth_lbl)
-        Me.GeneralInformation_fra.Controls.Add(Me.Travel_txt)
-        Me.GeneralInformation_fra.Controls.Add(Me.Travel_lbl)
+        Me.GeneralInformation_fra.Controls.Add(Me.TravelNew_txt)
+        Me.GeneralInformation_fra.Controls.Add(Me.TravelNew_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.TopFloorToOverhead_txt)
         Me.GeneralInformation_fra.Controls.Add(Me.TopFloorToOverhead_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.RopingNew_Cmb)
@@ -318,14 +855,144 @@ Partial Class frmEstimatingBase
         Me.GeneralInformation_fra.Controls.Add(Me.CapacityNew_cmb)
         Me.GeneralInformation_fra.Controls.Add(Me.SpeedLabel_lbl)
         Me.GeneralInformation_fra.Controls.Add(Me.CapacityLabel_lbl)
-        Me.GeneralInformation_fra.Controls.Add(Me.ExpandCollapseFrame_btn)
+        Me.GeneralInformation_fra.Controls.Add(Me.ExpandCollapseGeneralInfoFrame_btn)
         Me.GeneralInformation_fra.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GeneralInformation_fra.Location = New System.Drawing.Point(5, 11)
         Me.GeneralInformation_fra.Name = "GeneralInformation_fra"
-        Me.GeneralInformation_fra.Size = New System.Drawing.Size(1570, 215)
+        Me.GeneralInformation_fra.Size = New System.Drawing.Size(1561, 218)
         Me.GeneralInformation_fra.TabIndex = 25
         Me.GeneralInformation_fra.TabStop = False
         Me.GeneralInformation_fra.Text = "   General Information"
+        '
+        'SpeedExisting_cmb
+        '
+        Me.SpeedExisting_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.SpeedExisting_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SpeedExisting_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.SpeedExisting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SpeedExisting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.SpeedExisting_cmb.Location = New System.Drawing.Point(144, 141)
+        Me.SpeedExisting_cmb.Name = "SpeedExisting_cmb"
+        Me.SpeedExisting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpeedExisting_cmb.Size = New System.Drawing.Size(92, 21)
+        Me.SpeedExisting_cmb.TabIndex = 5
+        '
+        'SpeedExisting_lbl
+        '
+        Me.SpeedExisting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.SpeedExisting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SpeedExisting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SpeedExisting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SpeedExisting_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.SpeedExisting_lbl.Location = New System.Drawing.Point(40, 143)
+        Me.SpeedExisting_lbl.Name = "SpeedExisting_lbl"
+        Me.SpeedExisting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpeedExisting_lbl.Size = New System.Drawing.Size(101, 17)
+        Me.SpeedExisting_lbl.TabIndex = 191
+        Me.SpeedExisting_lbl.Text = "Existing Speed"
+        '
+        'CapacityExisting_cmb
+        '
+        Me.CapacityExisting_cmb.BackColor = System.Drawing.SystemColors.Window
+        Me.CapacityExisting_cmb.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CapacityExisting_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CapacityExisting_cmb.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CapacityExisting_cmb.Location = New System.Drawing.Point(144, 66)
+        Me.CapacityExisting_cmb.Name = "CapacityExisting_cmb"
+        Me.CapacityExisting_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CapacityExisting_cmb.Size = New System.Drawing.Size(92, 21)
+        Me.CapacityExisting_cmb.TabIndex = 2
+        '
+        'CapacityExisting_lbl
+        '
+        Me.CapacityExisting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.CapacityExisting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CapacityExisting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CapacityExisting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CapacityExisting_lbl.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.CapacityExisting_lbl.Location = New System.Drawing.Point(40, 69)
+        Me.CapacityExisting_lbl.Name = "CapacityExisting_lbl"
+        Me.CapacityExisting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.CapacityExisting_lbl.Size = New System.Drawing.Size(101, 17)
+        Me.CapacityExisting_lbl.TabIndex = 189
+        Me.CapacityExisting_lbl.Text = "Existing Capacity"
+        '
+        'ChangeInSpeed_chk
+        '
+        Me.ChangeInSpeed_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.ChangeInSpeed_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ChangeInSpeed_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ChangeInSpeed_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ChangeInSpeed_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ChangeInSpeed_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ChangeInSpeed_chk.Location = New System.Drawing.Point(8, 119)
+        Me.ChangeInSpeed_chk.Name = "ChangeInSpeed_chk"
+        Me.ChangeInSpeed_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ChangeInSpeed_chk.Size = New System.Drawing.Size(227, 15)
+        Me.ChangeInSpeed_chk.TabIndex = 4
+        Me.ChangeInSpeed_chk.Text = "Change in Speed"
+        Me.ChangeInSpeed_chk.UseVisualStyleBackColor = False
+        '
+        'ChangeInCapacity_chk
+        '
+        Me.ChangeInCapacity_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.ChangeInCapacity_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ChangeInCapacity_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ChangeInCapacity_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ChangeInCapacity_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ChangeInCapacity_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ChangeInCapacity_chk.Location = New System.Drawing.Point(8, 43)
+        Me.ChangeInCapacity_chk.Name = "ChangeInCapacity_chk"
+        Me.ChangeInCapacity_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ChangeInCapacity_chk.Size = New System.Drawing.Size(227, 15)
+        Me.ChangeInCapacity_chk.TabIndex = 1
+        Me.ChangeInCapacity_chk.Text = "Change in Capacity"
+        Me.ChangeInCapacity_chk.UseVisualStyleBackColor = False
+        '
+        'TravelExisting_txt
+        '
+        Me.TravelExisting_txt.AcceptsReturn = True
+        Me.TravelExisting_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.TravelExisting_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TravelExisting_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TravelExisting_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TravelExisting_txt.Location = New System.Drawing.Point(412, 91)
+        Me.TravelExisting_txt.MaxLength = 0
+        Me.TravelExisting_txt.Name = "TravelExisting_txt"
+        Me.TravelExisting_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TravelExisting_txt.Size = New System.Drawing.Size(92, 20)
+        Me.TravelExisting_txt.TabIndex = 11
+        Me.TravelExisting_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'TravelExisting_lbl
+        '
+        Me.TravelExisting_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.TravelExisting_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.TravelExisting_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.TravelExisting_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TravelExisting_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.TravelExisting_lbl.Location = New System.Drawing.Point(309, 94)
+        Me.TravelExisting_lbl.Name = "TravelExisting_lbl"
+        Me.TravelExisting_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TravelExisting_lbl.Size = New System.Drawing.Size(101, 16)
+        Me.TravelExisting_lbl.TabIndex = 185
+        Me.TravelExisting_lbl.Text = "Existing Travel"
+        '
+        'ChangeInTravel_chk
+        '
+        Me.ChangeInTravel_chk.BackColor = System.Drawing.SystemColors.Window
+        Me.ChangeInTravel_chk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ChangeInTravel_chk.Cursor = System.Windows.Forms.Cursors.Default
+        Me.ChangeInTravel_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ChangeInTravel_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ChangeInTravel_chk.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ChangeInTravel_chk.Location = New System.Drawing.Point(277, 68)
+        Me.ChangeInTravel_chk.Name = "ChangeInTravel_chk"
+        Me.ChangeInTravel_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ChangeInTravel_chk.Size = New System.Drawing.Size(227, 15)
+        Me.ChangeInTravel_chk.TabIndex = 10
+        Me.ChangeInTravel_chk.Text = "Change in Travel"
+        Me.ChangeInTravel_chk.UseVisualStyleBackColor = False
         '
         'Destination_cmb
         '
@@ -334,11 +1001,11 @@ Partial Class frmEstimatingBase
         Me.Destination_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Destination_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Destination_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Destination_cmb.Location = New System.Drawing.Point(1201, 190)
+        Me.Destination_cmb.Location = New System.Drawing.Point(662, 190)
         Me.Destination_cmb.Name = "Destination_cmb"
         Me.Destination_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Destination_cmb.Size = New System.Drawing.Size(119, 21)
-        Me.Destination_cmb.TabIndex = 181
+        Me.Destination_cmb.TabIndex = 23
         '
         'Destination_lbl
         '
@@ -347,7 +1014,7 @@ Partial Class frmEstimatingBase
         Me.Destination_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Destination_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Destination_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Destination_lbl.Location = New System.Drawing.Point(1065, 192)
+        Me.Destination_lbl.Location = New System.Drawing.Point(526, 192)
         Me.Destination_lbl.Name = "Destination_lbl"
         Me.Destination_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Destination_lbl.Size = New System.Drawing.Size(134, 16)
@@ -362,11 +1029,11 @@ Partial Class frmEstimatingBase
         Me.GatewayReviewRequired_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.GatewayReviewRequired_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GatewayReviewRequired_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.GatewayReviewRequired_chk.Location = New System.Drawing.Point(1065, 172)
+        Me.GatewayReviewRequired_chk.Location = New System.Drawing.Point(526, 167)
         Me.GatewayReviewRequired_chk.Name = "GatewayReviewRequired_chk"
         Me.GatewayReviewRequired_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.GatewayReviewRequired_chk.Size = New System.Drawing.Size(227, 15)
-        Me.GatewayReviewRequired_chk.TabIndex = 180
+        Me.GatewayReviewRequired_chk.TabIndex = 22
         Me.GatewayReviewRequired_chk.Text = "Gateway Review Required"
         Me.GatewayReviewRequired_chk.UseVisualStyleBackColor = False
         '
@@ -374,10 +1041,10 @@ Partial Class frmEstimatingBase
         '
         Me.ExpensesPerDayDetails_btn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.ExpensesPerDayDetails_btn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ExpensesPerDayDetails_btn.Location = New System.Drawing.Point(1201, 141)
+        Me.ExpensesPerDayDetails_btn.Location = New System.Drawing.Point(1436, 141)
         Me.ExpensesPerDayDetails_btn.Name = "ExpensesPerDayDetails_btn"
         Me.ExpensesPerDayDetails_btn.Size = New System.Drawing.Size(92, 23)
-        Me.ExpensesPerDayDetails_btn.TabIndex = 179
+        Me.ExpensesPerDayDetails_btn.TabIndex = 50
         Me.ExpensesPerDayDetails_btn.Text = "Details"
         Me.ExpensesPerDayDetails_btn.UseVisualStyleBackColor = True
         '
@@ -389,12 +1056,12 @@ Partial Class frmEstimatingBase
         Me.ExpensesPerDay_txt.Enabled = False
         Me.ExpensesPerDay_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExpensesPerDay_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ExpensesPerDay_txt.Location = New System.Drawing.Point(1201, 116)
+        Me.ExpensesPerDay_txt.Location = New System.Drawing.Point(1454, 116)
         Me.ExpensesPerDay_txt.MaxLength = 0
         Me.ExpensesPerDay_txt.Name = "ExpensesPerDay_txt"
         Me.ExpensesPerDay_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ExpensesPerDay_txt.Size = New System.Drawing.Size(92, 20)
-        Me.ExpensesPerDay_txt.TabIndex = 177
+        Me.ExpensesPerDay_txt.TabIndex = 49
         Me.ExpensesPerDay_txt.Text = " "
         Me.ExpensesPerDay_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -405,7 +1072,7 @@ Partial Class frmEstimatingBase
         Me.ExpensesPerDay_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ExpensesPerDay_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExpensesPerDay_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ExpensesPerDay_lbl.Location = New System.Drawing.Point(1065, 119)
+        Me.ExpensesPerDay_lbl.Location = New System.Drawing.Point(1318, 119)
         Me.ExpensesPerDay_lbl.Name = "ExpensesPerDay_lbl"
         Me.ExpensesPerDay_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ExpensesPerDay_lbl.Size = New System.Drawing.Size(134, 17)
@@ -419,12 +1086,12 @@ Partial Class frmEstimatingBase
         Me.Bonds_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.Bonds_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Bonds_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Bonds_txt.Location = New System.Drawing.Point(1201, 91)
+        Me.Bonds_txt.Location = New System.Drawing.Point(1454, 91)
         Me.Bonds_txt.MaxLength = 0
         Me.Bonds_txt.Name = "Bonds_txt"
         Me.Bonds_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Bonds_txt.Size = New System.Drawing.Size(92, 20)
-        Me.Bonds_txt.TabIndex = 175
+        Me.Bonds_txt.TabIndex = 48
         Me.Bonds_txt.Text = " "
         Me.Bonds_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -435,7 +1102,7 @@ Partial Class frmEstimatingBase
         Me.Bonds_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Bonds_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Bonds_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Bonds_lbl.Location = New System.Drawing.Point(1065, 94)
+        Me.Bonds_lbl.Location = New System.Drawing.Point(1318, 94)
         Me.Bonds_lbl.Name = "Bonds_lbl"
         Me.Bonds_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Bonds_lbl.Size = New System.Drawing.Size(134, 17)
@@ -450,11 +1117,11 @@ Partial Class frmEstimatingBase
         Me.ShortFloorOperation_chk.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ShortFloorOperation_chk.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ShortFloorOperation_chk.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ShortFloorOperation_chk.Location = New System.Drawing.Point(1065, 45)
+        Me.ShortFloorOperation_chk.Location = New System.Drawing.Point(1317, 45)
         Me.ShortFloorOperation_chk.Name = "ShortFloorOperation_chk"
         Me.ShortFloorOperation_chk.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ShortFloorOperation_chk.Size = New System.Drawing.Size(227, 15)
-        Me.ShortFloorOperation_chk.TabIndex = 174
+        Me.ShortFloorOperation_chk.TabIndex = 46
         Me.ShortFloorOperation_chk.Text = "Short Floor Operation <14.75"""
         Me.ShortFloorOperation_chk.UseVisualStyleBackColor = False
         '
@@ -465,12 +1132,12 @@ Partial Class frmEstimatingBase
         Me.Permits_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.Permits_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Permits_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Permits_txt.Location = New System.Drawing.Point(1201, 66)
+        Me.Permits_txt.Location = New System.Drawing.Point(1454, 66)
         Me.Permits_txt.MaxLength = 0
         Me.Permits_txt.Name = "Permits_txt"
         Me.Permits_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Permits_txt.Size = New System.Drawing.Size(92, 20)
-        Me.Permits_txt.TabIndex = 172
+        Me.Permits_txt.TabIndex = 47
         Me.Permits_txt.Text = " "
         Me.Permits_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -481,7 +1148,7 @@ Partial Class frmEstimatingBase
         Me.Permits_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Permits_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Permits_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Permits_lbl.Location = New System.Drawing.Point(1065, 69)
+        Me.Permits_lbl.Location = New System.Drawing.Point(1318, 69)
         Me.Permits_lbl.Name = "Permits_lbl"
         Me.Permits_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Permits_lbl.Size = New System.Drawing.Size(134, 17)
@@ -495,11 +1162,11 @@ Partial Class frmEstimatingBase
         Me.PEStampRequired_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.PEStampRequired_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PEStampRequired_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.PEStampRequired_cmb.Location = New System.Drawing.Point(1201, 14)
+        Me.PEStampRequired_cmb.Location = New System.Drawing.Point(1454, 14)
         Me.PEStampRequired_cmb.Name = "PEStampRequired_cmb"
         Me.PEStampRequired_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.PEStampRequired_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.PEStampRequired_cmb.TabIndex = 170
+        Me.PEStampRequired_cmb.TabIndex = 45
         '
         'PEStampRequired_lbl
         '
@@ -508,7 +1175,7 @@ Partial Class frmEstimatingBase
         Me.PEStampRequired_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.PEStampRequired_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PEStampRequired_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.PEStampRequired_lbl.Location = New System.Drawing.Point(1065, 17)
+        Me.PEStampRequired_lbl.Location = New System.Drawing.Point(1318, 17)
         Me.PEStampRequired_lbl.Name = "PEStampRequired_lbl"
         Me.PEStampRequired_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.PEStampRequired_lbl.Size = New System.Drawing.Size(134, 18)
@@ -522,11 +1189,11 @@ Partial Class frmEstimatingBase
         Me.OriginalGONumberAvailable_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.OriginalGONumberAvailable_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OriginalGONumberAvailable_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.OriginalGONumberAvailable_cmb.Location = New System.Drawing.Point(932, 166)
+        Me.OriginalGONumberAvailable_cmb.Location = New System.Drawing.Point(1184, 166)
         Me.OriginalGONumberAvailable_cmb.Name = "OriginalGONumberAvailable_cmb"
         Me.OriginalGONumberAvailable_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.OriginalGONumberAvailable_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.OriginalGONumberAvailable_cmb.TabIndex = 166
+        Me.OriginalGONumberAvailable_cmb.TabIndex = 43
         '
         'OriginalGOnumber_txt
         '
@@ -535,12 +1202,12 @@ Partial Class frmEstimatingBase
         Me.OriginalGOnumber_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.OriginalGOnumber_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OriginalGOnumber_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.OriginalGOnumber_txt.Location = New System.Drawing.Point(932, 190)
+        Me.OriginalGOnumber_txt.Location = New System.Drawing.Point(1184, 190)
         Me.OriginalGOnumber_txt.MaxLength = 6
         Me.OriginalGOnumber_txt.Name = "OriginalGOnumber_txt"
         Me.OriginalGOnumber_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.OriginalGOnumber_txt.Size = New System.Drawing.Size(92, 20)
-        Me.OriginalGOnumber_txt.TabIndex = 167
+        Me.OriginalGOnumber_txt.TabIndex = 44
         Me.OriginalGOnumber_txt.Text = " "
         Me.OriginalGOnumber_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -551,7 +1218,7 @@ Partial Class frmEstimatingBase
         Me.OriginalGONumberAvailable_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.OriginalGONumberAvailable_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OriginalGONumberAvailable_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.OriginalGONumberAvailable_lbl.Location = New System.Drawing.Point(796, 168)
+        Me.OriginalGONumberAvailable_lbl.Location = New System.Drawing.Point(1048, 168)
         Me.OriginalGONumberAvailable_lbl.Name = "OriginalGONumberAvailable_lbl"
         Me.OriginalGONumberAvailable_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.OriginalGONumberAvailable_lbl.Size = New System.Drawing.Size(134, 17)
@@ -565,7 +1232,7 @@ Partial Class frmEstimatingBase
         Me.OriginalGOnumber_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.OriginalGOnumber_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OriginalGOnumber_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.OriginalGOnumber_lbl.Location = New System.Drawing.Point(854, 192)
+        Me.OriginalGOnumber_lbl.Location = New System.Drawing.Point(1128, 192)
         Me.OriginalGOnumber_lbl.Name = "OriginalGOnumber_lbl"
         Me.OriginalGOnumber_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.OriginalGOnumber_lbl.Size = New System.Drawing.Size(54, 17)
@@ -578,12 +1245,12 @@ Partial Class frmEstimatingBase
         Me.ExistingControlModel_lst.Cursor = System.Windows.Forms.Cursors.Default
         Me.ExistingControlModel_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExistingControlModel_lst.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ExistingControlModel_lst.Location = New System.Drawing.Point(932, 141)
+        Me.ExistingControlModel_lst.Location = New System.Drawing.Point(1184, 141)
         Me.ExistingControlModel_lst.Name = "ExistingControlModel_lst"
         Me.ExistingControlModel_lst.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ExistingControlModel_lst.Size = New System.Drawing.Size(119, 21)
         Me.ExistingControlModel_lst.Sorted = True
-        Me.ExistingControlModel_lst.TabIndex = 163
+        Me.ExistingControlModel_lst.TabIndex = 42
         '
         'ExistingControlVendor_lst
         '
@@ -591,12 +1258,12 @@ Partial Class frmEstimatingBase
         Me.ExistingControlVendor_lst.Cursor = System.Windows.Forms.Cursors.Default
         Me.ExistingControlVendor_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExistingControlVendor_lst.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ExistingControlVendor_lst.Location = New System.Drawing.Point(932, 116)
+        Me.ExistingControlVendor_lst.Location = New System.Drawing.Point(1184, 116)
         Me.ExistingControlVendor_lst.Name = "ExistingControlVendor_lst"
         Me.ExistingControlVendor_lst.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ExistingControlVendor_lst.Size = New System.Drawing.Size(119, 21)
         Me.ExistingControlVendor_lst.Sorted = True
-        Me.ExistingControlVendor_lst.TabIndex = 162
+        Me.ExistingControlVendor_lst.TabIndex = 41
         '
         'ExistingControlModel_lbl
         '
@@ -605,7 +1272,7 @@ Partial Class frmEstimatingBase
         Me.ExistingControlModel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ExistingControlModel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExistingControlModel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ExistingControlModel_lbl.Location = New System.Drawing.Point(796, 143)
+        Me.ExistingControlModel_lbl.Location = New System.Drawing.Point(1048, 143)
         Me.ExistingControlModel_lbl.Name = "ExistingControlModel_lbl"
         Me.ExistingControlModel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ExistingControlModel_lbl.Size = New System.Drawing.Size(134, 17)
@@ -619,7 +1286,7 @@ Partial Class frmEstimatingBase
         Me.ExistingControlVendor_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ExistingControlVendor_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExistingControlVendor_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ExistingControlVendor_lbl.Location = New System.Drawing.Point(796, 119)
+        Me.ExistingControlVendor_lbl.Location = New System.Drawing.Point(1048, 119)
         Me.ExistingControlVendor_lbl.Name = "ExistingControlVendor_lbl"
         Me.ExistingControlVendor_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ExistingControlVendor_lbl.Size = New System.Drawing.Size(134, 17)
@@ -632,10 +1299,10 @@ Partial Class frmEstimatingBase
         Me.BankCompleteDate_txt.CustomFormat = "MM/dd/yyyy"
         Me.BankCompleteDate_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BankCompleteDate_txt.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.BankCompleteDate_txt.Location = New System.Drawing.Point(932, 91)
+        Me.BankCompleteDate_txt.Location = New System.Drawing.Point(1184, 91)
         Me.BankCompleteDate_txt.Name = "BankCompleteDate_txt"
         Me.BankCompleteDate_txt.Size = New System.Drawing.Size(119, 20)
-        Me.BankCompleteDate_txt.TabIndex = 159
+        Me.BankCompleteDate_txt.TabIndex = 40
         '
         'DTRequestedShipDate
         '
@@ -643,10 +1310,10 @@ Partial Class frmEstimatingBase
         Me.DTRequestedShipDate.CustomFormat = "MM/dd/yyyy"
         Me.DTRequestedShipDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DTRequestedShipDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DTRequestedShipDate.Location = New System.Drawing.Point(932, 66)
+        Me.DTRequestedShipDate.Location = New System.Drawing.Point(1184, 66)
         Me.DTRequestedShipDate.Name = "DTRequestedShipDate"
         Me.DTRequestedShipDate.Size = New System.Drawing.Size(119, 20)
-        Me.DTRequestedShipDate.TabIndex = 158
+        Me.DTRequestedShipDate.TabIndex = 39
         '
         'lblBankCompleteDate
         '
@@ -655,7 +1322,7 @@ Partial Class frmEstimatingBase
         Me.lblBankCompleteDate.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblBankCompleteDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblBankCompleteDate.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblBankCompleteDate.Location = New System.Drawing.Point(796, 94)
+        Me.lblBankCompleteDate.Location = New System.Drawing.Point(1048, 94)
         Me.lblBankCompleteDate.Name = "lblBankCompleteDate"
         Me.lblBankCompleteDate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblBankCompleteDate.Size = New System.Drawing.Size(134, 17)
@@ -669,7 +1336,7 @@ Partial Class frmEstimatingBase
         Me.lblRequestedShipDate.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.lblRequestedShipDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRequestedShipDate.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.lblRequestedShipDate.Location = New System.Drawing.Point(796, 69)
+        Me.lblRequestedShipDate.Location = New System.Drawing.Point(1048, 69)
         Me.lblRequestedShipDate.Name = "lblRequestedShipDate"
         Me.lblRequestedShipDate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblRequestedShipDate.Size = New System.Drawing.Size(134, 17)
@@ -683,11 +1350,11 @@ Partial Class frmEstimatingBase
         Me.FixtureFinish_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.FixtureFinish_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FixtureFinish_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.FixtureFinish_cmb.Location = New System.Drawing.Point(932, 40)
+        Me.FixtureFinish_cmb.Location = New System.Drawing.Point(1184, 40)
         Me.FixtureFinish_cmb.Name = "FixtureFinish_cmb"
         Me.FixtureFinish_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.FixtureFinish_cmb.Size = New System.Drawing.Size(119, 21)
-        Me.FixtureFinish_cmb.TabIndex = 156
+        Me.FixtureFinish_cmb.TabIndex = 38
         '
         'FixtureFinish_lbl
         '
@@ -696,7 +1363,7 @@ Partial Class frmEstimatingBase
         Me.FixtureFinish_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FixtureFinish_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FixtureFinish_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.FixtureFinish_lbl.Location = New System.Drawing.Point(796, 43)
+        Me.FixtureFinish_lbl.Location = New System.Drawing.Point(1048, 43)
         Me.FixtureFinish_lbl.Name = "FixtureFinish_lbl"
         Me.FixtureFinish_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.FixtureFinish_lbl.Size = New System.Drawing.Size(134, 15)
@@ -710,11 +1377,11 @@ Partial Class frmEstimatingBase
         Me.RiserQtyFront_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.RiserQtyFront_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RiserQtyFront_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.RiserQtyFront_Cmb.Location = New System.Drawing.Point(942, 14)
+        Me.RiserQtyFront_Cmb.Location = New System.Drawing.Point(1194, 14)
         Me.RiserQtyFront_Cmb.Name = "RiserQtyFront_Cmb"
         Me.RiserQtyFront_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.RiserQtyFront_Cmb.Size = New System.Drawing.Size(45, 21)
-        Me.RiserQtyFront_Cmb.TabIndex = 151
+        Me.RiserQtyFront_Cmb.TabIndex = 36
         '
         'RiserQtyRear_Cmb
         '
@@ -723,11 +1390,11 @@ Partial Class frmEstimatingBase
         Me.RiserQtyRear_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.RiserQtyRear_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RiserQtyRear_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.RiserQtyRear_Cmb.Location = New System.Drawing.Point(1006, 14)
+        Me.RiserQtyRear_Cmb.Location = New System.Drawing.Point(1258, 14)
         Me.RiserQtyRear_Cmb.Name = "RiserQtyRear_Cmb"
         Me.RiserQtyRear_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.RiserQtyRear_Cmb.Size = New System.Drawing.Size(45, 21)
-        Me.RiserQtyRear_Cmb.TabIndex = 152
+        Me.RiserQtyRear_Cmb.TabIndex = 37
         '
         'FinalRisers_lbl
         '
@@ -736,7 +1403,7 @@ Partial Class frmEstimatingBase
         Me.FinalRisers_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinalRisers_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FinalRisers_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.FinalRisers_lbl.Location = New System.Drawing.Point(796, 17)
+        Me.FinalRisers_lbl.Location = New System.Drawing.Point(1048, 17)
         Me.FinalRisers_lbl.Name = "FinalRisers_lbl"
         Me.FinalRisers_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.FinalRisers_lbl.Size = New System.Drawing.Size(134, 15)
@@ -750,7 +1417,7 @@ Partial Class frmEstimatingBase
         Me.RiserQtyFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.RiserQtyFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RiserQtyFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.RiserQtyFront_lbl.Location = New System.Drawing.Point(932, 17)
+        Me.RiserQtyFront_lbl.Location = New System.Drawing.Point(1184, 17)
         Me.RiserQtyFront_lbl.Name = "RiserQtyFront_lbl"
         Me.RiserQtyFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.RiserQtyFront_lbl.Size = New System.Drawing.Size(9, 15)
@@ -764,7 +1431,7 @@ Partial Class frmEstimatingBase
         Me.RiserQtyRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.RiserQtyRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RiserQtyRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.RiserQtyRear_lbl.Location = New System.Drawing.Point(993, 17)
+        Me.RiserQtyRear_lbl.Location = New System.Drawing.Point(1245, 17)
         Me.RiserQtyRear_lbl.Name = "RiserQtyRear_lbl"
         Me.RiserQtyRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.RiserQtyRear_lbl.Size = New System.Drawing.Size(9, 15)
@@ -778,12 +1445,12 @@ Partial Class frmEstimatingBase
         Me.PitDepth_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.PitDepth_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PitDepth_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.PitDepth_txt.Location = New System.Drawing.Point(662, 190)
+        Me.PitDepth_txt.Location = New System.Drawing.Point(412, 116)
         Me.PitDepth_txt.MaxLength = 0
         Me.PitDepth_txt.Name = "PitDepth_txt"
         Me.PitDepth_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.PitDepth_txt.Size = New System.Drawing.Size(92, 20)
-        Me.PitDepth_txt.TabIndex = 149
+        Me.PitDepth_txt.TabIndex = 12
         Me.PitDepth_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'PitDepth_lbl
@@ -793,41 +1460,41 @@ Partial Class frmEstimatingBase
         Me.PitDepth_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.PitDepth_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PitDepth_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.PitDepth_lbl.Location = New System.Drawing.Point(526, 192)
+        Me.PitDepth_lbl.Location = New System.Drawing.Point(276, 119)
         Me.PitDepth_lbl.Name = "PitDepth_lbl"
         Me.PitDepth_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.PitDepth_lbl.Size = New System.Drawing.Size(134, 16)
         Me.PitDepth_lbl.TabIndex = 150
         Me.PitDepth_lbl.Text = "Pit Depth"
         '
-        'Travel_txt
+        'TravelNew_txt
         '
-        Me.Travel_txt.AcceptsReturn = True
-        Me.Travel_txt.BackColor = System.Drawing.SystemColors.Window
-        Me.Travel_txt.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.Travel_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Travel_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Travel_txt.Location = New System.Drawing.Point(662, 166)
-        Me.Travel_txt.MaxLength = 0
-        Me.Travel_txt.Name = "Travel_txt"
-        Me.Travel_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Travel_txt.Size = New System.Drawing.Size(92, 20)
-        Me.Travel_txt.TabIndex = 147
-        Me.Travel_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.TravelNew_txt.AcceptsReturn = True
+        Me.TravelNew_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.TravelNew_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TravelNew_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TravelNew_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TravelNew_txt.Location = New System.Drawing.Point(412, 40)
+        Me.TravelNew_txt.MaxLength = 0
+        Me.TravelNew_txt.Name = "TravelNew_txt"
+        Me.TravelNew_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TravelNew_txt.Size = New System.Drawing.Size(92, 20)
+        Me.TravelNew_txt.TabIndex = 9
+        Me.TravelNew_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'Travel_lbl
+        'TravelNew_lbl
         '
-        Me.Travel_lbl.BackColor = System.Drawing.SystemColors.Window
-        Me.Travel_lbl.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Travel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Travel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Travel_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Travel_lbl.Location = New System.Drawing.Point(526, 168)
-        Me.Travel_lbl.Name = "Travel_lbl"
-        Me.Travel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Travel_lbl.Size = New System.Drawing.Size(134, 16)
-        Me.Travel_lbl.TabIndex = 148
-        Me.Travel_lbl.Text = "Travel"
+        Me.TravelNew_lbl.BackColor = System.Drawing.SystemColors.Window
+        Me.TravelNew_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.TravelNew_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.TravelNew_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TravelNew_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.TravelNew_lbl.Location = New System.Drawing.Point(276, 43)
+        Me.TravelNew_lbl.Name = "TravelNew_lbl"
+        Me.TravelNew_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TravelNew_lbl.Size = New System.Drawing.Size(134, 16)
+        Me.TravelNew_lbl.TabIndex = 148
+        Me.TravelNew_lbl.Text = "Travel"
         '
         'TopFloorToOverhead_txt
         '
@@ -836,12 +1503,12 @@ Partial Class frmEstimatingBase
         Me.TopFloorToOverhead_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TopFloorToOverhead_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TopFloorToOverhead_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.TopFloorToOverhead_txt.Location = New System.Drawing.Point(662, 141)
+        Me.TopFloorToOverhead_txt.Location = New System.Drawing.Point(412, 14)
         Me.TopFloorToOverhead_txt.MaxLength = 0
         Me.TopFloorToOverhead_txt.Name = "TopFloorToOverhead_txt"
         Me.TopFloorToOverhead_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.TopFloorToOverhead_txt.Size = New System.Drawing.Size(92, 20)
-        Me.TopFloorToOverhead_txt.TabIndex = 145
+        Me.TopFloorToOverhead_txt.TabIndex = 8
         Me.TopFloorToOverhead_txt.Text = " "
         Me.TopFloorToOverhead_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -852,7 +1519,7 @@ Partial Class frmEstimatingBase
         Me.TopFloorToOverhead_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.TopFloorToOverhead_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TopFloorToOverhead_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.TopFloorToOverhead_lbl.Location = New System.Drawing.Point(526, 143)
+        Me.TopFloorToOverhead_lbl.Location = New System.Drawing.Point(276, 17)
         Me.TopFloorToOverhead_lbl.Name = "TopFloorToOverhead_lbl"
         Me.TopFloorToOverhead_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.TopFloorToOverhead_lbl.Size = New System.Drawing.Size(134, 17)
@@ -866,11 +1533,11 @@ Partial Class frmEstimatingBase
         Me.RopingNew_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.RopingNew_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RopingNew_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.RopingNew_Cmb.Location = New System.Drawing.Point(662, 116)
+        Me.RopingNew_Cmb.Location = New System.Drawing.Point(662, 141)
         Me.RopingNew_Cmb.Name = "RopingNew_Cmb"
         Me.RopingNew_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.RopingNew_Cmb.Size = New System.Drawing.Size(119, 21)
-        Me.RopingNew_Cmb.TabIndex = 143
+        Me.RopingNew_Cmb.TabIndex = 21
         '
         'Roping_lbl
         '
@@ -879,7 +1546,7 @@ Partial Class frmEstimatingBase
         Me.Roping_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Roping_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Roping_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Roping_lbl.Location = New System.Drawing.Point(526, 119)
+        Me.Roping_lbl.Location = New System.Drawing.Point(526, 143)
         Me.Roping_lbl.Name = "Roping_lbl"
         Me.Roping_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Roping_lbl.Size = New System.Drawing.Size(134, 16)
@@ -893,11 +1560,11 @@ Partial Class frmEstimatingBase
         Me.MachineLocation_Cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.MachineLocation_Cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MachineLocation_Cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.MachineLocation_Cmb.Location = New System.Drawing.Point(662, 91)
+        Me.MachineLocation_Cmb.Location = New System.Drawing.Point(662, 116)
         Me.MachineLocation_Cmb.Name = "MachineLocation_Cmb"
         Me.MachineLocation_Cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.MachineLocation_Cmb.Size = New System.Drawing.Size(119, 21)
-        Me.MachineLocation_Cmb.TabIndex = 141
+        Me.MachineLocation_Cmb.TabIndex = 20
         '
         'MachineLocation_lbl
         '
@@ -906,7 +1573,7 @@ Partial Class frmEstimatingBase
         Me.MachineLocation_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.MachineLocation_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MachineLocation_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.MachineLocation_lbl.Location = New System.Drawing.Point(526, 94)
+        Me.MachineLocation_lbl.Location = New System.Drawing.Point(526, 119)
         Me.MachineLocation_lbl.Name = "MachineLocation_lbl"
         Me.MachineLocation_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.MachineLocation_lbl.Size = New System.Drawing.Size(134, 15)
@@ -920,12 +1587,12 @@ Partial Class frmEstimatingBase
         Me.HoistMotorRpm_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.HoistMotorRpm_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.HoistMotorRpm_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.HoistMotorRpm_txt.Location = New System.Drawing.Point(662, 66)
+        Me.HoistMotorRpm_txt.Location = New System.Drawing.Point(662, 91)
         Me.HoistMotorRpm_txt.MaxLength = 0
         Me.HoistMotorRpm_txt.Name = "HoistMotorRpm_txt"
         Me.HoistMotorRpm_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.HoistMotorRpm_txt.Size = New System.Drawing.Size(92, 20)
-        Me.HoistMotorRpm_txt.TabIndex = 139
+        Me.HoistMotorRpm_txt.TabIndex = 19
         Me.HoistMotorRpm_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'HoistMotorRpm_lbl
@@ -935,12 +1602,12 @@ Partial Class frmEstimatingBase
         Me.HoistMotorRpm_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.HoistMotorRpm_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.HoistMotorRpm_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.HoistMotorRpm_lbl.Location = New System.Drawing.Point(526, 69)
+        Me.HoistMotorRpm_lbl.Location = New System.Drawing.Point(526, 94)
         Me.HoistMotorRpm_lbl.Name = "HoistMotorRpm_lbl"
         Me.HoistMotorRpm_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.HoistMotorRpm_lbl.Size = New System.Drawing.Size(134, 16)
         Me.HoistMotorRpm_lbl.TabIndex = 140
-        Me.HoistMotorRpm_lbl.Text = "Motor RPM"
+        Me.HoistMotorRpm_lbl.Text = "Existing Motor RPM"
         '
         'HoistMotorHP_txt
         '
@@ -949,12 +1616,12 @@ Partial Class frmEstimatingBase
         Me.HoistMotorHP_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.HoistMotorHP_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.HoistMotorHP_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.HoistMotorHP_txt.Location = New System.Drawing.Point(662, 40)
+        Me.HoistMotorHP_txt.Location = New System.Drawing.Point(662, 66)
         Me.HoistMotorHP_txt.MaxLength = 0
         Me.HoistMotorHP_txt.Name = "HoistMotorHP_txt"
         Me.HoistMotorHP_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.HoistMotorHP_txt.Size = New System.Drawing.Size(92, 20)
-        Me.HoistMotorHP_txt.TabIndex = 137
+        Me.HoistMotorHP_txt.TabIndex = 18
         Me.HoistMotorHP_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'HoistMotorHP_lbl
@@ -964,7 +1631,7 @@ Partial Class frmEstimatingBase
         Me.HoistMotorHP_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.HoistMotorHP_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.HoistMotorHP_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.HoistMotorHP_lbl.Location = New System.Drawing.Point(526, 43)
+        Me.HoistMotorHP_lbl.Location = New System.Drawing.Point(526, 69)
         Me.HoistMotorHP_lbl.Name = "HoistMotorHP_lbl"
         Me.HoistMotorHP_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.HoistMotorHP_lbl.Size = New System.Drawing.Size(134, 16)
@@ -978,12 +1645,12 @@ Partial Class frmEstimatingBase
         Me.CarWeight_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarWeight_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarWeight_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarWeight_txt.Location = New System.Drawing.Point(662, 14)
+        Me.CarWeight_txt.Location = New System.Drawing.Point(932, 14)
         Me.CarWeight_txt.MaxLength = 0
         Me.CarWeight_txt.Name = "CarWeight_txt"
         Me.CarWeight_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarWeight_txt.Size = New System.Drawing.Size(92, 20)
-        Me.CarWeight_txt.TabIndex = 133
+        Me.CarWeight_txt.TabIndex = 24
         Me.CarWeight_txt.Text = " "
         Me.CarWeight_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -994,7 +1661,7 @@ Partial Class frmEstimatingBase
         Me.CarWeight_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarWeight_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarWeight_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarWeight_lbl.Location = New System.Drawing.Point(526, 17)
+        Me.CarWeight_lbl.Location = New System.Drawing.Point(796, 17)
         Me.CarWeight_lbl.Name = "CarWeight_lbl"
         Me.CarWeight_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarWeight_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1008,12 +1675,12 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningHeightFtRear_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningHeightFtRear_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightFtRear_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningHeightFtRear_txt.Location = New System.Drawing.Point(410, 141)
+        Me.CarDoorOpeningHeightFtRear_txt.Location = New System.Drawing.Point(932, 166)
         Me.CarDoorOpeningHeightFtRear_txt.MaxLength = 0
         Me.CarDoorOpeningHeightFtRear_txt.Name = "CarDoorOpeningHeightFtRear_txt"
         Me.CarDoorOpeningHeightFtRear_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightFtRear_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningHeightFtRear_txt.TabIndex = 125
+        Me.CarDoorOpeningHeightFtRear_txt.TabIndex = 33
         Me.CarDoorOpeningHeightFtRear_txt.Text = " "
         Me.CarDoorOpeningHeightFtRear_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -1024,12 +1691,12 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningHeightInRear_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningHeightInRear_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightInRear_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningHeightInRear_txt.Location = New System.Drawing.Point(461, 141)
+        Me.CarDoorOpeningHeightInRear_txt.Location = New System.Drawing.Point(984, 166)
         Me.CarDoorOpeningHeightInRear_txt.MaxLength = 0
         Me.CarDoorOpeningHeightInRear_txt.Name = "CarDoorOpeningHeightInRear_txt"
         Me.CarDoorOpeningHeightInRear_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightInRear_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningHeightInRear_txt.TabIndex = 126
+        Me.CarDoorOpeningHeightInRear_txt.TabIndex = 34
         Me.CarDoorOpeningHeightInRear_txt.Text = " "
         Me.CarDoorOpeningHeightInRear_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -1040,12 +1707,12 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningWidthFtRear_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningWidthFtRear_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthFtRear_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningWidthFtRear_txt.Location = New System.Drawing.Point(410, 116)
+        Me.CarDoorOpeningWidthFtRear_txt.Location = New System.Drawing.Point(932, 141)
         Me.CarDoorOpeningWidthFtRear_txt.MaxLength = 0
         Me.CarDoorOpeningWidthFtRear_txt.Name = "CarDoorOpeningWidthFtRear_txt"
         Me.CarDoorOpeningWidthFtRear_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthFtRear_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningWidthFtRear_txt.TabIndex = 123
+        Me.CarDoorOpeningWidthFtRear_txt.TabIndex = 31
         Me.CarDoorOpeningWidthFtRear_txt.Text = " "
         Me.CarDoorOpeningWidthFtRear_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -1056,23 +1723,23 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningWidthInRear_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningWidthInRear_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthInRear_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningWidthInRear_txt.Location = New System.Drawing.Point(461, 116)
+        Me.CarDoorOpeningWidthInRear_txt.Location = New System.Drawing.Point(984, 141)
         Me.CarDoorOpeningWidthInRear_txt.MaxLength = 0
         Me.CarDoorOpeningWidthInRear_txt.Name = "CarDoorOpeningWidthInRear_txt"
         Me.CarDoorOpeningWidthInRear_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthInRear_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningWidthInRear_txt.TabIndex = 124
+        Me.CarDoorOpeningWidthInRear_txt.TabIndex = 32
         Me.CarDoorOpeningWidthInRear_txt.Text = " "
         Me.CarDoorOpeningWidthInRear_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'CarDoorOpeningHeightFtRear_lbl
         '
-        Me.CarDoorOpeningHeightFtRear_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningHeightFtRear_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningHeightFtRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightFtRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightFtRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightFtRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningHeightFtRear_lbl.Location = New System.Drawing.Point(447, 143)
+        Me.CarDoorOpeningHeightFtRear_lbl.Location = New System.Drawing.Point(970, 168)
         Me.CarDoorOpeningHeightFtRear_lbl.Name = "CarDoorOpeningHeightFtRear_lbl"
         Me.CarDoorOpeningHeightFtRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightFtRear_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1081,12 +1748,12 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightInRear_lbl
         '
-        Me.CarDoorOpeningHeightInRear_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningHeightInRear_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningHeightInRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightInRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightInRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightInRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningHeightInRear_lbl.Location = New System.Drawing.Point(499, 143)
+        Me.CarDoorOpeningHeightInRear_lbl.Location = New System.Drawing.Point(1022, 168)
         Me.CarDoorOpeningHeightInRear_lbl.Name = "CarDoorOpeningHeightInRear_lbl"
         Me.CarDoorOpeningHeightInRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightInRear_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1100,7 +1767,7 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningHeightRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningHeightRear_lbl.Location = New System.Drawing.Point(276, 143)
+        Me.CarDoorOpeningHeightRear_lbl.Location = New System.Drawing.Point(796, 168)
         Me.CarDoorOpeningHeightRear_lbl.Name = "CarDoorOpeningHeightRear_lbl"
         Me.CarDoorOpeningHeightRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightRear_lbl.Size = New System.Drawing.Size(134, 19)
@@ -1114,7 +1781,7 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningWidthRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningWidthRear_lbl.Location = New System.Drawing.Point(276, 119)
+        Me.CarDoorOpeningWidthRear_lbl.Location = New System.Drawing.Point(796, 143)
         Me.CarDoorOpeningWidthRear_lbl.Name = "CarDoorOpeningWidthRear_lbl"
         Me.CarDoorOpeningWidthRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthRear_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1123,12 +1790,12 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthFtRear_lbl
         '
-        Me.CarDoorOpeningWidthFtRear_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningWidthFtRear_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningWidthFtRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthFtRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthFtRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthFtRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningWidthFtRear_lbl.Location = New System.Drawing.Point(447, 119)
+        Me.CarDoorOpeningWidthFtRear_lbl.Location = New System.Drawing.Point(970, 143)
         Me.CarDoorOpeningWidthFtRear_lbl.Name = "CarDoorOpeningWidthFtRear_lbl"
         Me.CarDoorOpeningWidthFtRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthFtRear_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1137,12 +1804,12 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthInRear_lbl
         '
-        Me.CarDoorOpeningWidthInRear_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningWidthInRear_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningWidthInRear_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthInRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthInRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthInRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningWidthInRear_lbl.Location = New System.Drawing.Point(499, 119)
+        Me.CarDoorOpeningWidthInRear_lbl.Location = New System.Drawing.Point(1022, 143)
         Me.CarDoorOpeningWidthInRear_lbl.Name = "CarDoorOpeningWidthInRear_lbl"
         Me.CarDoorOpeningWidthInRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthInRear_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1156,12 +1823,12 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningWidthInFront_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningWidthInFront_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthInFront_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningWidthInFront_txt.Location = New System.Drawing.Point(461, 40)
+        Me.CarDoorOpeningWidthInFront_txt.Location = New System.Drawing.Point(984, 66)
         Me.CarDoorOpeningWidthInFront_txt.MaxLength = 0
         Me.CarDoorOpeningWidthInFront_txt.Name = "CarDoorOpeningWidthInFront_txt"
         Me.CarDoorOpeningWidthInFront_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthInFront_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningWidthInFront_txt.TabIndex = 114
+        Me.CarDoorOpeningWidthInFront_txt.TabIndex = 27
         Me.CarDoorOpeningWidthInFront_txt.Text = " "
         Me.CarDoorOpeningWidthInFront_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -1172,12 +1839,12 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningWidthFtFront_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningWidthFtFront_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthFtFront_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningWidthFtFront_txt.Location = New System.Drawing.Point(410, 40)
+        Me.CarDoorOpeningWidthFtFront_txt.Location = New System.Drawing.Point(932, 66)
         Me.CarDoorOpeningWidthFtFront_txt.MaxLength = 0
         Me.CarDoorOpeningWidthFtFront_txt.Name = "CarDoorOpeningWidthFtFront_txt"
         Me.CarDoorOpeningWidthFtFront_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthFtFront_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningWidthFtFront_txt.TabIndex = 113
+        Me.CarDoorOpeningWidthFtFront_txt.TabIndex = 26
         Me.CarDoorOpeningWidthFtFront_txt.Text = " "
         Me.CarDoorOpeningWidthFtFront_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -1188,12 +1855,12 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningHeightInFront_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningHeightInFront_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightInFront_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningHeightInFront_txt.Location = New System.Drawing.Point(461, 66)
+        Me.CarDoorOpeningHeightInFront_txt.Location = New System.Drawing.Point(984, 91)
         Me.CarDoorOpeningHeightInFront_txt.MaxLength = 0
         Me.CarDoorOpeningHeightInFront_txt.Name = "CarDoorOpeningHeightInFront_txt"
         Me.CarDoorOpeningHeightInFront_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightInFront_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningHeightInFront_txt.TabIndex = 116
+        Me.CarDoorOpeningHeightInFront_txt.TabIndex = 29
         Me.CarDoorOpeningHeightInFront_txt.Text = " "
         Me.CarDoorOpeningHeightInFront_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -1204,23 +1871,23 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningHeightFtFront_txt.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.CarDoorOpeningHeightFtFront_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightFtFront_txt.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.CarDoorOpeningHeightFtFront_txt.Location = New System.Drawing.Point(410, 66)
+        Me.CarDoorOpeningHeightFtFront_txt.Location = New System.Drawing.Point(932, 91)
         Me.CarDoorOpeningHeightFtFront_txt.MaxLength = 0
         Me.CarDoorOpeningHeightFtFront_txt.Name = "CarDoorOpeningHeightFtFront_txt"
         Me.CarDoorOpeningHeightFtFront_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightFtFront_txt.Size = New System.Drawing.Size(35, 20)
-        Me.CarDoorOpeningHeightFtFront_txt.TabIndex = 115
+        Me.CarDoorOpeningHeightFtFront_txt.TabIndex = 28
         Me.CarDoorOpeningHeightFtFront_txt.Text = " "
         Me.CarDoorOpeningHeightFtFront_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'CarDoorOpeningWidthInFront_lbl
         '
-        Me.CarDoorOpeningWidthInFront_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningWidthInFront_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningWidthInFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthInFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthInFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthInFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningWidthInFront_lbl.Location = New System.Drawing.Point(499, 43)
+        Me.CarDoorOpeningWidthInFront_lbl.Location = New System.Drawing.Point(1022, 69)
         Me.CarDoorOpeningWidthInFront_lbl.Name = "CarDoorOpeningWidthInFront_lbl"
         Me.CarDoorOpeningWidthInFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthInFront_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1229,12 +1896,12 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningWidthFtFront_lbl
         '
-        Me.CarDoorOpeningWidthFtFront_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningWidthFtFront_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningWidthFtFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningWidthFtFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthFtFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthFtFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningWidthFtFront_lbl.Location = New System.Drawing.Point(447, 43)
+        Me.CarDoorOpeningWidthFtFront_lbl.Location = New System.Drawing.Point(970, 69)
         Me.CarDoorOpeningWidthFtFront_lbl.Name = "CarDoorOpeningWidthFtFront_lbl"
         Me.CarDoorOpeningWidthFtFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthFtFront_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1248,7 +1915,7 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningWidthFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningWidthFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningWidthFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningWidthFront_lbl.Location = New System.Drawing.Point(276, 43)
+        Me.CarDoorOpeningWidthFront_lbl.Location = New System.Drawing.Point(796, 69)
         Me.CarDoorOpeningWidthFront_lbl.Name = "CarDoorOpeningWidthFront_lbl"
         Me.CarDoorOpeningWidthFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningWidthFront_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1262,7 +1929,7 @@ Partial Class frmEstimatingBase
         Me.CarDoorOpeningHeightFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningHeightFront_lbl.Location = New System.Drawing.Point(276, 69)
+        Me.CarDoorOpeningHeightFront_lbl.Location = New System.Drawing.Point(796, 94)
         Me.CarDoorOpeningHeightFront_lbl.Name = "CarDoorOpeningHeightFront_lbl"
         Me.CarDoorOpeningHeightFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightFront_lbl.Size = New System.Drawing.Size(134, 19)
@@ -1271,12 +1938,12 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightInFront_lbl
         '
-        Me.CarDoorOpeningHeightInFront_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningHeightInFront_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningHeightInFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightInFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightInFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightInFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningHeightInFront_lbl.Location = New System.Drawing.Point(499, 69)
+        Me.CarDoorOpeningHeightInFront_lbl.Location = New System.Drawing.Point(1022, 94)
         Me.CarDoorOpeningHeightInFront_lbl.Name = "CarDoorOpeningHeightInFront_lbl"
         Me.CarDoorOpeningHeightInFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightInFront_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1285,12 +1952,12 @@ Partial Class frmEstimatingBase
         '
         'CarDoorOpeningHeightFtFront_lbl
         '
-        Me.CarDoorOpeningHeightFtFront_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.CarDoorOpeningHeightFtFront_lbl.BackColor = System.Drawing.SystemColors.Window
         Me.CarDoorOpeningHeightFtFront_lbl.Cursor = System.Windows.Forms.Cursors.Default
         Me.CarDoorOpeningHeightFtFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CarDoorOpeningHeightFtFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CarDoorOpeningHeightFtFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CarDoorOpeningHeightFtFront_lbl.Location = New System.Drawing.Point(447, 69)
+        Me.CarDoorOpeningHeightFtFront_lbl.Location = New System.Drawing.Point(970, 94)
         Me.CarDoorOpeningHeightFtFront_lbl.Name = "CarDoorOpeningHeightFtFront_lbl"
         Me.CarDoorOpeningHeightFtFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CarDoorOpeningHeightFtFront_lbl.Size = New System.Drawing.Size(17, 15)
@@ -1304,7 +1971,7 @@ Partial Class frmEstimatingBase
         Me.Application_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Application_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Application_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Application_lbl.Location = New System.Drawing.Point(8, 168)
+        Me.Application_lbl.Location = New System.Drawing.Point(8, 192)
         Me.Application_lbl.Name = "Application_lbl"
         Me.Application_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Application_lbl.Size = New System.Drawing.Size(134, 15)
@@ -1318,11 +1985,11 @@ Partial Class frmEstimatingBase
         Me.PowerSupply_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.PowerSupply_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PowerSupply_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.PowerSupply_cmb.Location = New System.Drawing.Point(144, 141)
+        Me.PowerSupply_cmb.Location = New System.Drawing.Point(144, 166)
         Me.PowerSupply_cmb.Name = "PowerSupply_cmb"
         Me.PowerSupply_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.PowerSupply_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.PowerSupply_cmb.TabIndex = 109
+        Me.PowerSupply_cmb.TabIndex = 6
         '
         'PowerSupply_lbl
         '
@@ -1331,7 +1998,7 @@ Partial Class frmEstimatingBase
         Me.PowerSupply_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.PowerSupply_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PowerSupply_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.PowerSupply_lbl.Location = New System.Drawing.Point(8, 143)
+        Me.PowerSupply_lbl.Location = New System.Drawing.Point(8, 168)
         Me.PowerSupply_lbl.Name = "PowerSupply_lbl"
         Me.PowerSupply_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.PowerSupply_lbl.Size = New System.Drawing.Size(134, 15)
@@ -1345,11 +2012,11 @@ Partial Class frmEstimatingBase
         Me.Application_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Application_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Application_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Application_cmb.Location = New System.Drawing.Point(144, 166)
+        Me.Application_cmb.Location = New System.Drawing.Point(144, 190)
         Me.Application_cmb.Name = "Application_cmb"
         Me.Application_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Application_cmb.Size = New System.Drawing.Size(119, 21)
-        Me.Application_cmb.TabIndex = 110
+        Me.Application_cmb.TabIndex = 7
         '
         'LayoutRequirements_cmb
         '
@@ -1358,11 +2025,11 @@ Partial Class frmEstimatingBase
         Me.LayoutRequirements_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.LayoutRequirements_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LayoutRequirements_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.LayoutRequirements_cmb.Location = New System.Drawing.Point(144, 190)
+        Me.LayoutRequirements_cmb.Location = New System.Drawing.Point(932, 190)
         Me.LayoutRequirements_cmb.Name = "LayoutRequirements_cmb"
         Me.LayoutRequirements_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.LayoutRequirements_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.LayoutRequirements_cmb.TabIndex = 107
+        Me.LayoutRequirements_cmb.TabIndex = 35
         '
         'LayoutRequirements_lbl
         '
@@ -1371,7 +2038,7 @@ Partial Class frmEstimatingBase
         Me.LayoutRequirements_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.LayoutRequirements_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LayoutRequirements_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.LayoutRequirements_lbl.Location = New System.Drawing.Point(8, 192)
+        Me.LayoutRequirements_lbl.Location = New System.Drawing.Point(796, 192)
         Me.LayoutRequirements_lbl.Name = "LayoutRequirements_lbl"
         Me.LayoutRequirements_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.LayoutRequirements_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1385,7 +2052,7 @@ Partial Class frmEstimatingBase
         Me.DoorOperatorTypeRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.DoorOperatorTypeRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DoorOperatorTypeRear_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.DoorOperatorTypeRear_lbl.Location = New System.Drawing.Point(276, 94)
+        Me.DoorOperatorTypeRear_lbl.Location = New System.Drawing.Point(796, 119)
         Me.DoorOperatorTypeRear_lbl.Name = "DoorOperatorTypeRear_lbl"
         Me.DoorOperatorTypeRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DoorOperatorTypeRear_lbl.Size = New System.Drawing.Size(134, 15)
@@ -1399,11 +2066,11 @@ Partial Class frmEstimatingBase
         Me.DoorOperatorTypeFront_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.DoorOperatorTypeFront_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DoorOperatorTypeFront_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.DoorOperatorTypeFront_cmb.Location = New System.Drawing.Point(410, 14)
+        Me.DoorOperatorTypeFront_cmb.Location = New System.Drawing.Point(932, 40)
         Me.DoorOperatorTypeFront_cmb.Name = "DoorOperatorTypeFront_cmb"
         Me.DoorOperatorTypeFront_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DoorOperatorTypeFront_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.DoorOperatorTypeFront_cmb.TabIndex = 103
+        Me.DoorOperatorTypeFront_cmb.TabIndex = 25
         '
         'DoorOperatorTypeFront_lbl
         '
@@ -1412,7 +2079,7 @@ Partial Class frmEstimatingBase
         Me.DoorOperatorTypeFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.DoorOperatorTypeFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DoorOperatorTypeFront_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.DoorOperatorTypeFront_lbl.Location = New System.Drawing.Point(276, 17)
+        Me.DoorOperatorTypeFront_lbl.Location = New System.Drawing.Point(796, 43)
         Me.DoorOperatorTypeFront_lbl.Name = "DoorOperatorTypeFront_lbl"
         Me.DoorOperatorTypeFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DoorOperatorTypeFront_lbl.Size = New System.Drawing.Size(134, 15)
@@ -1426,11 +2093,11 @@ Partial Class frmEstimatingBase
         Me.DoorOperatorTypeRear_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.DoorOperatorTypeRear_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DoorOperatorTypeRear_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.DoorOperatorTypeRear_cmb.Location = New System.Drawing.Point(410, 91)
+        Me.DoorOperatorTypeRear_cmb.Location = New System.Drawing.Point(932, 116)
         Me.DoorOperatorTypeRear_cmb.Name = "DoorOperatorTypeRear_cmb"
         Me.DoorOperatorTypeRear_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DoorOperatorTypeRear_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.DoorOperatorTypeRear_cmb.TabIndex = 104
+        Me.DoorOperatorTypeRear_cmb.TabIndex = 30
         '
         'DriveType_cmb
         '
@@ -1439,11 +2106,11 @@ Partial Class frmEstimatingBase
         Me.DriveType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.DriveType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DriveType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.DriveType_cmb.Location = New System.Drawing.Point(410, 190)
+        Me.DriveType_cmb.Location = New System.Drawing.Point(662, 40)
         Me.DriveType_cmb.Name = "DriveType_cmb"
         Me.DriveType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DriveType_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.DriveType_cmb.TabIndex = 101
+        Me.DriveType_cmb.TabIndex = 17
         '
         'DriveType_lbl
         '
@@ -1452,7 +2119,7 @@ Partial Class frmEstimatingBase
         Me.DriveType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.DriveType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DriveType_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.DriveType_lbl.Location = New System.Drawing.Point(276, 192)
+        Me.DriveType_lbl.Location = New System.Drawing.Point(526, 43)
         Me.DriveType_lbl.Name = "DriveType_lbl"
         Me.DriveType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DriveType_lbl.Size = New System.Drawing.Size(134, 15)
@@ -1466,12 +2133,12 @@ Partial Class frmEstimatingBase
         Me.MachineType_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.MachineType_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MachineType_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.MachineType_cmb.Location = New System.Drawing.Point(410, 166)
+        Me.MachineType_cmb.Location = New System.Drawing.Point(662, 14)
         Me.MachineType_cmb.Name = "MachineType_cmb"
         Me.MachineType_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.MachineType_cmb.Size = New System.Drawing.Size(92, 21)
         Me.MachineType_cmb.Sorted = True
-        Me.MachineType_cmb.TabIndex = 99
+        Me.MachineType_cmb.TabIndex = 16
         '
         'MachineType_lbl
         '
@@ -1480,7 +2147,7 @@ Partial Class frmEstimatingBase
         Me.MachineType_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.MachineType_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MachineType_lbl.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.MachineType_lbl.Location = New System.Drawing.Point(276, 168)
+        Me.MachineType_lbl.Location = New System.Drawing.Point(526, 17)
         Me.MachineType_lbl.Name = "MachineType_lbl"
         Me.MachineType_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.MachineType_lbl.Size = New System.Drawing.Size(134, 16)
@@ -1493,11 +2160,11 @@ Partial Class frmEstimatingBase
         Me.NumberofStopsTotal_cmb.Cursor = System.Windows.Forms.Cursors.Default
         Me.NumberofStopsTotal_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumberofStopsTotal_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NumberofStopsTotal_cmb.Location = New System.Drawing.Point(144, 66)
+        Me.NumberofStopsTotal_cmb.Location = New System.Drawing.Point(412, 141)
         Me.NumberofStopsTotal_cmb.Name = "NumberofStopsTotal_cmb"
         Me.NumberofStopsTotal_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.NumberofStopsTotal_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.NumberofStopsTotal_cmb.TabIndex = 32
+        Me.NumberofStopsTotal_cmb.TabIndex = 13
         '
         'NumberofStopsTotal_lbl
         '
@@ -1506,7 +2173,7 @@ Partial Class frmEstimatingBase
         Me.NumberofStopsTotal_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.NumberofStopsTotal_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumberofStopsTotal_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NumberofStopsTotal_lbl.Location = New System.Drawing.Point(8, 69)
+        Me.NumberofStopsTotal_lbl.Location = New System.Drawing.Point(276, 143)
         Me.NumberofStopsTotal_lbl.Name = "NumberofStopsTotal_lbl"
         Me.NumberofStopsTotal_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.NumberofStopsTotal_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1520,7 +2187,7 @@ Partial Class frmEstimatingBase
         Me.NumberofStopsFront_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.NumberofStopsFront_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumberofStopsFront_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NumberofStopsFront_lbl.Location = New System.Drawing.Point(8, 94)
+        Me.NumberofStopsFront_lbl.Location = New System.Drawing.Point(276, 168)
         Me.NumberofStopsFront_lbl.Name = "NumberofStopsFront_lbl"
         Me.NumberofStopsFront_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.NumberofStopsFront_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1534,7 +2201,7 @@ Partial Class frmEstimatingBase
         Me.NumberofStopsRear_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.NumberofStopsRear_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumberofStopsRear_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NumberofStopsRear_lbl.Location = New System.Drawing.Point(8, 119)
+        Me.NumberofStopsRear_lbl.Location = New System.Drawing.Point(276, 192)
         Me.NumberofStopsRear_lbl.Name = "NumberofStopsRear_lbl"
         Me.NumberofStopsRear_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.NumberofStopsRear_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1547,11 +2214,11 @@ Partial Class frmEstimatingBase
         Me.NumberofStopsFront_cmb.Cursor = System.Windows.Forms.Cursors.Default
         Me.NumberofStopsFront_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumberofStopsFront_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NumberofStopsFront_cmb.Location = New System.Drawing.Point(144, 91)
+        Me.NumberofStopsFront_cmb.Location = New System.Drawing.Point(412, 166)
         Me.NumberofStopsFront_cmb.Name = "NumberofStopsFront_cmb"
         Me.NumberofStopsFront_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.NumberofStopsFront_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.NumberofStopsFront_cmb.TabIndex = 33
+        Me.NumberofStopsFront_cmb.TabIndex = 14
         '
         'NumberofStopsRear_cmb
         '
@@ -1559,11 +2226,11 @@ Partial Class frmEstimatingBase
         Me.NumberofStopsRear_cmb.Cursor = System.Windows.Forms.Cursors.Default
         Me.NumberofStopsRear_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumberofStopsRear_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.NumberofStopsRear_cmb.Location = New System.Drawing.Point(144, 116)
+        Me.NumberofStopsRear_cmb.Location = New System.Drawing.Point(412, 190)
         Me.NumberofStopsRear_cmb.Name = "NumberofStopsRear_cmb"
         Me.NumberofStopsRear_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.NumberofStopsRear_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.NumberofStopsRear_cmb.TabIndex = 34
+        Me.NumberofStopsRear_cmb.TabIndex = 15
         '
         'SpeedNew_cmb
         '
@@ -1572,11 +2239,11 @@ Partial Class frmEstimatingBase
         Me.SpeedNew_cmb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.SpeedNew_cmb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SpeedNew_cmb.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.SpeedNew_cmb.Location = New System.Drawing.Point(144, 40)
+        Me.SpeedNew_cmb.Location = New System.Drawing.Point(144, 91)
         Me.SpeedNew_cmb.Name = "SpeedNew_cmb"
         Me.SpeedNew_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SpeedNew_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.SpeedNew_cmb.TabIndex = 24
+        Me.SpeedNew_cmb.TabIndex = 3
         '
         'CapacityNew_cmb
         '
@@ -1588,7 +2255,7 @@ Partial Class frmEstimatingBase
         Me.CapacityNew_cmb.Name = "CapacityNew_cmb"
         Me.CapacityNew_cmb.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CapacityNew_cmb.Size = New System.Drawing.Size(92, 21)
-        Me.CapacityNew_cmb.TabIndex = 23
+        Me.CapacityNew_cmb.TabIndex = 0
         '
         'SpeedLabel_lbl
         '
@@ -1597,7 +2264,7 @@ Partial Class frmEstimatingBase
         Me.SpeedLabel_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.SpeedLabel_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SpeedLabel_lbl.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.SpeedLabel_lbl.Location = New System.Drawing.Point(8, 43)
+        Me.SpeedLabel_lbl.Location = New System.Drawing.Point(8, 94)
         Me.SpeedLabel_lbl.Name = "SpeedLabel_lbl"
         Me.SpeedLabel_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SpeedLabel_lbl.Size = New System.Drawing.Size(134, 17)
@@ -1618,27 +2285,27 @@ Partial Class frmEstimatingBase
         Me.CapacityLabel_lbl.TabIndex = 25
         Me.CapacityLabel_lbl.Text = "Capacity"
         '
-        'ExpandCollapseFrame_btn
+        'ExpandCollapseGeneralInfoFrame_btn
         '
-        Me.ExpandCollapseFrame_btn.FlatAppearance.BorderColor = System.Drawing.Color.White
-        Me.ExpandCollapseFrame_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ExpandCollapseFrame_btn.Location = New System.Drawing.Point(1, -1)
-        Me.ExpandCollapseFrame_btn.Name = "ExpandCollapseFrame_btn"
-        Me.ExpandCollapseFrame_btn.Size = New System.Drawing.Size(20, 19)
-        Me.ExpandCollapseFrame_btn.TabIndex = 3
-        Me.ExpandCollapseFrame_btn.UseVisualStyleBackColor = True
+        Me.ExpandCollapseGeneralInfoFrame_btn.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ExpandCollapseGeneralInfoFrame_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ExpandCollapseGeneralInfoFrame_btn.Location = New System.Drawing.Point(1, -1)
+        Me.ExpandCollapseGeneralInfoFrame_btn.Name = "ExpandCollapseGeneralInfoFrame_btn"
+        Me.ExpandCollapseGeneralInfoFrame_btn.Size = New System.Drawing.Size(20, 19)
+        Me.ExpandCollapseGeneralInfoFrame_btn.TabIndex = 3
+        Me.ExpandCollapseGeneralInfoFrame_btn.UseVisualStyleBackColor = True
         '
         'BillofMaterialsandTaskList_fra
         '
         Me.BillofMaterialsandTaskList_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.ExpandAll_cmd)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.BillOfMaterials_spr)
         Me.BillofMaterialsandTaskList_fra.Controls.Add(Me.CollapseAll_cmd)
-        Me.BillofMaterialsandTaskList_fra.Location = New System.Drawing.Point(4, 231)
+        Me.BillofMaterialsandTaskList_fra.Location = New System.Drawing.Point(4, 321)
         Me.BillofMaterialsandTaskList_fra.Name = "BillofMaterialsandTaskList_fra"
-        Me.BillofMaterialsandTaskList_fra.Size = New System.Drawing.Size(1573, 386)
+        Me.BillofMaterialsandTaskList_fra.Size = New System.Drawing.Size(1561, 311)
         Me.BillofMaterialsandTaskList_fra.TabIndex = 80
         Me.BillofMaterialsandTaskList_fra.TabStop = False
         Me.BillofMaterialsandTaskList_fra.Text = "Bill of Materials and Task List"
@@ -1646,10 +2313,10 @@ Partial Class frmEstimatingBase
         'ExpandAll_cmd
         '
         Me.ExpandAll_cmd.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.ExpandAll_cmd.Location = New System.Drawing.Point(602, 14)
+        Me.ExpandAll_cmd.Location = New System.Drawing.Point(596, 14)
         Me.ExpandAll_cmd.Name = "ExpandAll_cmd"
         Me.ExpandAll_cmd.Size = New System.Drawing.Size(113, 23)
-        Me.ExpandAll_cmd.TabIndex = 81
+        Me.ExpandAll_cmd.TabIndex = 65
         Me.ExpandAll_cmd.Text = "Expand All"
         Me.ExpandAll_cmd.UseVisualStyleBackColor = True
         '
@@ -1657,15 +2324,15 @@ Partial Class frmEstimatingBase
         '
         Me.BillOfMaterials_spr.AccessibleDescription = "FpSpread1, Sheet1, Row 0, Column 0, "
         Me.BillOfMaterials_spr.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BillOfMaterials_spr.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BillOfMaterials_spr.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
-        Me.BillOfMaterials_spr.Location = New System.Drawing.Point(6, 43)
+        Me.BillOfMaterials_spr.Location = New System.Drawing.Point(6, 41)
         Me.BillOfMaterials_spr.Name = "BillOfMaterials_spr"
         Me.BillOfMaterials_spr.Sheets.AddRange(New FarPoint.Win.Spread.SheetView() {Me.BillOfMaterials_spr_Sheet1})
-        Me.BillOfMaterials_spr.Size = New System.Drawing.Size(1563, 337)
-        Me.BillOfMaterials_spr.TabIndex = 80
+        Me.BillOfMaterials_spr.Size = New System.Drawing.Size(1551, 264)
+        Me.BillOfMaterials_spr.TabIndex = 64
         Me.BillOfMaterials_spr.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         '
         'BillOfMaterials_spr_Sheet1
@@ -1676,10 +2343,10 @@ Partial Class frmEstimatingBase
         'CollapseAll_cmd
         '
         Me.CollapseAll_cmd.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.CollapseAll_cmd.Location = New System.Drawing.Point(858, 14)
+        Me.CollapseAll_cmd.Location = New System.Drawing.Point(852, 14)
         Me.CollapseAll_cmd.Name = "CollapseAll_cmd"
         Me.CollapseAll_cmd.Size = New System.Drawing.Size(113, 23)
-        Me.CollapseAll_cmd.TabIndex = 82
+        Me.CollapseAll_cmd.TabIndex = 66
         Me.CollapseAll_cmd.Text = "Collapse All"
         Me.CollapseAll_cmd.UseVisualStyleBackColor = True
         '
@@ -1688,20 +2355,20 @@ Partial Class frmEstimatingBase
         Me.OrderTab.Location = New System.Drawing.Point(4, 25)
         Me.OrderTab.Name = "OrderTab"
         Me.OrderTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.OrderTab.Size = New System.Drawing.Size(1582, 634)
+        Me.OrderTab.Size = New System.Drawing.Size(1573, 644)
         Me.OrderTab.TabIndex = 1
         Me.OrderTab.UseVisualStyleBackColor = True
         '
         'OrderingForms_fra
         '
         Me.OrderingForms_fra.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.OrderingForms_fra.Controls.Add(Me.OrderingForms_lst)
         Me.OrderingForms_fra.Controls.Add(Me.OrderingForms_con)
         Me.OrderingForms_fra.Location = New System.Drawing.Point(11, 48)
         Me.OrderingForms_fra.Name = "OrderingForms_fra"
-        Me.OrderingForms_fra.Size = New System.Drawing.Size(1575, 624)
+        Me.OrderingForms_fra.Size = New System.Drawing.Size(1566, 634)
         Me.OrderingForms_fra.TabIndex = 55
         Me.OrderingForms_fra.TabStop = False
         Me.OrderingForms_fra.Visible = False
@@ -1709,7 +2376,7 @@ Partial Class frmEstimatingBase
         'OrderingForms_lst
         '
         Me.OrderingForms_lst.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.OrderingForms_lst.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OrderingForms_lst.FormattingEnabled = True
         Me.OrderingForms_lst.Location = New System.Drawing.Point(2, 12)
@@ -1720,12 +2387,12 @@ Partial Class frmEstimatingBase
         'OrderingForms_con
         '
         Me.OrderingForms_con.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.OrderingForms_con.AutoScroll = True
         Me.OrderingForms_con.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.OrderingForms_con.Location = New System.Drawing.Point(120, 12)
+        Me.OrderingForms_con.Location = New System.Drawing.Point(111, 12)
         Me.OrderingForms_con.Name = "OrderingForms_con"
-        Me.OrderingForms_con.Size = New System.Drawing.Size(1483, 606)
+        Me.OrderingForms_con.Size = New System.Drawing.Size(1483, 616)
         Me.OrderingForms_con.TabIndex = 53
         '
         'MDI_pic
@@ -1738,7 +2405,7 @@ Partial Class frmEstimatingBase
         Me.MDI_pic.Dock = System.Windows.Forms.DockStyle.Top
         Me.MDI_pic.Location = New System.Drawing.Point(0, 0)
         Me.MDI_pic.Name = "MDI_pic"
-        Me.MDI_pic.Size = New System.Drawing.Size(1602, 99)
+        Me.MDI_pic.Size = New System.Drawing.Size(1593, 99)
         Me.MDI_pic.TabIndex = 24
         Me.MDI_pic.TabStop = False
         '
@@ -1747,12 +2414,12 @@ Partial Class frmEstimatingBase
         Me.fraHdrJobInfo.BackColor = System.Drawing.SystemColors.Control
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrBnkLetter)
         Me.fraHdrJobInfo.Controls.Add(Me.Units_txt)
-        Me.fraHdrJobInfo.Controls.Add(Me.txtHdrGONegNum)
+        Me.fraHdrJobInfo.Controls.Add(Me.txtHdrEstimateNum)
         Me.fraHdrJobInfo.Controls.Add(Me.HdrGONum_txt)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrBldgName)
         Me.fraHdrJobInfo.Controls.Add(Me.Label1)
         Me.fraHdrJobInfo.Controls.Add(Me.Label2)
-        Me.fraHdrJobInfo.Controls.Add(Me.lblHdrGONegNum)
+        Me.fraHdrJobInfo.Controls.Add(Me.lblHdrEstimateNum)
         Me.fraHdrJobInfo.Controls.Add(Me.HdrGONum_lbl)
         Me.fraHdrJobInfo.Controls.Add(Me.lblHdrBldgNme)
         Me.fraHdrJobInfo.Dock = System.Windows.Forms.DockStyle.Top
@@ -1761,7 +2428,7 @@ Partial Class frmEstimatingBase
         Me.fraHdrJobInfo.Location = New System.Drawing.Point(0, 60)
         Me.fraHdrJobInfo.Name = "fraHdrJobInfo"
         Me.fraHdrJobInfo.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraHdrJobInfo.Size = New System.Drawing.Size(1598, 30)
+        Me.fraHdrJobInfo.Size = New System.Drawing.Size(1589, 30)
         Me.fraHdrJobInfo.TabIndex = 25
         Me.fraHdrJobInfo.TabStop = False
         '
@@ -1779,8 +2446,7 @@ Partial Class frmEstimatingBase
         Me.txtHdrBnkLetter.ReadOnly = True
         Me.txtHdrBnkLetter.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtHdrBnkLetter.Size = New System.Drawing.Size(20, 20)
-        Me.txtHdrBnkLetter.TabIndex = 19
-        Me.txtHdrBnkLetter.Text = "A"
+        Me.txtHdrBnkLetter.TabIndex = 81
         Me.txtHdrBnkLetter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Units_txt
@@ -1797,26 +2463,24 @@ Partial Class frmEstimatingBase
         Me.Units_txt.ReadOnly = True
         Me.Units_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Units_txt.Size = New System.Drawing.Size(65, 20)
-        Me.Units_txt.TabIndex = 21
-        Me.Units_txt.Text = "01-04"
+        Me.Units_txt.TabIndex = 82
         Me.Units_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'txtHdrGONegNum
+        'txtHdrEstimateNum
         '
-        Me.txtHdrGONegNum.AcceptsReturn = True
-        Me.txtHdrGONegNum.BackColor = System.Drawing.SystemColors.Window
-        Me.txtHdrGONegNum.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtHdrGONegNum.Enabled = False
-        Me.txtHdrGONegNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtHdrGONegNum.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtHdrGONegNum.Location = New System.Drawing.Point(451, 6)
-        Me.txtHdrGONegNum.MaxLength = 0
-        Me.txtHdrGONegNum.Name = "txtHdrGONegNum"
-        Me.txtHdrGONegNum.ReadOnly = True
-        Me.txtHdrGONegNum.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtHdrGONegNum.Size = New System.Drawing.Size(105, 20)
-        Me.txtHdrGONegNum.TabIndex = 18
-        Me.txtHdrGONegNum.Text = "ZZZZ-00000"
+        Me.txtHdrEstimateNum.AcceptsReturn = True
+        Me.txtHdrEstimateNum.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHdrEstimateNum.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHdrEstimateNum.Enabled = False
+        Me.txtHdrEstimateNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtHdrEstimateNum.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHdrEstimateNum.Location = New System.Drawing.Point(451, 6)
+        Me.txtHdrEstimateNum.MaxLength = 0
+        Me.txtHdrEstimateNum.Name = "txtHdrEstimateNum"
+        Me.txtHdrEstimateNum.ReadOnly = True
+        Me.txtHdrEstimateNum.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHdrEstimateNum.Size = New System.Drawing.Size(105, 20)
+        Me.txtHdrEstimateNum.TabIndex = 80
         '
         'HdrGONum_txt
         '
@@ -1831,7 +2495,7 @@ Partial Class frmEstimatingBase
         Me.HdrGONum_txt.Name = "HdrGONum_txt"
         Me.HdrGONum_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.HdrGONum_txt.Size = New System.Drawing.Size(49, 20)
-        Me.HdrGONum_txt.TabIndex = 16
+        Me.HdrGONum_txt.TabIndex = 78
         '
         'txtHdrBldgName
         '
@@ -1847,8 +2511,7 @@ Partial Class frmEstimatingBase
         Me.txtHdrBldgName.ReadOnly = True
         Me.txtHdrBldgName.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtHdrBldgName.Size = New System.Drawing.Size(217, 20)
-        Me.txtHdrBldgName.TabIndex = 17
-        Me.txtHdrBldgName.Text = "Queen Tower"
+        Me.txtHdrBldgName.TabIndex = 79
         '
         'Label1
         '
@@ -1882,21 +2545,21 @@ Partial Class frmEstimatingBase
         Me.Label2.Text = "Units"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'lblHdrGONegNum
+        'lblHdrEstimateNum
         '
-        Me.lblHdrGONegNum.BackColor = System.Drawing.SystemColors.Control
-        Me.lblHdrGONegNum.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblHdrGONegNum.Enabled = False
-        Me.lblHdrGONegNum.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.lblHdrGONegNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblHdrGONegNum.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblHdrGONegNum.Location = New System.Drawing.Point(384, 8)
-        Me.lblHdrGONegNum.Name = "lblHdrGONegNum"
-        Me.lblHdrGONegNum.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblHdrGONegNum.Size = New System.Drawing.Size(67, 19)
-        Me.lblHdrGONegNum.TabIndex = 31
-        Me.lblHdrGONegNum.Text = "Estimate # "
-        Me.lblHdrGONegNum.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblHdrEstimateNum.BackColor = System.Drawing.SystemColors.Control
+        Me.lblHdrEstimateNum.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblHdrEstimateNum.Enabled = False
+        Me.lblHdrEstimateNum.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.lblHdrEstimateNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblHdrEstimateNum.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblHdrEstimateNum.Location = New System.Drawing.Point(384, 8)
+        Me.lblHdrEstimateNum.Name = "lblHdrEstimateNum"
+        Me.lblHdrEstimateNum.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblHdrEstimateNum.Size = New System.Drawing.Size(67, 19)
+        Me.lblHdrEstimateNum.TabIndex = 31
+        Me.lblHdrEstimateNum.Text = "Estimate # "
+        Me.lblHdrEstimateNum.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'HdrGONum_lbl
         '
@@ -1948,7 +2611,7 @@ Partial Class frmEstimatingBase
         Me.fraHdrIcons.Location = New System.Drawing.Point(0, 0)
         Me.fraHdrIcons.Name = "fraHdrIcons"
         Me.fraHdrIcons.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraHdrIcons.Size = New System.Drawing.Size(1598, 60)
+        Me.fraHdrIcons.Size = New System.Drawing.Size(1589, 60)
         Me.fraHdrIcons.TabIndex = 24
         Me.fraHdrIcons.TabStop = False
         '
@@ -1958,7 +2621,7 @@ Partial Class frmEstimatingBase
         Me.btnTorque.Location = New System.Drawing.Point(1039, 8)
         Me.btnTorque.Name = "btnTorque"
         Me.btnTorque.Size = New System.Drawing.Size(46, 46)
-        Me.btnTorque.TabIndex = 43
+        Me.btnTorque.TabIndex = 77
         Me.btnTorque.TabStop = False
         Me.btnTorque.Text = "Torque"
         '
@@ -1970,7 +2633,7 @@ Partial Class frmEstimatingBase
         Me.Merge_cmd.Location = New System.Drawing.Point(309, 8)
         Me.Merge_cmd.Name = "Merge_cmd"
         Me.Merge_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Merge_cmd.TabIndex = 42
+        Me.Merge_cmd.TabIndex = 72
         Me.Merge_cmd.TabStop = False
         Me.Merge_cmd.Tag = "Merge Cars"
         Me.Merge_cmd.Text = "Merge"
@@ -1983,7 +2646,7 @@ Partial Class frmEstimatingBase
         Me.Copy_cmd.Location = New System.Drawing.Point(259, 8)
         Me.Copy_cmd.Name = "Copy_cmd"
         Me.Copy_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Copy_cmd.TabIndex = 41
+        Me.Copy_cmd.TabIndex = 71
         Me.Copy_cmd.TabStop = False
         Me.Copy_cmd.Tag = "Copy Cars"
         Me.Copy_cmd.Text = "Copy"
@@ -1996,7 +2659,7 @@ Partial Class frmEstimatingBase
         Me.FreezeSave_btn.Location = New System.Drawing.Point(957, 8)
         Me.FreezeSave_btn.Name = "FreezeSave_btn"
         Me.FreezeSave_btn.Size = New System.Drawing.Size(46, 46)
-        Me.FreezeSave_btn.TabIndex = 39
+        Me.FreezeSave_btn.TabIndex = 76
         Me.FreezeSave_btn.TabStop = False
         Me.FreezeSave_btn.Text = "Freeze"
         Me.FreezeSave_btn.Visible = False
@@ -2008,7 +2671,7 @@ Partial Class frmEstimatingBase
         Me.Exit_cmd.Location = New System.Drawing.Point(0, 8)
         Me.Exit_cmd.Name = "Exit_cmd"
         Me.Exit_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Exit_cmd.TabIndex = 0
+        Me.Exit_cmd.TabIndex = 67
         Me.Exit_cmd.TabStop = False
         Me.Exit_cmd.Tag = "Exit System"
         Me.Exit_cmd.Text = "Exit"
@@ -2021,7 +2684,7 @@ Partial Class frmEstimatingBase
         Me.Save_cmd.Location = New System.Drawing.Point(48, 8)
         Me.Save_cmd.Name = "Save_cmd"
         Me.Save_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Save_cmd.TabIndex = 1
+        Me.Save_cmd.TabIndex = 68
         Me.Save_cmd.TabStop = False
         Me.Save_cmd.Tag = "Save Changes"
         Me.Save_cmd.Text = "Save"
@@ -2034,7 +2697,7 @@ Partial Class frmEstimatingBase
         Me.CMMain_cmd.Location = New System.Drawing.Point(96, 8)
         Me.CMMain_cmd.Name = "CMMain_cmd"
         Me.CMMain_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.CMMain_cmd.TabIndex = 6
+        Me.CMMain_cmd.TabIndex = 69
         Me.CMMain_cmd.Tag = "Return to Contract Manager"
         Me.CMMain_cmd.Text = "Main"
         Me.CMMain_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -2046,7 +2709,7 @@ Partial Class frmEstimatingBase
         Me.Screen_cmd.Location = New System.Drawing.Point(440, 8)
         Me.Screen_cmd.Name = "Screen_cmd"
         Me.Screen_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Screen_cmd.TabIndex = 10
+        Me.Screen_cmd.TabIndex = 73
         Me.Screen_cmd.TabStop = False
         Me.Screen_cmd.Tag = "Print Screen"
         Me.Screen_cmd.Text = "Screen"
@@ -2059,7 +2722,7 @@ Partial Class frmEstimatingBase
         Me.Forms_cmd.Location = New System.Drawing.Point(145, 8)
         Me.Forms_cmd.Name = "Forms_cmd"
         Me.Forms_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Forms_cmd.TabIndex = 11
+        Me.Forms_cmd.TabIndex = 70
         Me.Forms_cmd.TabStop = False
         Me.Forms_cmd.Tag = "Print Forms"
         Me.Forms_cmd.Text = "Forms"
@@ -2072,7 +2735,7 @@ Partial Class frmEstimatingBase
         Me.Book_cmd.Location = New System.Drawing.Point(762, 8)
         Me.Book_cmd.Name = "Book_cmd"
         Me.Book_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Book_cmd.TabIndex = 15
+        Me.Book_cmd.TabIndex = 74
         Me.Book_cmd.TabStop = False
         Me.Book_cmd.Tag = "Create Booking File"
         Me.Book_cmd.Text = "Book"
@@ -2085,7 +2748,7 @@ Partial Class frmEstimatingBase
         Me.Config_cmd.Location = New System.Drawing.Point(810, 8)
         Me.Config_cmd.Name = "Config_cmd"
         Me.Config_cmd.Size = New System.Drawing.Size(46, 46)
-        Me.Config_cmd.TabIndex = 34
+        Me.Config_cmd.TabIndex = 75
         Me.Config_cmd.TabStop = False
         Me.Config_cmd.Tag = "Create Config File"
         Me.Config_cmd.Text = "Config"
@@ -2093,23 +2756,27 @@ Partial Class frmEstimatingBase
         '
         'frmEstimatingBase
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoScroll = True
+        Me.AutoSize = True
         Me.BackColor = System.Drawing.SystemColors.Window
-        Me.ClientSize = New System.Drawing.Size(1602, 795)
+        Me.ClientSize = New System.Drawing.Size(1593, 799)
         Me.ControlBox = False
         Me.Controls.Add(Me.MDI_pic)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmEstimatingBase"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "MOD Estimating"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.GroupBox1.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.CarTab.ResumeLayout(False)
         Me.CarData_fra.ResumeLayout(False)
+        Me.Torque_fra.ResumeLayout(False)
+        Me.Torque_fra.PerformLayout()
         Me.GeneralInformation_fra.ResumeLayout(False)
         Me.GeneralInformation_fra.PerformLayout()
         Me.BillofMaterialsandTaskList_fra.ResumeLayout(False)
@@ -2129,12 +2796,12 @@ Partial Class frmEstimatingBase
     Public WithEvents fraHdrJobInfo As System.Windows.Forms.GroupBox
     Public WithEvents txtHdrBnkLetter As System.Windows.Forms.TextBox
     Public WithEvents Units_txt As System.Windows.Forms.TextBox
-    Public WithEvents txtHdrGONegNum As System.Windows.Forms.TextBox
+    Public WithEvents txtHdrEstimateNum As System.Windows.Forms.TextBox
     Public WithEvents HdrGONum_txt As System.Windows.Forms.TextBox
     Public WithEvents txtHdrBldgName As System.Windows.Forms.TextBox
     Public WithEvents Label1 As System.Windows.Forms.Label
     Public WithEvents Label2 As System.Windows.Forms.Label
-    Public WithEvents lblHdrGONegNum As System.Windows.Forms.Label
+    Public WithEvents lblHdrEstimateNum As System.Windows.Forms.Label
     Public WithEvents HdrGONum_lbl As System.Windows.Forms.Label
     Public WithEvents lblHdrBldgNme As System.Windows.Forms.Label
     Public WithEvents fraHdrIcons As System.Windows.Forms.GroupBox
@@ -2148,7 +2815,7 @@ Partial Class frmEstimatingBase
     Private WithEvents Config_cmd As System.Windows.Forms.Button
     Friend WithEvents GeneralInformation_fra As System.Windows.Forms.GroupBox
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
-    Friend WithEvents ExpandCollapseFrame_btn As System.Windows.Forms.Button
+    Friend WithEvents ExpandCollapseGeneralInfoFrame_btn As System.Windows.Forms.Button
     Friend WithEvents BillofMaterialsandTaskList_fra As System.Windows.Forms.GroupBox
     Friend WithEvents ExpandAll_cmd As System.Windows.Forms.Button
     Friend WithEvents BillOfMaterials_spr As FarPoint.Win.Spread.FpSpread
@@ -2210,8 +2877,8 @@ Partial Class frmEstimatingBase
     Public WithEvents Roping_lbl As System.Windows.Forms.Label
     Public WithEvents PitDepth_txt As System.Windows.Forms.TextBox
     Public WithEvents PitDepth_lbl As System.Windows.Forms.Label
-    Public WithEvents Travel_txt As System.Windows.Forms.TextBox
-    Public WithEvents Travel_lbl As System.Windows.Forms.Label
+    Public WithEvents TravelNew_txt As System.Windows.Forms.TextBox
+    Public WithEvents TravelNew_lbl As System.Windows.Forms.Label
     Public WithEvents TopFloorToOverhead_txt As System.Windows.Forms.TextBox
     Public WithEvents TopFloorToOverhead_lbl As System.Windows.Forms.Label
     Public WithEvents RiserQtyFront_Cmb As System.Windows.Forms.ComboBox
@@ -2255,6 +2922,48 @@ Partial Class frmEstimatingBase
     Public WithEvents Destination_cmb As System.Windows.Forms.ComboBox
     Public WithEvents Destination_lbl As System.Windows.Forms.Label
     Public WithEvents btnTorque As System.Windows.Forms.Button
+    Friend WithEvents Torque_fra As System.Windows.Forms.GroupBox
+    Public WithEvents MachineModelExisting_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents MachineVendorExisting_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents MachineModelExisting_lbl As System.Windows.Forms.Label
+    Public WithEvents MachineVendorExisting_lbl As System.Windows.Forms.Label
+    Friend WithEvents ExpandCollapseTorqueFrame_btn As System.Windows.Forms.Button
+    Public WithEvents ChangeInTravel_chk As System.Windows.Forms.CheckBox
+    Public WithEvents ChangeInSpeed_chk As System.Windows.Forms.CheckBox
+    Public WithEvents ChangeInCapacity_chk As System.Windows.Forms.CheckBox
+    Public WithEvents TravelExisting_txt As System.Windows.Forms.TextBox
+    Public WithEvents TravelExisting_lbl As System.Windows.Forms.Label
+    Public WithEvents SpeedExisting_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents SpeedExisting_lbl As System.Windows.Forms.Label
+    Public WithEvents CapacityExisting_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents CapacityExisting_lbl As System.Windows.Forms.Label
+    Public WithEvents FullLoadCurrentIDC1_txt As System.Windows.Forms.TextBox
+    Public WithEvents FullLoadCurrentIDC1Amps_lbl As System.Windows.Forms.Label
+    Public WithEvents FullLoadCurrentIDC1_lbl As System.Windows.Forms.Label
+    Public WithEvents CwtSheaveQty_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents CwtSheaveQty_lbl As System.Windows.Forms.Label
+    Public WithEvents CarSheaveQty_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents CarSheaveQty_lbl As System.Windows.Forms.Label
+    Public WithEvents Compensation_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents Compensation_lbl As System.Windows.Forms.Label
+    Private WithEvents HoistRopeSizeIn_lbl As System.Windows.Forms.Label
+    Public WithEvents CarToCwtRopeDrop_txt As System.Windows.Forms.TextBox
+    Private WithEvents CarToCwtRopeDrop_lbl As System.Windows.Forms.Label
+    Private WithEvents CarToCwtRopeDropIn_lbl As System.Windows.Forms.Label
+    Public WithEvents HoistRopeQty_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents HoistRopeSize_Cmb As System.Windows.Forms.ComboBox
+    Public WithEvents HoistRopeQty_lbl As System.Windows.Forms.Label
+    Public WithEvents HoistRopeSize_lbl As System.Windows.Forms.Label
+    Public WithEvents BrakeType_cmb As System.Windows.Forms.ComboBox
+    Public WithEvents BrakeType_lbl As System.Windows.Forms.Label
+    Public WithEvents NominalMotorRPM_lbl As System.Windows.Forms.Label
+    Public WithEvents ExistingMachineSheaveDia_cmb As System.Windows.Forms.ComboBox
+    Private WithEvents ExistingMachineSheaveDia_lbl As System.Windows.Forms.Label
+    Private WithEvents ExistingMachineSheaveDiaIn_lbl As System.Windows.Forms.Label
+    Public WithEvents ArmatureFullLoadVoltageVFLU_txt As System.Windows.Forms.TextBox
+    Public WithEvents ArmatureFullLoadVoltageVFLUVolts_lbl As System.Windows.Forms.Label
+    Public WithEvents ArmatureFullLoadVoltageVFLU_lbl As System.Windows.Forms.Label
+    Public WithEvents NominalMotorRPM_txt As System.Windows.Forms.TextBox
 
 #End Region
 End Class

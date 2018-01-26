@@ -216,5 +216,19 @@
     Public Const STATUS_FROZEN As String = "FROZEN"
 
     Public Const DATETIMENOTESFORMAT As String = "MM/dd/yyyy hh:mm:ss AMPM"
+    Public Const DATESTAMPFORMAT As String = "MM/dd/yyyy"
 
+    Public Const DRIVETYPE_BR As String = "AC - non Regen"
+    Public Const DRIVETYPE_SCRDC As String = "SCR/DC"
+    Public Const DRIVETYPE_QUATTRO As String = "Quattro"
+    Public Const DRIVETYPE_PF1 As String = "AC - Regen"
+    Public Const DRIVETYPE_BESTPRICE As String = "Best Price"
+    Public Const StandardPerformance As String = "Standard"
+    Public Const HighPerformance As String = "High"
+    Public Const LowPerformance_GEARED As String = "Low (1.97 ft/s^2, 0.6 m/s^2)"
+    Public Const StandardPerformance_GEARED As String = "2.62 ft/s^2, 0.8 m/s^2"
+    Public Const HighPerformance_GEARED As String = "3.28 ft/s^2, 1.0 m/s^2"
+    Public Const LowPerformance_GEARLESS As String = "Low (2.62 ft/s^2, 0.8 m/s^2)"
+    Public Const StandardPerformance_GEARLESS As String = "3.28 ft/s^2, 1.0 m/s^2"
+    Public Const HighPerformance_GEARLESS As String = "3.94 ft/s^2, 1.2 m/s^2"
 End Module

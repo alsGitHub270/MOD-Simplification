@@ -14,6 +14,7 @@
     Public ADOConnectionMODDataDataBase As New ADODB.Connection
     Public ADOConnectionMessageDataBase As New ADODB.Connection
     Public ADOConnectionHapDatabase As New ADODB.Connection
+    
     Public ADOCatalogRPTdata As ADOX.Catalog = Nothing
     Public ADOCatalogHapDatabase As ADOX.Catalog = Nothing
     Public _ADOCatalogMODDataDataBase As ADOX.Catalog = Nothing
@@ -93,9 +94,6 @@
     Public All_LocalCodeDep As New All_LocalCodeDepTYP()
 
     Public TaxRate As Single = -999.99
-
-
-
 
     Public CalledToRunReconfig As Boolean
     Public CarProductCode As Integer
@@ -184,6 +182,8 @@
         Dim EstimateLevel As String
         Dim CurrentRow As Integer
         Dim EstimateStatus As String
+        Dim ANSICode As String
+        Dim GONum As String
         Public Shared Function CreateInstance() As CurrentGOData_Type
             Dim result As New CurrentGOData_Type()
             result.Type = String.Empty
@@ -194,6 +194,8 @@
             result.CurrentUnits = String.Empty
             result.EstimateLevel = String.Empty
             result.EstimateStatus = String.Empty
+            result.ANSICode = String.Empty
+            result.GONum = String.Empty
             Return result
         End Function
     End Structure

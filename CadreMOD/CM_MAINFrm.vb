@@ -482,9 +482,10 @@ Partial Friend Class CM_MAIN_frm
             End If
         End If
        
+        '  CurrentGOData_Typ.ANSICode = cboANSICode.Text
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
-                MessageBox.Show("Please set your curson on the 'Base' or 'Alt' row")
+                MessageBox.Show("Please set your cursor on the 'Base' or 'Alt' row")
             Case "Master", "Base"
                 Me.ShowInTaskbar = False
                 Using frmEstimatingBase
@@ -498,7 +499,7 @@ Partial Friend Class CM_MAIN_frm
                 End Using
                 Me.ShowInTaskbar = True
             Case Else
-                MessageBox.Show("Please set your curson on the 'Base' or 'Alt' row")
+                MessageBox.Show("Please set your cursor on the 'Base' or 'Alt' row")
         End Select
 
     End Sub
@@ -2424,7 +2425,7 @@ AddMasterRow_Error:
             Exit Sub
         End If
         If FromCM Then
-        SaveTopOfFormToDataset()
+            SaveTopOfFormToDataset()
         End If
         'Serialize("C:\Temp\cadre.json", dsCadre, "Error Writing Cadre Json file", isDirty)           'Contracts.EstimateNum & ".json"
         ' Serialize(Contracts.EstimateNum & ".json", dsCadre, "Error Writing Cadre Json file", isDirty)
@@ -2479,6 +2480,8 @@ AddMasterRow_Error:
         txtJobCity.Text = Contracts.JobCity
         txtJobState.Text = Contracts.JobState
         txtJobZip.Text = Contracts.JobZip
+        txtContractNumber.Text = Contracts.ContractNumber
+
 
     End Sub
 
@@ -3349,7 +3352,7 @@ AddMasterRow_Error:
                     sSuptReview = "Required"
                 Else
                     sSuptReview = sSuptStatus
-                
+
                 End If
                 Me.txtSuptReview.Text = sSuptReview
             End If
@@ -3372,7 +3375,7 @@ AddMasterRow_Error:
                 Exit Sub
         End Select
 
-        
+
         sMessage = "Please note that when a Superintendent Approval is requested, you will not be able to make any further changes to the estimate."
         Cursor.Current = Cursors.Default
         If MessageBox.Show(sMessage, "Continue?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Cancel Then
@@ -3547,10 +3550,10 @@ AddMasterRow_Error:
             'clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
             '    clsNotes.SetValue("cost_bonds", MOD_Cost_typ.Bonds_Cost)
             '    clsNotes.SetValue("cost_projectManager", MOD_Cost_typ.ProjectManager_Cost)
-            '    clsNotes.SetValue("ansiCode", ME_ADM01Bnk_typ.ANSICode)
+            '      clsNotes.SetValue("ansiCode", CurrentGOData_Typ.ANSICode)
             '    clsNotes.SetValue("blendedLaborRate", Math.Round(RATES.FieldLabor_Rate, 2))
-            '    clsNotes.SetValue("businessLine", "MOD")
-            '    clsNotes.SetValue("Form", "Booking Approval Review MOD")
+            clsNotes.SetValue("businessLine", "MOD")
+            clsNotes.SetValue("Form", "Booking Approval Review MOD")
             '    If GONumbers(CurrentGOSelection).MachineType = HYDRO_TYPE Then
             '        PowerUnitType = ME_HYDMRM01Car_typ.PowerUnit
             '        If Not String.IsNullOrEmpty(ME_HYDHSTPITCar_typ.ExistingPistonDiameterFirstStage) Then

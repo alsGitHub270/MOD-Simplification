@@ -67,8 +67,8 @@ Partial Friend Class MN_TRQ01_frm
         'If isInitializingComponent Then
         '    Exit Sub
         'End If
-        'If Conversion.Val(CompensationQty_cmb.Text) <> ME_PIT01Car_typ.CableChainQty Then
-        '    If ConfirmAmendment(CompensationQty_cmb, CompensationQty_lbl, CStr(ME_PIT01Car_typ.CableChainQty)) Then
+        'If Conversion.Val(CompensationQty_cmb.Text) <> MN_TRQ01_typ.CompensationQty Then
+        '    If ConfirmAmendment(CompensationQty_cmb, CompensationQty_lbl, CStr(MN_TRQ01_typ.CompensationQty)) Then
         '        StatusData.FormsStatus(ESTIMATE_FORMS, ME_PIT01_MENU_INDEX) = FORM_IS_DIRTY
         '        MDIChildDirty = True
         '        MN_TRQ01_typ.bDirty = True
@@ -79,15 +79,15 @@ Partial Friend Class MN_TRQ01_frm
         '        Set_Fields_Grey()
         '        Main_MDI_frm.ProcessChildMessage()
         '    Else
-        '        CompensationQty_cmb.Text = CStr(ME_PIT01Car_typ.CableChainQty)
+        '        CompensationQty_cmb.Text = CStr(MN_TRQ01_typ.CompensationQty)
         '    End If
         'End If
 
     End Sub
     'Private Sub CompensationQty_cmb_SelectedIndexChanged(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles CompensationQty_cmb.SelectedIndexChanged
 
-    '    If Conversion.Val(CompensationQty_cmb.Text) <> ME_PIT01Car_typ.CableChainQty Then
-    '        If ConfirmAmendment(CompensationQty_cmb, CompensationQty_lbl, CStr(ME_PIT01Car_typ.CableChainQty)) Then
+    '    If Conversion.Val(CompensationQty_cmb.Text) <> MN_TRQ01_typ.CompensationQty Then
+    '        If ConfirmAmendment(CompensationQty_cmb, CompensationQty_lbl, CStr(MN_TRQ01_typ.CompensationQty)) Then
     '            StatusData.FormsStatus(ESTIMATE_FORMS, ME_PIT01_MENU_INDEX) = FORM_IS_DIRTY
     '            MDIChildDirty = True
     '            MN_TRQ01_typ.bDirty = True
@@ -98,7 +98,7 @@ Partial Friend Class MN_TRQ01_frm
     '            Set_Fields_Grey()
     '            Main_MDI_frm.ProcessChildMessage()
     '        Else
-    '            CompensationQty_cmb.Text = CStr(ME_PIT01Car_typ.CableChainQty)
+    '            CompensationQty_cmb.Text = CStr(MN_TRQ01_typ.CompensationQty)
     '        End If
     '    End If
 
@@ -707,8 +707,8 @@ Partial Friend Class MN_TRQ01_frm
     '        If isInitializingComponent Then
     '            Exit Sub
     '        End If
-    '        If Performance_cmb.Text <> ME_COM01Car_typ.Performance Then
-    '            If ConfirmAmendment(Performance_cmb, Performance_lbl, ME_COM01Car_typ.Performance) Then
+    '        If Performance_cmb.Text <> MN_TRQ01_typ.Performance Then
+    '            If ConfirmAmendment(Performance_cmb, Performance_lbl, MN_TRQ01_typ.Performance) Then
     '                StatusData.FormsStatus(ESTIMATE_FORMS, ME_COM01_MENU_INDEX) = FORM_IS_DIRTY
     '                MDIChildDirty = True
     '                MN_TRQ01_typ.bDirty = True
@@ -719,15 +719,15 @@ Partial Friend Class MN_TRQ01_frm
     '                Set_Fields_Grey()
     '                Main_MDI_frm.ProcessChildMessage()
     '            Else
-    '                Performance_cmb.Text = ME_COM01Car_typ.Performance
+    '                Performance_cmb.Text = MN_TRQ01_typ.Performance
     '            End If
     '        End If
 
     '    End Sub
     '    Private Sub Performance_cmb_SelectedIndexChanged(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles Performance_cmb.SelectedIndexChanged
 
-    '        If Performance_cmb.Text <> ME_COM01Car_typ.Performance Then
-    '            If ConfirmAmendment(Performance_cmb, Performance_lbl, ME_COM01Car_typ.Performance) Then
+    '        If Performance_cmb.Text <> MN_TRQ01_typ.Performance Then
+    '            If ConfirmAmendment(Performance_cmb, Performance_lbl, MN_TRQ01_typ.Performance) Then
     '                StatusData.FormsStatus(ESTIMATE_FORMS, ME_COM01_MENU_INDEX) = FORM_IS_DIRTY
     '                MDIChildDirty = True
     '                MN_TRQ01_typ.bDirty = True
@@ -738,7 +738,7 @@ Partial Friend Class MN_TRQ01_frm
     '                Set_Fields_Grey()
     '                Main_MDI_frm.ProcessChildMessage()
     '            Else
-    '                Performance_cmb.Text = ME_COM01Car_typ.Performance
+    '                Performance_cmb.Text = MN_TRQ01_typ.Performance
     '            End If
     '        End If
 
@@ -1189,7 +1189,7 @@ Partial Friend Class MN_TRQ01_frm
     '            If Dependents.HoistwaySheaveDia = SET_TO_ACTIVE Then
     '                ME_HstWay02Car_typ.HoistwaySheaveDia = HoistwaySheave_cmb.Text
     '            End If
-    '            ME_COM01Car_typ.Performance = Performance_cmb.Text
+    '            MN_TRQ01_typ.Performance = Performance_cmb.Text
     '            ME_CAR01Car_typ.CarWeight = "" & CarWeight_txt.Text
     '            ME_MRM01Car_typ.RopingNew = RopingNew_cmb.Text
     '            ME_MRM01Car_typ.Wrap = Wrap_cmb.Text
@@ -1203,7 +1203,7 @@ Partial Friend Class MN_TRQ01_frm
     '            ME_MRM01Car_typ.VFan = Vfan_txt.Text
     '            ME_MRM01Car_typ.IFan = Ifan_txt.Text
     '            ME_PIT01Car_typ.CableChainSize = CompensationSize_cmb.Text
-    '            ME_PIT01Car_typ.CableChainQty = Convert.ToInt16(Conversion.Val(CompensationQty_cmb.Text))
+    '            MN_TRQ01_typ.CompensationQty = Convert.ToInt16(Conversion.Val(CompensationQty_cmb.Text))
     '            ME_PIT01Car_typ.CompensationType = CompensationType_cmb.Text
     '            If Dependents.SheaveDiameter = SET_TO_ACTIVE Then
     '                ME_PIT01Car_typ.SheaveDiameter = CompSheaveDiameter_txt.Text
@@ -1291,7 +1291,7 @@ Partial Friend Class MN_TRQ01_frm
     '                AssignListIndex(HoistwaySheave_cmb, ME_HstWay02Car_typ.HoistwaySheaveDia)
     '            End If
     '        End If
-    '        AssignListIndex(Performance_cmb, ME_COM01Car_typ.Performance)
+    '        AssignListIndex(Performance_cmb, MN_TRQ01_typ.Performance)
     '        CarWeight_txt.Text = ME_CAR01Car_typ.CarWeight
     '        AssignListIndex(RopingNew_cmb, ME_MRM01Car_typ.RopingNew)
     '        AssignListIndex(Wrap_cmb, ME_MRM01Car_typ.Wrap)
@@ -1339,14 +1339,14 @@ Partial Friend Class MN_TRQ01_frm
     '        Ifan_txt.Text = ME_MRM01Car_typ.IFan
     '        CheckforNullTypeCombo(CompensationType_cmb, ME_PIT01Car_typ.CompensationType)
     '        If FindString(CompensationSize_cmb, ME_PIT01Car_typ.CableChainSize) = -1 Then
-    '            ME_PIT01Car_typ.CableChainQty = 0
+    '            MN_TRQ01_typ.CompensationQty = 0
     '            Dependents.CableChainQty = SET_TO_GREY
     '        End If
     '        CheckforNullTypeCombo(CompensationSize_cmb, ME_PIT01Car_typ.CableChainSize)
-    '        If ME_PIT01Car_typ.CableChainQty = 0 Then
+    '        If MN_TRQ01_typ.CompensationQty = 0 Then
     '            CompensationQty_cmb.SelectedIndex = -1
     '        Else
-    '            CheckforNullTypeCombo(CompensationQty_cmb, CStr(ME_PIT01Car_typ.CableChainQty))
+    '            CheckforNullTypeCombo(CompensationQty_cmb, CStr(MN_TRQ01_typ.CompensationQty))
     '        End If
     '        If Dependents.SheaveDiameter = SET_TO_ACTIVE Then
     '            CompSheaveDiameter_txt.Text = ME_PIT01Car_typ.SheaveDiameter

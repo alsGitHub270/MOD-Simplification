@@ -125,19 +125,19 @@ Partial Friend Class MN_TRQ03_frm
     '    TotalSystemInertiaAtHighSpeed_lbl(1).Text = Strings.FormatNumber(dTotalInertia, 3, TriState.True)
     '    TotalSystemInertiaAtTheSheave_lbl(1).Text = Strings.FormatNumber(dTotalInertiaAtSheave, 3, TriState.True)
     '    CompType_lbl(1).Text = IIf(String.IsNullOrEmpty(ME_PIT01Car_typ.CompensationType), "None", ME_PIT01Car_typ.CompensationType)
-    '    NumberOfComps_lbl(1).Text = IIf(ME_PIT01Car_typ.CableChainSize = "Unknown", "Unknown", CStr(ME_PIT01Car_typ.CableChainQty))
+    '    NumberOfComps_lbl(1).Text = IIf(ME_PIT01Car_typ.CableChainSize = "Unknown", "Unknown", CStr(MN_TRQ01_typ.CompensationQty))
     '    CompSize_lbl(1).Text = IIf(String.IsNullOrEmpty(ME_PIT01Car_typ.CableChainSize), "0.00", ME_PIT01Car_typ.CableChainSize)
-    '    If ME_PIT01Car_typ.CableChainQty > 0 Then
+    '    If MN_TRQ01_typ.CompensationQty > 0 Then
     '        If Strings.Left(ME_PIT01Car_typ.CableChainSize, 2) = "WF" Then
-    '            TotalCompWeight_lbl(1).Text = Strings.FormatNumber(Conversion.Val(Strings.Mid(ME_PIT01Car_typ.CableChainSize, 3, 2)) * ME_PIT01Car_typ.CableChainQty / 10, 4, TriState.True)
-    '            CompUnitWeight_lbl(1).Text = Strings.FormatNumber(Conversion.Val(TotalCompWeight_lbl(1).Text) / ME_PIT01Car_typ.CableChainQty, 4, TriState.True)
+    '            TotalCompWeight_lbl(1).Text = Strings.FormatNumber(Conversion.Val(Strings.Mid(ME_PIT01Car_typ.CableChainSize, 3, 2)) * MN_TRQ01_typ.CompensationQty / 10, 4, TriState.True)
+    '            CompUnitWeight_lbl(1).Text = Strings.FormatNumber(Conversion.Val(TotalCompWeight_lbl(1).Text) / MN_TRQ01_typ.CompensationQty, 4, TriState.True)
     '        Else
-    '            CompUnitWeight_lbl(1).Text = Strings.FormatNumber(IIf(Conversion.Val(MN_TRQ01_typ.CompensationWeight) = 0, Get_CompUnitWeight(), Conversion.Val(MN_TRQ01_typ.CompensationWeight) / ME_PIT01Car_typ.CableChainQty), 4, TriState.True)
-    '            TotalCompWeight_lbl(1).Text = Strings.FormatNumber(IIf(Conversion.Val(MN_TRQ01_typ.CompensationWeight) = 0, Conversion.Val(CStr(Get_CompUnitWeight())) * ME_PIT01Car_typ.CableChainQty, MN_TRQ01_typ.CompensationWeight), 4, TriState.True)
+    '            CompUnitWeight_lbl(1).Text = Strings.FormatNumber(IIf(Conversion.Val(MN_TRQ02_typ.CompensationWeight) = 0, MN_TRQ02_typ.CompensationUnitWeight, Conversion.Val(MN_TRQ02_typ.CompensationWeight) / MN_TRQ01_typ.CompensationQty), 4, TriState.True)
+    '            TotalCompWeight_lbl(1).Text = Strings.FormatNumber(IIf(Conversion.Val(MN_TRQ02_typ.CompensationWeight) = 0, Conversion.Val(CStr(MN_TRQ02_typ.CompensationUnitWeight)) * MN_TRQ01_typ.CompensationQty, MN_TRQ02_typ.CompensationWeight), 4, TriState.True)
     '        End If
     '    ElseIf ME_PIT01Car_typ.CableChainSize = "Unknown" Then
     '        CompUnitWeight_lbl(1).Text = "Unknown"
-    '        TotalCompWeight_lbl(1).Text = Strings.FormatNumber(Conversion.Val(MN_TRQ01_typ.CompensationWeight), 4, TriState.True)
+    '        TotalCompWeight_lbl(1).Text = Strings.FormatNumber(Conversion.Val(MN_TRQ02_typ.CompensationWeight), 4, TriState.True)
     '    End If
     '    IdealCompWeight_lbl(1).Text = Strings.FormatNumber(dIdealCompWeight, 4, TriState.True)
     '    CompSheaveJ_lbl(1).Text = Strings.FormatNumber(Conversion.Val(MN_TRQ01_typ.CompSheaveJ), 2, TriState.True)

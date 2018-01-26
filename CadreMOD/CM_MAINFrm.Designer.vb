@@ -1849,7 +1849,7 @@ Partial Class CM_MAIN_frm
         Me.btnPrint.Text = "Print to PDF"
         Me.btnPrint.UseVisualStyleBackColor = True
         '
-        'btnCollapse
+        'Button3
         '
         Me.btnCollapse.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnCollapse.Location = New System.Drawing.Point(1001, 21)
@@ -1875,7 +1875,7 @@ Partial Class CM_MAIN_frm
         Me.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnDelete.UseVisualStyleBackColor = False
         '
-        'btnExpand
+        'Button2
         '
         Me.btnExpand.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.btnExpand.Location = New System.Drawing.Point(211, 21)

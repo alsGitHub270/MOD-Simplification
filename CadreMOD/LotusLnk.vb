@@ -89,24 +89,25 @@ Module Lotuslnk
     Public CadreBookingUploadDB As String = String.Empty
     Public IsPilotOffice As Boolean = False
 
+    Dim CustomerClassAbr As String
+
     Public Sub Add_FeedBack_Doc()
         Dim Filesystem As New Scripting.FileSystemObject()
         Dim Name As String = ""
         Dim TotalProco, TotalAward As Single
 
         Try
-            '            If Not QueryFeedback(False) Then
-            '                If gbShape Then
-            '                    CreateNewOpportunity()
-            '                End If
-            '            End If
             QueryFeedback(False)
+
             If HoldFeedbackRecord = "Smart" Then
                 CreateActivity()
                 AttachToDBName(HoldNotesFeedbackPath, Feedback)
                 clsNotes.CreateDOC("MOD Estimate")
                 Dim EditHistoryText = "Created: " & Strings.Format(DateTime.Now, DATETIMENOTESFORMAT) & " by " & Contracts.Estimator
                 clsNotes.SetValue("EditHistory", EditHistoryText)
+            Else
+                'QueryFeedback(False)
+                Attach_To_Feedback()
             End If
             '            For iIndx As Integer = 0 To GetUBoundGONumbers()
             '                If GONumbers(iIndx).IncludeInBid = CheckState.Checked Then
@@ -124,6 +125,15 @@ Module Lotuslnk
             '                End If
             '            Next iIndx
             '            clsNotes.SetValue("Proposal_Price", TotalPrice)
+
+            clsNotes.SetValue("custname", Contracts.JobName)
+            clsNotes.SetValue("bldname", Contracts.JobName)
+
+            clsNotes.SetValue("custnumber", Contracts.ContractNumber)
+            clsNotes.SetValue("customerLevel", CustomerClassAbr)
+            clsNotes.SetValue("customerTier", Contracts.CustomerTier)
+            clsNotes.SetValue("ContractType", Contracts.ContractType)
+
             clsNotes.SetValue("proposal_num", HoldUniqueActivity)
             clsNotes.SetValue("FeedbackUnique", HoldUniqueActivity)
             clsNotes.SetValue("ActivityUnique", HoldUniqueActivity)
@@ -146,11 +156,45 @@ Module Lotuslnk
             '            End If
             clsNotes.SetValue("prob_sale", Get_ProbabilityofSale(Contracts.ProbabilityOfSale))
             clsNotes.SetValue("prob_sale_range", Contracts.ProbabilityOfSale)
-            clsNotes.SetValue("SalesRep", Contracts.SalesRepName)
-            clsNotes.SetValue("Estimator", clsNotes.CN_Username)
+            If HoldFeedbackRecord = "Smart" Then
+                clsNotes.SetValue_Readers("creator", clsNotes.CN_Username)
+                clsNotes.SetValue_Readers("originalsalesrep", Contracts.SalesRepName)
+                clsNotes.SetValue("date", CDate(Strings.Format(DateTime.Now, DATESTAMPFORMAT)))
+                clsNotes.SetValue("status", "Pre-bid")
+                clsNotes.SetValue("$ConflictAction", "1")
+                clsNotes.SetValue_Readers("Reader_Admin", "[ADMIN]")
+                clsNotes.SetValue_Readers("AdminReader", "[ADMIN]")
+                clsNotes.SetValue_Readers("Estimator", clsNotes.CN_Username)
+                clsNotes.SetValue_Readers("SalesRep", Contracts.SalesRepName)
+                clsNotes.SetValue("systemStatus", "Approved")
+                clsNotes.SetValue("engineeringReqStatus", "NA")
+                clsNotes.SetValue("requirementsStatus", "NA")
+                clsNotes.SetValue("ReviewerMechanicalSignature", "")
+                clsNotes.SetValue("ReviewerMechanicalSignatureDate", "")
+                clsNotes.SetValue("ReviewerMechanicalStatus", "NA")
+                clsNotes.SetValue("ReviewerElectricalSignature", "")
+                clsNotes.SetValue("ReviewerElectricalSignatureDate", "")
+                clsNotes.SetValue("ReviewerElectricalStatus", "NA")
+                clsNotes.SetValue("ReviewerSIDSignature", "")
+                clsNotes.SetValue("ReviewerSIDSignatureDate", "")
+                clsNotes.SetValue("ReviewerSIDStatus", "NA")
+                clsNotes.SetValue("approverNotifSent", "")
+                clsNotes.SetValue("commentatorNotifSent", "")
+                clsNotes.SetValue("SIDapproverNotifSent", "")
+                clsNotes.SetValue("commentator", "P_SEC_SMART_MOD_COMMENTS")
+                clsNotes.SetValue("commentatorMail", "P_SEC_SMART_MOD_COMMENTS_MAIL")
+                clsNotes.SetValue("bidApprover", "P_SEC_SMART_MOD_APPROVERS")
+                clsNotes.SetValue("bidApproverMail", "P_SEC_SMART_MOD_APPROVERS_MAIL")
+            Else
+                clsNotes.SetValue("SalesRep", Contracts.SalesRepName)
+                clsNotes.SetValue("Estimator", clsNotes.CN_Username)
+            End If
             clsNotes.SetValue("Version", SHORT_VERSION)
             clsNotes.SetValue_Readers("Reader", Contracts.Reader)
             clsNotes.SetValue_Readers("reader_global", Contracts.ReaderGlobal)
+            clsNotes.SetValue_Readers("Reader_Admin", "[ADMIN]")
+            clsNotes.SetValue_Readers("AdminReader", "[ADMIN]")
+
             If clsNotes.CheckAttachments() Then
                 clsNotes.DeleteALLAttachments()
             End If
@@ -173,6 +217,7 @@ Module Lotuslnk
         End Try
 
     End Sub
+
     Private Sub SchindlerData_To_Fields()
 
         On Error Resume Next
@@ -328,6 +373,8 @@ MISSINGMESSAGE:
 
         Attach_To_SmartCenter_Customer()
         Contracts.JobName = TrimFields(clsNotes.GetValue("CustName"))
+        Contracts.ContractNumber = Strings.Left(clsNotes.GetValue("CustNumber"), 10)
+        Contracts.CustomerTier = clsNotes.GetValue("CustomerTier")
         Contracts.SAPContactNumber = clsNotes.GetValue("SAPContactNumber")
         Contracts.JobAddress = TrimFields(clsNotes.GetValue("Address"))
         Contracts.JobAddress2 = TrimFields(clsNotes.GetValue("Address_1"))
@@ -338,7 +385,7 @@ MISSINGMESSAGE:
         If Contracts.SalesRepOffice = "" Then
             Contracts.SalesRepOffice = TranslateOfficeNumber(OfficeFromSmart)
         End If
-        '        Contracts.ContractType = clsNotes.GetValue("ContractType")
+        Contracts.ContractType = clsNotes.GetValue("ContractType")
         Contracts.Country = clsNotes.GetValue("Country")
         RetrieveBuildingType(clsNotes.GetValue("LocationsXML"))
         Owner_Info.Name = TrimFields(clsNotes.GetValue("BillToName"))
@@ -353,11 +400,14 @@ MISSINGMESSAGE:
         Contracts.Region = Strings.Left(clsNotes.GetValue("Region"), 5)
         Contracts.Area = clsNotes.GetValue("Area")
         Contracts.Territory = clsNotes.GetValue("Territory")
-        '        Contracts.CustomerTier = clsNotes.GetValue("CUSTOMERTIER")
-        '        clsNotes.GetValue_Readers("Reader")
-        '        Contracts.Reader = ReadersValue
-        '        clsNotes.GetValue_Readers("reader_global")
-        '        Contracts.ReaderGlobal = ReadersValue
+
+        CustomerClassAbr = Strings.Left(clsNotes.GetValue("CustLevel"), 2)
+
+        Contracts.CustomerTier = clsNotes.GetValue("CustomerTier")
+        clsNotes.GetValue_Readers("Reader")
+        Contracts.Reader = ReadersValue
+        clsNotes.GetValue_Readers("reader_global")
+        Contracts.ReaderGlobal = ReadersValue
 
         Attach_To_SmartCenter_Contact()
         If Not MissingContactInfo Then

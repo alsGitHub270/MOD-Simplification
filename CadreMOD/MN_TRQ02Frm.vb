@@ -122,7 +122,7 @@ Partial Friend Class MN_TRQ02_frm
     '    Private Sub CompensationWeight_txt_Leave(ByVal eventSender As Object, ByVal eventArgs As EventArgs) Handles CompensationWeight_txt.Leave
 
     '        If ValidateTextBoxInput_Text(Me, CompensationWeight_txt, ENTRY_NOT_A_NUMBER, True) = ENTRY_VALID Then
-    '            If CompensationWeight_txt.Text <> MN_TRQ01_typ.CompensationWeight Then
+    '            If CompensationWeight_txt.Text <> MN_TRQ02_typ.CompensationWeight Then
     '                MDIChildDirty = True
     '                Fields2Type()
     '                Dependents.MOD_Parent()
@@ -1146,7 +1146,7 @@ Partial Friend Class MN_TRQ02_frm
     '            MN_TRQ01_typ.CompSheaveJ = CompSheaveJ_txt.Text
     '        End If
     '        If Dependents.CompensationWeightTQ = SET_TO_ACTIVE Then
-    '            MN_TRQ01_typ.CompensationWeight = IIf(CompensationWeight_txt.Text = "", CStr(0), CompensationWeight_txt.Text)
+    '            MN_TRQ02_typ.CompensationWeight = IIf(CompensationWeight_txt.Text = "", CStr(0), CompensationWeight_txt.Text)
     '        End If
     '        If Dependents.CompSheaveWeightTQ = SET_TO_ACTIVE Then
     '            MN_TRQ01_typ.CompSheaveWt = CompSheaveWeight_txt.Text
@@ -1312,10 +1312,10 @@ Partial Friend Class MN_TRQ02_frm
     '            End If
     '        End If
     '        If Dependents.CompensationWeightTQ = SET_TO_ACTIVE Then
-    '            If Conversion.Val(MN_TRQ01_typ.CompensationWeight) = 0 Then
+    '            If Conversion.Val(MN_TRQ02_typ.CompensationWeight) = 0 Then
     '                CompensationWeight_txt.Text = ""
     '            Else
-    '                CompensationWeight_txt.Text = MN_TRQ01_typ.CompensationWeight
+    '                CompensationWeight_txt.Text = MN_TRQ02_typ.CompensationWeight
     '            End If
     '        End If
     '        If Dependents.CompSheaveWeightTQ = SET_TO_ACTIVE Then
@@ -1707,7 +1707,7 @@ Partial Friend Class MN_TRQ02_frm
     '        Else
     '            CompensationWeight_lbl.Enabled = True
     '            CompensationWeight_txt.Enabled = True
-    '            If Conversion.Val(MN_TRQ01_typ.CompensationWeight) = 0 Then
+    '            If Conversion.Val(MN_TRQ02_typ.CompensationWeight) = 0 Then
     '                CompensationWeight_txt.BackColor = Color.Yellow
     '            Else
     '                CompensationWeight_txt.BackColor = Color.White

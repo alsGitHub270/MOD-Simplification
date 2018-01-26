@@ -469,8 +469,8 @@ Module EstimatingMOD
                                                             CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
                                                         End If
                                                     Case "Haughton or Otis"
-                                                        If Not String.IsNullOrEmpty(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst")) Then
-                                                            Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst").ToUpper
+                                                        If Not String.IsNullOrEmpty(GetValue_GeneralInfo(CurDataset, "ExistingControlVendor_lst")) Then
+                                                            Select Case GetValue_GeneralInfo(CurDataset, "ExistingControlVendor_lst").ToUpper
                                                                 Case "HAUGHTON", "OTIS"
                                                                     CurField += UseMaterialItemRecordSet.Fields("Transfer Price").Value
                                                                 Case Else
@@ -938,8 +938,8 @@ Module EstimatingMOD
             CurDataset = SetCurrentDataset()
             NumberOfFrontOpenings = Conversion.Val(GetValue_GeneralInfo(CurDataset, "NumberofStopsFront_cmb"))
             NumberOfRearOpenings = Conversion.Val(GetValue_GeneralInfo(CurDataset, "NumberofStopsRear_cmb"))
-            OEMVendor = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlVendor_lst")
-            OEMModel = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExistingControlModel_lst")
+            OEMVendor = GetValue_GeneralInfo(CurDataset, "ExistingControlVendor_lst")
+            OEMModel = GetValue_GeneralInfo(CurDataset, "ExistingControlModel_lst")
             If Math.Round(Conversion.Val(CurMATID)) > 900 Then
                 CurMATID = "900" & Strings.Right(CurMATID, 3)
                 UseWhere = "[Sub ID] = '" & CurMATID & "'"
@@ -1150,15 +1150,30 @@ Module EstimatingMOD
                                             End If
                                         End If
                                     Case MAT_ID_GearedMachineBedplateBrakeSwitch
-                                        CurValue = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb")
-                                        Select Case CurValue
-                                            Case "Overhead", "Basement"
-                                                If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(CurValue) > -1 Then
-                                                    AddToOptions = True
-                                                End If
-                                            Case Else
-                                                AddToOptions = True
-                                        End Select
+                                        CurValue = GetValue(CurDataset.Tables(TABLENAME_TORQUEDATA), "MachineVendorNew_Cmb")
+                                        If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(CurValue) > -1 Then
+                                            CurValue = GetValue_GeneralInfo(CurDataset, "MachineLocation_Cmb")
+                                            Select Case CurValue
+                                                Case "Overhead", "Basement"
+                                                    If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf(CurValue) > -1 Then
+                                                        If Math.Round(Conversion.Val(dtBuildingInfo(0)("seismic_zone"))) > 1 Then
+                                                            If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Seismic") > -1 Then
+                                                                AddToOptions = True
+                                                            End If
+                                                        ElseIf UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Seismic") = -1 Then
+                                                            AddToOptions = True
+                                                        End If
+                                                    End If
+                                                Case Else
+                                                    If Math.Round(Conversion.Val(dtBuildingInfo(0)("seismic_zone"))) > 1 Then
+                                                        If UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Seismic") > -1 Then
+                                                            AddToOptions = True
+                                                        End If
+                                                    ElseIf UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Seismic") = -1 Then
+                                                        AddToOptions = True
+                                                    End If
+                                            End Select
+                                        End If
                                     Case MAT_ID_CarGovernor, MAT_ID_CwtGovernor
                                         If IsPOHController And UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("GB") > -1 Then
                                             AddToOptions = False
@@ -1231,7 +1246,7 @@ Module EstimatingMOD
                                                 AddToOptions = True
                                             End If
                                         ElseIf UseMaterialItemRecordSet.Fields("Types").Value.ToString.IndexOf("Basement") > -1 Then
-                                            If GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb") = "Basement" Then
+                                            If GetValue_GeneralInfo(CurDataset, "MachineLocation_Cmb") = "Basement" Then
                                                 AddToOptions = True
                                             End If
                                         Else
@@ -1263,11 +1278,11 @@ Module EstimatingMOD
                                             AddToOptions = True
                                         End If
                                     Case MAT_ID_CarBuffer, MAT_ID_CwtBuffer
-                                        Select Case Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")))
+                                        Select Case Math.Round(Conversion.Val(GetValue_GeneralInfo(CurDataset, "Application_cmb")))
                                             Case Is = 0
                                                 CurValue = String.Empty
                                             Case Is <= 100
-                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
+                                                Select Case GetValue_GeneralInfo(CurDataset, "Application_cmb")
                                                     Case "Passenger"
                                                         CurValue = "100 fpm (passenger)"
                                                     Case "Freight"
@@ -1276,7 +1291,7 @@ Module EstimatingMOD
                                                         CurValue = String.Empty
                                                 End Select
                                             Case Is <= 150
-                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
+                                                Select Case GetValue_GeneralInfo(CurDataset, "Application_cmb")
                                                     Case "Passenger"
                                                         CurValue = "150 fpm (passenger)"
                                                     Case "Freight"
@@ -1285,7 +1300,7 @@ Module EstimatingMOD
                                                         CurValue = String.Empty
                                                 End Select
                                             Case Is <= 200
-                                                Select Case GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Application_cmb")
+                                                Select Case GetValue_GeneralInfo(CurDataset, "Application_cmb")
                                                     Case "Passenger"
                                                         CurValue = "200 fpm (passenger)"
                                                     Case "Freight"
@@ -1375,13 +1390,14 @@ Module EstimatingMOD
                                         End If
                                     Case MAT_ID_BrakeSwitchRGD
                                         CurValue = "Non-HW"
-                                        'CJ - 1/10/18 - Uncomment when Existing Machine Vendor/Model
-                                        'If = HW Then
-                                        '   CurValue = "Hollister-Whitney"
-                                        'End If
+                                        If GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "MachineVendorExisting_Cmb") = HOLLISTERWHITNEY Then
+                                            CurValue = "Hollister Whitney"
+                                        End If
                                         If UseMaterialItemRecordSet.Fields("Type").Value.ToString.IndexOf(CurValue) > -1 Then
                                             AddToOptions = True
                                         End If
+                                    Case MAT_ID_ACMotorNGD
+
                                     Case Else
                                         AddToOptions = True
                                 End Select
@@ -1639,11 +1655,11 @@ Module EstimatingMOD
                     If UseMaterialItemRecordSet.RecordCount > 0 Then
                         'Base Cost/Hours
                         If CurrentGOData_Typ.EstimateLevel = "Alt" Then
-                            TotalTravel = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TravelNew_txt")) +
-                                          Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
-                                          Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
-                            FrontOpenings = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
-                            RearOpenings = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+                            TotalTravel = Conversion.Val(GetValue_GeneralInfo(EstimatingDataset, "TravelNew_txt")) +
+                                          Conversion.Val(GetValue_GeneralInfo(EstimatingDataset, "TopFloorToOverhead_txt")) +
+                                          Conversion.Val(GetValue_GeneralInfo(EstimatingDataset, "PitDepth_txt"))
+                            FrontOpenings = Conversion.Val(GetValue_GeneralInfo(EstimatingDataset, "NumberofStopsFront_cmb"))
+                            RearOpenings = Conversion.Val(GetValue_GeneralInfo(EstimatingDataset, "NumberofStopsRear_cmb"))
                             TotalOpenings = FrontOpenings + RearOpenings
                             UseWhere = "[Sub ID] = '" & CurDataRow(TABLECOL_MATERIALID) & "'"
                             If Not IsDBNull(CurDataRow(TABLECOL_TYPE_BASE)) Then
@@ -1677,11 +1693,11 @@ Module EstimatingMOD
                                                 Else
                                                     UseFieldName = MAT_ID_RearCarDoorOperator
                                                 End If
-                                                MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
+                                                MaterialQty = PerCarQty * Conversion.Val(GetValue_Materials(CurDataset, UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
                                             Case "PER DOOR"
-                                                MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
+                                                MaterialQty = PerCarQty * Conversion.Val(GetValue_Materials(CurDataset, UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
                                             Case "PER ROPE PER CAR"
-                                                MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
+                                                MaterialQty = PerCarQty * Conversion.Val(GetValue_Materials(CurDataset, UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
                                             Case "PER OPENING PER CAR"
                                                 MaterialQty = PerCarQty * TotalOpenings
                                             Case "PER PORT"
@@ -1746,11 +1762,11 @@ Module EstimatingMOD
                             End If
                         End If
                         'Cost/Hours
-                        TotalTravel = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TravelNew_txt")) +
-                                      Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "TopFloorToOverhead_txt")) +
-                                      Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "PitDepth_txt"))
-                        FrontOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsFront_cmb"))
-                        RearOpenings = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "NumberofStopsRear_cmb"))
+                        TotalTravel = Conversion.Val(GetValue_GeneralInfo(CurDataset, "TravelNew_txt")) +
+                                      Conversion.Val(GetValue_GeneralInfo(CurDataset, "TopFloorToOverhead_txt")) +
+                                      Conversion.Val(GetValue_GeneralInfo(CurDataset, "PitDepth_txt"))
+                        FrontOpenings = Conversion.Val(GetValue_GeneralInfo(CurDataset, "NumberofStopsFront_cmb"))
+                        RearOpenings = Conversion.Val(GetValue_GeneralInfo(CurDataset, "NumberofStopsRear_cmb"))
                         TotalOpenings = FrontOpenings + RearOpenings
                         UseWhere = "[Sub ID] = '" & CurDataRow(TABLECOL_MATERIALID) & "'"
                         If Not IsDBNull(CurDataRow(UseTypeCol)) Then
@@ -1784,11 +1800,11 @@ Module EstimatingMOD
                                             Else
                                                 UseFieldName = MAT_ID_RearCarDoorOperator
                                             End If
-                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
+                                            MaterialQty = PerCarQty * Conversion.Val(GetValue_Materials(CurDataset, UseUnitQtyCol, MAIN_ID_DoorOperator, UseFieldName))
                                         Case "PER DOOR"
-                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
+                                            MaterialQty = PerCarQty * Conversion.Val(GetValue_Materials(CurDataset, UseUnitQtyCol, MAIN_ID_CabEquipment, MAT_ID_CarDoor))
                                         Case "PER ROPE PER CAR"
-                                            MaterialQty = PerCarQty * Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_MATERIALS), UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
+                                            MaterialQty = PerCarQty * Conversion.Val(GetValue_Materials(CurDataset, UseUnitQtyCol, MAIN_ID_Hoistway, MAT_ID_HoistRopes))
                                         Case "PER OPENING PER CAR"
                                             MaterialQty = PerCarQty * TotalOpenings
                                         Case "PER PORT"
@@ -1959,10 +1975,10 @@ Module EstimatingMOD
                     Expenses = 0
                     NPS_Cost = 0
                 Else
-                    PBO_Costs = (Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Permits_txt")) * PerCarQty) +
-                                 Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "Bonds_txt")) +
+                    PBO_Costs = (Conversion.Val(GetValue_GeneralInfo(CurDataset, "Permits_txt")) * PerCarQty) +
+                                 Conversion.Val(GetValue_GeneralInfo(CurDataset, "Bonds_txt")) +
                                  Conversion.Val(dtBuildingInfo(0)("ocpl"))
-                    Expenses = Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "ExpensesPerDay_txt"))
+                    Expenses = Conversion.Val(GetValue_GeneralInfo(CurDataset, "ExpensesPerDay_txt"))
                     NPS_Cost = Conversion.Val(dtBuildingInfo(0)("nps_one_time_cost").ToString)
                     NPS_Cost += Conversion.Val(dtBuildingInfo(0)("nps_material_cost").ToString) * Conversion.Val(dtBuildingInfo(0)("nps_duration").ToString)
                     NPS_Cost *= PerCarQty
@@ -2009,8 +2025,8 @@ Module EstimatingMOD
 
                 CurDataRow("Total_Bank_Cost") = Math.Round(Total_Bank_Cost, 2)
                 CurDataRow("Bank_Net_Price") = Math.Round(Bank_Net_Price, 2)
-                CurDataRow("speed") = Math.Round(Conversion.Val(GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "SpeedNew_cmb")))
-                CurDataRow("machine_model") = GetValue(CurDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
+                CurDataRow("speed") = Math.Round(Conversion.Val(GetValue_GeneralInfo(CurDataset, "SpeedNew_cmb")))
+                CurDataRow("machine_model") = GetValue_GeneralInfo(CurDataset, "MachineType_cmb")
             End If
             CM_MAIN_frm.FpSpread1.Refresh()
             CM_MAIN_frm.CalculateC1_FinalBankPrice()
@@ -2158,7 +2174,7 @@ Module EstimatingMOD
         Return ReturnVal
 
     End Function
-    Private Function GetValue_Materials(ByRef UseDataset As DataSet, ByVal ColumnName As String, ByVal UseMainID As String, ByVal UseMatID As String) As String
+    Public Function GetValue_Materials(ByRef UseDataset As DataSet, ByVal ColumnName As String, ByVal UseMainID As String, ByVal UseMatID As String) As String
         Dim ReturnVal As String = String.Empty
 
         ReturnVal = GetValue(UseDataset.Tables(TABLENAME_MATERIALS), ColumnName)
@@ -2295,6 +2311,154 @@ Module EstimatingMOD
         End If
         UseLabel.Enabled = EnableStatus
         UseControl.Enabled = EnableStatus
+
+    End Sub
+    Public Sub SetUpTorqueDataset(ByRef CurDataset As DataSet)
+
+        TorqueData = EstimatingDataset.Tables.Add(TABLENAME_TORQUEDATA)
+        TorqueData.Columns.AddRange(New DataColumn() {New DataColumn("UnitsInTab", typeStr),
+                                                      New DataColumn("MachineVendorExisting_Cmb", typeStr),
+                                                      New DataColumn("MachineModelExisting_Cmb", typeStr),
+                                                      New DataColumn("ExistingMachineSheaveDia_cmb", typeStr),
+                                                      New DataColumn("NominalMotorRPM_txt", typeStr),
+                                                      New DataColumn("BrakeType_cmb", typeStr),
+                                                      New DataColumn("HoistRopeQty_Cmb", typeStr),
+                                                      New DataColumn("HoistRopeSize_Cmb", typeStr),
+                                                      New DataColumn("CarToCwtRopeDrop_txt", typeStr),
+                                                      New DataColumn("Compensation_cmb", typeStr),
+                                                      New DataColumn("CarSheaveQty_Cmb", typeStr),
+                                                      New DataColumn("CwtSheaveQty_Cmb", typeStr),
+                                                      New DataColumn("FullLoadCurrentIDC1_txt", typeStr),
+                                                      New DataColumn("ArmatureFullLoadVoltageVFLU_txt", typeStr),
+                                                      New DataColumn("MachineVendorNew_Cmb", typeStr),
+                                                      New DataColumn("MachineModelNew_Cmb", typeStr),
+                                                      New DataColumn("Acceleration", typeStr),
+                                                      New DataColumn("bDirty", typeStr),
+                                                      New DataColumn("bPowerData", typeStr),
+                                                      New DataColumn("bSuperTable", typeStr),
+                                                      New DataColumn("Calculated_KVA", typeStr),
+                                                      New DataColumn("CarSheaveDiameter", typeStr),
+                                                      New DataColumn("CarSheaveJ", typeStr),
+                                                      New DataColumn("CarWeightCalculated", typeStr),
+                                                      New DataColumn("CompensationWeight", typeStr),
+                                                      New DataColumn("CompSheaveJ", typeStr),
+                                                      New DataColumn("CompSheaveWt", typeStr),
+                                                      New DataColumn("ControlCableWeight", typeStr),
+                                                      New DataColumn("Counterweight", typeStr),
+                                                      New DataColumn("CwtSheaveDiameter", typeStr),
+                                                      New DataColumn("CwtSheaveJ", typeStr),
+                                                      New DataColumn("Deceleration", typeStr),
+                                                      New DataColumn("DecelerationD125", typeStr),
+                                                      New DataColumn("DecelerationTraction", typeStr),
+                                                      New DataColumn("DecelerationTSD", typeStr),
+                                                      New DataColumn("DeflectorSheaveDiameter", typeStr),
+                                                      New DataColumn("DeflectorSheaveJ", typeStr),
+                                                      New DataColumn("DriveModel", typeStr),
+                                                      New DataColumn("DriveModelDefault", typeStr),
+                                                      New DataColumn("ForwardGearEfficiency", typeStr),
+                                                      New DataColumn("GearRation1", typeStr),
+                                                      New DataColumn("GearRation2", typeStr),
+                                                      New DataColumn("GrooveNumber", typeStr),
+                                                      New DataColumn("HatchEfficiency", typeStr),
+                                                      New DataColumn("HiSpeedShaftInertia", typeStr),
+                                                      New DataColumn("HoistCableQty", typeStr),
+                                                      New DataColumn("HorizontalDistance", typeStr),
+                                                      New DataColumn("IdlerSheaveDiameter", typeStr),
+                                                      New DataColumn("InputVoltage", typeStr),
+                                                      New DataColumn("len1", typeStr),
+                                                      New DataColumn("len2", typeStr),
+                                                      New DataColumn("len3", typeStr),
+                                                      New DataColumn("MachineSheaveJ", typeStr),
+                                                      New DataColumn("MainTravelingCable", typeStr),
+                                                      New DataColumn("MainTravelingCableQty", typeStr),
+                                                      New DataColumn("MaxGroovePressure", typeStr),
+                                                      New DataColumn("MaxShaftSheaveLoad", typeStr),
+                                                      New DataColumn("MotorRPM", typeStr),
+                                                      New DataColumn("NominalMotorHP", typeStr),
+                                                      New DataColumn("NominalMotorHPDefault", typeStr),
+                                                      New DataColumn("NumberofCarTopSheaves", typeStr),
+                                                      New DataColumn("NumberofIdlerSheaves", typeStr),
+                                                      New DataColumn("OverheadSheaveInertia", typeStr),
+                                                      New DataColumn("Required_KVA", typeStr),
+                                                      New DataColumn("ReverseGearEfficiency", typeStr),
+                                                      New DataColumn("RopeDrop", typeStr),
+                                                      New DataColumn("RopeGrade", typeStr),
+                                                      New DataColumn("RopeGripperModel", typeStr),
+                                                      New DataColumn("RopeOffset", typeStr),
+                                                      New DataColumn("RopeSplayKitMounting", typeStr),
+                                                      New DataColumn("RopeStrength", typeStr),
+                                                      New DataColumn("RopeWeight", typeStr),
+                                                      New DataColumn("SheaveDiameter", typeStr),
+                                                      New DataColumn("TractionAdder", typeStr),
+                                                      New DataColumn("UN", typeStr),
+                                                      New DataColumn("VerticalDistance", typeStr),
+                                                      New DataColumn("WrapAngle", typeStr)})
+
+    End Sub
+    Public Sub SaveTorqueEngineeringData(ByVal CurDataRow As DataRow)
+
+        CurDataRow("MachineVendorNew_Cmb") = MN_TRQ01_typ.MachineVendorNew
+        CurDataRow("MachineModelNew_Cmb") = MN_TRQ01_typ.MachineModelNew
+        CurDataRow("Acceleration") = MN_TRQ01_typ.Acceleration
+        CurDataRow("bDirty") = MN_TRQ01_typ.bDirty
+        CurDataRow("bPowerData") = MN_TRQ01_typ.bPowerData
+        CurDataRow("bSuperTable") = MN_TRQ01_typ.bSuperTable
+        CurDataRow("Calculated_KVA") = MN_TRQ01_typ.Calculated_KVA
+        CurDataRow("CarSheaveDiameter") = MN_TRQ01_typ.CarSheaveDiameter
+        CurDataRow("CarSheaveJ") = MN_TRQ01_typ.CarSheaveJ
+        CurDataRow("CarWeightCalculated") = MN_TRQ01_typ.CarWeightCalculated
+        CurDataRow("CompensationWeight") = MN_TRQ02_typ.CompensationWeight
+        CurDataRow("CompSheaveJ") = MN_TRQ01_typ.CompSheaveJ
+        CurDataRow("CompSheaveWt") = MN_TRQ01_typ.CompSheaveWt
+        CurDataRow("ControlCableWeight") = MN_TRQ01_typ.ControlCableWeight
+        CurDataRow("Counterweight") = MN_TRQ01_typ.Counterweight
+        CurDataRow("CwtSheaveDiameter") = MN_TRQ01_typ.CwtSheaveDiameter
+        CurDataRow("CwtSheaveJ") = MN_TRQ01_typ.CwtSheaveJ
+        CurDataRow("Deceleration") = MN_TRQ01_typ.Deceleration
+        CurDataRow("DecelerationD125") = MN_TRQ01_typ.DecelerationD125
+        CurDataRow("DecelerationTraction") = MN_TRQ01_typ.DecelerationTraction
+        CurDataRow("DecelerationTSD") = MN_TRQ01_typ.DecelerationTSD
+        CurDataRow("DeflectorSheaveDiameter") = MN_TRQ01_typ.DeflectorSheaveDiameter
+        CurDataRow("DeflectorSheaveJ") = MN_TRQ01_typ.DeflectorSheaveJ
+        CurDataRow("DriveModel") = MN_TRQ01_typ.DriveModel
+        CurDataRow("DriveModelDefault") = MN_TRQ01_typ.DriveModelDefault
+        CurDataRow("ForwardGearEfficiency") = MN_TRQ01_typ.ForwardGearEfficiency
+        CurDataRow("GearRation1") = MN_TRQ01_typ.GearRation1
+        CurDataRow("GearRation2") = MN_TRQ01_typ.GearRation2
+        CurDataRow("GrooveNumber") = MN_TRQ01_typ.GrooveNumber
+        CurDataRow("HatchEfficiency") = MN_TRQ01_typ.HatchEfficiency
+        CurDataRow("HiSpeedShaftInertia") = MN_TRQ01_typ.HiSpeedShaftInertia
+        CurDataRow("HorizontalDistance") = MN_TRQ01_typ.HorizontalDistance
+        CurDataRow("IdlerSheaveDiameter") = MN_TRQ01_typ.IdlerSheaveDiameter
+        CurDataRow("InputVoltage") = MN_TRQ01_typ.InputVoltage
+        CurDataRow("len1") = MN_TRQ01_typ.len1
+        CurDataRow("len2") = MN_TRQ01_typ.len2
+        CurDataRow("len3") = MN_TRQ01_typ.len3
+        CurDataRow("MachineSheaveJ") = MN_TRQ01_typ.MachineSheaveJ
+        CurDataRow("MainTravelingCable") = MN_TRQ01_typ.MainTravelingCable
+        CurDataRow("MainTravelingCableQty") = MN_TRQ01_typ.MainTravelingCableQty
+        CurDataRow("MaxGroovePressure") = MN_TRQ01_typ.MaxGroovePressure
+        CurDataRow("MaxShaftSheaveLoad") = MN_TRQ01_typ.MaxShaftSheaveLoad
+        CurDataRow("MotorRPM") = MN_TRQ01_typ.MotorRPM
+        CurDataRow("NominalMotorHP") = MN_TRQ01_typ.NominalMotorHP
+        CurDataRow("NominalMotorHPDefault") = MN_TRQ01_typ.NominalMotorHPDefault
+        CurDataRow("NumberofCarTopSheaves") = MN_TRQ01_typ.NumberofCarTopSheaves
+        CurDataRow("NumberofIdlerSheaves") = MN_TRQ01_typ.NumberofIdlerSheaves
+        CurDataRow("OverheadSheaveInertia") = MN_TRQ01_typ.OverheadSheaveInertia
+        CurDataRow("Required_KVA") = MN_TRQ01_typ.Required_KVA
+        CurDataRow("ReverseGearEfficiency") = MN_TRQ01_typ.ReverseGearEfficiency
+        CurDataRow("RopeDrop") = MN_TRQ01_typ.RopeDrop
+        CurDataRow("RopeGrade") = MN_TRQ01_typ.RopeGrade
+        CurDataRow("RopeGripperModel") = MN_TRQ01_typ.RopeGripperModel
+        CurDataRow("RopeOffset") = MN_TRQ01_typ.RopeOffset
+        CurDataRow("RopeSplayKitMounting") = MN_TRQ01_typ.RopeSplayKitMounting
+        CurDataRow("RopeStrength") = MN_TRQ01_typ.RopeStrength
+        CurDataRow("RopeWeight") = MN_TRQ01_typ.RopeWeight
+        CurDataRow("SheaveDiameter") = MN_TRQ01_typ.SheaveDiameter
+        CurDataRow("TractionAdder") = MN_TRQ01_typ.TractionAdder
+        CurDataRow("UN") = MN_TRQ01_typ.UN
+        CurDataRow("VerticalDistance") = MN_TRQ01_typ.VerticalDistance
+        CurDataRow("WrapAngle") = MN_TRQ01_typ.WrapAngle
 
     End Sub
 End Module

@@ -218,7 +218,7 @@ Partial Friend Class MN_TRQ05_frm
     '            DecTork_lbl(2).Text = Strings.FormatNumber(Math.Abs(Conversion.Val(MN_PowerData_GEARED_typ.CurrentOutOfTheConverter_TSFLD)), 2, TriState.True)
     '        End If
     '        sSQL = "SELECT * FROM [Drive Selection] "
-    '        sSQL = sSQL & "WHERE ANSI=" & (IIf((ME_ADM01Bnk_typ.ANSICode) >= 2000, "True", "False"))
+    '        sSQL = sSQL & "WHERE ANSI=" & (IIf((CurrentGOData_Typ.ANSICode) >= 2000, "True", "False"))
     '        sSQL = sSQL & " AND [Drive Selection]='" & MN_TRQ01_typ.DriveModel & "'"
     '        WorkingRecordSet = New ADODB.Recordset
     '        WorkingRecordSet.Open(sSQL, ADOConnection)

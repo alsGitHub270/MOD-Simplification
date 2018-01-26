@@ -652,6 +652,10 @@ Module General
         Return sngValue
     End Function
 
+    Public Function GetBuildingInfo(columnName As String) As String
+        Return dtBuildingInfo.Rows(0).Item(columnName).ToString
+    End Function
+
     Public Sub SaveAll()
 
         CM_MAIN_frm.SaveAll(False)

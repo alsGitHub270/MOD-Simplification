@@ -243,23 +243,7 @@ Public Class frmEstimatingAlt
                                                            New DataColumn("ChangeInTravel_chk", typeInt),
                                                            New DataColumn("TravelExisting_txt", typeStr)})
 
-            TorqueData = EstimatingDataset.Tables.Add(TABLENAME_TORQUEDATA)
-            TorqueData.Columns.AddRange(New DataColumn() {New DataColumn("UnitsInTab", typeStr),
-                                                          New DataColumn("MachineVendorExisting_Cmb", typeStr),
-                                                          New DataColumn("MachineModelExisting_Cmb", typeStr),
-                                                          New DataColumn("ExistingMachineSheaveDia_cmb", typeStr),
-                                                          New DataColumn("NominalMotorRPM_txt", typeStr),
-                                                          New DataColumn("BrakeType_cmb", typeStr),
-                                                          New DataColumn("HoistRopeQty_Cmb", typeStr),
-                                                          New DataColumn("HoistRopeSize_Cmb", typeStr),
-                                                          New DataColumn("CarToCwtRopeDrop_txt", typeStr),
-                                                          New DataColumn("Compensation_cmb", typeStr),
-                                                          New DataColumn("CarSheaveQty_Cmb", typeStr),
-                                                          New DataColumn("CwtSheaveQty_Cmb", typeStr),
-                                                          New DataColumn("FullLoadCurrentIDC1_txt", typeStr),
-                                                          New DataColumn("ArmatureFullLoadVoltageVFLU_txt", typeStr),
-                                                          New DataColumn("MachineVendorNew_Cmb", typeStr),
-                                                          New DataColumn("MachineModelNew_Cmb", typeStr)})
+            SetUpTorqueDataset(EstimatingDataset)
 
             Deserialize(ALT_Filename, AltDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             AltDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
@@ -1018,8 +1002,8 @@ Public Class frmEstimatingAlt
             UseMachineVendor = NewMachineVendor
             UseMachineModel = NewMachineModel
         End If
-        sSQL = "SELECT RopeSizes.RopeSize, RopeSizes.MaxNumberRopes AS RopesMaximum " & "FROM RopeSizes " & "WHERE (((RopeSizes.MachineType)='" &
-               UseMachineModel & "'));"
+        'sSQL = "SELECT RopeSizes.RopeSize, RopeSizes.MaxNumberRopes AS RopesMaximum " & "FROM RopeSizes " & "WHERE (((RopeSizes.MachineType)='" &
+        '       UseMachineModel & "'));"
         Select Case UseMachineModel
             Case MACHINE_FMR355, MACHINE_PMR355, MACHINE_PMR490
                 MaxNumberRopes = 8
@@ -1041,38 +1025,38 @@ Public Class frmEstimatingAlt
                         MaxNumberRopes = 11
                 End Select
             Case Else
-                If UseMachineModel = OTHER Or UseMachineModel = "" Then
-                    sSQL = "SELECT RopeSizes.RopeSize, Max(RopeSizes.MaxNumberRopes) AS RopesMaximum " &
-                           "FROM SuperTable INNER JOIN RopeSizes ON SuperTable.MachineModel = RopeSizes.MachineType " & "GROUP BY RopeSizes.RopeSize;"
-                End If
-                ResetADODBRecordset(TorqueRecordset)
-                TorqueRecordset.Open(sSQL, ADOConnection)
-                MaxNumberRopes = 2
-                Do While Not TorqueRecordset.EOF
-                    If TranslateRopeSize(HoistRopeSize, True) = "" & TorqueRecordset("RopeSize").Value Then
-                        If Conversion.Val("" & TorqueRecordset("RopesMaximum").Value) = 0 Then
-                            If CurrentMachineType.IndexOf(GEARLESS_TYPE) > -1 Then
-                                MaxNumberRopes = 11
-                            Else
-                                MaxNumberRopes = 8
-                            End If
-                            Exit Sub
-                        Else
-                            MaxNumberRopes = Conversion.Val("" & TorqueRecordset("RopesMaximum").Value)
-                        End If
-                        Exit Do
-                    End If
-                    TorqueRecordset.MoveNext()
-                Loop
-                TorqueRecordset.Close()
-                TorqueRecordset = Nothing
-                If MaxNumberRopes < 3 Then
-                    If CurrentMachineType.IndexOf(GEARLESS_TYPE) > -1 Then
-                        MaxNumberRopes = 11
-                    Else
-                        MaxNumberRopes = 8
-                    End If
-                End If
+                'If UseMachineModel = OTHER Or UseMachineModel = "" Then
+                '    sSQL = "SELECT RopeSizes.RopeSize, Max(RopeSizes.MaxNumberRopes) AS RopesMaximum " &
+                '           "FROM SuperTable INNER JOIN RopeSizes ON SuperTable.MachineModel = RopeSizes.MachineType " & "GROUP BY RopeSizes.RopeSize;"
+                'End If
+                'ResetADODBRecordset(TorqueRecordset)
+                'TorqueRecordset.Open(sSQL, ADOConnection)
+                'MaxNumberRopes = 2
+                'Do While Not TorqueRecordset.EOF
+                '    If TranslateRopeSize(HoistRopeSize, True) = "" & TorqueRecordset("RopeSize").Value Then
+                '        If Conversion.Val("" & TorqueRecordset("RopesMaximum").Value) = 0 Then
+                '            If CurrentMachineType.IndexOf(GEARLESS_TYPE) > -1 Then
+                '                MaxNumberRopes = 11
+                '            Else
+                '                MaxNumberRopes = 8
+                '            End If
+                '            Exit Sub
+                '        Else
+                '            MaxNumberRopes = Conversion.Val("" & TorqueRecordset("RopesMaximum").Value)
+                '        End If
+                '        Exit Do
+                '    End If
+                '    TorqueRecordset.MoveNext()
+                'Loop
+                'TorqueRecordset.Close()
+                'TorqueRecordset = Nothing
+                'If MaxNumberRopes < 3 Then
+                '    If CurrentMachineType.IndexOf(GEARLESS_TYPE) > -1 Then
+                '        MaxNumberRopes = 11
+                '    Else
+                '        MaxNumberRopes = 8
+                '    End If
+                'End If
         End Select
         HoistRopeQty_Cmb.Items.Clear()
         For i = 3 To MaxNumberRopes
@@ -1092,24 +1076,24 @@ Public Class frmEstimatingAlt
                 aHoistCableSize(0) = "16 mm"
                 aHoistCableSize(1) = "19 mm"
             Case Else
-                Select Case CurrentMachineType
-                    Case "New" & GEARLESS_TYPE, MACHINE_FMM200
-                        sSQL = "SELECT DISTINCT RopeSizes.RopeSize FROM RopeSizes "
-                    Case Else
-                        sSQL = "SELECT DISTINCT RopeSizes.RopeSize FROM SuperTable INNER JOIN RopeSizes ON SuperTable.MachineModel = RopeSizes.MachineType " &
-                               "WHERE RopeSize Is Not Null AND SuperTable.MachineType='"
-                        If CurrentMachineType.IndexOf(GEARED_TYPE) > -1 Then
-                            sSQL &= GEARED_TYPE & "'"
-                        Else
-                            sSQL &= GEARLESS_TYPE & "'"
-                        End If
-                        If UseMachineVendor <> "" And UseMachineVendor <> OTHER Then
-                            sSQL &= " AND SuperTable.Manufacturer = '" & UseMachineVendor & "'"
-                        End If
-                        If UseMachineModel <> "" And UseMachineModel <> OTHER Then
-                            sSQL &= " AND RopeSizes.MachineType = '" & UseMachineModel & "'"
-                        End If
-                End Select
+                'Select Case CurrentMachineType
+                '    Case "New" & GEARLESS_TYPE, MACHINE_FMM200
+                sSQL = "SELECT DISTINCT RopeSizes.RopeSize FROM RopeSizes "
+                '    Case Else
+                '        sSQL = "SELECT DISTINCT RopeSizes.RopeSize FROM SuperTable INNER JOIN RopeSizes ON SuperTable.MachineModel = RopeSizes.MachineType " &
+                '               "WHERE RopeSize Is Not Null AND SuperTable.MachineType='"
+                '        If CurrentMachineType.IndexOf(GEARED_TYPE) > -1 Then
+                '            sSQL &= GEARED_TYPE & "'"
+                '        Else
+                '            sSQL &= GEARLESS_TYPE & "'"
+                '        End If
+                '        If UseMachineVendor <> "" And UseMachineVendor <> OTHER Then
+                '            sSQL &= " AND SuperTable.Manufacturer = '" & UseMachineVendor & "'"
+                '        End If
+                '        If UseMachineModel <> "" And UseMachineModel <> OTHER Then
+                '            sSQL &= " AND RopeSizes.MachineType = '" & UseMachineModel & "'"
+                '        End If
+                'End Select
                 ResetADODBRecordset(TorqueRecordset)
                 TorqueRecordset.Open(sSQL, ADOConnection)
                 If TorqueRecordset.EOF Then
@@ -1503,6 +1487,7 @@ Public Class frmEstimatingAlt
                     _row([Cntrl].Name) = UseCheckbox.CheckState
                 End If
             Next Cntrl
+            SaveTorqueEngineeringData(_row)
             If is_new_row Then
                 TorqueData.Rows.Add(_row)
             End If
@@ -1516,6 +1501,7 @@ Public Class frmEstimatingAlt
 
         Try
             UpdateGeneralInfoDatatable()
+            UpdateTorqueDataDatatable()
             ALT_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, CurrentGOData_Typ.Alt,
                                                        FormatFileNameFromTab(CurrentTab)) & FileSuffix_ALT & ".JSON"
             If Not Serialize(ALT_Filename, AltDataset, "Error Saving Data - " & CurrentTab, FormIsDirty) Then
@@ -1791,9 +1777,6 @@ Public Class frmEstimatingAlt
     Private Sub Set_Fields_Grey_ALT()
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
 
-        ValidateChangeInCapacitySpeedTravel(ChangeInCapacity_chk.CheckState, CapacityExisting_lbl, CapacityExisting_cmb)
-        ValidateChangeInCapacitySpeedTravel(ChangeInSpeed_chk.CheckState, SpeedExisting_lbl, SpeedExisting_cmb)
-        ValidateChangeInCapacitySpeedTravel(ChangeInTravel_chk.CheckState, TravelExisting_lbl, TravelExisting_txt)
         If Conversion.Val(NumberofStopsRear_cmb.Text) = 0 Then
             DoorOperatorTypeRear_cmb.SelectedIndex = -1
             CarDoorOpeningWidthFtRear_txt.Text = String.Empty
@@ -1807,8 +1790,17 @@ Public Class frmEstimatingAlt
                 [Cntrl].Enabled = False
             End If
         Next Cntrl
+        ChangeInCapacity_chk.Enabled = True
+        ChangeInSpeed_chk.Enabled = True
+        ChangeInTravel_chk.Enabled = True
         Select Case MachineType_cmb.Text
             Case "Reuse " & GEARED_TYPE
+                ChangeInCapacity_chk.Enabled = False
+                ChangeInCapacity_chk.CheckState = CheckState.Unchecked
+                ChangeInSpeed_chk.Enabled = False
+                ChangeInSpeed_chk.CheckState = CheckState.Unchecked
+                ChangeInTravel_chk.Enabled = False
+                ChangeInTravel_chk.CheckState = CheckState.Unchecked
                 MachineVendorExisting_lbl.Enabled = True
                 MachineVendorExisting_Cmb.Enabled = True
                 MachineModelExisting_lbl.Enabled = True
@@ -1892,6 +1884,9 @@ Public Class frmEstimatingAlt
                 ArmatureFullLoadVoltageVFLUVolts_lbl.Enabled = True
             Case Else
         End Select
+        ValidateChangeInCapacitySpeedTravel(ChangeInCapacity_chk.CheckState, CapacityExisting_lbl, CapacityExisting_cmb)
+        ValidateChangeInCapacitySpeedTravel(ChangeInSpeed_chk.CheckState, SpeedExisting_lbl, SpeedExisting_cmb)
+        ValidateChangeInCapacitySpeedTravel(ChangeInTravel_chk.CheckState, TravelExisting_lbl, TravelExisting_txt)
         If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
             For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
                 BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
@@ -2158,7 +2153,9 @@ Public Class frmEstimatingAlt
     End Sub
     Private Sub FullLoadCurrentIDC1_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles FullLoadCurrentIDC1_txt.LostFocus
         If FullLoadCurrentIDC1_txt.Text.Trim <> GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "FullLoadCurrentIDC1_txt") Then
+            bMotorDependentChange = True
             TorqueValueChanged()
+            bMotorDependentChange = False
         End If
     End Sub
     Private Sub ArmatureFullLoadVoltageVFLU_txt_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles ArmatureFullLoadVoltageVFLU_txt.LostFocus
@@ -2209,6 +2206,7 @@ Public Class frmEstimatingAlt
                     UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
                 End If
             Next Cntrl
+            TorqueMain()
         End If
 
     End Sub
