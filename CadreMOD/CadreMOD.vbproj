@@ -123,12 +123,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExpensesPerDay_mod.vb" />
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form1.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmEstimatingAlt.Designer.vb">
       <DependentUpon>frmEstimatingAlt.vb</DependentUpon>
     </Compile>
@@ -142,6 +136,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EstimatingMOD.vb" />
+    <Compile Include="frmOrdering.Designer.vb">
+      <DependentUpon>frmOrdering.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmOrdering.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MN_TRQ01Frm.Designer.vb">
       <DependentUpon>MN_TRQ01Frm.vb</DependentUpon>
     </Compile>
@@ -245,14 +245,14 @@
     <EmbeddedResource Include="ExpensesPerDay_frm.resX">
       <DependentUpon>ExpensesPerDay_frm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmEstimatingAlt.resx">
       <DependentUpon>frmEstimatingAlt.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmLaborRates.resx">
       <DependentUpon>frmLaborRates.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOrdering.resx">
+      <DependentUpon>frmOrdering.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MN_TRQ01Frm.resX">
       <DependentUpon>MN_TRQ01Frm.vb</DependentUpon>

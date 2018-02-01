@@ -13,9 +13,9 @@ Public Class frmEstimatingBase
     Private Const TotalMaterialColumns As Integer = 11
 
     Private CurrentGenInfoFrameHeight As Integer = 0, CurrentTorqueFrameHeight As Integer = 0, CurrentBillofMaterialsandTaskListFrameHeight As Integer = 0
-    Private CurrentGenInfoFrameColor As System.Drawing.Color = Color.White, CurrentTorqueFrameColor As System.Drawing.Color = Color.White
+    Private CurrentGenInfoFrameText As String = String.Empty, CurrentTorqueFrameText As String = String.Empty
 
-    Private CurParentRow As Integer = 0
+    Private CurParentRow As Integer = 0, CurActiveChildRow As Integer = -999, CurActiveChildCol As Integer = -999
     Private CurChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
     Private SheetCornerColWidth_MAIN As Integer = 0, SheetCornerColWidth_CHILD As Integer = 0
     Private OrderingForms_spc As Object
@@ -227,9 +227,10 @@ Public Class frmEstimatingBase
                                                            New DataColumn("TravelExisting_txt", typeStr)})
 
             SetUpTorqueDataset(EstimatingDataset)
-
+            CreateLaborRateDataTable(EstimatingDataset)
             Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             EstimatingDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+            RecalculateLaborRates()
 
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error In Base - CreateDataSet")
@@ -314,12 +315,14 @@ Public Class frmEstimatingBase
         End If
         TabControl1.SelectTab(0)
         CurrentTab = TabControl1.TabPages(0).Text.Trim
+        CurrentTabUnits = Strings.Left(CurrentTab, CurrentTab.Length - 6)
         TabControl1.Left = 3
+        GroupBox1.Width = Me.Width - 5
         TabControl1.Width = GroupBox1.Width - TabControl1.Left - 5
         CurrentGenInfoFrameHeight = GeneralInformation_fra.Height
-        CurrentGenInfoFrameColor = GeneralInformation_fra.BackColor
+        CurrentGenInfoFrameText = GeneralInformation_fra.Text
         CurrentTorqueFrameHeight = Torque_fra.Height
-        CurrentTorqueFrameColor = Torque_fra.BackColor
+        CurrentTorqueFrameText = Torque_fra.Text
         CurrentBillofMaterialsandTaskListFrameHeight = BillofMaterialsandTaskList_fra.Height
         Dim UseIndex As Integer = 0
         For Each Cntrl As Control In ExpensesPerDay_frm.Controls
@@ -332,12 +335,19 @@ Public Class frmEstimatingBase
         ResetADODBRecordset(UseMaterialItemRecordSet)
         UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         DisplayEST_vs_ORD()
+        EnableBillOfMaterials()
         isInitializingComponent = False
         Me.Cursor = Cursors.Default
 
     End Sub
     Private Sub frmEstimatingBase_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PrepareThisForm()
+    End Sub
+    Private Sub BillOfMaterials_spr_CellClick(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.CellClickEventArgs) Handles BillOfMaterials_spr.CellClick
+        CurParentRow = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
+        CurChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(CurParentRow, 0)
+        CurActiveChildRow = CurChildSheetView.ActiveRowIndex
+        CurActiveChildCol = CurChildSheetView.ActiveColumnIndex
     End Sub
     Private Sub BillOfMaterials_spr_ChildViewCreated(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.ChildViewCreatedEventArgs) Handles BillOfMaterials_spr.ChildViewCreated
 
@@ -362,7 +372,7 @@ Public Class frmEstimatingBase
                 SaveAll()
             End If
         End If
-        UseMaterialItemRecordSet.Close()
+        ResetADODBRecordset(UseMaterialItemRecordSet)
         EndProgram()
 
     End Sub
@@ -598,6 +608,7 @@ Public Class frmEstimatingBase
         LayoutRequirements_cmb.Items.Add("Approval")
         LayoutRequirements_cmb.Items.Add("Machine Room")
         LayoutRequirements_cmb.Items.Add("Full")
+        LayoutRequirements_cmb.Items.Add("None")
 
         MachineType_cmb.Items.Clear()
         Select Case CurrentGOData_Typ.MachineType
@@ -1063,7 +1074,6 @@ Public Class frmEstimatingBase
         Dim ChildSheetView As New FarPoint.Win.Spread.SheetView
         Dim CurRow As Integer = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
         Dim CurMAIN_ID As String = String.Empty, NewMAT_ID As String = String.Empty, NewDesc As String = String.Empty
-        Dim CurUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
 
         If Not isInitializingComponent Then
             FormIsDirty = EstimatingDataset.HasChanges()
@@ -1073,38 +1083,26 @@ Public Class frmEstimatingBase
                     CurRow = ChildSheetView.ActiveRowIndex
                     CurMAIN_ID = ChildSheetView.Cells(CurRow, MAT_COL_MAIN_ID).Text
                     NewMAT_ID = ChildSheetView.Cells(CurRow, MAT_COL_MATERIAL_ID).Text
-                    If Math.Round(Conversion.Val(NewMAT_ID)) >= 900 And
-                       ChildSheetView.ActiveColumnIndex = MAT_COL_MATERIAL_DESC Then
+                    If Math.Round(Conversion.Val(NewMAT_ID)) >= 900 And ChildSheetView.ActiveColumnIndex = MAT_COL_MATERIAL_DESC Then
                         NewMAT_ID = (Math.Round(Conversion.Val(Strings.Left(NewMAT_ID, 3))) + 1).ToString & Strings.Right(NewMAT_ID, 3)
                         NewDesc = SetSPRText("Description", ChildSheetView, CurRow)
-                        SubGroups.Rows.Add(New Object() {NewDesc, CurMAIN_ID, NewMAT_ID, CurUnits, "", "", "", 0, 0, 0, 0, ""})
-                        CurRow = ChildSheetView.RowCount - 1
-                        ChildSheetView.Cells(CurRow, MAT_COL_OPTION_EST).CellType = SetSPRCombo("Options", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_TYPE_EST).CellType = SetSPRCombo("Types", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_ORDER_BY_EST).CellType = SetSPRCombo("OrderBys", ChildSheetView, CurRow)
-                        ChildSheetView.Cells(CurRow, MAT_COL_QTY_EST).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView, CurRow))
-                        Set_Fields_Grey_EST()
+                        SubGroups.Rows.Add(New Object() {NewDesc, CurMAIN_ID, NewMAT_ID, CurrentTabUnits, "", "", "", 0, 0, 0, 0, ""})
                     End If
                 End If
-                RetrieveCostHours(CurRow)
+                PopulateEstimating(False)
             End If
         End If
 
     End Sub
     Private Sub BillOfMaterials_spr_ComboCloseUp(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.EditorNotifyEventArgs) Handles BillOfMaterials_spr.ComboCloseUp
-
-        SetIsPOHController()
         If Not isInitializingComponent Then
             FormIsDirty = EstimatingDataset.HasChanges()
-            If FormIsDirty Then
-                RetrieveCostHours(e.Row)
-            End If
         End If
-
     End Sub
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
         CurrentTab = TabControl1.SelectedTab.Text.Trim
+        CurrentTabUnits = Strings.Left(CurrentTab, CurrentTab.Length - 6)
         If Not isInitializingComponent Then
             Select Case PromptForSave()
                 Case MsgBoxResult.Yes, MsgBoxResult.No, 0
@@ -1156,56 +1154,18 @@ Public Class frmEstimatingBase
         End If
 
     End Sub
-    Private Sub BillOfMaterials_spr_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles BillOfMaterials_spr.Click
-        CurParentRow = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
-        CurChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(CurParentRow, 0)
-    End Sub
-    Private Sub RetrieveCostHours(ByVal UseRow As Integer)
-        Dim ChildSheetView As FarPoint.Win.Spread.SheetView = Nothing
-        Dim CurRow As Integer = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
-        Dim TotalCost As Integer = 0, TotalStdHours As Integer = 0, TotalSpecHours As Integer = 0
-
-        ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(CurRow, 0)
-        If Not ChildSheetView Is Nothing Then
-            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION_EST).Text,
-                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE_EST).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY_EST).Text, "Cost",
-                         ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_COST_EST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY_EST).Value)
-            GetCostHours(ChildSheetView.Cells(UseRow, MAT_COL_MATERIAL_ID).Text, ChildSheetView.Cells(UseRow, MAT_COL_OPTION_EST).Text,
-                         ChildSheetView.Cells(UseRow, MAT_COL_TYPE_EST).Text, ChildSheetView.Cells(UseRow, MAT_COL_ORDER_BY_EST).Text, "Hours",
-                         ChildSheetView.Cells(UseRow, MAT_COL_STANDARD_HOURS_EST).Value, ChildSheetView.Cells(UseRow, MAT_COL_QTY_EST).Value)
-            For iIndex As Integer = 0 To ChildSheetView.RowCount - 1
-                TotalCost += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_MATERIAL_COST_EST).Value)
-                TotalStdHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_STANDARD_HOURS_EST).Value)
-                TotalSpecHours += Math.Round(ChildSheetView.Cells(iIndex, MAT_COL_SPECIAL_HOURS_EST).Value)
-            Next iIndex
-        End If
-        BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_COST, TotalCost)
-        BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_STD_HRS, TotalStdHours)
-        BillOfMaterials_spr.ActiveSheet.SetValue(CurRow, MAIN_COL_TOTAL_SPEC_HRS, TotalSpecHours)
-
-    End Sub
     Private Sub PopulateEstimating(ByVal ResetData As Boolean)
         Dim fpFont As New System.Drawing.Font("Microsoft Sans Serif", 8.25)
         Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
         Dim dt As DataTable
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
-        Dim UseUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
-        Dim CurActiveRow As Integer = 0, CurActiveCol As Integer = 0, CurActiveChildRow As Integer = -999, CurActiveChildCol As Integer = -999
+        Dim TotalCost As Single = 0, TotalStdHours As Single = 0, TotalSpecHours As Single = 0
 
         Try
             Me.Cursor = Cursors.WaitCursor
-            If BillOfMaterials_spr.ActiveSheet.RowCount > 0 Then
-                CurActiveRow = BillOfMaterials_spr.ActiveSheet.ActiveRowIndex
-                CurActiveCol = BillOfMaterials_spr.ActiveSheet.ActiveColumnIndex
-                ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(CurActiveRow, 0)
-                If Not ChildSheetView1 Is Nothing Then
-                    CurActiveChildRow = ChildSheetView1.ActiveRowIndex()
-                    CurActiveChildCol = ChildSheetView1.ActiveColumnIndex()
-                End If
-            End If
             BillOfMaterials_spr.ActiveSheet.RowCount = 0
             If ResetData Then
-                CreateEstimatingDataSet(UseUnits)
+                CreateEstimatingDataSet(CurrentTabUnits)
             End If
             Load_ListBoxes()
             model = BillOfMaterials_spr.ActiveSheet.Models.Data
@@ -1216,6 +1176,7 @@ Public Class frmEstimatingBase
             model.DataSource = EstimatingDataset
             PopulateGeneralInfo()
             PopulateTorqueData()
+            SetIsPOHController()
             BillOfMaterials_spr.ActiveSheet.GetDataView(False).AllowNew = False
             BillOfMaterials_spr.ActiveSheet.ColumnHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.ColumnHeaderRenderer
             BillOfMaterials_spr.ActiveSheet.RowHeader.DefaultStyle.Renderer = New FarPoint.Win.Spread.CellType.RowHeaderRenderer
@@ -1245,6 +1206,7 @@ Public Class frmEstimatingBase
                 BillOfMaterials_spr.ActiveSheet.SheetCorner.Columns(0, 0).Width = SheetCornerColWidth_MAIN
             End If
             GeneralInformation_fra.Left = 6
+            GeneralInformation_fra.Width = CarData_fra.Width - 10
             ExpensesPerDayDetails_btn.Left = ExpensesPerDay_txt.Left
             Torque_fra.Left = 6
             Torque_fra.Width = GeneralInformation_fra.Width
@@ -1253,9 +1215,12 @@ Public Class frmEstimatingBase
             RelocateAndResizeAllFrames()
             BillOfMaterials_spr.Left = 6
             BillOfMaterials_spr.Visible = False
+            'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 Then
             ExpandCollapseAll("Expand")
             ExpandCollapseAll("Collapse")
-            If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
+            ResetADODBRecordset(UseMaterialItemRecordSet)
+            UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
+            If UseMaterialItemRecordSet.RecordCount > 0 Then
                 BillOfMaterials_spr.Visible = True
                 For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
                     ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
@@ -1263,14 +1228,6 @@ Public Class frmEstimatingBase
                         ChildSheetView1.SetColumnVisible(MAT_COL_MAIN_ID, False)
                         ChildSheetView1.SetColumnVisible(MAT_COL_MATERIAL_ID, False)
                         ChildSheetView1.SetColumnVisible(MAT_COL_UNITS, False)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 365)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_EST, 100)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_EST, 100)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_EST, 100)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_EST, 100)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_EST, 120)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_EST, 100)
-                        ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_EST, 200)
                         If SheetCornerColWidth_CHILD = 0 Then
                             SheetCornerColWidth_CHILD = ChildSheetView1.SheetCorner.Columns(0, 0).Width
                         Else
@@ -1282,14 +1239,6 @@ Public Class frmEstimatingBase
                             ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).CellType = SetSPRCombo("OrderBys", ChildSheetView1, jIndex)
                             If ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value = -999 Then
                                 ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value = Conversion.Val(SetSPRText("UnitQty", ChildSheetView1, jIndex))
-                            End If
-                            If Not isInitializingComponent Then
-                                GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text,
-                                             ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text, "Cost",
-                                             ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_EST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
-                                GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text, ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text,
-                                             ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text, ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text, "Hours",
-                                             ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_EST).Value, ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
                             End If
                         Next jIndex
                     End If
@@ -1324,16 +1273,47 @@ Public Class frmEstimatingBase
                         BillOfMaterials_spr.ActiveSheet.SetRowVisible(iIndex, False)
                     End If
                 Next iIndex
-                BillOfMaterials_spr.ActiveSheet.SetActiveCell(CurActiveRow, CurActiveCol)
-                If CurActiveChildRow <> -999 And CurActiveChildCol <> -999 Then
-                    ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(CurActiveRow, 0)
+                Set_Fields_Grey_EST()
+                For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
+                    ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
+                    TotalCost = 0
+                    TotalStdHours = 0
+                    TotalSpecHours = 0
                     If Not ChildSheetView1 Is Nothing Then
-                        ChildSheetView1.ExpandRow(CurActiveChildRow, True)
-                        ChildSheetView1.SetActiveCell(CurActiveChildRow, CurActiveChildCol)
+                        For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                            If Not isInitializingComponent Then
+                                ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_EST).Value = GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text,
+                                                                                                              ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text,
+                                                                                                              ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text,
+                                                                                                              ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text, "Cost",
+                                                                                                              ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
+                                ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_EST).Value = GetCostHours(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text,
+                                                                                                               ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text,
+                                                                                                               ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text,
+                                                                                                               ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text, "Hours",
+                                                                                                               ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value)
+                            End If
+                            TotalCost += Math.Round(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_EST).Value)
+                            TotalStdHours += Math.Round(ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_EST).Value)
+                            TotalSpecHours += Math.Round(ChildSheetView1.Cells(jIndex, MAT_COL_SPECIAL_HOURS_EST).Value)
+                        Next jIndex
                     End If
+                    BillOfMaterials_spr.ActiveSheet.SetValue(iIndex, MAIN_COL_TOTAL_COST, TotalCost)
+                    BillOfMaterials_spr.ActiveSheet.SetValue(iIndex, MAIN_COL_TOTAL_STD_HRS, TotalStdHours)
+                    BillOfMaterials_spr.ActiveSheet.SetValue(iIndex, MAIN_COL_TOTAL_SPEC_HRS, TotalSpecHours)
+                Next iIndex
+            End If
+            UseMaterialItemRecordSet.Close()
+            'Else
+            '    Set_Fields_Grey_EST()
+            'End If
+            BillOfMaterials_spr.ActiveSheet.SetActiveCell(CurParentRow, 0)
+            If CurActiveChildRow <> -999 And CurActiveChildCol <> -999 Then
+                BillOfMaterials_spr.ActiveSheet.ExpandRow(CurParentRow, True)
+                If Not CurChildSheetView Is Nothing Then
+                    CurChildSheetView.SetActiveCell(CurActiveChildRow, CurActiveChildCol)
                 End If
             End If
-            Set_Fields_Grey_EST()
             Me.Cursor = Cursors.Default
 
         Catch ex As Exception
@@ -1357,7 +1337,7 @@ Public Class frmEstimatingBase
             Else
                 _row = GeneralInfo.Rows(0)
             End If
-            _row("UnitsInTab") = SplitUnitsForSave(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+            _row("UnitsInTab") = SplitUnitsForSave(CurrentTabUnits)
             For Each Cntrl As Control In GeneralInformation_fra.Controls
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
                     _row([Cntrl].Name) = [Cntrl].Text
@@ -1392,7 +1372,7 @@ Public Class frmEstimatingBase
             Else
                 _row = TorqueData.Rows(0)
             End If
-            _row("UnitsInTab") = SplitUnitsForSave(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+            _row("UnitsInTab") = SplitUnitsForSave(CurrentTabUnits)
             For Each Cntrl As Control In Torque_fra.Controls
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
                     _row([Cntrl].Name) = [Cntrl].Text
@@ -1461,7 +1441,7 @@ Public Class frmEstimatingBase
             'End If
             EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
                                                        FormatFileNameFromTab(CurrentTab)) & "MODORD.JSON"
-            If Not Serialize(EST_Filename, OrderingDataset, "Error Saving Data - " & CurrentTab, FormIsDirty) Then
+            If Not Serialize(EST_Filename, dsOrdering, "Error Saving Data - " & CurrentTab, FormIsDirty) Then
                 Throw New Exception
             End If
 
@@ -1473,7 +1453,7 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub Save_cmd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Save_cmd.Click
-        UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+        UpdateAllTotals(CurrentTabUnits)
         SaveAll()
     End Sub
     Private Sub GeneralInfoValueChanged(Optional ByVal UpdateComponents As Boolean = True)
@@ -1481,16 +1461,14 @@ Public Class frmEstimatingBase
         If Not isInitializingComponent Then
             UpdateGeneralInfoDatatable()
             Load_ListBoxes()
-            isInitializingComponent = True
-            If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed And UpdateComponents Then
-                PopulateEstimating(False)
-            Else
-                PopulateGeneralInfo()
-                PopulateTorqueData()
-                Set_Fields_Grey_EST()
-            End If
+            'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 And UpdateComponents Then
+            PopulateEstimating(False)
+            'Else
+            '    PopulateGeneralInfo()
+            '    PopulateTorqueData()
+            '    Set_Fields_Grey_EST()
+            'End If
             EnableBillOfMaterials()
-            isInitializingComponent = False
             FormIsDirty = True
         End If
 
@@ -1668,7 +1646,6 @@ Public Class frmEstimatingBase
         ShowCopyMergeDialog(Merge_cmd.Tag)
     End Sub
     Private Sub ShowCopyMergeDialog(ByVal CurButtonLabel As String)
-        Dim CurUnits As String = Strings.Left(CurrentTab, CurrentTab.Length - 6)
         Dim iIndex As Integer = 0, AryIndex As Integer = -1
 
         If File.Exists(EST_Filename = EstimatePath & Get_FileName(Contracts.EstimateNum, CurrentGOData_Typ.Bank, "A",
@@ -1677,10 +1654,10 @@ Public Class frmEstimatingBase
                 Case MsgBoxResult.Yes, 0
                     ArchiveFiles()
                     UnitCopyMerge_frm.Text = CurButtonLabel
-                    UnitCopyMerge_frm.CurUnits = CurUnits
+                    UnitCopyMerge_frm.CurUnits = CurrentTabUnits
                     Erase UnitCopyMerge_frm.UnitOptions
                     If CurButtonLabel.Contains("Copy") Then
-                        CalculateNumberOfCarsInEstimate(CurUnits)
+                        CalculateNumberOfCarsInEstimate(CurrentTabUnits)
                         UnitCopyMerge_frm.UnitOptions = UnitsInEstimate
                     ElseIf TabControl1.TabPages.Count > 1 Then
                         For iIndex = 0 To TabControl1.TabPages.Count
@@ -1703,7 +1680,7 @@ Public Class frmEstimatingBase
                         If CurButtonLabel.Contains("Merge") Then
                             For iIndex = TabControl1.TabPages.Count - 1 To 0 Step -1
                                 Dim CurTab As TabPage = TabControl1.TabPages(iIndex)
-                                If CurTab.Text = CurUnits & EST_Suffix Then
+                                If CurTab.Text = CurrentTabUnits & EST_Suffix Then
                                     TabControl1.TabPages.Remove(CurTab)
                                     Exit For
                                 End If
@@ -1749,6 +1726,8 @@ Public Class frmEstimatingBase
     End Function
     Private Sub Set_Fields_Grey_EST()
         Dim ChildSheetView1 As FarPoint.Win.Spread.SheetView = Nothing
+        Dim CurComboBox As ComboBox = Nothing
+        Dim CurOption As String = String.Empty
 
         If Conversion.Val(NumberofStopsRear_cmb.Text) = 0 Then
             DoorOperatorTypeRear_lbl.Enabled = False
@@ -1896,63 +1875,100 @@ Public Class frmEstimatingBase
         ValidateChangeInCapacitySpeedTravel(ChangeInCapacity_chk.CheckState, CapacityExisting_lbl, CapacityExisting_cmb)
         ValidateChangeInCapacitySpeedTravel(ChangeInSpeed_chk.CheckState, SpeedExisting_lbl, SpeedExisting_cmb)
         ValidateChangeInCapacitySpeedTravel(ChangeInTravel_chk.CheckState, TravelExisting_lbl, TravelExisting_txt)
-        If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
-            For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
-                BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
-                BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
-                For jIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.ColumnCount - 1
-                    BillOfMaterials_spr.ActiveSheet.SetColumnSizeable(jIndex, False)
-                Next jIndex
-                ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
-                If Not ChildSheetView1 Is Nothing Then
-                    ChildSheetView1.LockBackColor = Color.WhiteSmoke
-                    For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
-                        ChildSheetView1.SetRowSizeable(jIndex, False)
-                        For kIndex As Integer = 0 To ChildSheetView1.ColumnCount - 1
-                            ChildSheetView1.SetColumnSizeable(kIndex, False)
-                            Select Case kIndex
-                                Case MAT_COL_MATERIAL_DESC
-                                    If Math.Round(Conversion.Val(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text)) >= 900 Then
-                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = False
-                                    Else
-                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                                    End If
-                                Case MAT_COL_STANDARD_HOURS_EST
+        'For Each Cntrl As Control In Torque_fra.Controls
+        '    If TypeOf [Cntrl] Is ComboBox Then
+        '        CurComboBox = [Cntrl]
+        '        If CurComboBox.Items.Count = 1 Then
+        '            isInitializingComponent = True
+        '            CurComboBox.Text = CurComboBox.Items(0)
+        '            isInitializingComponent = False
+        '            CurComboBox.Enabled = False
+        '        End If
+        '    End If
+        'Next Cntrl
+        'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 Then
+        For iIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.RowCount - 1
+            BillOfMaterials_spr.ActiveSheet.SetRowSizeable(iIndex, False)
+            BillOfMaterials_spr.ActiveSheet.Cells(iIndex, MAIN_COL_MAIN_GROUP).Locked = True
+            For jIndex As Integer = 0 To BillOfMaterials_spr.ActiveSheet.ColumnCount - 1
+                BillOfMaterials_spr.ActiveSheet.SetColumnSizeable(jIndex, False)
+            Next jIndex
+            ChildSheetView1 = BillOfMaterials_spr.ActiveSheet.FindChildView(iIndex, 0)
+            If Not ChildSheetView1 Is Nothing Then
+                ChildSheetView1.LockBackColor = Color.WhiteSmoke
+                For jIndex As Integer = 0 To ChildSheetView1.RowCount - 1
+                    ChildSheetView1.SetRowSizeable(jIndex, False)
+                    CurOption = String.Empty
+                    For kIndex As Integer = 0 To ChildSheetView1.ColumnCount - 1
+                        ChildSheetView1.SetColumnSizeable(kIndex, False)
+                        Select Case kIndex
+                            Case MAT_COL_MATERIAL_DESC
+                                If Math.Round(Conversion.Val(ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_ID).Text)) >= 900 Then
+                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = False
+                                Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                                Case MAT_COL_OPTION_EST, MAT_COL_TYPE_EST, MAT_COL_ORDER_BY_EST
-                                    LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, kIndex))
-                                Case MAT_COL_MATERIAL_COST_EST
-                                    If ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text = "RL" Or
-                                       ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_ALT).Text = "PL" Or
+                                End If
+                                ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_DESC, 365)
+                            Case MAT_COL_OPTION_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_OPTION_EST, 100)
+                                LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST))
+                                CurOption = ChildSheetView1.GetValue(jIndex, MAT_COL_OPTION_EST)
+                            Case MAT_COL_TYPE_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_TYPE_EST, 100)
+                                If CurOption = "Reuse" Or CurOption = "NA" Or String.IsNullOrEmpty(CurOption) Then
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Text = String.Empty
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST).Locked = True
+                                Else
+                                    LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, MAT_COL_TYPE_EST))
+                                End If
+                            Case MAT_COL_ORDER_BY_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_ORDER_BY_EST, 100)
+                                If CurOption = "Reuse" Or CurOption = "NA" Or String.IsNullOrEmpty(CurOption) Then
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text = String.Empty
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Locked = True
+                                Else
+                                    LockSPRComboIfMissingOptionsORSingleOption(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST))
+                                End If
+                            Case MAT_COL_QTY_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_QTY_EST, 90)
+                                If CurOption = "Reuse" Or CurOption = "NA" Or String.IsNullOrEmpty(CurOption) Then
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Value = 0
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Locked = True
+                                Else
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_QTY_EST).Locked = False
+                                End If
+                            Case MAT_COL_MATERIAL_COST_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_MATERIAL_COST_EST, 100)
+                                If CurOption = "Reuse" Or CurOption = "NA" Or String.IsNullOrEmpty(CurOption) Then
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_EST).Value = 0
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_MATERIAL_COST_EST).Locked = True
+                                ElseIf ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text = "RL" Or
+                                       ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text = "PL" Or
                                        String.IsNullOrEmpty(ChildSheetView1.Cells(jIndex, MAT_COL_ORDER_BY_EST).Text) Or
                                        ChildSheetView1.Cells(jIndex, MAT_COL_OPTION_EST).Text = "Refurbish" Then
-                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = False
-                                    Else
-                                        ChildSheetView1.Cells(jIndex, kIndex).Locked = True
-                                    End If
-                                Case Else
                                     ChildSheetView1.Cells(jIndex, kIndex).Locked = False
-                            End Select
-                        Next kIndex
-                    Next jIndex
-                End If
-            Next iIndex
-        End If
-
-    End Sub
-    Private Sub LockSPRComboIfMissingOptionsORSingleOption(ByRef CurCell As FarPoint.Win.Spread.Cell)
-        Dim CurCmb As FarPoint.Win.Spread.CellType.ComboBoxCellType = CurCell.CellType
-
-        If IsNothing(CurCmb) Then
-            CurCell.Locked = True
-        ElseIf CurCmb.Items.Count = 0 Then
-            CurCell.Locked = True
-        ElseIf CurCmb.Items.Count = 1 Then
-            CurCell.Text = CurCmb.Items(0)
-            CurCell.Locked = True
-        Else
-            CurCell.Locked = False
-        End If
+                                Else
+                                    ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                                End If
+                                ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_EST, 120)
+                            Case MAT_COL_STANDARD_HOURS_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_STANDARD_HOURS_EST, 120)
+                                If CurOption = "Reuse" Or CurOption = "NA" Or String.IsNullOrEmpty(CurOption) Then
+                                    ChildSheetView1.Cells(jIndex, MAT_COL_STANDARD_HOURS_EST).Value = 0
+                                End If
+                                ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                            Case MAT_COL_SPECIAL_HOURS_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_SPECIAL_HOURS_EST, 100)
+                            Case MAT_COL_COMMENTS_EST
+                                ChildSheetView1.SetColumnWidth(MAT_COL_COMMENTS_EST, 200)
+                            Case Else
+                                ChildSheetView1.Cells(jIndex, kIndex).Locked = True
+                        End Select
+                    Next kIndex
+                Next jIndex
+            End If
+        Next iIndex
+        'End If
 
     End Sub
     Private Sub OrderingForms_lst_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles OrderingForms_lst.DoubleClick
@@ -1980,14 +1996,16 @@ Public Class frmEstimatingBase
                 If Not isInitializingComponent Then
                     ChildSheetView = BillOfMaterials_spr.ActiveSheet.FindChildView(BillOfMaterials_spr.ActiveSheet.ActiveRowIndex, 0)
                     If Not ChildSheetView Is Nothing Then
-                        Select Case ChildSheetView.ActiveColumnIndex
-                            Case MAT_COL_QTY_EST, MAT_COL_MATERIAL_COST_EST, MAT_COL_STANDARD_HOURS_EST, MAT_COL_SPECIAL_HOURS_EST
-                                ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = 0
-                            Case Else
-                                ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = ""
-                        End Select
+                        If Not ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Locked Then
+                            Select Case ChildSheetView.ActiveColumnIndex
+                                Case MAT_COL_QTY_EST, MAT_COL_MATERIAL_COST_EST, MAT_COL_SPECIAL_HOURS_EST
+                                    ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = 0
+                                Case Else
+                                    ChildSheetView.Cells(ChildSheetView.ActiveRowIndex, ChildSheetView.ActiveColumnIndex).Value = ""
+                            End Select
+                            PopulateEstimating(False)
+                        End If
                     End If
-                    RetrieveCostHours(ChildSheetView.ActiveRowIndex)
                     FormIsDirty = True
                 End If
             Case Else
@@ -2028,61 +2046,57 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub EnableBillOfMaterials()
-        Dim UseBackColor As System.Drawing.Color = FrameColorToProceed
+        Dim FrameCompleted As Boolean = True
 
         For Each Cntrl As Control In GeneralInformation_fra.Controls
             If [Cntrl].Enabled = True Then
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
                     If [Cntrl].Text.Trim.Length = 0 Then
-                        UseBackColor = CurrentGenInfoFrameColor
+                        FrameCompleted = False
                         Exit For
                     End If
                 ElseIf TypeOf [Cntrl] Is DateTimePicker Then
                     Dim UseDTPicker As DateTimePicker = [Cntrl]
                     If UseDTPicker.Value.ToString("d").Trim.Length = 0 Then
-                        UseBackColor = CurrentGenInfoFrameColor
+                        FrameCompleted = False
                         Exit For
                     End If
                 End If
             End If
         Next Cntrl
-        GeneralInformation_fra.BackColor = UseBackColor
-        For Each Cntrl As Control In GeneralInformation_fra.Controls
-            If Not (TypeOf [Cntrl] Is Button) Then
-                [Cntrl].BackColor = UseBackColor
-            End If
-        Next Cntrl
-        UseBackColor = FrameColorToProceed
+        GeneralInformation_fra.Text = CurrentGenInfoFrameText
+        If FrameCompleted Then
+            GeneralInformation_fra.Text &= " (COMPLETED)"
+        End If
+        FrameCompleted = True
         For Each Cntrl As Control In Torque_fra.Controls
             If [Cntrl].Enabled = True Then
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
                     If [Cntrl].Text.Trim.Length = 0 Then
-                        UseBackColor = CurrentGenInfoFrameColor
+                        FrameCompleted = False
                         Exit For
                     End If
                 ElseIf TypeOf [Cntrl] Is DateTimePicker Then
                     Dim UseDTPicker As DateTimePicker = [Cntrl]
                     If UseDTPicker.Value.ToString("d").Trim.Length = 0 Then
-                        UseBackColor = CurrentGenInfoFrameColor
+                        FrameCompleted = False
                         Exit For
                     End If
                 End If
             End If
         Next Cntrl
-        Torque_fra.BackColor = UseBackColor
-        For Each Cntrl As Control In Torque_fra.Controls
-            If Not (TypeOf [Cntrl] Is Button) Then
-                [Cntrl].BackColor = UseBackColor
-            End If
-        Next Cntrl
-        If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
-            PopulateEstimating(False)
-            BillofMaterialsandTaskList_fra.Enabled = True
-            BillOfMaterials_spr.Visible = True
-        Else
-            BillofMaterialsandTaskList_fra.Enabled = False
-            BillOfMaterials_spr.Visible = False
+        Torque_fra.Text = CurrentTorqueFrameText
+        If FrameCompleted Then
+            Torque_fra.Text &= " (COMPLETED)"
         End If
+        'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 Then
+        '    PopulateEstimating(False)
+        '    BillofMaterialsandTaskList_fra.Enabled = True
+        '    BillOfMaterials_spr.Visible = True
+        'Else
+        '    BillofMaterialsandTaskList_fra.Enabled = False
+        '    BillOfMaterials_spr.Visible = False
+        'End If
 
     End Sub
     Private Sub ChangeInCapacity_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChangeInCapacity_chk.CheckedChanged
@@ -2099,16 +2113,14 @@ Public Class frmEstimatingBase
         If Not isInitializingComponent Then
             UpdateTorqueDataDatatable()
             Load_ListBoxes()
-            isInitializingComponent = True
-            If GeneralInformation_fra.BackColor = FrameColorToProceed And Torque_fra.BackColor = FrameColorToProceed Then
-                PopulateEstimating(False)
-            Else
-                PopulateGeneralInfo()
-                PopulateTorqueData()
-                Set_Fields_Grey_EST()
-            End If
+            'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 Then
+            PopulateEstimating(False)
+            'Else
+            '    PopulateGeneralInfo()
+            '    PopulateTorqueData()
+            '    Set_Fields_Grey_EST()
+            'End If
             EnableBillOfMaterials()
-            isInitializingComponent = False
             FormIsDirty = True
         End If
 
@@ -2171,6 +2183,7 @@ Public Class frmEstimatingBase
         Dim dr As DataRow
 
         If GeneralInfo.Rows.Count = 1 Then
+            isInitializingComponent = True
             dr = GeneralInfo.Rows(0)
             For Each Cntrl As Control In GeneralInformation_fra.Controls
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
@@ -2186,6 +2199,10 @@ Public Class frmEstimatingBase
             For iIndex As Integer = SubcontractedLaborCost.LaborCost.GetLowerBound(0) To SubcontractedLaborCost.LaborCost.GetUpperBound(0)
                 SubcontractedLaborCost.LaborCost(iIndex).Cost = dr(SubcontractedLaborCost.LaborCost(iIndex).Description)
             Next iIndex
+            isInitializingComponent = False
+            'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 Then
+            TorqueMain()
+            'End If
         End If
 
     End Sub
@@ -2194,6 +2211,7 @@ Public Class frmEstimatingBase
 
         If TorqueData.Rows.Count = 1 Then
             dr = TorqueData.Rows(0)
+            isInitializingComponent = True
             For Each Cntrl As Control In Torque_fra.Controls
                 If TypeOf [Cntrl] Is ComboBox Or TypeOf [Cntrl] Is TextBox Then
                     [Cntrl].Text = FindValueInDataRow([Cntrl].Name, dr)
@@ -2205,8 +2223,29 @@ Public Class frmEstimatingBase
                     UseCheckbox.CheckState = Conversion.Val(FindValueInDataRow([Cntrl].Name, dr))
                 End If
             Next Cntrl
+            isInitializingComponent = False
+            'If GeneralInformation_fra.Text.IndexOf("COMPLETED") > -1 And Torque_fra.Text.IndexOf("COMPLETED") > -1 Then
             TorqueMain()
+            'End If
         End If
+
+    End Sub
+    Private Sub btnLaborRates_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLaborRates.Click
+
+        If dtBuildingInfo.Rows(0).Item("installing_office") = "" Then
+            MessageBox.Show("Please select an Installing Office to calculate Labor Rates", "Missing Installing Office", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            Exit Sub
+        End If
+        Try
+            Using obj As New frmLaborRates
+                obj.localOffice = dtBuildingInfo.Rows(0).Item("installing_office")
+                obj.ShowDialog()
+            End Using      ' calls dispose automatically
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
 
     End Sub
 End Class

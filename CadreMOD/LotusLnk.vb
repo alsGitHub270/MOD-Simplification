@@ -97,7 +97,6 @@ Module Lotuslnk
         Dim TotalProco, TotalAward As Single
 
         Try
-            QueryFeedback(False)
 
             If HoldFeedbackRecord = "Smart" Then
                 CreateActivity()
@@ -106,7 +105,7 @@ Module Lotuslnk
                 Dim EditHistoryText = "Created: " & Strings.Format(DateTime.Now, DATETIMENOTESFORMAT) & " by " & Contracts.Estimator
                 clsNotes.SetValue("EditHistory", EditHistoryText)
             Else
-                'QueryFeedback(False)
+                QueryFeedback(False)
                 Attach_To_Feedback()
             End If
             '            For iIndx As Integer = 0 To GetUBoundGONumbers()

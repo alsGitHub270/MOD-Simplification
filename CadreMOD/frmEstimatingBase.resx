@@ -121,6 +121,16 @@
     <value>514, 191</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnLaborRates.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAADrSURBVDhPjZGtCsJQGIbnXzYYBiJqNMiwWQ0aLAbBYDGsWGwmwSDYvQRvwOBF2LwBEbwBo0lM
+        +nyHVxibjr3wcM7O97xzc15awvmiDHldZo+V4A2BjrKFQgOWKu+hA0WN/wdprVKcO7SkJcOwLvEBXe03
+        cNC+LTUZhn1JZyhp796Zteakf0FoqmDctM4g2z+OuFIpyhOmUtKDWIG5ilHGUn4HwT2irSoMYav91Um/
+        wtC+p71rFQpghQB62p+kJsPwKMn9itZL5GwgNRmG9qgh2Hf+FowXTKSlBzEHvooju9YoW3SDHfg6isXz
+        Pm1HrmYhbIUNAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="Merge_cmd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

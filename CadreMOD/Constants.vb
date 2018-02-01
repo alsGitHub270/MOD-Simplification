@@ -14,6 +14,7 @@
     Public Const MACHINE_FMR355 As String = "FMR 355"
     Public Const MACHINE_PMR355 As String = "PMR 355"
     Public Const MACHINE_PMR490 As String = "PMR 490"
+    Public Const MACHINE_FM710 As String = "FM 710"
 
     ' dB Operations
     Public Const MOVE_FIRST As Integer = 0

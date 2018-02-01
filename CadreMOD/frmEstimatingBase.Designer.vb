@@ -186,6 +186,7 @@ Partial Class frmEstimatingBase
         Me.HdrGONum_lbl = New System.Windows.Forms.Label()
         Me.lblHdrBldgNme = New System.Windows.Forms.Label()
         Me.fraHdrIcons = New System.Windows.Forms.GroupBox()
+        Me.btnLaborRates = New System.Windows.Forms.Button()
         Me.btnTorque = New System.Windows.Forms.Button()
         Me.Merge_cmd = New System.Windows.Forms.Button()
         Me.Copy_cmd = New System.Windows.Forms.Button()
@@ -2326,6 +2327,7 @@ Partial Class frmEstimatingBase
         Me.BillOfMaterials_spr.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BillOfMaterials_spr.EditModeReplace = True
         Me.BillOfMaterials_spr.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BillOfMaterials_spr.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.AsNeeded
         Me.BillOfMaterials_spr.Location = New System.Drawing.Point(6, 41)
@@ -2594,6 +2596,7 @@ Partial Class frmEstimatingBase
         'fraHdrIcons
         '
         Me.fraHdrIcons.BackColor = System.Drawing.SystemColors.Control
+        Me.fraHdrIcons.Controls.Add(Me.btnLaborRates)
         Me.fraHdrIcons.Controls.Add(Me.btnTorque)
         Me.fraHdrIcons.Controls.Add(Me.Merge_cmd)
         Me.fraHdrIcons.Controls.Add(Me.Copy_cmd)
@@ -2614,6 +2617,21 @@ Partial Class frmEstimatingBase
         Me.fraHdrIcons.Size = New System.Drawing.Size(1589, 60)
         Me.fraHdrIcons.TabIndex = 24
         Me.fraHdrIcons.TabStop = False
+        '
+        'btnLaborRates
+        '
+        Me.btnLaborRates.BackColor = System.Drawing.SystemColors.Control
+        Me.btnLaborRates.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.25!)
+        Me.btnLaborRates.Image = CType(resources.GetObject("btnLaborRates.Image"), System.Drawing.Image)
+        Me.btnLaborRates.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnLaborRates.Location = New System.Drawing.Point(592, 8)
+        Me.btnLaborRates.Name = "btnLaborRates"
+        Me.btnLaborRates.Size = New System.Drawing.Size(46, 46)
+        Me.btnLaborRates.TabIndex = 102
+        Me.btnLaborRates.TabStop = False
+        Me.btnLaborRates.Text = "Labor Rates"
+        Me.btnLaborRates.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnLaborRates.UseVisualStyleBackColor = True
         '
         'btnTorque
         '
@@ -2698,6 +2716,7 @@ Partial Class frmEstimatingBase
         Me.CMMain_cmd.Name = "CMMain_cmd"
         Me.CMMain_cmd.Size = New System.Drawing.Size(46, 46)
         Me.CMMain_cmd.TabIndex = 69
+        Me.CMMain_cmd.TabStop = False
         Me.CMMain_cmd.Tag = "Return to Contract Manager"
         Me.CMMain_cmd.Text = "Main"
         Me.CMMain_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -2964,6 +2983,7 @@ Partial Class frmEstimatingBase
     Public WithEvents ArmatureFullLoadVoltageVFLUVolts_lbl As System.Windows.Forms.Label
     Public WithEvents ArmatureFullLoadVoltageVFLU_lbl As System.Windows.Forms.Label
     Public WithEvents NominalMotorRPM_txt As System.Windows.Forms.TextBox
+    Private WithEvents btnLaborRates As System.Windows.Forms.Button
 
 #End Region
 End Class
