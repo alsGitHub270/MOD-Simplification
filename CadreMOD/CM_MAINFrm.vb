@@ -21,7 +21,6 @@ Partial Friend Class CM_MAIN_frm
     Dim dsTemp As DataSet
 
     Dim copying_to_new_row As Boolean = False
-    Dim adding_to_labor_and_overtime As Boolean = False
 
     Dim initializing As Boolean
     Dim id_to_copy As String = ""
@@ -63,7 +62,7 @@ Partial Friend Class CM_MAIN_frm
                                                             New DataColumn("Bank_Net_Price", typeInt),
                                                             New DataColumn("Sales_Commission", typeInt),
                                                             New DataColumn("Bank_Final_Price", typeInt),
-                                                            New DataColumn("Labor_Rate", typeInt),
+                                                            New DataColumn("Labor_Rate", typeSingle),
                                                             New DataColumn("product_code", typeInt),
                                                             New DataColumn("lead_time", typeInt),
                                                             New DataColumn("Include", typeBool),
@@ -97,7 +96,7 @@ Partial Friend Class CM_MAIN_frm
                                                        New DataColumn("Bank_Net_Price", typeInt), _
                                                        New DataColumn("Sales_Commission", typeInt), _
                                                        New DataColumn("Bank_Final_Price", typeInt), _
-                                                       New DataColumn("Labor_Rate", typeInt), _
+                                                       New DataColumn("Labor_Rate", typeSingle), _
                                                        New DataColumn("product_code", typeInt), _
                                                        New DataColumn("lead_time", typeInt), _
                                                        New DataColumn("Comment", typeStr), _
@@ -131,7 +130,7 @@ Partial Friend Class CM_MAIN_frm
                                                       New DataColumn("Bank_Net_Price", typeInt), _
                                                       New DataColumn("Sales_Commission", typeInt), _
                                                       New DataColumn("Bank_Final_Price", typeInt), _
-                                                      New DataColumn("Labor_Rate", typeInt), _
+                                                      New DataColumn("Labor_Rate", typeSingle), _
                                                       New DataColumn("product_code", typeInt), _
                                                       New DataColumn("lead_time", typeInt),
                                                       New DataColumn("Comment", typeStr),
@@ -193,20 +192,11 @@ Partial Friend Class CM_MAIN_frm
             UpdateContactGroupFromNotes()
         End If
 
-        CreateLaborRateDataTable()
-
-        CreateOverTimeDataTable()
-
-
         'Add the relations
         dsCadre.Relations.Add("Summary_Base_Relationship", dsCadre.Tables("SummaryGroup").Columns("id"), dsCadre.Tables("BaseGroup").Columns("id"))
         dsCadre.Relations.Add("Base_Alt_Relationship", dsCadre.Tables("BaseGroup").Columns("alt_id"), dsCadre.Tables("AltGroup").Columns("id"))
-
     End Sub
-
-
     Private Sub CreateSummaryCloneDataTable()
-
         Try
             If dsCadre.Tables.Contains("Summary_Clone") = False Then
                 dtSummaryClone = New DataTable
@@ -221,281 +211,28 @@ Partial Friend Class CM_MAIN_frm
 
     End Sub
 
-    Private Sub CreateLaborRateDataTable()
-        dtLaborRates = dsCadre.Tables.Add("LaborRates")
-        dtLaborRates.Columns.Add("rate_year")
-        dtLaborRates.Columns.Add("st_rate")
-        dtLaborRates.Columns.Add("ot_rate")
-        For i = 0 To dtSummaryGroup.Rows.Count - 1
-            dtLaborRates.Columns.Add("labor_ratio_" & dtSummaryGroup.Rows(i).Item("Bank"))
-        Next
-        ReadInLaborRates()
-    End Sub
-
-    Private Sub CreateOverTimeDataTable()
-        ' Creates datatable for all rows in the summary table
-        Dim column As DataColumn
-        Try
-            dtOverTime = dsCadre.Tables.Add("OverTime")
-
-            dtOverTime.Columns.Add("bank")
-            column = New DataColumn
-            column.DataType = typeInt
-            column.DefaultValue = 5
-            column.ColumnName = "work_days"
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "work_hours"
-            column.DataType = typeInt
-            column.DefaultValue = 8
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "#_teams"
-            column.DataType = typeInt
-            column.DefaultValue = 1
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "ot_%"
-            column.DataType = typeSingle
-            column.DefaultValue = 0
-            dtOverTime.Columns.Add(column)
-
-            column = New DataColumn
-            column.ColumnName = "ot_labor_inefficiency"
-            column.DataType = typeSingle
-            column.DefaultValue = 0
-            dtOverTime.Columns.Add(column)
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Creating OverTime Datatable", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-        ReadInOvertime()
-
-    End Sub
-
-    Private Sub InsertNewOvertimeRow(ByVal pBank As String)
-        Try
-            Dim _row As DataRow = dtOverTime.NewRow
-            _row("Bank") = pBank
-            dtOverTime.Rows.Add(_row)
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Adding Row to Overtime Datatable", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-    End Sub
-
-    Private Sub ReadInLaborRates()
-        Dim json As String
-        Dim rate_year As Integer = Year(Now)
-        Dim labor_rates_not_found As Boolean = True
-
-        Try
-
-            If File.Exists(CM_file) Then
-                Using sr As StreamReader = New StreamReader(CM_file)  ' to be changed to CM_file
-                    json = sr.ReadToEnd
-                End Using
-
-                Dim ser As JObject = JObject.Parse(json)
-                Dim data As List(Of JToken) = ser.Children().ToList
-
-                For Each item As JProperty In data
-                    item.CreateReader()
-                    Select Case item.Name
-                        Case "LaborRates"
-                            For Each lr As JObject In item.Values
-                                labor_rates_not_found = False
-                                Dim workRow As DataRow = dtLaborRates.NewRow
-                                For i As Integer = 0 To dtLaborRates.Columns.Count - 1
-                                    If Not IsNothing(lr.Item(dtLaborRates.Columns(i).ColumnName)) Then
-                                        workRow.Item(i) = lr.Item(dtLaborRates.Columns(i).ColumnName)   ' Column names and key from json must be the same.  lr uses name, no ordinal designation
-                                    End If
-                                Next
-                                dtLaborRates.Rows.Add(workRow)
-                            Next
-                    End Select
-                Next
-            End If
-            If labor_rates_not_found Then
-                InitializeLaborRates()
-            Else
-                RecalculateLaborRates()
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Reading In Labor Rates", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub RecalculateLaborRates()
-
-        Dim rate_year As Integer = Year(Now)
-        Dim adjustment As Decimal = 1.035
-        Dim st_rate As Decimal
-        Dim ot_rate As Decimal
-        Dim myList As New List(Of String)()
-        Dim installation_office As String
-        Dim x As Integer
-
-        If dtLaborRates.Rows.Count = 0 Then
-            ReadInLaborRates()
-        End If
-
-        If initializing Then
-            installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
-        Else
-            installation_office = Me.cboInstallingOffice.Text
-        End If
-
-        Try
-            If installation_office.Trim.Length = 0 Then
-                Exit Sub
-            End If
-           
-            myList = GetLaborRates(installation_office)
-
-            x = CInt(dtLaborRates(0).Item("rate_year")) - rate_year
-
-            For i As Integer = 0 To dtLaborRates.Rows.Count - 1
-                st_rate = myList(0) * adjustment ^ x
-                ot_rate = myList(1) * adjustment ^ x
-                dtLaborRates.Rows(i).Item("st_rate") = Math.Round(st_rate, 2)
-                dtLaborRates.Rows(i).Item("ot_rate") = Math.Round(ot_rate, 2)
-                x += 1
-            Next
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Processing Labor Rates", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-    End Sub
-
-    Private Sub InitializeLaborRates()
-        Dim rate_year As Integer
-        Dim adjustment As Decimal = 1.035
-        Dim st_rate As Decimal
-        Dim ot_rate As Decimal
-        Dim myList As New List(Of String)()
-        Dim installation_office As String
-
-        rate_year = Year(Now)
-        If initializing Then
-            If dtBuildingInfo.Rows.Count = 0 OrElse dtBuildingInfo.Rows(0).Item("installing_office") = "" Then
-                ' Me.btnLaborRates.Enabled = False
-                Exit Sub
-            Else
-                installation_office = dtBuildingInfo.Rows(0).Item("installing_office")
-            End If
-        Else
-            installation_office = Me.cboInstallingOffice.Text
-        End If
-
-        Try
-            Dim sSQL As String = "SELECT STRate, OTRate " & _
-                    "FROM [Rate (MOD Labor)] " & _
-                    "WHERE Office = '" & installation_office & "';"
-
-            myList = GetDataFromOptions(sSQL, True)
-            st_rate = myList(0)
-            ot_rate = myList(1)
-
-            For i As Integer = 0 To 9
-                Dim workRow As DataRow = dtLaborRates.NewRow
-                workRow("rate_year") = rate_year
-                workRow("st_rate") = Math.Round(st_rate, 2)
-                workRow("ot_rate") = Math.Round(ot_rate, 2)
-                For j As Integer = 3 To dtLaborRates.Columns.Count - 1
-                    workRow(j) = 0
-                Next
-                dtLaborRates.Rows.Add(workRow)
-                rate_year += 1
-                st_rate *= adjustment
-                ot_rate *= adjustment
-            Next
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error in InitializeLaborRates", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-    End Sub
-
-    Private Sub ReadInOvertime()
-        Dim json As String
-        Dim OT_not_found As Boolean = True
-
-        Try
-            If File.Exists(CM_file) Then
-                Using sr As StreamReader = New StreamReader(CM_file)  ' to be changed to CM_file
-                    json = sr.ReadToEnd
-                End Using
-
-                Dim ser As JObject = JObject.Parse(json)
-                Dim data As List(Of JToken) = ser.Children().ToList
-
-                For Each item As JProperty In data
-                    item.CreateReader()
-                    Select Case item.Name
-                        Case "OverTime"
-                            For Each ot As JObject In item.Values
-                                OT_not_found = False
-                                Dim workRow As DataRow = dtOverTime.NewRow
-                                For i As Integer = 0 To dtOverTime.Columns.Count - 1
-                                    ' Column names and key from json must be the same.
-                                    If Not IsNothing(ot.Item(dtOverTime.Columns(i).ColumnName)) Then
-                                        workRow.Item(i) = ot.Item(dtOverTime.Columns(i).ColumnName)
-                                    End If
-                                Next
-                                dtOverTime.Rows.Add(workRow)
-                            Next
-                    End Select
-                Next
-            End If
-            If OT_not_found Then
-                InitializeOverTime()
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Reading In Overtime", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-    End Sub
-
-    Private Sub InitializeOverTime()
-
-        For Each row As DataRow In dtSummaryGroup.Rows
-            Dim newRow As DataRow = dtOverTime.NewRow
-            newRow("bank") = row.Item("Bank")
-            dtOverTime.Rows.Add(newRow)
-        Next
-        isDirty = True
-    End Sub
-
     Private Sub btnEstimate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEstimate.Click
-
 
         If isDirty Then
             If PromptForSave() <> DialogResult.Yes Then
                 Exit Sub
             End If
         End If
-       
-        '  CurrentGOData_Typ.ANSICode = cboANSICode.Text
+
+        CurrentGOData_Typ.ANSICode = cboANSICode.Text
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Summary"
                 MessageBox.Show("Please set your cursor on the 'Base' or 'Alt' row")
             Case "Master", "Base"
                 Me.ShowInTaskbar = False
                 Using frmEstimatingBase
-                    frmEstimatingBase.ShowDialog()
+                    frmEstimatingBase.ShowDialog(Me)
                 End Using
                 Me.ShowInTaskbar = True
             Case "Alt"
                 Me.ShowInTaskbar = False
                 Using frmEstimatingAlt
-                    frmEstimatingAlt.ShowDialog()
+                    frmEstimatingAlt.ShowDialog(Me)
                 End Using
                 Me.ShowInTaskbar = True
             Case Else
@@ -768,7 +505,6 @@ Partial Friend Class CM_MAIN_frm
 
         initializing = False
         FpSpread1.Show()
-
     End Sub
 
     Private Sub FpSpread1_CellClick(ByVal sender As Object, ByVal e As FarPoint.Win.Spread.CellClickEventArgs) Handles FpSpread1.CellClick
@@ -779,7 +515,6 @@ Partial Friend Class CM_MAIN_frm
 
         CurrentGOData_Typ.EstimateLevel = String.Empty
         CurrentGOData_Typ.Alt = "A"
-
         CurrentGOData_Typ.Bank = FpSpread1.ActiveSheet.Cells(CurRow, 3).Text
         CurrentGOData_Typ.MachineType = FpSpread1.ActiveSheet.Cells(CurRow, 4).Text
         CurrentGOData_Typ.CurrentUnits = FpSpread1.ActiveSheet.Cells(CurRow, 5).Text
@@ -1472,8 +1207,6 @@ Partial Friend Class CM_MAIN_frm
             dtBaseGroup.Rows.Add(New Object() {"Base", _id, "1", "", _id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, default_c1, 0, 0, 0, 0, 0, 0, ""})
             isDirty = True
 
-            adding_to_labor_and_overtime = True
-
             SetSummaryC1Colors()
             SetBaseAltC1Colors()
         Catch ex As Exception
@@ -1516,10 +1249,6 @@ Partial Friend Class CM_MAIN_frm
                 If _bank = "" Then
                     MessageBox.Show("Please select a bank", "Bank ?", MessageBoxButtons.OK, MessageBoxIcon.Hand)
                     e.Cancel = True
-                ElseIf adding_to_labor_and_overtime Then
-                    dtLaborRates.Columns.Add("labor_ratio_" & _bank)
-                    InsertNewOvertimeRow(_bank)
-                    adding_to_labor_and_overtime = False
                 End If
 
             Case 4
@@ -1630,7 +1359,6 @@ Partial Friend Class CM_MAIN_frm
             Dim selected_bank As String = FpSpread1.Sheets(0).Cells(summary_row, 3).Text
             If MessageBox.Show("You are about to delete all data for Bank '" & selected_bank & "' from this Estimate.  Are you sure?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
                 DeleteBank(summary_row)
-                DeleteLaborAndOT(selected_bank)
                 DeleteFiles()
             End If
 
@@ -1899,7 +1627,6 @@ Partial Friend Class CM_MAIN_frm
             Next CurControl
             Me.txtOCPL.Visible = True
             Me.lblOCPL.Visible = True
-            Me.btnLaborRates.Visible = True
         Else
             BuildingInformation_fra.Height = ExpandCollapseFrame_btn.Height + 2
             ExpandCollapseFrame_btn.Image = Image.FromFile(ImageFileLocation & "add.png")
@@ -1914,7 +1641,6 @@ Partial Friend Class CM_MAIN_frm
             Next CurControl
             Me.txtOCPL.Visible = False
             Me.lblOCPL.Visible = False
-            Me.btnLaborRates.Visible = False
         End If
         Relocate_Equipment_Frame()
 
@@ -2291,9 +2017,9 @@ AddMasterRow_Error:
     Private Sub cboInstallingOffice_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboInstallingOffice.SelectedIndexChanged
         If Not initializing Then
             isDirty = True
-            If dtBuildingInfo.Rows.Count = 0 OrElse cboInstallingOffice.Text <> dtBuildingInfo.Rows(0).Item("installing_office") Then
-                RecalculateLaborRates()
-            End If
+            'If dtBuildingInfo.Rows.Count = 0 OrElse cboInstallingOffice.Text <> dtBuildingInfo.Rows(0).Item("installing_office") Then
+            '    RecalculateLaborRates()
+            'End If
         End If
     End Sub
     Private Sub cboServiceOffice_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboServiceOffice.SelectedIndexChanged
@@ -2481,7 +2207,6 @@ AddMasterRow_Error:
         txtJobState.Text = Contracts.JobState
         txtJobZip.Text = Contracts.JobZip
         txtContractNumber.Text = Contracts.ContractNumber
-
 
     End Sub
 
@@ -2781,25 +2506,6 @@ AddMasterRow_Error:
                 '    ChildSheetView1.ColumnHeaderVisible = False
             End If
         Next iIndex
-    End Sub
-
-    Private Sub btnLaborRates_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLaborRates.Click
-
-        If Me.cboInstallingOffice.Text = "" Then
-            MessageBox.Show("Please select an Installing Office to calculate Labor Rates", "Missing Installing Office", MessageBoxButtons.OK, MessageBoxIcon.Hand)
-            Exit Sub
-        End If
-        Try
-            Using obj As New frmLaborRates
-                obj.localOffice = Me.cboInstallingOffice.Text
-                obj.ShowDialog()
-            End Using      ' calls dispose automatically
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-
     End Sub
 
     Public Sub CalculateC1_FinalBankPrice()
@@ -3550,7 +3256,7 @@ AddMasterRow_Error:
             'clsNotes.SetValue("cost_permits", MOD_Cost_typ.Permits_Cost)
             '    clsNotes.SetValue("cost_bonds", MOD_Cost_typ.Bonds_Cost)
             '    clsNotes.SetValue("cost_projectManager", MOD_Cost_typ.ProjectManager_Cost)
-            '      clsNotes.SetValue("ansiCode", CurrentGOData_Typ.ANSICode)
+            clsNotes.SetValue("ansiCode", CurrentGOData_Typ.ANSICode)
             '    clsNotes.SetValue("blendedLaborRate", Math.Round(RATES.FieldLabor_Rate, 2))
             clsNotes.SetValue("businessLine", "MOD")
             clsNotes.SetValue("Form", "Booking Approval Review MOD")
@@ -3649,22 +3355,6 @@ AddMasterRow_Error:
         Return True
     End Function
 
-    Private Sub DeleteLaborAndOT(ByVal selected_bank As String)
-
-        Try
-            dtLaborRates.Columns.Remove("labor_ratio_" & selected_bank)
-            dtOverTime.Columns.Remove("work_days_" & selected_bank)
-            dtOverTime.Columns.Remove("work_hours_" & selected_bank)
-            dtOverTime.Columns.Remove("#_teams_" & selected_bank)
-            dtOverTime.Columns.Remove("ot%_" & selected_bank)
-            dtOverTime.Columns.Remove("ot_labor_inefficiency_" & selected_bank)
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error Deleting Labor and OT", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-    End Sub
-
-
     Private Function GenerateSuptApprovalReport() As String
 
         Dim filename As String = String.Empty
@@ -3688,6 +3378,7 @@ AddMasterRow_Error:
             combinedSheet = CreateCombinedSheet()
 
             SetSuptApprovalRptHeaders(combinedSheet)
+
 
             newSpread.Sheets.Add(combinedSheet)
             newSpread.SaveExcel(filename, FarPoint.Excel.ExcelSaveFlags.UseOOXMLFormat)
@@ -3787,14 +3478,12 @@ AddMasterRow_Error:
             End If
         End If
     End Sub
-
     Private Sub txtNegNum_Validating(sender As System.Object, e As System.ComponentModel.CancelEventArgs) Handles txtNegNum.Validating
         If Me.txtNegNum.TextLength <> 6 And Me.txtNegNum.TextLength <> 0 Then
             e.Cancel = True
             MessageBox.Show("Neg Number must be 6 digits in length.", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
-
     Private Sub txtNegNum_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtNegNum.TextChanged
         isDirty = True
     End Sub
@@ -3802,6 +3491,5 @@ AddMasterRow_Error:
     Private Sub txtOCPL_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtOCPL.TextChanged
         isDirty = True
     End Sub
-
 
 End Class

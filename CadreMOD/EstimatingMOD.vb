@@ -41,6 +41,7 @@ Module EstimatingMOD
     Public Const TABLENAME_TORQUEDATA As String = "TorqueData"
     Public Const TABLENAME_ORDERINFO As String = "OrderInfo"
     Public Const TABLENAME_LABORRATES As String = "LaborRates"
+    Public Const TABLENAME_OVERTIME As String = "OverTime"
 
     Public Const TABLECOL_MATERIALDESC As String = "Material Description"
     Public Const TABLECOL_MAINID As String = "MainID"
@@ -423,6 +424,7 @@ Module EstimatingMOD
     Public UseUnitQtyCol As String = TABLECOL_UNITQTY_EST
     Public UseMaterialItemRecordSet As New ADODB.Recordset
     Public TorqueRecordset As New ADODB.Recordset
+    Public BankLaborRate As Single = 0
 
     Public Function GetCostHours(ByVal MaterialID As String, ByVal CurOption As String, ByVal CurType As String, ByVal CurOrderBy As String,
                                  ByVal CostOrHours As String, ByVal CurQty As Integer) As Single
@@ -2141,7 +2143,12 @@ Module EstimatingMOD
                             UseMaterialItemRecordSet.MoveNext()
                         Loop
                     Case "OrderBys"
-                        If CurrentSheet.Cells(RowNum, UseOptionCol).Text = "Refurbish" Then
+                        If CurrentGOData_Typ.EstimateLevel = "Alt" Then
+                            CurValue = CurrentSheet.Cells(RowNum, MAT_COL_OPTION_ALT).Text
+                        Else
+                            CurValue = CurrentSheet.Cells(RowNum, MAT_COL_OPTION_EST).Text
+                        End If
+                        If CurValue = "Refurbish" Then
                             Options = {"RL"}
                         Else
                             If IsPOHController Then
@@ -2281,7 +2288,7 @@ Module EstimatingMOD
                                     Case "2 CABLES OF LENGTH = (TRAVEL+2*PIT DEPTH+10FT)"
                                         ReturnIntVal *= Math.Round(CurTravel + (2 * CurPitDepth) + 10)
                                     Case "NO. OF COMP ROPES X (TRAVEL +  2*PIT DEPTH + 10FT)"
-                                        ReturnIntVal *= Math.Round((CurTravel + (2 * CurPitDepth) + 10) * MN_TRQ01_typ.CompensationQty)
+                                        ReturnIntVal *= Math.Round((CurTravel + (2 * CurPitDepth) + 10) * Conversion.Val(MN_TRQ01_typ.CompensationQty))
                                     Case "LENGTH PER CAR = (TRAVEL + PIT DEPTH + TOP FLOOR TO OVERHEAD + 10 FT)*2"
                                         ReturnIntVal *= Math.Round((CurTravel + CurPitDepth + CurOverhead + 10) * 2)
                                     Case "2 PER OPENING PER CAR"
@@ -2694,8 +2701,9 @@ Module EstimatingMOD
                 CurDataRow("BDP_Hours") = Math.Round(BDP_Hours, 2)
                 CurDataRow("Special_Hours") = Math.Round(Special_Hours, 2)
                 Labor_Hours = BDP_Hours + Special_Hours
-                Labor_Cost = Labor_Hours * CurDataRow("Labor_Rate")
+                Labor_Cost = Labor_Hours * BankLaborRate
                 CurDataRow("Labor_Cost") = Math.Round(Labor_Cost, 2)
+                CurDataRow("Labor_Rate") = BankLaborRate
                 If CurDataRow("OT_Hours_Included") > Labor_Hours Then
                     CurDataRow("OT_Hours_Included") = 0
                 Else
@@ -2952,18 +2960,25 @@ Module EstimatingMOD
                 UseMaterialItemRecordSet.Close()
             End If
         End If
-        UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
         Select Case EstScreen
             Case "Estimating"
                 Select Case frmEstimatingBase.PromptForSave()
-                    Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                    Case MsgBoxResult.Yes
+                        UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+                        frmEstimatingBase.Cursor = Cursors.Default
+                        frmEstimatingBase.Dispose()
+                    Case MsgBoxResult.No, 0
                         frmEstimatingBase.Cursor = Cursors.Default
                         frmEstimatingBase.Dispose()
                     Case Else
                 End Select
             Case "Alt"
                 Select Case frmEstimatingAlt.PromptForSave()
-                    Case MsgBoxResult.Yes, MsgBoxResult.No, 0
+                    Case MsgBoxResult.Yes
+                        UpdateAllTotals(Strings.Left(CurrentTab, CurrentTab.Length - 6))
+                        frmEstimatingAlt.Cursor = Cursors.Default
+                        frmEstimatingAlt.Dispose()
+                    Case MsgBoxResult.No, 0
                         frmEstimatingAlt.Cursor = Cursors.Default
                         frmEstimatingAlt.Dispose()
                     Case Else
@@ -3167,13 +3182,35 @@ Module EstimatingMOD
 
     End Sub
     Public Sub CreateLaborRateDataTable(ByRef CurDataset As DataSet)
+        Dim column As DataColumn
 
         dtLaborRates = CurDataset.Tables.Add(TABLENAME_LABORRATES)
+
         dtLaborRates.Columns.Add("UnitsInTab")
-        dtLaborRates.Columns.Add("rate_year")
-        dtLaborRates.Columns.Add("st_rate")
-        dtLaborRates.Columns.Add("ot_rate")
-        dtLaborRates.Columns.Add("labor_ratio_" & CurrentGOData_Typ.Bank)
+
+        column = New DataColumn
+        column.DataType = typeSingle
+        column.DefaultValue = 0
+        column.ColumnName = "rate_year"
+        dtLaborRates.Columns.Add(column)
+
+        column = New DataColumn
+        column.DataType = typeSingle
+        column.DefaultValue = 0
+        column.ColumnName = "st_rate"
+        dtLaborRates.Columns.Add(column)
+
+        column = New DataColumn
+        column.DataType = typeSingle
+        column.DefaultValue = 0
+        column.ColumnName = "ot_rate"
+        dtLaborRates.Columns.Add(column)
+
+        column = New DataColumn
+        column.DataType = typeSingle
+        column.DefaultValue = 0
+        column.ColumnName = "labor_ratio_" & CurrentGOData_Typ.Bank
+        dtLaborRates.Columns.Add(column)
 
     End Sub
     Public Sub RecalculateLaborRates()
@@ -3216,6 +3253,7 @@ Module EstimatingMOD
         Dim ot_rate As Decimal
         Dim myList As New List(Of String)()
         Dim installation_office As String
+        Dim RatioStart As Integer = 20
 
         Try
             If dtBuildingInfo.Rows.Count = 0 OrElse dtBuildingInfo.Rows(0).Item("installing_office") = "" Then
@@ -3228,12 +3266,20 @@ Module EstimatingMOD
             ot_rate = myList(1)
             For i As Integer = 0 To 9
                 Dim workRow As DataRow = dtLaborRates.NewRow
+                workRow("UnitsInTab") = CurrentTabUnits
                 workRow("rate_year") = rate_year
                 workRow("st_rate") = Math.Round(st_rate, 2)
                 workRow("ot_rate") = Math.Round(ot_rate, 2)
-                For j As Integer = 3 To dtLaborRates.Columns.Count - 1
-                    workRow(j) = 0
-                Next j
+                Select Case i
+                    Case 0
+                        workRow("labor_ratio_" & CurrentGOData_Typ.Bank) = 20
+                    Case 1
+                        workRow("labor_ratio_" & CurrentGOData_Typ.Bank) = 20
+                    Case 2
+                        workRow("labor_ratio_" & CurrentGOData_Typ.Bank) = 60
+                    Case Else
+                        workRow("labor_ratio_" & CurrentGOData_Typ.Bank) = 0
+                End Select
                 dtLaborRates.Rows.Add(workRow)
                 rate_year += 1
                 st_rate *= adjustment
@@ -3261,4 +3307,115 @@ Module EstimatingMOD
         End If
 
     End Sub
+    Public Sub CreateOverTimeDataTable(ByRef CurDataset As DataSet)
+        Dim column As DataColumn
+
+        Try
+            dtOverTime = CurDataset.Tables.Add(TABLENAME_OVERTIME)
+
+            dtOverTime.Columns.Add("bank")
+            column = New DataColumn
+            column.DataType = typeInt
+            column.DefaultValue = 4
+            column.ColumnName = "work_days"
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "work_hours"
+            column.DataType = typeInt
+            column.DefaultValue = 10
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "#_teams"
+            column.DataType = typeInt
+            column.DefaultValue = 1
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "ot_%"
+            column.DataType = typeSingle
+            column.DefaultValue = 0
+            dtOverTime.Columns.Add(column)
+
+            column = New DataColumn
+            column.ColumnName = "ot_labor_inefficiency"
+            column.DataType = typeSingle
+            column.DefaultValue = -999.99
+            dtOverTime.Columns.Add(column)
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error Creating OverTime Datatable", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+
+    End Sub
+    Public Sub InitializeOverTime()
+        Dim newRow As DataRow = Nothing
+
+        If dtOverTime.Rows.Count = 0 Then
+            newRow = dtOverTime.NewRow
+            newRow("bank") = CurrentGOData_Typ.Bank
+            newRow("ot_labor_inefficiency") = 0
+            dtOverTime.Rows.Add(newRow)
+            isDirty = True
+        Else
+            newRow = dtOverTime(0)
+            If newRow("ot_labor_inefficiency") = -999.99 Then
+                newRow("ot_labor_inefficiency") = 0
+                Select Case newRow("work_days")
+                    Case 5
+                        Select Case newRow("work_hours")
+                            Case 10
+                                newRow("ot_labor_inefficiency") = 5
+                            Case 12
+                                newRow("ot_labor_inefficiency") = 10
+                            Case Else
+                        End Select
+                    Case 6
+                        Select Case newRow("work_hours")
+                            Case 8
+                                newRow("ot_labor_inefficiency") = 10
+                            Case 10
+                                newRow("ot_labor_inefficiency") = 15
+                            Case 12
+                                newRow("ot_labor_inefficiency") = 20
+                            Case Else
+                        End Select
+                    Case 7
+                        Select Case newRow("work_hours")
+                            Case 8
+                                newRow("ot_labor_inefficiency") = 25
+                            Case 10
+                                newRow("ot_labor_inefficiency") = 30
+                            Case 12
+                                newRow("ot_labor_inefficiency") = 35
+                            Case Else
+                        End Select
+                    Case Else
+                End Select
+            End If
+        End If
+
+
+    End Sub
+    Public Function CalculateLaborRate()
+        Dim LaborRate As Single = 0
+        Dim OvertimePercent As Single = 0
+        Dim LaborRatio As Single = 0
+
+        If dtOverTime.Rows.Count > 0 Then
+            OvertimePercent = dtOverTime(0).Item("ot_%")
+        End If
+        For i As Integer = 0 To dtLaborRates.Rows.Count - 1
+            LaborRatio = dtLaborRates.Rows(i).Item("labor_ratio_" & CurrentGOData_Typ.Bank)
+            If LaborRatio > 1 Then
+                LaborRatio /= 100
+            End If
+            LaborRate += ((dtLaborRates.Rows(i).Item("st_rate") * (1 - OvertimePercent)) + (dtLaborRates.Rows(i).Item("ot_rate") * OvertimePercent)) *
+                          LaborRatio
+        Next i
+        Return Math.Round(LaborRate, 2)
+
+    End Function
 End Module

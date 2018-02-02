@@ -64,12 +64,12 @@ Module Excel_Document
         End Try
 
         ' Open the workbook.
-        Dim workbook As Excel.Workbook = excel_app.Workbooks.Open(filename:=excelFile)
+        Dim workbook As Excel.Workbook = excel_app.Workbooks.Open(Filename:=excelFile)
 
         Dim sheet As Excel.Worksheet
         sheet = workbook.Worksheets("Sheet1")
         sheet.Unprotect()
-
+        ' workbook.Unprotect()
         Try
             sheet.Range("A1:A3").EntireRow.Insert()
             sheet.Range("A1:Z14").Font.Bold = True
@@ -88,8 +88,8 @@ Module Excel_Document
             MessageBox.Show(ex.Message, "Error in AddSuptHeaders", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Finally
-            ReleaseObject(sheet)
-            ReleaseObject(workbook)
+            releaseObject(sheet)
+            releaseObject(workbook)
             'releaseObject(excel_app)
         End Try
     End Sub
@@ -105,15 +105,7 @@ Module Excel_Document
         End Try
     End Sub
 
-
-
-
-
-
-    
     Public Sub GenerateCN1Report()
-        '    Public Sub GenerateCN1Report(_bank As String, _units As String, _installation_office As String, _negnum As String)
-
         Dim _bank As String = CurrentGOData_Typ.Bank
         Dim _units As String = CurrentGOData_Typ.CurrentUnits
         Dim excelSheet As Excel.Worksheet = Nothing

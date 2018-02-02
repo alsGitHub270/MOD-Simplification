@@ -18,6 +18,8 @@
                 dsOrdering.Relations.Add("Ordering_Table_Relationship", dsOrdering.Tables("Ordering").Columns("id"), dsOrdering.Tables("Ordering_Items").Columns("fkey"))
             End If
 
+            SetOrderingDefaults()
+
             Dim model As FarPoint.Win.Spread.Model.DefaultSheetDataModel
             model = sprOrdering.ActiveSheet.Models.Data
             model.DataSource = dsOrdering
@@ -231,4 +233,9 @@
         End With
 
     End Sub
+
+    Private Sub SetOrderingDefaults()
+        Throw New NotImplementedException
+    End Sub
+
 End Class

@@ -198,6 +198,8 @@ Partial Class frmEstimatingBase
         Me.Forms_cmd = New System.Windows.Forms.Button()
         Me.Book_cmd = New System.Windows.Forms.Button()
         Me.Config_cmd = New System.Windows.Forms.Button()
+        Me.LaborRate_txt = New System.Windows.Forms.TextBox()
+        Me.LaborRate_lbl = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.CarTab.SuspendLayout()
@@ -2414,6 +2416,8 @@ Partial Class frmEstimatingBase
         'fraHdrJobInfo
         '
         Me.fraHdrJobInfo.BackColor = System.Drawing.SystemColors.Control
+        Me.fraHdrJobInfo.Controls.Add(Me.LaborRate_txt)
+        Me.fraHdrJobInfo.Controls.Add(Me.LaborRate_lbl)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrBnkLetter)
         Me.fraHdrJobInfo.Controls.Add(Me.Units_txt)
         Me.fraHdrJobInfo.Controls.Add(Me.txtHdrEstimateNum)
@@ -2773,6 +2777,39 @@ Partial Class frmEstimatingBase
         Me.Config_cmd.Text = "Config"
         Me.Config_cmd.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
+        'LaborRate_txt
+        '
+        Me.LaborRate_txt.AcceptsReturn = True
+        Me.LaborRate_txt.BackColor = System.Drawing.SystemColors.Window
+        Me.LaborRate_txt.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.LaborRate_txt.Enabled = False
+        Me.LaborRate_txt.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LaborRate_txt.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.LaborRate_txt.Location = New System.Drawing.Point(879, 6)
+        Me.LaborRate_txt.MaxLength = 0
+        Me.LaborRate_txt.Name = "LaborRate_txt"
+        Me.LaborRate_txt.ReadOnly = True
+        Me.LaborRate_txt.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.LaborRate_txt.Size = New System.Drawing.Size(65, 20)
+        Me.LaborRate_txt.TabIndex = 84
+        Me.LaborRate_txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'LaborRate_lbl
+        '
+        Me.LaborRate_lbl.BackColor = System.Drawing.SystemColors.Control
+        Me.LaborRate_lbl.Cursor = System.Windows.Forms.Cursors.Default
+        Me.LaborRate_lbl.Enabled = False
+        Me.LaborRate_lbl.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.LaborRate_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LaborRate_lbl.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.LaborRate_lbl.Location = New System.Drawing.Point(808, 8)
+        Me.LaborRate_lbl.Name = "LaborRate_lbl"
+        Me.LaborRate_lbl.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.LaborRate_lbl.Size = New System.Drawing.Size(67, 19)
+        Me.LaborRate_lbl.TabIndex = 83
+        Me.LaborRate_lbl.Text = "Labor Rate"
+        Me.LaborRate_lbl.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'frmEstimatingBase
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -2984,6 +3021,8 @@ Partial Class frmEstimatingBase
     Public WithEvents ArmatureFullLoadVoltageVFLU_lbl As System.Windows.Forms.Label
     Public WithEvents NominalMotorRPM_txt As System.Windows.Forms.TextBox
     Private WithEvents btnLaborRates As System.Windows.Forms.Button
+    Public WithEvents LaborRate_txt As System.Windows.Forms.TextBox
+    Public WithEvents LaborRate_lbl As System.Windows.Forms.Label
 
 #End Region
 End Class

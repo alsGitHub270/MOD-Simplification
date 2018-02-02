@@ -812,7 +812,7 @@ Module TorqueCalc
         If MachineType = GEARED_TYPE Then
             iIndex = 1
             sSQL = "SELECT * FROM [Drive Selection] WHERE [Drive Selection].ANSI="
-            If CurrentGOData_Typ.ANSICode >= 2000 Then
+            If Conversion.Val(CurrentGOData_Typ.ANSICode) >= 2000 Then
                 sSQL &= "True"
             Else
                 sSQL &= "False"
@@ -865,7 +865,7 @@ Module TorqueCalc
                 dIdealCompWeight = iRoping * dRWT - dCtrlCableWt / 4
                 dCompWt = dIdealCompWeight / 2
             Else
-                dCompWt = MN_TRQ01_typ.CompensationQty * MN_TRQ02_typ.CompensationUnitWeight
+                dCompWt = Conversion.Val(MN_TRQ01_typ.CompensationQty) * Conversion.Val(MN_TRQ02_typ.CompensationUnitWeight)
             End If
         Else
             dCompWt = Conversion.Val(MN_TRQ02_typ.CompensationWeight)
@@ -2763,7 +2763,7 @@ Module TorqueCalc
                 MN_TRQ01_typ.Required_KVA = 0
                 MN_PowerData_GEARED_typ.PeakCurrent = CStr(0)
             Case Else
-                bANSI = (CurrentGOData_Typ.ANSICode) >= 2000
+                bANSI = Conversion.Val(CurrentGOData_Typ.ANSICode) >= 2000
                 If MN_TRQ01_typ.DriveModel <> "" Then
                     sSQL = "SELECT * FROM [Drive Selection] WHERE [Drive Selection]='" & MN_TRQ01_typ.DriveModel & "' AND "
                     sSQL = sSQL & " [Drive Selection].ANSI=" & (IIf(bANSI, "True", "False"))
@@ -3006,6 +3006,7 @@ Module TorqueCalc
         Dim CurMachineType As String = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineType_cmb")
 
         Try
+            ResetADODBRecordset(CableRecordSet)
             CableRecordSet.Open("SELECT CableID,CableType,CableWeight,PartNumber, Use FROM CableWeight ORDER BY CableID", ADOConnection)
             Select Case GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "RopingNew_Cmb")
                 Case "1:1 Single Wrap"
@@ -3084,7 +3085,7 @@ Module TorqueCalc
             TopOfCarSheave = GetValue_Materials(EstimatingDataset, UseOptionCol, MAIN_ID_CarItems, MAT_ID_CarSheaveAttachmentandGuard)
             CarSheaveQty = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "CarSheaveQty_Cmb"))
             InitializeTorqueCollections()
-            MachineLocation = Conversion.Val(GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb"))
+            MachineLocation = GetValue(EstimatingDataset.Tables(TABLENAME_GENERALINFO), "MachineLocation_Cmb")
             HoistRopeSize = GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "HoistRopeSize_Cmb")
             HoistRopeQty = GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "HoistRopeQty_Cmb")
             NominalMotorRPM = GetValue(EstimatingDataset.Tables(TABLENAME_TORQUEDATA), "NominalMotorRPM_txt")
@@ -3271,7 +3272,7 @@ Module TorqueCalc
                     MN_TRQ02_typ.CompensationWeight = Strings.FormatNumber(dIdealCompWeight / 2, 3, TriState.True)
                 Else
                     Set_CompUnitWeight()
-                    MN_TRQ02_typ.CompensationWeight = MN_TRQ01_typ.CompensationQty * MN_TRQ02_typ.CompensationUnitWeight
+                    MN_TRQ02_typ.CompensationWeight = Conversion.Val(MN_TRQ01_typ.CompensationQty) * Conversion.Val(MN_TRQ02_typ.CompensationUnitWeight)
                 End If
             End If
             If Conversion.Val(MN_TRQ01_typ.WrapAngle) = 0 Or MN_TRQ01_typ.bDirty Then
@@ -3976,8 +3977,8 @@ lbl_OTHER:
     End Function
     Public Sub Set_CompUnitWeight()
         Dim result As Double = 0
-        Dim sSQL As String = "SELECT CompensationType.CompName, Compensation.CompSize1, Compensation.CompSize2 " & "FROM CompensationType " &
-                             "INNER JOIN Compensation ON CompensationType.CompensationType = Compensation.CompensationType " &
+        Dim sSQL As String = "SELECT CompensationType.CompName, Compensation.CompSize1, Compensation.CompSize2 " & "FROM CompensationType " & _
+                             "INNER JOIN Compensation ON CompensationType.CompType = Compensation.CompType " & _
                              "ORDER BY Compensation.CompSize, Compensation.CompSize1;"
 
         ResetADODBRecordset(TorqueRecordset)
@@ -4057,16 +4058,15 @@ lbl_OTHER:
         End If
 
         Dim FileNumber As Integer = FileSystem.FreeFile()
-        Dim DebugFile As String = DebugPath & HoldUniqueActivity & "_" & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & _
-                                  Strings.Left(CurrentGOData_Typ.Units, 2) & TORQUE_DEBUG_DETAIL_FILE_NAME
+        Dim DebugFile As String = DebugPath & HoldUniqueActivity & "_" & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentTabUnits & TORQUE_DEBUG_DETAIL_FILE_NAME
         FileSystem.FileOpen(FileNumber, DebugFile, OpenMode.Output)
         FileSystem.PrintLine(FileNumber, sDebugInfo)
         FileSystem.FileClose(FileNumber)
 
     End Sub
     Public Sub Torque2DebugFileIn()
-
         Dim sDebugInfoIn As String = ""
+
         sDebugInfoIn = sDebugInfoIn & "Torque Run for;" & CurrentGOData_Typ.GONum & Environment.NewLine
         sDebugInfoIn = sDebugInfoIn & "Machine Room Location;" & MachineLocation & Environment.NewLine
         sDebugInfoIn = sDebugInfoIn & "Capacity;" & CStr(Capacity) & Environment.NewLine
@@ -4115,10 +4115,9 @@ lbl_OTHER:
         sDebugInfo = sDebugInfoIn
 
     End Sub
-
     Public Sub Torque2DebugFileOut()
-
         Dim sDebugInfoOut As String = ""
+
         sDebugInfoOut = "Groove Pressure of Sheave Diameter; " & Strings.FormatNumber(dGrooveP, 3, TriState.True) & Environment.NewLine
         sDebugInfoOut = sDebugInfoOut & "Rope Tension; " & Strings.FormatNumber(dTension, 3, TriState.True) & Environment.NewLine
         sDebugInfoOut = sDebugInfoOut & "Factor Of Safety; " & Strings.FormatNumber(dSafety, 3, TriState.True) & Environment.NewLine
@@ -4143,7 +4142,12 @@ lbl_OTHER:
         sDebugInfoOut = sDebugInfoOut & "Number of Comps; " & CStr(MN_TRQ01_typ.CompensationQty) & Environment.NewLine
         sDebugInfoOut = sDebugInfoOut & "Comp size; " & MN_TRQ02_typ.CompensationSize & Environment.NewLine
         sDebugInfoOut = sDebugInfoOut & "Comp unit Weight; " & CStr(MN_TRQ02_typ.CompensationUnitWeight) & Environment.NewLine
-        sDebugInfoOut = sDebugInfoOut & "Total Comp Weight; " & (IIf(Conversion.Val(MN_TRQ02_typ.CompensationWeight) = 0, CStr(MN_TRQ02_typ.CompensationUnitWeight * MN_TRQ01_typ.CompensationQty), MN_TRQ02_typ.CompensationWeight)) & Environment.NewLine
+        If Conversion.Val(MN_TRQ02_typ.CompensationWeight) = 0 Then
+            sDebugInfoOut = sDebugInfoOut & "Total Comp Weight; " & Conversion.Val(MN_TRQ02_typ.CompensationUnitWeight) *
+                            Conversion.Val(MN_TRQ01_typ.CompensationQty) & Environment.NewLine
+        Else
+            sDebugInfoOut = sDebugInfoOut & "Total Comp Weight; " & MN_TRQ02_typ.CompensationWeight & Environment.NewLine
+        End If
         sDebugInfoOut = sDebugInfoOut & "Ideal Comp Weight; " & Strings.FormatNumber(dIdealCompWeight, 4, TriState.True) & Environment.NewLine
         sDebugInfoOut = sDebugInfoOut & "Comp Sheave Weight; " & Strings.FormatNumber(Conversion.Val(MN_TRQ01_typ.CompSheaveWt), 4, TriState.True) & Environment.NewLine
         Set_InputVoltage()
@@ -4202,8 +4206,7 @@ lbl_OTHER:
         If Strings.Right(sDebugInfo, 7) = "~end~2~" Then
             sDebugInfo = sDebugInfo & Environment.NewLine & Environment.NewLine & sDebugPowerData & Environment.NewLine & "~end~3~"
             FileNumber = FileSystem.FreeFile()
-            Dim DebugFile As String = DebugPath & HoldUniqueActivity & "_" & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & _
-                                      Strings.Left(CurrentGOData_Typ.Units, 2) & TORQUE_DEBUG_DETAIL_FILE_NAME
+            Dim DebugFile As String = DebugPath & HoldUniqueActivity & "_" & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentTabUnits & TORQUE_DEBUG_DETAIL_FILE_NAME
             FileSystem.FileOpen(FileNumber, DebugFile, OpenMode.Output)
             FileSystem.PrintLine(FileNumber, sDebugInfo)
             FileSystem.FileClose(FileNumber)
@@ -4271,8 +4274,7 @@ lbl_OTHER:
         If Strings.Right(sDebugInfo, 7) = "~end~2~" Then
             sDebugInfo = sDebugInfo & Environment.NewLine & Environment.NewLine & sDebugPowerData & Environment.NewLine & "~end~3~"
             FileNumber = FileSystem.FreeFile()
-            Dim DebugFile As String = DebugPath & HoldUniqueActivity & "_" & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & _
-                                      Strings.Left(CurrentGOData_Typ.Units, 2) & TORQUE_DEBUG_DETAIL_FILE_NAME
+            Dim DebugFile As String = DebugPath & HoldUniqueActivity & "_" & CurrentGOData_Typ.Bank & CurrentGOData_Typ.Alt & CurrentTabUnits & TORQUE_DEBUG_DETAIL_FILE_NAME
             FileSystem.FileOpen(FileNumber, DebugFile, OpenMode.Output)
             FileSystem.PrintLine(FileNumber, sDebugInfo)
             FileSystem.FileClose(FileNumber)

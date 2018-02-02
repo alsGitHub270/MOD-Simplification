@@ -173,11 +173,11 @@ DetachFilesError:
                 End If
                 NameAry = doc.GetFirstItem("FileAttachments")
                 If Not (NameAry Is Nothing) Then
-                    Listed = NameAry.Contains(FileName)
-                    If Not Listed Then
-                        NameAry.AppendToTextList(FileName)
-                        If Not DocCreated Then
-                            doc.Save(True, True)
+                Listed = NameAry.Contains(FileName)
+                If Not Listed Then
+                    NameAry.AppendToTextList(FileName)
+                    If Not DocCreated Then
+                        doc.Save(True, True)
                         End If
                     End If
                 End If
@@ -195,7 +195,6 @@ DetachFilesError:
 
         Catch e As System.Exception
             result = False
-
             If Information.Err().Number = 7225 Then
                 Select Case True
                     Case FilePath.Length = 0

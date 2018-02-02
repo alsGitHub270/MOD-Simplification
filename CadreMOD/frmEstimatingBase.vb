@@ -228,8 +228,10 @@ Public Class frmEstimatingBase
 
             SetUpTorqueDataset(EstimatingDataset)
             CreateLaborRateDataTable(EstimatingDataset)
+            CreateOverTimeDataTable(EstimatingDataset)
             Deserialize(EST_Filename, EstimatingDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             EstimatingDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+            InitializeOverTime()
             RecalculateLaborRates()
 
         Catch ex As Exception
@@ -336,6 +338,8 @@ Public Class frmEstimatingBase
         UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         DisplayEST_vs_ORD()
         EnableBillOfMaterials()
+        BankLaborRate = CalculateLaborRate()
+        LaborRate_txt.Text = BankLaborRate
         isInitializingComponent = False
         Me.Cursor = Cursors.Default
 
@@ -1125,7 +1129,8 @@ Public Class frmEstimatingBase
         ElseIf CurrentTab.IndexOf(ORD_Suffix) > -1 Then
             PopulateOrdering()
             OrderingForms_lst.Items.Clear()
-            OrderingForms_lst.Items.Add("Governor")
+            OrderingForms_lst.Items.Add("General")
+            OrderingForms_lst.Items.Add("Ordering")
             OrderingForms_lst.Left = 3
             OrderingForms_lst.Top = 12
             OrderingForms_lst.Height = OrderingForms_fra.Height - 6
@@ -1972,17 +1977,17 @@ Public Class frmEstimatingBase
 
     End Sub
     Private Sub OrderingForms_lst_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles OrderingForms_lst.DoubleClick
-        Dim NewGovForm As New ORD_Governor_frm
+        Dim NewOrderingForm As New frmOrdering
 
         OrderingForms_con.Controls.Clear()
-        NewGovForm.TopLevel = False
-        NewGovForm.Left = 0
-        NewGovForm.Width = OrderingForms_con.Width
-        'NewGovForm.WindowState = FormWindowState.Maximized
-        NewGovForm.FormBorderStyle = Windows.Forms.FormBorderStyle.None
-        NewGovForm.Visible = True
+        NewOrderingForm.TopLevel = False
+        NewOrderingForm.Left = 0
+        NewOrderingForm.Width = OrderingForms_con.Width
+        'NewOrderingForm.WindowState = FormWindowState.Maximized
+        NewOrderingForm.FormBorderStyle = Windows.Forms.FormBorderStyle.None
+        NewOrderingForm.Visible = True
         OrderingForms_con.Controls.Clear()
-        OrderingForms_con.Controls.Add(NewGovForm)
+        OrderingForms_con.Controls.Add(NewOrderingForm)
 
     End Sub
     Private Sub btnTorque_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTorque.Click
@@ -2241,6 +2246,7 @@ Public Class frmEstimatingBase
                 obj.localOffice = dtBuildingInfo.Rows(0).Item("installing_office")
                 obj.ShowDialog()
             End Using      ' calls dispose automatically
+            LaborRate_txt.Text = BankLaborRate
 
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)

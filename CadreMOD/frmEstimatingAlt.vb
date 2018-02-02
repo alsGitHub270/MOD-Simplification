@@ -245,8 +245,10 @@ Public Class frmEstimatingAlt
 
             SetUpTorqueDataset(AltDataset)
             CreateLaborRateDataTable(AltDataset)
+            CreateOverTimeDataTable(AltDataset)
             Deserialize(ALT_Filename, AltDataset, "Error Reading Data - " & CurUnits, FormIsDirty)
             AltDataset.Relations.Add(TABLENAME_MATERIALS, MainGroups.Columns("MainID"), SubGroups.Columns("MainID"))
+            InitializeOverTime()
             RecalculateLaborRates()
 
             For iIndex = 0 To AltDataset.Tables.Count - 1
@@ -421,6 +423,8 @@ Public Class frmEstimatingAlt
         UseMaterialItemRecordSet.Open(COMPONENT_LIST_TABLE, ADOConnectionMODDataDataBase)
         DisplayALT()
         EnableBillOfMaterials()
+        BankLaborRate = CalculateLaborRate()
+        LaborRate_txt.Text = BankLaborRate
         isInitializingComponent = False
         Me.Cursor = Cursors.Default
 
@@ -2235,6 +2239,7 @@ Public Class frmEstimatingAlt
                 obj.localOffice = dtBuildingInfo.Rows(0).Item("installing_office")
                 obj.ShowDialog()
             End Using      ' calls dispose automatically
+            LaborRate_txt.Text = BankLaborRate
 
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error Loading Labor Rates Form", MessageBoxButtons.OK, MessageBoxIcon.Error)

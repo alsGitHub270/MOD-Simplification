@@ -267,12 +267,10 @@ Module General
         Return ReturnVal
 
     End Function
-
     Public Sub EndProgram()
         Reset_Resolution()
         Environment.Exit(0)
     End Sub
-
     Public Function TranslateOfficeNumber(ByVal sOfficeNumberOld As String, Optional ByVal bSalesOffice As Boolean = False, Optional ByVal bIgnoreShape As Boolean = False) As String
         Dim sWhere As String = "[Office] = " & FixSQLString(sOfficeNumberOld)
         Dim sNewOffice As String = "New Office"
@@ -409,7 +407,6 @@ Module General
         'End If
 
     End Function
-
     Public Function FixSQLString(ByVal ThisFieldValue As String) As String
         Dim j As Byte
         Dim i As Byte = (ThisFieldValue.IndexOf("'"c) + 1)
@@ -422,11 +419,9 @@ Module General
         Return "'" & ThisFieldValue & "'"
 
     End Function
-
     Public Function Get_FileName(ByRef ThisNegNum As String, ByRef ThisBank As String, ByRef ThisAlt As String, ByRef ThisUnits As String) As String
         Return ThisNegNum & ThisBank & ThisAlt & ThisUnits
     End Function
-
     Public Function GetDataFromOptions(ByVal sSQL As String, Optional ByVal multiple_fields As Boolean = False) As List(Of String)
         Dim dataSource As String = HAPDatabasePath & "\" & MODDATA_DATABASE_NAME
         Dim cnstr As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & dataSource & ";Jet OLEDB:Database Password=oscar"
@@ -455,12 +450,10 @@ Module General
 
         Return myList
     End Function
-
     Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
         Dim Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
     End Function
-
     Public Function FormatUnits(ByRef UnitsInString As String) As String
         Dim UnitsLine As String = String.Empty
         Dim TempLine As String = String.Empty
@@ -534,7 +527,6 @@ Module General
         Return UnitsLine
 
     End Function
-
     Public Function SplitUnitsForSave(ByVal CurUnits As String) As String
         Dim ReturnVal As String = String.Empty
 
@@ -546,7 +538,6 @@ Module General
         Return ReturnVal
 
     End Function
-
     Public Function Serialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim ReturnVal As Boolean = True
@@ -566,7 +557,6 @@ Module General
         Return ReturnVal
 
     End Function
-
     Public Function Deserialize(ByVal UseFileName As String, ByRef UseDataset As System.Data.DataSet, ByVal ErrMsg As String, ByRef CurDirtyFlag As Boolean) As Boolean
         Dim json As String = ""
         Dim dsTemp As DataSet
@@ -595,7 +585,6 @@ Module General
         Return ReturnVal
 
     End Function
-
     Public Function FileIsOpen(ByVal pathfile As String) As Boolean
         Dim ff As Integer
         If System.IO.File.Exists(pathfile) Then
@@ -612,7 +601,6 @@ Module General
         End If
         Return False
     End Function
-
     Public Sub ArchiveFiles()
         Dim JSONFileLocation As DirectoryInfo = New DirectoryInfo(EstimatePath)
 
@@ -641,7 +629,6 @@ Module General
         Next row
         Return sngValue
     End Function
-
     Public Function GetSummaryTotals(ByVal column As Integer) As Single
         Dim sngValue As Double = 0
         For Each row As DataRow In dtSummaryGroup.Rows
@@ -651,19 +638,17 @@ Module General
         Next row
         Return sngValue
     End Function
-
     Public Function GetBuildingInfo(columnName As String) As String
         Return dtBuildingInfo.Rows(0).Item(columnName).ToString
     End Function
-
     Public Sub SaveAll()
 
         CM_MAIN_frm.SaveAll(False)
         Select Case CurrentGOData_Typ.EstimateLevel
             Case "Master"
                 If AllowedToSave() Then
-                frmEstimatingBase.SaveEstimatingData()
-                frmEstimatingBase.SaveOrderingData()
+                    frmEstimatingBase.SaveEstimatingData()
+                    frmEstimatingBase.SaveOrderingData()
                 End If
             Case "Base"
                 frmEstimatingBase.SaveEstimatingData()
@@ -674,7 +659,6 @@ Module General
         ArchiveFiles()
 
     End Sub
-
     Public Sub CompareFiles()
         Dim Filesystem As New Scripting.FileSystemObject()
         Dim Name As String
@@ -696,9 +680,7 @@ Module General
         Loop
 
     End Sub
-
     Public Sub DeleteAllFiles()
-
         For Each FoundFile As String In My.Computer.FileSystem.GetFiles(ReportsPath)
             Dim count As Integer
             Try
@@ -708,16 +690,13 @@ Module General
                     message += vbCrLf & vbCrLf & "If you wish to retain the file, save it to another folder."
                     MessageBox.Show(message, "Cannot initialize Estimate Folder", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If
-                File.Delete(FoundFile)
+            File.Delete(FoundFile)
             Catch ex As Exception
-                ' To prevent system crash when FoundFile cannot be deleted 
                 count += 1
                 MessageBox.Show("Cannot delete '" & FoundFile & ".", "Caannot delete file", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End Try
         Next FoundFile
-
     End Sub
-
     Public Sub DeleteFiles()
         Dim FileNameLike As String = String.Empty
 
@@ -739,9 +718,6 @@ Module General
         Next FoundFile
 
     End Sub
-
-
-
     Public Function GetLaborRates(_installation_office) As List(Of String)
         Dim sSQL As String = "SELECT STRate, OTRate " & _
                     "FROM [Rate (MOD Labor)] " & _
@@ -749,9 +725,7 @@ Module General
         Dim myList As New List(Of String)()
         myList = GetDataFromOptions(sSQL, True)
         Return myList
-
     End Function
-    
     Public Sub PauseSystem(ByRef TimeAmt As Single)
         Dim PauseTime As Single = TimeAmt
         Dim StartTime As Single = DateTime.Now.TimeOfDay.TotalSeconds
